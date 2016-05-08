@@ -13,6 +13,10 @@
 		5045BD181CDED11500A8A0FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5045BD171CDED11500A8A0FA /* Assets.xcassets */; };
 		5045BD1B1CDED11500A8A0FA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5045BD191CDED11500A8A0FA /* LaunchScreen.storyboard */; };
 		5045BD261CDED11500A8A0FA /* MoltonfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5045BD251CDED11500A8A0FA /* MoltonfTests.swift */; };
+		5045BD311CDEDE2B00A8A0FA /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5045BD301CDEDE2A00A8A0FA /* RxBlocking.framework */; };
+		5045BD331CDEDE2E00A8A0FA /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */; };
+		5045BD351CDEDE3200A8A0FA /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5045BD341CDEDE3200A8A0FA /* RxSwift.framework */; };
+		5045BD371CDEDE3600A8A0FA /* RxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5045BD361CDEDE3600A8A0FA /* RxTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +40,10 @@
 		5045BD211CDED11500A8A0FA /* MoltonfTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoltonfTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5045BD251CDED11500A8A0FA /* MoltonfTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoltonfTests.swift; sourceTree = "<group>"; };
 		5045BD271CDED11500A8A0FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5045BD301CDEDE2A00A8A0FA /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
+		5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
+		5045BD341CDEDE3200A8A0FA /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		5045BD361CDEDE3600A8A0FA /* RxTests.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTests.framework; path = Carthage/Build/iOS/RxTests.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +51,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5045BD311CDEDE2B00A8A0FA /* RxBlocking.framework in Frameworks */,
+				5045BD331CDEDE2E00A8A0FA /* RxCocoa.framework in Frameworks */,
+				5045BD351CDEDE3200A8A0FA /* RxSwift.framework in Frameworks */,
+				5045BD371CDEDE3600A8A0FA /* RxTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +73,7 @@
 			children = (
 				5045BD0F1CDED11500A8A0FA /* Moltonf */,
 				5045BD241CDED11500A8A0FA /* MoltonfTests */,
+				5045BD381CDEDF8300A8A0FA /* Frameworks */,
 				5045BD0E1CDED11400A8A0FA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -96,6 +109,17 @@
 			path = MoltonfTests;
 			sourceTree = "<group>";
 		};
+		5045BD381CDEDF8300A8A0FA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5045BD341CDEDE3200A8A0FA /* RxSwift.framework */,
+				5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */,
+				5045BD301CDEDE2A00A8A0FA /* RxBlocking.framework */,
+				5045BD361CDEDE3600A8A0FA /* RxTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -106,6 +130,7 @@
 				5045BD091CDED11400A8A0FA /* Sources */,
 				5045BD0A1CDED11400A8A0FA /* Frameworks */,
 				5045BD0B1CDED11400A8A0FA /* Resources */,
+				5045BD391CDEDFAD00A8A0FA /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -191,6 +216,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5045BD391CDEDFAD00A8A0FA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxBlocking.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxTests.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5045BD091CDED11400A8A0FA /* Sources */ = {
@@ -329,6 +374,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Moltonf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hironytic.moltonfios;
@@ -340,6 +389,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Moltonf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hironytic.moltonfios;
