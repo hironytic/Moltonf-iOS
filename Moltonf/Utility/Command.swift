@@ -1,5 +1,5 @@
 //
-// ViewController.swift
+// Command.swift
 // Moltonf
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -24,19 +24,32 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+public class Command {
+    let canExecute: Driver<Bool>
+    let execute: () -> Void
+    
+    convenience init() {
+        self.init(canExecute: Driver.just(false), execute: { })
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    convenience init(execute: () -> Void) {
+        self.init(canExecute: Driver.just(true), execute: execute)
     }
-
-
+    
+    init(canExecute: Driver<Bool>, execute: () -> Void) {
+        self.canExecute = canExecute
+        self.execute = execute
+    }
 }
 
+extension Command {
+    public func drive(control: UIBarButtonItem) -> Disposable {
+        let disposable = CompositeDisposable()
+        disposable.addDisposable(self.canExecute.drive(control.rx_enabled))
+        disposable.addDisposable(control.rx_tap.subscribeNext(self.execute))
+        return disposable
+    }
+}
