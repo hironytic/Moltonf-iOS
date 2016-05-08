@@ -1,5 +1,5 @@
 //
-// WorkspaceListViewModel.swift
+// Messenger.swift
 // Moltonf
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -27,16 +27,15 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class WorkspaceListViewModel {
-    var addNewCommand = Command()
-    let messenger = Messenger()
-    class TransitionToDocumentFileListMessage: Message { }
-    
-    private let workspaceManager = WorkspaceManager.sharedInstance
-    
+public class Messenger {
+    private let subject = PublishSubject<Message>()
+    public let driver: Driver<Message>
+
     init() {
-        addNewCommand = Command() { [weak self] in
-            self?.messenger.send(TransitionToDocumentFileListMessage())
-        };        
+        self.driver = subject.asDriver(onErrorJustReturn: Message())
+    }
+    
+    public func send(message: Message) {
+        subject.onNext(message)
     }
 }

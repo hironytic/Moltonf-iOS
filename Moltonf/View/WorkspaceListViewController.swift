@@ -53,7 +53,13 @@ class WorkspaceListViewController: UITableViewController {
     private func bind() {
         disposeBag = DisposeBag()
         
-        viewModel.addNewCommand2.drive(addNewButton).addDisposableTo(disposeBag)
+        viewModel.addNewCommand.drive(addNewButton).addDisposableTo(disposeBag)
+        viewModel.messenger.driver
+            .filter { $0 is WorkspaceListViewModel.TransitionToDocumentFileListMessage }
+            .driveNext { _ in
+                print("presentViewController")
+            }
+            .addDisposableTo(disposeBag)
     }
     
     // MARK: - Table view data source
