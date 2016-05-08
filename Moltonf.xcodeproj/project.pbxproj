@@ -13,10 +13,8 @@
 		5045BD181CDED11500A8A0FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5045BD171CDED11500A8A0FA /* Assets.xcassets */; };
 		5045BD1B1CDED11500A8A0FA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5045BD191CDED11500A8A0FA /* LaunchScreen.storyboard */; };
 		5045BD261CDED11500A8A0FA /* MoltonfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5045BD251CDED11500A8A0FA /* MoltonfTests.swift */; };
-		5045BD311CDEDE2B00A8A0FA /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5045BD301CDEDE2A00A8A0FA /* RxBlocking.framework */; };
 		5045BD331CDEDE2E00A8A0FA /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */; };
 		5045BD351CDEDE3200A8A0FA /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5045BD341CDEDE3200A8A0FA /* RxSwift.framework */; };
-		5045BD371CDEDE3600A8A0FA /* RxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5045BD361CDEDE3600A8A0FA /* RxTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,10 +38,8 @@
 		5045BD211CDED11500A8A0FA /* MoltonfTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoltonfTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5045BD251CDED11500A8A0FA /* MoltonfTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoltonfTests.swift; sourceTree = "<group>"; };
 		5045BD271CDED11500A8A0FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5045BD301CDEDE2A00A8A0FA /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
 		5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		5045BD341CDEDE3200A8A0FA /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
-		5045BD361CDEDE3600A8A0FA /* RxTests.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTests.framework; path = Carthage/Build/iOS/RxTests.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,10 +47,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5045BD311CDEDE2B00A8A0FA /* RxBlocking.framework in Frameworks */,
 				5045BD331CDEDE2E00A8A0FA /* RxCocoa.framework in Frameworks */,
 				5045BD351CDEDE3200A8A0FA /* RxSwift.framework in Frameworks */,
-				5045BD371CDEDE3600A8A0FA /* RxTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,8 +108,6 @@
 			children = (
 				5045BD341CDEDE3200A8A0FA /* RxSwift.framework */,
 				5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */,
-				5045BD301CDEDE2A00A8A0FA /* RxBlocking.framework */,
-				5045BD361CDEDE3600A8A0FA /* RxTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -226,8 +218,6 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/RxBlocking.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/RxTests.framework",
 			);
 			outputPaths = (
 			);
