@@ -28,15 +28,18 @@ import RxSwift
 import RxCocoa
 
 class WorkspaceListViewModel {
-    var addNewCommand = Command()
     let messenger = Messenger()
     class TransitionToDocumentFileListMessage: Message { }
+
+    var addNewAction: ActionObserver<Void>!
     
     private let workspaceManager = WorkspaceManager.sharedInstance
     
     init() {
-        addNewCommand = Command() { [weak self] in
-            self?.messenger.send(TransitionToDocumentFileListMessage())
-        };        
+        addNewAction = ActionObserver(handler: addNew)
+    }
+    
+    private func addNew() {
+        self.messenger.send(TransitionToDocumentFileListMessage())
     }
 }

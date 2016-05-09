@@ -1,5 +1,5 @@
 //
-// Command.swift
+// ActionObserver.swift
 // Moltonf
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -23,33 +23,27 @@
 // THE SOFTWARE.
 //
 
-import UIKit
+import Foundation
 import RxSwift
-import RxCocoa
 
-public class Command {
-    let canExecute: Driver<Bool>
-    let execute: () -> Void
+public class ActionObserver<Element>: ObserverType {
+    public typealias E = Element
+    public typealias Handler = (Element) -> Void
     
-    convenience init() {
-        self.init(canExecute: Driver.just(false), execute: { })
-    }
-
-    convenience init(execute: () -> Void) {
-        self.init(canExecute: Driver.just(true), execute: execute)
-    }
+    private let handler: Handler
     
-    init(canExecute: Driver<Bool>, execute: () -> Void) {
-        self.canExecute = canExecute
-        self.execute = execute
+    public init(handler: Handler) {
+        self.handler = handler
     }
-}
 
-extension Command {
-    public func drive(control: UIBarButtonItem) -> Disposable {
-        let disposable = CompositeDisposable()
-        disposable.addDisposable(self.canExecute.drive(control.rx_enabled))
-        disposable.addDisposable(control.rx_tap.subscribeNext(self.execute))
-        return disposable
+    public func on(event: Event<Element>) {
+        switch event {
+        case .Next(let element):
+            handler(element)
+        case .Error(_):
+            break
+        case .Completed:
+            break
+        }
     }
 }

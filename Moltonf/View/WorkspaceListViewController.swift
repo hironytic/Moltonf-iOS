@@ -51,9 +51,11 @@ class WorkspaceListViewController: UITableViewController {
     }
 
     private func bind() {
+        let viewModel = self.viewModel
         disposeBag = DisposeBag()
+
+        addNewButton.rx_tap.bindTo(viewModel.addNewAction).addDisposableTo(disposeBag)
         
-        viewModel.addNewCommand.drive(addNewButton).addDisposableTo(disposeBag)
         viewModel.messenger.driver
             .filter { $0 is WorkspaceListViewModel.TransitionToDocumentFileListMessage }
             .driveNext { _ in
