@@ -1,5 +1,5 @@
 //
-// Messenger.swift
+// TransitionMessage.swift
 // Moltonf
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -24,18 +24,11 @@
 //
 
 import Foundation
-import RxSwift
-import RxCocoa
 
-public class Messenger {
-    private let subject = PublishSubject<Message>()
-    public let driver: Driver<Message>
-
-    init() {
-        self.driver = subject.asDriver(onErrorJustReturn: Message())
-    }
+public class TransitionMessage: Message {
+    let viewModel: ViewModel
     
-    public func send(message: Message) {
-        subject.onNext(message)
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
     }
 }

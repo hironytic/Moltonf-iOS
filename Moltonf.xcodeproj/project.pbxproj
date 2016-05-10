@@ -12,8 +12,11 @@
 		5025EFE71CDF17470032AD67 /* WorkspaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */; };
 		5025EFEA1CDF689E0032AD67 /* WorkspaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE91CDF689E0032AD67 /* WorkspaceManager.swift */; };
 		5025EFEC1CDF6F900032AD67 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFEB1CDF6F900032AD67 /* Message.swift */; };
-		5025EFEE1CDF7EFD0032AD67 /* Messenger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFED1CDF7EFD0032AD67 /* Messenger.swift */; };
+		5025EFEE1CDF7EFD0032AD67 /* MessageSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFED1CDF7EFD0032AD67 /* MessageSlot.swift */; };
 		5025EFF11CE0D50C0032AD67 /* ActionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFF01CE0D50C0032AD67 /* ActionObserver.swift */; };
+		5025EFF31CE15FD30032AD67 /* TransitionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFF21CE15FD30032AD67 /* TransitionMessage.swift */; };
+		5025EFF51CE160580032AD67 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFF41CE160580032AD67 /* ViewModel.swift */; };
+		5025EFF71CE161470032AD67 /* SelectArchiveFileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFF61CE161470032AD67 /* SelectArchiveFileViewModel.swift */; };
 		5045BD111CDED11500A8A0FA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5045BD101CDED11500A8A0FA /* AppDelegate.swift */; };
 		5045BD181CDED11500A8A0FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5045BD171CDED11500A8A0FA /* Assets.xcassets */; };
 		5045BD1B1CDED11500A8A0FA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5045BD191CDED11500A8A0FA /* LaunchScreen.storyboard */; };
@@ -38,8 +41,11 @@
 		5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceListViewModel.swift; sourceTree = "<group>"; };
 		5025EFE91CDF689E0032AD67 /* WorkspaceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceManager.swift; sourceTree = "<group>"; };
 		5025EFEB1CDF6F900032AD67 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		5025EFED1CDF7EFD0032AD67 /* Messenger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Messenger.swift; sourceTree = "<group>"; };
+		5025EFED1CDF7EFD0032AD67 /* MessageSlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageSlot.swift; sourceTree = "<group>"; };
 		5025EFF01CE0D50C0032AD67 /* ActionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionObserver.swift; sourceTree = "<group>"; };
+		5025EFF21CE15FD30032AD67 /* TransitionMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionMessage.swift; sourceTree = "<group>"; };
+		5025EFF41CE160580032AD67 /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		5025EFF61CE161470032AD67 /* SelectArchiveFileViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectArchiveFileViewModel.swift; sourceTree = "<group>"; };
 		5045BD0D1CDED11400A8A0FA /* Moltonf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Moltonf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5045BD101CDED11500A8A0FA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5045BD171CDED11500A8A0FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -86,7 +92,9 @@
 			children = (
 				5025EFF01CE0D50C0032AD67 /* ActionObserver.swift */,
 				5025EFEB1CDF6F900032AD67 /* Message.swift */,
-				5025EFED1CDF7EFD0032AD67 /* Messenger.swift */,
+				5025EFED1CDF7EFD0032AD67 /* MessageSlot.swift */,
+				5025EFF21CE15FD30032AD67 /* TransitionMessage.swift */,
+				5025EFF41CE160580032AD67 /* ViewModel.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -94,6 +102,7 @@
 		5025EFE41CDF16800032AD67 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				5025EFF61CE161470032AD67 /* SelectArchiveFileViewModel.swift */,
 				5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */,
 			);
 			path = ViewModel;
@@ -279,13 +288,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5025EFF71CE161470032AD67 /* SelectArchiveFileViewModel.swift in Sources */,
 				5045BD111CDED11500A8A0FA /* AppDelegate.swift in Sources */,
+				5025EFF51CE160580032AD67 /* ViewModel.swift in Sources */,
 				5025EFE31CDF16530032AD67 /* WorkspaceListViewController.swift in Sources */,
+				5025EFF31CE15FD30032AD67 /* TransitionMessage.swift in Sources */,
 				5025EFE71CDF17470032AD67 /* WorkspaceListViewModel.swift in Sources */,
 				5025EFEC1CDF6F900032AD67 /* Message.swift in Sources */,
 				5025EFF11CE0D50C0032AD67 /* ActionObserver.swift in Sources */,
 				5025EFEA1CDF689E0032AD67 /* WorkspaceManager.swift in Sources */,
-				5025EFEE1CDF7EFD0032AD67 /* Messenger.swift in Sources */,
+				5025EFEE1CDF7EFD0032AD67 /* MessageSlot.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

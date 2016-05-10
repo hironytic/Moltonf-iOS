@@ -1,5 +1,5 @@
 //
-// WorkspaceListViewModel.swift
+// ViewModel.swift
 // Moltonf
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -24,22 +24,7 @@
 //
 
 import Foundation
-import RxSwift
-import RxCocoa
 
-class WorkspaceListViewModel: ViewModel {
-    var messenger: Driver<Message>!
-    var addNewAction: AnyObserver<Void>!
+public protocol ViewModel {
     
-    private let workspaceManager = WorkspaceManager.sharedInstance
-    private let messageSlot = MessageSlot()
-    
-    init() {
-        messenger = messageSlot.messenger
-        addNewAction = ActionObserver(handler: addNew).asObserver()
-    }
-    
-    private func addNew() {
-        messageSlot.send(TransitionMessage(viewModel: SelectArchiveFileViewModel()))
-    }
 }

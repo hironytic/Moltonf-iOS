@@ -56,12 +56,20 @@ class WorkspaceListViewController: UITableViewController {
 
         addNewButton.rx_tap.bindTo(viewModel.addNewAction).addDisposableTo(disposeBag)
         
-        viewModel.messenger.driver
-            .filter { $0 is WorkspaceListViewModel.TransitionToDocumentFileListMessage }
-            .driveNext { _ in
-                print("presentViewController")
+        viewModel.messenger
+            .driveNext { message in
+                switch message {
+                case let transitionMessage as TransitionMessage:
+                    self.transition(transitionMessage)
+                default:
+                    break
+                }
             }
             .addDisposableTo(disposeBag)
+    }
+    
+    private func transition(message: TransitionMessage) {
+        print("presentViewController \(message.viewModel)")
     }
     
     // MARK: - Table view data source
