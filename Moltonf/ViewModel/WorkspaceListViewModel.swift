@@ -32,14 +32,12 @@ class WorkspaceListViewModel: ViewModel {
     var addNewAction: AnyObserver<Void>!
     
     private let workspaceManager = WorkspaceManager.sharedInstance
-    private let messageSlot = MessageSlot()
+    private let addNewSubject = PublishSubject<Void>()
     
     init() {
-        messenger = messageSlot.messenger
-        addNewAction = ActionObserver(handler: addNew).asObserver()
-    }
-    
-    private func addNew() {
-        messageSlot.send(TransitionMessage(viewModel: SelectArchiveFileViewModel()))
+        addNewAction = addNewSubject.asObserver()
+        messenger = addNewSubject
+            .map { TransitionMessage(viewModel: SelectArchiveFileViewModel()) }
+            .asDriver(onErrorJustReturn: Message())
     }
 }
