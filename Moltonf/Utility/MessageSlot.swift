@@ -28,14 +28,14 @@ import RxSwift
 import RxCocoa
 
 public class MessageSlot {
-    private let subject = PublishSubject<Message>()
+    private let _subject = PublishSubject<Message>()
     public let messenger: Driver<Message>
 
     init() {
-        self.messenger = subject.asDriver(onErrorJustReturn: Message())
+        self.messenger = _subject.asDriver(onErrorJustReturn: Message())
     }
     
     public func send(message: Message) {
-        subject.onNext(message)
+        _subject.onNext(message)
     }
 }

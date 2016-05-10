@@ -31,15 +31,15 @@ class WorkspaceListViewModel: ViewModel {
     var messenger: Driver<Message>!
     var addNewAction: AnyObserver<Void>!
     
-    private let workspaceManager = WorkspaceManager.sharedInstance
-    private let messageSlot = MessageSlot()
+    private let _workspaceManager = WorkspaceManager.sharedInstance
+    private let _messageSlot = MessageSlot()
     
     init() {
-        messenger = messageSlot.messenger
+        messenger = _messageSlot.messenger
         addNewAction = ActionObserver(handler: addNew).asObserver()
     }
     
     private func addNew() {
-        messageSlot.send(TransitionMessage(viewModel: SelectArchiveFileViewModel()))
+        _messageSlot.send(TransitionMessage(viewModel: SelectArchiveFileViewModel()))
     }
 }
