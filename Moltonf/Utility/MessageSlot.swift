@@ -29,10 +29,12 @@ import RxCocoa
 
 public class MessageSlot {
     private let _subject = PublishSubject<Message>()
-    public let messenger: Driver<Message>
+    public let messenger: Observable<Message>
 
     init() {
-        self.messenger = _subject.asDriver(onErrorJustReturn: Message())
+        self.messenger = _subject
+            .share()
+            .observeOn(MainScheduler.instance)
     }
     
     public func send(message: Message) {

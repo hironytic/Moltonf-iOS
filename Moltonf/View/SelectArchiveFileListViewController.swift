@@ -62,7 +62,7 @@ class SelectArchiveFileListViewController: UITableViewController {
                 .addDisposableTo(disposeBag)
             
             viewModel.messenger
-                .driveNext { [weak self] message in
+                .subscribeNext { [weak self] message in
                     switch message {
                     case _ as DismissingMessage:
                         self?.dismissViewControllerAnimated(true, completion: nil)

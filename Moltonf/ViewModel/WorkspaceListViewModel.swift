@@ -28,7 +28,7 @@ import RxSwift
 import RxCocoa
 
 class WorkspaceListViewModel: ViewModel {
-    var messenger: Driver<Message>!
+    var messenger: Observable<Message>!
     var addNewAction: AnyObserver<Void>!
     
     private let _workspaceManager = WorkspaceManager.sharedInstance

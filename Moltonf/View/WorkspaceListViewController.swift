@@ -57,7 +57,7 @@ class WorkspaceListViewController: UITableViewController {
         addNewButton.rx_tap.bindTo(viewModel.addNewAction).addDisposableTo(disposeBag)
         
         viewModel.messenger
-            .driveNext { [weak self] message in
+            .subscribeNext { [weak self] message in
                 switch message {
                 case let transitionMessage as TransitionMessage:
                     self?.transition(transitionMessage)

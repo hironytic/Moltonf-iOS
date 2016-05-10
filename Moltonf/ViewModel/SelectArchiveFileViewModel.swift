@@ -28,7 +28,7 @@ import RxSwift
 import RxCocoa
 
 class SelectArchiveFileViewModel: ViewModel {
-    var messenger: Driver<Message>!
+    var messenger: Observable<Message>!
     var archiveFiles: Driver<[ArchiveFileManager.FileItem]>!
     var closeAction: AnyObserver<Void>!
     var refreshAction: AnyObserver<Void>!
