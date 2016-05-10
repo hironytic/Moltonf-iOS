@@ -24,7 +24,40 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
 
 class SelectArchiveFileViewModel: ViewModel {
+    var messenger: Driver<Message>!
+    var archiveFiles: Driver<[ArchiveFileManager.FileItem]>!
+    var closeAction: AnyObserver<Void>!
+    var refreshAction: AnyObserver<Void>!
+    var selectAction: AnyObserver<ArchiveFileManager.FileItem>!
     
+    private let _archiveFileManager: ArchiveFileManager
+    private let _messageSlot = MessageSlot()
+    
+    init() {
+        let directory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true)[0]
+        _archiveFileManager = ArchiveFileManager(directory: directory)
+        
+        messenger = _messageSlot.messenger
+        archiveFiles = _archiveFileManager.archiveFiles.asDriver(onErrorJustReturn: [])
+        closeAction = ActionObserver(handler: close).asObserver()
+        refreshAction = ActionObserver(handler: refresh).asObserver()
+        selectAction = ActionObserver(handler: select).asObserver()
+    }
+    
+    private func close() {
+        _messageSlot.send(DismissingMessage())
+    }
+    
+    private func refresh() {
+        _archiveFileManager.loadFileList()
+    }
+    
+    private func select(item: ArchiveFileManager.FileItem) {
+        print("selected: \(item.title)")
+        _messageSlot.send(DismissingMessage())
+    }
 }

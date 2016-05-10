@@ -57,10 +57,10 @@ class WorkspaceListViewController: UITableViewController {
         addNewButton.rx_tap.bindTo(viewModel.addNewAction).addDisposableTo(disposeBag)
         
         viewModel.messenger
-            .driveNext { message in
+            .driveNext { [weak self] message in
                 switch message {
                 case let transitionMessage as TransitionMessage:
-                    self.transition(transitionMessage)
+                    self?.transition(transitionMessage)
                 default:
                     break
                 }
@@ -69,6 +69,15 @@ class WorkspaceListViewController: UITableViewController {
     }
     
     private func transition(message: TransitionMessage) {
+        switch message.viewModel {
+        case let viewModel as SelectArchiveFileViewModel:
+            let storyboard: UIStoryboard = UIStoryboard(name: "SelectArchiveFile", bundle: NSBundle.mainBundle())
+            let viewController: UINavigationController = storyboard.instantiateInitialViewController() as! UINavigationController
+            (viewController.topViewController as! SelectArchiveFileListViewController).viewModel = viewModel
+            presentViewController(viewController, animated: true, completion: nil)
+        default:
+            break
+        }
         print("presentViewController \(message.viewModel)")
     }
     
