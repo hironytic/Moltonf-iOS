@@ -43,9 +43,10 @@ class SelectArchiveFileViewModel: ViewModel {
         
         messenger = _messageSlot.messenger
         archiveFiles = _archiveFileManager.archiveFiles.asDriver(onErrorJustReturn: [])
-        closeAction = ActionObserver(handler: close).asObserver()
-        refreshAction = ActionObserver(handler: refresh).asObserver()
-        selectAction = ActionObserver(handler: select).asObserver()
+
+        closeAction = ActionObserver.asObserver { [weak self] in self?.close() }
+        refreshAction = ActionObserver.asObserver { [weak self] in self?.refresh() }
+        selectAction = ActionObserver.asObserver { [weak self] item in self?.select(item) }
     }
     
     private func close() {

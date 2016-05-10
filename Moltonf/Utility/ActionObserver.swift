@@ -46,4 +46,8 @@ public class ActionObserver<Element>: ObserverType {
             break
         }
     }
+    
+    public static func asObserver(handler: Handler) -> AnyObserver<Element> {
+        return ActionObserver<Element>(handler: handler).asObserver()
+    }
 }

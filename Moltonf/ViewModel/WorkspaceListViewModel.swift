@@ -36,7 +36,8 @@ class WorkspaceListViewModel: ViewModel {
     
     init() {
         messenger = _messageSlot.messenger
-        addNewAction = ActionObserver(handler: addNew).asObserver()
+        
+        addNewAction = ActionObserver.asObserver { [weak self] in self?.addNew() }
     }
     
     private func addNew() {
