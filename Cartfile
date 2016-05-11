@@ -1,1 +1,2 @@
 github "ReactiveX/RxSwift" ~> 2.0
+github "hironytic/Eventitic" ~> 1.0
