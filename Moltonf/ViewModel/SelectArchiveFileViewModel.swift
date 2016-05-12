@@ -23,9 +23,10 @@
 // THE SOFTWARE.
 //
 
+import Eventitic
 import Foundation
-import RxSwift
 import RxCocoa
+import RxSwift
 
 class SelectArchiveFileViewModel: ViewModel {
     var messenger: Observable<Message>!
@@ -34,19 +35,26 @@ class SelectArchiveFileViewModel: ViewModel {
     var refreshAction: AnyObserver<Void>!
     var selectAction: AnyObserver<ArchiveFileManager.FileItem>!
     
-    private let _archiveFileManager: ArchiveFileManager
+    private let _listenerStore = ListenerStore()
     private let _messageSlot = MessageSlot()
+    private let _archiveFileManager: ArchiveFileManager
+    private let _archiveFilesSource = Variable<[ArchiveFileManager.FileItem]>([])
     
     init() {
         let directory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true)[0]
         _archiveFileManager = ArchiveFileManager(directory: directory)
         
         messenger = _messageSlot.messenger
-        archiveFiles = _archiveFileManager.archiveFiles.asDriver(onErrorJustReturn: [])
+        archiveFiles = _archiveFilesSource.asDriver()
 
         closeAction = ActionObserver.asObserver { [weak self] in self?.close() }
         refreshAction = ActionObserver.asObserver { [weak self] in self?.refresh() }
         selectAction = ActionObserver.asObserver { [weak self] item in self?.select(item) }
+        
+        _archiveFilesSource.value = _archiveFileManager.archiveFiles
+        _archiveFileManager.archiveFilesChanged.listen { [weak self] fileItem in
+            self?._archiveFilesSource.value = fileItem
+        }.addToStore(_listenerStore)
     }
     
     private func close() {
@@ -54,7 +62,7 @@ class SelectArchiveFileViewModel: ViewModel {
     }
     
     private func refresh() {
-        _archiveFileManager.loadFileList()
+        _archiveFileManager.reloadFileList()
     }
     
     private func select(item: ArchiveFileManager.FileItem) {

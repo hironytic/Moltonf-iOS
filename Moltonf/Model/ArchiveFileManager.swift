@@ -24,7 +24,7 @@
 //
 
 import Foundation
-import RxSwift
+import Eventitic
 
 class ArchiveFileManager {
     class FileItem {
@@ -36,27 +36,33 @@ class ArchiveFileManager {
             self.title = title
         }
     }
-    
-    var archiveFiles: Observable<[FileItem]>!
+
+    private(set) var archiveFiles: [FileItem] = []
+    let archiveFilesChanged = EventSource<[FileItem]>()
     
     private let _directory: String
-    private let _fileList = Variable<[FileItem]>([])
     
     init(directory: String) {
         _directory = directory
-        archiveFiles = _fileList.asObservable()
         
-        loadFileList()
+        loadFileList(notify: false)
+    }
+
+    func reloadFileList() {
+        loadFileList(notify: true)
     }
     
-    func loadFileList() {
+    private func loadFileList(notify doNotify: Bool) {
         let fm = NSFileManager.defaultManager()
         let contents = (try? fm.contentsOfDirectoryAtPath(_directory)) ?? []
-        _fileList.value = contents
+        archiveFiles = contents
             .map { FileItem(filePath: (_directory as NSString).stringByAppendingPathComponent($0), title: $0) }
             .filter { item in   // exclude directories
                 var isDirectory: ObjCBool = false
                 return fm.fileExistsAtPath(item.filePath, isDirectory: &isDirectory) && !isDirectory.boolValue
             }
+        if (doNotify) {
+            archiveFilesChanged.fire(archiveFiles)
+        }
     }
 }
