@@ -8,7 +8,6 @@
         <!--Select Play Data Archive-->
         <scene sceneID="PfY-Td-Gcg">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="PFl-In-Pph" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="OAn-GD-6HS" customClass="SelectArchiveFileListViewController" customModule="Moltonf" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Gb9-oZ-5o5">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -38,6 +37,7 @@
                         <outlet property="refreshButton" destination="y4x-NV-zg7" id="fLd-NE-mGe"/>
                     </connections>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PFl-In-Pph" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="716" y="349"/>
         </scene>

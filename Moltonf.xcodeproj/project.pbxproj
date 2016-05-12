@@ -92,25 +92,23 @@
 		5025EFDC1CDF15090032AD67 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				5025EFFA1CE1FEF70032AD67 /* SelectArchiveFile.storyboard */,
+				5067A9D41CE49F670079E3DA /* Storyboard */,
 				5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift */,
-				5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */,
 				5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
 		};
-		5025EFDD1CDF150F0032AD67 /* Utility */ = {
+		5025EFDD1CDF150F0032AD67 /* AppFramework */ = {
 			isa = PBXGroup;
 			children = (
+				5067A9D51CE4A0C10079E3DA /* Message */,
 				5025EFF01CE0D50C0032AD67 /* ActionObserver.swift */,
 				5025EFEB1CDF6F900032AD67 /* Message.swift */,
 				5025EFED1CDF7EFD0032AD67 /* MessageSlot.swift */,
-				5025EFF21CE15FD30032AD67 /* TransitionMessage.swift */,
 				5025EFF41CE160580032AD67 /* ViewModel.swift */,
-				5025EFFE1CE2139B0032AD67 /* DismissingMessage.swift */,
 			);
-			path = Utility;
+			path = AppFramework;
 			sourceTree = "<group>";
 		};
 		5025EFE41CDF16800032AD67 /* ViewModel */ = {
@@ -153,11 +151,11 @@
 		5045BD0F1CDED11500A8A0FA /* Moltonf */ = {
 			isa = PBXGroup;
 			children = (
+				5045BD101CDED11500A8A0FA /* AppDelegate.swift */,
 				5025EFDC1CDF15090032AD67 /* View */,
 				5025EFE41CDF16800032AD67 /* ViewModel */,
 				5025EFE51CDF16890032AD67 /* Model */,
-				5025EFDD1CDF150F0032AD67 /* Utility */,
-				5045BD101CDED11500A8A0FA /* AppDelegate.swift */,
+				5025EFDD1CDF150F0032AD67 /* AppFramework */,
 				5045BD171CDED11500A8A0FA /* Assets.xcassets */,
 				5045BD1C1CDED11500A8A0FA /* Info.plist */,
 				5045BD191CDED11500A8A0FA /* LaunchScreen.storyboard */,
@@ -182,6 +180,24 @@
 				5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5067A9D41CE49F670079E3DA /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				5025EFFA1CE1FEF70032AD67 /* SelectArchiveFile.storyboard */,
+				5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */,
+			);
+			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		5067A9D51CE4A0C10079E3DA /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				5025EFFE1CE2139B0032AD67 /* DismissingMessage.swift */,
+				5025EFF21CE15FD30032AD67 /* TransitionMessage.swift */,
+			);
+			path = Message;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
