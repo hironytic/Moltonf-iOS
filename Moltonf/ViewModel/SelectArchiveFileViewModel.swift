@@ -30,10 +30,17 @@ import RxSwift
 
 class SelectArchiveFileViewModel: ViewModel {
     var messenger: Observable<Message>!
+    
     var archiveFiles: Driver<[ArchiveFileManager.FileItem]>!
-    var closeAction: AnyObserver<Void>!
+    var cancelAction: AnyObserver<Void>!
     var refreshAction: AnyObserver<Void>!
     var selectAction: AnyObserver<ArchiveFileManager.FileItem>!
+    
+    enum Result {
+        case Selected(String)
+        case Cancelled
+    }
+    var resultFunc: (Result -> Void)? = nil
     
     private let _listenerStore = ListenerStore()
     private let _messageSlot = MessageSlot()
@@ -47,7 +54,7 @@ class SelectArchiveFileViewModel: ViewModel {
         messenger = _messageSlot.messenger
         archiveFiles = _archiveFilesSource.asDriver()
 
-        closeAction = ActionObserver.asObserver { [weak self] in self?.close() }
+        cancelAction = ActionObserver.asObserver { [weak self] in self?.cancel() }
         refreshAction = ActionObserver.asObserver { [weak self] in self?.refresh() }
         selectAction = ActionObserver.asObserver { [weak self] item in self?.select(item) }
         
@@ -57,8 +64,9 @@ class SelectArchiveFileViewModel: ViewModel {
         }.addToStore(_listenerStore)
     }
     
-    private func close() {
+    private func cancel() {
         _messageSlot.send(DismissingMessage())
+        resultFunc?(.Cancelled)
     }
     
     private func refresh() {
@@ -66,7 +74,7 @@ class SelectArchiveFileViewModel: ViewModel {
     }
     
     private func select(item: ArchiveFileManager.FileItem) {
-        print("selected: \(item.title)")
         _messageSlot.send(DismissingMessage())
+        resultFunc?(.Selected(item.filePath))
     }
 }

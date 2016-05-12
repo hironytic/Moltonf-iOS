@@ -44,7 +44,7 @@ class SelectArchiveFileListViewController: UITableViewController {
         disposeBag = DisposeBag()
         if let viewModel = self.viewModel {
             cancelButton.rx_tap
-                .bindTo(viewModel.closeAction)
+                .bindTo(viewModel.cancelAction)
                 .addDisposableTo(disposeBag)
             
             refreshButton.rx_tap
