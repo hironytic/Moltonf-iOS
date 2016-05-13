@@ -30,6 +30,7 @@ import RxCocoa
 class SelectArchiveFileListViewController: UITableViewController {
     var disposeBag: DisposeBag!
     var viewModel: SelectArchiveFileViewModel!
+    var noItemsLabel: UILabel!
     
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     @IBOutlet weak var refreshButton: UIBarButtonItem!
@@ -37,10 +38,22 @@ class SelectArchiveFileListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        bind()
+        let noItemsLabelParent = UIView()
+        tableView.backgroundView = noItemsLabelParent
+        noItemsLabel = UILabel()
+        noItemsLabel.text = "No files found"
+        noItemsLabel.textColor = UIColor.lightGrayColor()
+        noItemsLabel.sizeToFit()
+        noItemsLabel.translatesAutoresizingMaskIntoConstraints = false
+        noItemsLabelParent.addSubview(noItemsLabel)
+        let horizontalConstraint = NSLayoutConstraint(item: noItemsLabel, attribute: .CenterX, relatedBy: .Equal, toItem: noItemsLabelParent, attribute: .CenterX, multiplier: 1.0, constant: 0.0)
+        let verticalConstraint = NSLayoutConstraint(item: noItemsLabel, attribute: .CenterY, relatedBy: .Equal, toItem: noItemsLabelParent, attribute: .CenterY, multiplier: 1.0, constant: 0.0)
+        noItemsLabelParent.addConstraints([horizontalConstraint, verticalConstraint])
+        
+        bindViewModel()
     }
 
-    private func bind() {
+    private func bindViewModel() {
         disposeBag = DisposeBag()
         if let viewModel = self.viewModel {
             cancelButton.rx_tap
@@ -49,6 +62,16 @@ class SelectArchiveFileListViewController: UITableViewController {
             
             refreshButton.rx_tap
                 .bindTo(viewModel.refreshAction)
+                .addDisposableTo(disposeBag)
+            
+            viewModel.noItemsMessageHidden
+                .driveNext { [weak self] hidden in
+                    self?.tableView.separatorStyle = hidden ? .SingleLine : .None
+                }
+                .addDisposableTo(disposeBag)
+            
+            viewModel.noItemsMessageHidden
+                .drive(noItemsLabel.rx_hidden)
                 .addDisposableTo(disposeBag)
             
             viewModel.archiveFiles

@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
-        <!--Select Play Data Archive-->
+        <!--Load from iTunes-->
         <scene sceneID="PfY-Td-Gcg">
             <objects>
                 <tableViewController id="OAn-GD-6HS" customClass="SelectArchiveFileListViewController" customModule="Moltonf" customModuleProvider="target" sceneMemberID="viewController">
@@ -28,7 +28,7 @@
                             <outlet property="delegate" destination="OAn-GD-6HS" id="erp-6C-1UD"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Select Play Data Archive" id="XRc-H9-TxC">
+                    <navigationItem key="navigationItem" title="Load from iTunes" id="XRc-H9-TxC">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="5lp-wB-DRm"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="y4x-NV-zg7"/>
                     </navigationItem>
