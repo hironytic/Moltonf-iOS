@@ -67,6 +67,7 @@ class ArchiveFileManager {
             let fm = NSFileManager.defaultManager()
             let contents = (try? fm.contentsOfDirectoryAtPath(_directory)) ?? []
             archiveFiles = contents
+                .filter { $0[$0.startIndex] != "." }    // exclude hidden files
                 .map { FileItem(filePath: (_directory as NSString).stringByAppendingPathComponent($0), title: $0) }
                 .filter { item in   // exclude directories
                     var isDirectory: ObjCBool = false
