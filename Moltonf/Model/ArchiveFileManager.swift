@@ -37,32 +37,41 @@ class ArchiveFileManager {
         }
     }
 
-    private(set) var archiveFiles: [FileItem] = []
     let archiveFilesChanged = EventSource<[FileItem]>()
+    private(set) var archiveFiles: [FileItem] = [] {
+        didSet {
+            archiveFilesChanged.fire(archiveFiles)
+        }
+    }
+    
+    let refreshingChanged = EventSource<Bool>()
+    private(set) var refreshing: Bool = false {
+        didSet {
+            refreshingChanged.fire(refreshing)
+        }
+    }
     
     private let _directory: String
     
     init(directory: String) {
         _directory = directory
         
-        loadFileList(notify: false)
+        reloadFileList()
     }
 
     func reloadFileList() {
-        loadFileList(notify: true)
-    }
-    
-    private func loadFileList(notify doNotify: Bool) {
-        let fm = NSFileManager.defaultManager()
-        let contents = (try? fm.contentsOfDirectoryAtPath(_directory)) ?? []
-        archiveFiles = contents
-            .map { FileItem(filePath: (_directory as NSString).stringByAppendingPathComponent($0), title: $0) }
-            .filter { item in   // exclude directories
-                var isDirectory: ObjCBool = false
-                return fm.fileExistsAtPath(item.filePath, isDirectory: &isDirectory) && !isDirectory.boolValue
-            }
-        if (doNotify) {
-            archiveFilesChanged.fire(archiveFiles)
+        do {
+            refreshing = true
+            defer { refreshing = false }
+        
+            let fm = NSFileManager.defaultManager()
+            let contents = (try? fm.contentsOfDirectoryAtPath(_directory)) ?? []
+            archiveFiles = contents
+                .map { FileItem(filePath: (_directory as NSString).stringByAppendingPathComponent($0), title: $0) }
+                .filter { item in   // exclude directories
+                    var isDirectory: ObjCBool = false
+                    return fm.fileExistsAtPath(item.filePath, isDirectory: &isDirectory) && !isDirectory.boolValue
+                }
         }
     }
 }

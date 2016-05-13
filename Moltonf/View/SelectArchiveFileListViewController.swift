@@ -33,11 +33,13 @@ class SelectArchiveFileListViewController: UITableViewController {
     var noItemsLabel: UILabel!
     
     @IBOutlet weak var cancelButton: UIBarButtonItem!
-    @IBOutlet weak var refreshButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(SelectArchiveFileListViewController.refresh(_:)), forControlEvents: .ValueChanged)
+        
         let noItemsLabelParent = UIView()
         tableView.backgroundView = noItemsLabelParent
         noItemsLabel = UILabel()
@@ -60,10 +62,6 @@ class SelectArchiveFileListViewController: UITableViewController {
                 .bindTo(viewModel.cancelAction)
                 .addDisposableTo(disposeBag)
             
-            refreshButton.rx_tap
-                .bindTo(viewModel.refreshAction)
-                .addDisposableTo(disposeBag)
-            
             viewModel.noItemsMessageHidden
                 .driveNext { [weak self] hidden in
                     self?.tableView.separatorStyle = hidden ? .SingleLine : .None
@@ -77,6 +75,16 @@ class SelectArchiveFileListViewController: UITableViewController {
             viewModel.archiveFiles
                 .drive(tableView.rx_itemsWithCellIdentifier("Cell", cellType: UITableViewCell.self)) { (row, element, cell) in
                     cell.textLabel?.text = element.title
+                }
+                .addDisposableTo(disposeBag)
+            
+            viewModel.refreshing
+                .driveNext { [weak self] refreshing in
+                    if (refreshing) {
+                        self?.refreshControl?.beginRefreshing()
+                    } else {
+                        self?.refreshControl?.endRefreshing()
+                    }
                 }
                 .addDisposableTo(disposeBag)
             
@@ -95,5 +103,10 @@ class SelectArchiveFileListViewController: UITableViewController {
                 }
                 .addDisposableTo(disposeBag)
         }
+    }
+    
+    @objc
+    private func refresh(sender: AnyObject) {
+        self.viewModel?.refreshAction.onNext()
     }
 }

@@ -33,6 +33,7 @@ class SelectArchiveFileViewModel: ViewModel {
     
     var archiveFiles: Driver<[ArchiveFileManager.FileItem]>!
     var noItemsMessageHidden: Driver<Bool>!
+    var refreshing: Driver<Bool>!
     var cancelAction: AnyObserver<Void>!
     var refreshAction: AnyObserver<Void>!
     var selectAction: AnyObserver<ArchiveFileManager.FileItem>!
@@ -47,6 +48,7 @@ class SelectArchiveFileViewModel: ViewModel {
     private let _messageSlot = MessageSlot()
     private let _archiveFileManager: ArchiveFileManager
     private let _archiveFilesSource = Variable<[ArchiveFileManager.FileItem]>([])
+    private let _refreshingSource = Variable<Bool>(false)
     
     init() {
         let directory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true)[0]
@@ -55,6 +57,7 @@ class SelectArchiveFileViewModel: ViewModel {
         messenger = _messageSlot.messenger
         archiveFiles = _archiveFilesSource.asDriver()
         noItemsMessageHidden = archiveFiles.map { !$0.isEmpty }
+        refreshing = _refreshingSource.asDriver()
 
         cancelAction = ActionObserver.asObserver { [weak self] in self?.cancel() }
         refreshAction = ActionObserver.asObserver { [weak self] in self?.refresh() }
@@ -63,6 +66,11 @@ class SelectArchiveFileViewModel: ViewModel {
         _archiveFilesSource.value = _archiveFileManager.archiveFiles
         _archiveFileManager.archiveFilesChanged.listen { [weak self] fileItem in
             self?._archiveFilesSource.value = fileItem
+        }.addToStore(_listenerStore)
+        
+        _refreshingSource.value = _archiveFileManager.refreshing
+        _archiveFileManager.refreshingChanged.listen { [weak self] value in
+            self?._refreshingSource.value = value
         }.addToStore(_listenerStore)
     }
     

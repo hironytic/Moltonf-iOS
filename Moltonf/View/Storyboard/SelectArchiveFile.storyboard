@@ -30,11 +30,9 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Load from iTunes" id="XRc-H9-TxC">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="5lp-wB-DRm"/>
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="y4x-NV-zg7"/>
                     </navigationItem>
                     <connections>
                         <outlet property="cancelButton" destination="5lp-wB-DRm" id="sdp-sX-mpK"/>
-                        <outlet property="refreshButton" destination="y4x-NV-zg7" id="fLd-NE-mGe"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PFl-In-Pph" userLabel="First Responder" sceneMemberID="firstResponder"/>
