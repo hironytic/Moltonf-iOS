@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		501F95491CE61C7A00628E29 /* ArchiveLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F95481CE61C7A00628E29 /* ArchiveLoader.swift */; };
+		501F954B1CE61CA700628E29 /* ArchiveSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F954A1CE61CA700628E29 /* ArchiveSchema.swift */; };
 		5025EFE11CDF15A70032AD67 /* WorkspaceList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */; };
 		5025EFE31CDF16530032AD67 /* WorkspaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */; };
 		5025EFE71CDF17470032AD67 /* WorkspaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */; };
@@ -41,6 +43,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		501F95481CE61C7A00628E29 /* ArchiveLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveLoader.swift; sourceTree = "<group>"; };
+		501F954A1CE61CA700628E29 /* ArchiveSchema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveSchema.swift; sourceTree = "<group>"; };
 		5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = WorkspaceList.storyboard; sourceTree = "<group>"; };
 		5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceListViewController.swift; sourceTree = "<group>"; };
 		5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceListViewModel.swift; sourceTree = "<group>"; };
@@ -89,6 +93,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		501F95471CE61C5600628E29 /* Archive */ = {
+			isa = PBXGroup;
+			children = (
+				501F95481CE61C7A00628E29 /* ArchiveLoader.swift */,
+				501F954A1CE61CA700628E29 /* ArchiveSchema.swift */,
+			);
+			path = Archive;
+			sourceTree = "<group>";
+		};
 		5025EFDC1CDF15090032AD67 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -123,6 +136,7 @@
 		5025EFE51CDF16890032AD67 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				501F95471CE61C5600628E29 /* Archive */,
 				5025EFF81CE1EFFB0032AD67 /* ArchiveFileManager.swift */,
 				5025EFE91CDF689E0032AD67 /* WorkspaceManager.swift */,
 			);
@@ -324,6 +338,7 @@
 			files = (
 				5025EFF71CE161470032AD67 /* SelectArchiveFileViewModel.swift in Sources */,
 				5025EFFD1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift in Sources */,
+				501F954B1CE61CA700628E29 /* ArchiveSchema.swift in Sources */,
 				5045BD111CDED11500A8A0FA /* AppDelegate.swift in Sources */,
 				5025EFF51CE160580032AD67 /* ViewModel.swift in Sources */,
 				5025EFF91CE1EFFB0032AD67 /* ArchiveFileManager.swift in Sources */,
@@ -333,6 +348,7 @@
 				5025EFFF1CE2139B0032AD67 /* DismissingMessage.swift in Sources */,
 				5025EFEC1CDF6F900032AD67 /* Message.swift in Sources */,
 				5025EFF11CE0D50C0032AD67 /* ActionObserver.swift in Sources */,
+				501F95491CE61C7A00628E29 /* ArchiveLoader.swift in Sources */,
 				5025EFEA1CDF689E0032AD67 /* WorkspaceManager.swift in Sources */,
 				5025EFEE1CDF7EFD0032AD67 /* MessageSlot.swift in Sources */,
 			);
