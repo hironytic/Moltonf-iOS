@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		501F954D1CE61E2E00628E29 /* QName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F954C1CE61E2E00628E29 /* QName.swift */; };
 		5025EFE11CDF15A70032AD67 /* WorkspaceList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */; };
 		5025EFE31CDF16530032AD67 /* WorkspaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */; };
 		5025EFE71CDF17470032AD67 /* WorkspaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		501F954C1CE61E2E00628E29 /* QName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QName.swift; sourceTree = "<group>"; };
 		5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = WorkspaceList.storyboard; sourceTree = "<group>"; };
 		5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceListViewController.swift; sourceTree = "<group>"; };
 		5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceListViewModel.swift; sourceTree = "<group>"; };
@@ -89,6 +91,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		501F95471CE61C5600628E29 /* Archive */ = {
+			isa = PBXGroup;
+			children = (
+				501F954C1CE61E2E00628E29 /* QName.swift */,
+			);
+			path = Archive;
+			sourceTree = "<group>";
+		};
 		5025EFDC1CDF15090032AD67 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -123,6 +133,7 @@
 		5025EFE51CDF16890032AD67 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				501F95471CE61C5600628E29 /* Archive */,
 				5025EFF81CE1EFFB0032AD67 /* ArchiveFileManager.swift */,
 				5025EFE91CDF689E0032AD67 /* WorkspaceManager.swift */,
 			);
@@ -329,6 +340,7 @@
 				5025EFF91CE1EFFB0032AD67 /* ArchiveFileManager.swift in Sources */,
 				5025EFE31CDF16530032AD67 /* WorkspaceListViewController.swift in Sources */,
 				5025EFF31CE15FD30032AD67 /* TransitionMessage.swift in Sources */,
+				501F954D1CE61E2E00628E29 /* QName.swift in Sources */,
 				5025EFE71CDF17470032AD67 /* WorkspaceListViewModel.swift in Sources */,
 				5025EFFF1CE2139B0032AD67 /* DismissingMessage.swift in Sources */,
 				5025EFEC1CDF6F900032AD67 /* Message.swift in Sources */,
