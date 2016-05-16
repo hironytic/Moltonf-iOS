@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		501F95491CE61C7A00628E29 /* ArchiveLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F95481CE61C7A00628E29 /* ArchiveLoader.swift */; };
 		501F954B1CE61CA700628E29 /* ArchiveSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F954A1CE61CA700628E29 /* ArchiveSchema.swift */; };
+		501F954F1CE9B77E00628E29 /* XMLPullitic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 501F954E1CE9B77E00628E29 /* XMLPullitic.framework */; };
 		5025EFE11CDF15A70032AD67 /* WorkspaceList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */; };
 		5025EFE31CDF16530032AD67 /* WorkspaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */; };
 		5025EFE71CDF17470032AD67 /* WorkspaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */; };
@@ -45,6 +46,7 @@
 /* Begin PBXFileReference section */
 		501F95481CE61C7A00628E29 /* ArchiveLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveLoader.swift; sourceTree = "<group>"; };
 		501F954A1CE61CA700628E29 /* ArchiveSchema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveSchema.swift; sourceTree = "<group>"; };
+		501F954E1CE9B77E00628E29 /* XMLPullitic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XMLPullitic.framework; path = Carthage/Build/iOS/XMLPullitic.framework; sourceTree = "<group>"; };
 		5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = WorkspaceList.storyboard; sourceTree = "<group>"; };
 		5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceListViewController.swift; sourceTree = "<group>"; };
 		5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceListViewModel.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				5045BD331CDEDE2E00A8A0FA /* RxCocoa.framework in Frameworks */,
 				5045BD351CDEDE3200A8A0FA /* RxSwift.framework in Frameworks */,
 				5080FAD81CE3F73300ECD5A0 /* Eventitic.framework in Frameworks */,
+				501F954F1CE9B77E00628E29 /* XMLPullitic.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,6 +192,7 @@
 		5045BD381CDEDF8300A8A0FA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				501F954E1CE9B77E00628E29 /* XMLPullitic.framework */,
 				5080FAD71CE3F73300ECD5A0 /* Eventitic.framework */,
 				5045BD341CDEDE3200A8A0FA /* RxSwift.framework */,
 				5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */,
@@ -322,6 +326,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Eventitic.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/XMLPullitic.framework",
 			);
 			outputPaths = (
 			);
