@@ -25,6 +25,15 @@
 
 import Foundation
 
+// see this site about the common archive
+// http://wolfbbs.jp/%B6%A6%C4%CC%A5%A2%A1%BC%A5%AB%A5%A4%A5%D6%B4%F0%C8%D7%C0%B0%C8%F7%B7%D7%B2%E8.html
+
+// direct links to schemas
+// http://jindolf.sourceforge.jp/xml/xsd/coreType-090929.xsd
+// http://jindolf.sourceforge.jp/xml/xsd/coreXML-090929.xsd
+// http://jindolf.sourceforge.jp/xml/xsd/bbsArchive-110421.xsd
+
+
 class NamespaceCandidates {
     let candidates: [String]
     init(_ candidates: [String]) {
@@ -54,15 +63,24 @@ class ArchiveSchema {
     // element "village"
     static let ELEM_VILLAGE = "village"
 
+    // attribute "xml:lang"
+    static let ATTR_LANG = "xml:lang"
+    
     // attribute "xml:base"
     static let ATTR_BASE = "xml:base"
 
     // attribute "fullName"
     static let ATTR_FULL_NAME = "fullName"
+    
+    // attribute "vid"
+    static let ATTR_VID = "vid"
+    
+    // attribute "commitTime"
+    static let ATTR_COMMIT_TIME = "commitTime"
 
     // attribute "state"
     static let ATTR_STATE = "state"
-
+    
     // state of village: prologue
     static let VAL_VILLAGE_STATE_PROLOGUE = "prologue"
     
@@ -75,8 +93,38 @@ class ArchiveSchema {
     // state of village: game is over
     static let VAL_VILLAGE_STATE_GAMEOVER = "gameover"
 
+    // attribute "disclosure"
+    static let ATTR_DISCLOSURE = "disclosure"
+    
+    // attribute "isValid"
+    static let ATTR_IS_VALID = "isValid"
+    
+    // attribute "landName"
+    static let ATTR_LAND_NAME = "landName"
+    
+    // attribute "formalName"
+    static let ATTR_FORMAL_NAME = "formalName"
+    
+    // attribute "landId"
+    static let ATTR_LAND_ID = "landId"
+    
+    // attribute "landPrefix"
+    static let ATTR_LAND_PREFIX = "landPrefix"
+    
+    // attribute "locale"
+    static let ATTR_LOCALE = "locale"
+    
+    // attribute "orgencoding"
+    static let ATTR_ORGENCODING = "origencoding"
+    
+    // attribute "timezone"
+    static let ATTR_TIMEZONE = "timezone"
+    
     // attribute "graveIconURI"
     static let ATTR_GRAVE_ICON_URI = "graveIconURI"
+    
+    // attribute "generator"
+    static let ATTR_GENERATOR = "generator"
 
     //
     // --------------------------------------------------

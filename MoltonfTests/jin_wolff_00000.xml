@@ -1,0 +1,691 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+  人狼BBSアーカイブ
+  http://jindolf.sourceforge.jp/
+-->
+
+<!DOCTYPE village SYSTEM "http://jindolf.sourceforge.jp/xml/dtd/bbsArchive-091001.dtd" >
+
+<village
+  xmlns="http://jindolf.sourceforge.jp/xml/ns/401"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xsi:schemaLocation="http://jindolf.sourceforge.jp/xml/ns/401 http://jindolf.sourceforge.jp/xml/xsd/bbsArchive-091001.xsd"
+  xml:lang="ja-JP"
+  xml:base="http://192.168.150.129/moltonf/"
+  fullName="F0 テスト用の村" vid="0"
+  commitTime="08:15:00+09:00"
+  state="gameover" isValid="true"
+  landName="人狼BBS:F国" formalName="人狼BBS:F"
+  landId="wolff" landPrefix="F"
+  locale="ja-JP" origencoding="Shift_JIS" timezone="GMT+09:00"
+  graveIconURI="plugin_wolf/img/face99.jpg"
+  generator="nobody1.0"
+>
+
+<avatarList>
+
+<avatar
+  avatarId="gerd"
+  fullName="楽天家 ゲルト" shortName="ゲルト"
+  faceIconURI="plugin_wolf/img/face01.jpg"
+/>
+
+<avatar
+  avatarId="clara"
+  fullName="司書 クララ" shortName="クララ"
+  faceIconURI="plugin_wolf/img/face19.jpg"
+/>
+
+<avatar
+  avatarId="fridel"
+  fullName="シスター フリーデル" shortName="フリーデル"
+  faceIconURI="plugin_wolf/img/face17.jpg"
+/>
+
+<avatar
+  avatarId="liesa"
+  fullName="少女 リーザ" shortName="リーザ"
+  faceIconURI="plugin_wolf/img/face09.jpg"
+/>
+
+<avatar
+  avatarId="regina"
+  fullName="宿屋の女主人 レジーナ" shortName="レジーナ"
+  faceIconURI="plugin_wolf/img/face16.jpg"
+/>
+
+<avatar
+  avatarId="dieter"
+  fullName="ならず者 ディーター" shortName="ディーター"
+  faceIconURI="plugin_wolf/img/face07.jpg"
+/>
+
+<avatar
+  avatarId="simson"
+  fullName="神父 ジムゾン" shortName="ジムゾン"
+  faceIconURI="plugin_wolf/img/face04.jpg"
+/>
+
+<avatar
+  avatarId="peter"
+  fullName="少年 ペーター" shortName="ペーター"
+  faceIconURI="plugin_wolf/img/face08.jpg"
+/>
+
+<avatar
+  avatarId="joachim"
+  fullName="青年 ヨアヒム" shortName="ヨアヒム"
+  faceIconURI="plugin_wolf/img/face13.jpg"
+/>
+
+<avatar
+  avatarId="nicolas"
+  fullName="旅人 ニコラス" shortName="ニコラス"
+  faceIconURI="plugin_wolf/img/face06.jpg"
+/>
+
+<avatar
+  avatarId="jacob"
+  fullName="農夫 ヤコブ" shortName="ヤコブ"
+  faceIconURI="plugin_wolf/img/face15.jpg"
+/>
+
+<avatar
+  avatarId="simon"
+  fullName="負傷兵 シモン" shortName="シモン"
+  faceIconURI="plugin_wolf/img/face20.jpg"
+/>
+
+<avatar
+  avatarId="erna"
+  fullName="仕立て屋 エルナ" shortName="エルナ"
+  faceIconURI="plugin_wolf/img/face18.jpg"
+/>
+
+<avatar
+  avatarId="otto"
+  fullName="パン屋 オットー" shortName="オットー"
+  faceIconURI="plugin_wolf/img/face12.jpg"
+/>
+
+<avatar
+  avatarId="moritz"
+  fullName="老人 モーリッツ" shortName="モーリッツ"
+  faceIconURI="plugin_wolf/img/face03.jpg"
+/>
+
+<avatar
+  avatarId="katharina"
+  fullName="羊飼い カタリナ" shortName="カタリナ"
+  faceIconURI="plugin_wolf/img/face11.jpg"
+/>
+
+</avatarList>
+
+<period
+  type="prologue" day="0"
+  nextCommitDay="--07-11+09:00" commitTime="08:15:00+09:00"
+  sourceURI="index.rb?vid=0&amp;meslog=0_ready_0&amp;mes=all"
+  loadedTime="2009-07-12T16:23:52.000+09:00"
+>
+
+<startEntry>
+<li>昼間は人間のふりをして、夜に正体を現すという人狼。</li>
+<li>その人狼が、この村に紛れ込んでいるという噂が広がった。</li>
+<li/>
+<li>村人達は半信半疑ながらも、村はずれの宿に集められることになった。</li>
+<li/>
+</startEntry>
+
+<onStage entryNo="1" avatarId="gerd" >
+<li>1人目、楽天家 ゲルト。</li>
+</onStage>
+
+<talk
+  type="public" avatarId="gerd"
+  xname="mes1246547703" time="00:15:00+09:00"
+>
+<li>人狼なんているわけないじゃん。みんな大げさだなあ</li>
+<li/>
+</talk>
+
+</period>
+
+<period
+  type="progress" day="1"
+  nextCommitDay="--07-11+09:00" commitTime="08:15:00+09:00"
+  sourceURI="index.rb?vid=0&amp;meslog=0_progress_0&amp;mes=all"
+  loadedTime="2009-07-12T16:23:53.000+09:00"
+>
+
+<startMirror>
+<li>さあ、自らの姿を鏡に映してみよう。</li>
+<li>そこに映るのはただの村人か、それとも血に飢えた人狼か。</li>
+<li/>
+<li>例え人狼でも、多人数で立ち向かえば怖くはない。</li>
+<li>問題は、だれが人狼なのかという事だ。</li>
+<li>占い師の能力を持つ人間ならば、それを見破れるだろう。</li>
+<li/>
+</startMirror>
+
+<openRole>
+<li>どうやらこの中には、村人が7名、人狼が3名、占い師が1名、霊能者が1名、狂人が1名、狩人が1名、共有者が2名いるようだ。</li>
+<roleHeads role="innocent" heads="7" />
+<roleHeads role="wolf" heads="3" />
+<roleHeads role="seer" heads="1" />
+<roleHeads role="shaman" heads="1" />
+<roleHeads role="madman" heads="1" />
+<roleHeads role="hunter" heads="1" />
+<roleHeads role="frater" heads="2" />
+</openRole>
+
+<talk
+  type="public" avatarId="gerd"
+  xname="mes1246576501" time="08:15:00+09:00"
+>
+<li>ふぁーあ……ねむいな……寝てていい？</li>
+<li/>
+</talk>
+
+<talk
+  type="wolf" avatarId="simon"
+  xname="mes1246576544" time="08:15:00+09:00"
+>
+<li>おおかみなのれす</li>
+</talk>
+
+<talk
+  type="private" avatarId="fridel"
+  xname="mes1246576567" time="08:16:00+09:00"
+>
+<li>ひとりごとなのれす。</li>
+</talk>
+
+<talk
+  type="public" avatarId="peter"
+  xname="mes1246576649" time="08:17:00+09:00"
+>
+<li>つ &#x20;議題</li>
+<li>■１ 能力者ＣＯの方針</li>
+<li>■２ 回避ＣＯの方針</li>
+<li>■３ 占い先</li>
+</talk>
+
+</period>
+
+<period
+  type="progress" day="2"
+  nextCommitDay="--07-11+09:00" commitTime="08:15:00+09:00"
+  sourceURI="index.rb?vid=0&amp;meslog=0_progress_1&amp;mes=all"
+  loadedTime="2009-07-12T16:23:54.000+09:00"
+>
+
+<judge byWhom="jacob" target="simson" >
+<li>農夫 ヤコブ は、神父 ジムゾン を占った。</li>
+</judge>
+
+<murdered>
+<li>次の日の朝、楽天家 ゲルト が無残な姿で発見された。</li>
+<li/>
+<avatarRef avatarId="gerd" />
+</murdered>
+
+<startAssault>
+<li>ついに犠牲者が出た。人狼はこの村人達のなかにいる。</li>
+<li>しかし、それを見分ける手段はない。</li>
+<li/>
+<li>村人達は、疑わしい者を排除するため、投票を行う事にした。</li>
+<li>無実の犠牲者が出るのもやむをえない。村が全滅するよりは……。</li>
+<li/>
+<li>最後まで残るのは村人か、それとも人狼か。</li>
+<li/>
+</startAssault>
+
+<survivor>
+<li>現在の生存者は、司書 クララ、シスター フリーデル、少女 リーザ、宿屋の女主人 レジーナ、ならず者 ディーター、神父 ジムゾン、少年 ペーター、青年 ヨアヒム、旅人 ニコラス、農夫 ヤコブ、負傷兵 シモン、仕立て屋 エルナ、パン屋 オットー、老人 モーリッツ、羊飼い カタリナ の 15 名。</li>
+<avatarRef avatarId="clara" />
+<avatarRef avatarId="fridel" />
+<avatarRef avatarId="liesa" />
+<avatarRef avatarId="regina" />
+<avatarRef avatarId="dieter" />
+<avatarRef avatarId="simson" />
+<avatarRef avatarId="peter" />
+<avatarRef avatarId="joachim" />
+<avatarRef avatarId="nicolas" />
+<avatarRef avatarId="jacob" />
+<avatarRef avatarId="simon" />
+<avatarRef avatarId="erna" />
+<avatarRef avatarId="otto" />
+<avatarRef avatarId="moritz" />
+<avatarRef avatarId="katharina" />
+</survivor>
+
+<talk
+  type="public" avatarId="otto"
+  xname="mes1246663001" time="08:16:00+09:00"
+>
+<li>2日目</li>
+</talk>
+
+</period>
+
+<period
+  type="progress" day="3"
+  nextCommitDay="--07-11+09:00" commitTime="08:15:00+09:00"
+  sourceURI="index.rb?vid=0&amp;meslog=0_progress_2&amp;mes=all"
+  loadedTime="2009-07-12T16:23:55.000+09:00"
+>
+
+<counting victim="moritz" >
+<li>司書 クララ は 老人 モーリッツ に投票した。</li>
+<li>シスター フリーデル は 少年 ペーター に投票した。</li>
+<li>少女 リーザ は 少年 ペーター に投票した。</li>
+<li>宿屋の女主人 レジーナ は 老人 モーリッツ に投票した。</li>
+<li>ならず者 ディーター は 少年 ペーター に投票した。</li>
+<li>神父 ジムゾン は 老人 モーリッツ に投票した。</li>
+<li>少年 ペーター は 老人 モーリッツ に投票した。</li>
+<li>青年 ヨアヒム は 老人 モーリッツ に投票した。</li>
+<li>旅人 ニコラス は 少年 ペーター に投票した。</li>
+<li>農夫 ヤコブ は 少年 ペーター に投票した。</li>
+<li>負傷兵 シモン は 農夫 ヤコブ に投票した。</li>
+<li>仕立て屋 エルナ は 司書 クララ に投票した。</li>
+<li>パン屋 オットー は 老人 モーリッツ に投票した。</li>
+<li>老人 モーリッツ は 負傷兵 シモン に投票した。</li>
+<li>羊飼い カタリナ は 少年 ペーター に投票した。</li>
+<li/>
+<li>老人 モーリッツ は村人達の手により処刑された。</li>
+<vote byWhom="clara" target="moritz" />
+<vote byWhom="fridel" target="peter" />
+<vote byWhom="liesa" target="peter" />
+<vote byWhom="regina" target="moritz" />
+<vote byWhom="dieter" target="peter" />
+<vote byWhom="simson" target="moritz" />
+<vote byWhom="peter" target="moritz" />
+<vote byWhom="joachim" target="moritz" />
+<vote byWhom="nicolas" target="peter" />
+<vote byWhom="jacob" target="peter" />
+<vote byWhom="simon" target="jacob" />
+<vote byWhom="erna" target="clara" />
+<vote byWhom="otto" target="moritz" />
+<vote byWhom="moritz" target="simon" />
+<vote byWhom="katharina" target="peter" />
+</counting>
+
+<judge byWhom="jacob" target="nicolas" >
+<li>農夫 ヤコブ は、旅人 ニコラス を占った。</li>
+</judge>
+
+<assault
+  byWhom="dieter" target="clara"
+  xname="mes1246749301" time="08:15:00+09:00"
+ >
+<li>司書 クララ ！ 今日がお前の命日だ！</li>
+</assault>
+
+<guard byWhom="erna" target="clara" >
+<li>仕立て屋 エルナ は、司書 クララ を守っている。</li>
+</guard>
+
+<noMurder>
+<li>今日は犠牲者がいないようだ。人狼は襲撃に失敗したのだろうか。</li>
+<li/>
+</noMurder>
+
+<survivor>
+<li>現在の生存者は、司書 クララ、シスター フリーデル、少女 リーザ、宿屋の女主人 レジーナ、ならず者 ディーター、神父 ジムゾン、少年 ペーター、青年 ヨアヒム、旅人 ニコラス、農夫 ヤコブ、負傷兵 シモン、仕立て屋 エルナ、パン屋 オットー、羊飼い カタリナ の 14 名。</li>
+<avatarRef avatarId="clara" />
+<avatarRef avatarId="fridel" />
+<avatarRef avatarId="liesa" />
+<avatarRef avatarId="regina" />
+<avatarRef avatarId="dieter" />
+<avatarRef avatarId="simson" />
+<avatarRef avatarId="peter" />
+<avatarRef avatarId="joachim" />
+<avatarRef avatarId="nicolas" />
+<avatarRef avatarId="jacob" />
+<avatarRef avatarId="simon" />
+<avatarRef avatarId="erna" />
+<avatarRef avatarId="otto" />
+<avatarRef avatarId="katharina" />
+</survivor>
+
+<talk
+  type="public" avatarId="jacob"
+  xname="mes1246749317" time="08:15:00+09:00"
+>
+<li>3日目</li>
+</talk>
+
+</period>
+
+<period
+  type="progress" day="4"
+  nextCommitDay="--07-11+09:00" commitTime="08:15:00+09:00"
+  sourceURI="index.rb?vid=0&amp;meslog=0_progress_3&amp;mes=all"
+  loadedTime="2009-07-12T16:23:56.000+09:00"
+>
+
+<counting victim="katharina" >
+<li>司書 クララ は 羊飼い カタリナ に投票した。</li>
+<li>シスター フリーデル は 羊飼い カタリナ に投票した。</li>
+<li>少女 リーザ は 羊飼い カタリナ に投票した。</li>
+<li>宿屋の女主人 レジーナ は 農夫 ヤコブ に投票した。</li>
+<li>ならず者 ディーター は 羊飼い カタリナ に投票した。</li>
+<li>神父 ジムゾン は 農夫 ヤコブ に投票した。</li>
+<li>少年 ペーター は 農夫 ヤコブ に投票した。</li>
+<li>青年 ヨアヒム は 羊飼い カタリナ に投票した。</li>
+<li>旅人 ニコラス は 羊飼い カタリナ に投票した。</li>
+<li>農夫 ヤコブ は 羊飼い カタリナ に投票した。</li>
+<li>負傷兵 シモン は 羊飼い カタリナ に投票した。</li>
+<li>仕立て屋 エルナ は 羊飼い カタリナ に投票した。</li>
+<li>パン屋 オットー は 農夫 ヤコブ に投票した。</li>
+<li>羊飼い カタリナ は 農夫 ヤコブ に投票した。</li>
+<li/>
+<li>羊飼い カタリナ は村人達の手により処刑された。</li>
+<vote byWhom="clara" target="katharina" />
+<vote byWhom="fridel" target="katharina" />
+<vote byWhom="liesa" target="katharina" />
+<vote byWhom="regina" target="jacob" />
+<vote byWhom="dieter" target="katharina" />
+<vote byWhom="simson" target="jacob" />
+<vote byWhom="peter" target="jacob" />
+<vote byWhom="joachim" target="katharina" />
+<vote byWhom="nicolas" target="katharina" />
+<vote byWhom="jacob" target="katharina" />
+<vote byWhom="simon" target="katharina" />
+<vote byWhom="erna" target="katharina" />
+<vote byWhom="otto" target="jacob" />
+<vote byWhom="katharina" target="jacob" />
+</counting>
+
+<judge byWhom="jacob" target="dieter" >
+<li>農夫 ヤコブ は、ならず者 ディーター を占った。</li>
+</judge>
+
+<assault
+  byWhom="otto" target="liesa"
+  xname="mes1246835702" time="08:15:00+09:00"
+ >
+<li>少女 リーザ ！ 今日がお前の命日だ！</li>
+</assault>
+
+<guard byWhom="erna" target="clara" >
+<li>仕立て屋 エルナ は、司書 クララ を守っている。</li>
+</guard>
+
+<murdered>
+<li>次の日の朝、少女 リーザ が無残な姿で発見された。</li>
+<li/>
+<avatarRef avatarId="liesa" />
+</murdered>
+
+<survivor>
+<li>現在の生存者は、司書 クララ、シスター フリーデル、宿屋の女主人 レジーナ、ならず者 ディーター、神父 ジムゾン、少年 ペーター、青年 ヨアヒム、旅人 ニコラス、農夫 ヤコブ、負傷兵 シモン、仕立て屋 エルナ、パン屋 オットー の 12 名。</li>
+<avatarRef avatarId="clara" />
+<avatarRef avatarId="fridel" />
+<avatarRef avatarId="regina" />
+<avatarRef avatarId="dieter" />
+<avatarRef avatarId="simson" />
+<avatarRef avatarId="peter" />
+<avatarRef avatarId="joachim" />
+<avatarRef avatarId="nicolas" />
+<avatarRef avatarId="jacob" />
+<avatarRef avatarId="simon" />
+<avatarRef avatarId="erna" />
+<avatarRef avatarId="otto" />
+</survivor>
+
+<talk
+  type="public" avatarId="simson"
+  xname="mes1246835725" time="08:15:00+09:00"
+>
+<li>4日目</li>
+</talk>
+
+</period>
+
+<period
+  type="progress" day="5"
+  nextCommitDay="--07-11+09:00" commitTime="08:15:00+09:00"
+  sourceURI="index.rb?vid=0&amp;meslog=0_progress_4&amp;mes=all"
+  loadedTime="2009-07-12T16:23:57.000+09:00"
+>
+
+<counting victim="otto" >
+<li>司書 クララ は パン屋 オットー に投票した。</li>
+<li>シスター フリーデル は パン屋 オットー に投票した。</li>
+<li>宿屋の女主人 レジーナ は パン屋 オットー に投票した。</li>
+<li>ならず者 ディーター は パン屋 オットー に投票した。</li>
+<li>神父 ジムゾン は パン屋 オットー に投票した。</li>
+<li>少年 ペーター は パン屋 オットー に投票した。</li>
+<li>青年 ヨアヒム は パン屋 オットー に投票した。</li>
+<li>旅人 ニコラス は パン屋 オットー に投票した。</li>
+<li>農夫 ヤコブ は パン屋 オットー に投票した。</li>
+<li>負傷兵 シモン は パン屋 オットー に投票した。</li>
+<li>仕立て屋 エルナ は パン屋 オットー に投票した。</li>
+<li>パン屋 オットー は ならず者 ディーター に投票した。</li>
+<li/>
+<li>パン屋 オットー は村人達の手により処刑された。</li>
+<vote byWhom="clara" target="otto" />
+<vote byWhom="fridel" target="otto" />
+<vote byWhom="regina" target="otto" />
+<vote byWhom="dieter" target="otto" />
+<vote byWhom="simson" target="otto" />
+<vote byWhom="peter" target="otto" />
+<vote byWhom="joachim" target="otto" />
+<vote byWhom="nicolas" target="otto" />
+<vote byWhom="jacob" target="otto" />
+<vote byWhom="simon" target="otto" />
+<vote byWhom="erna" target="otto" />
+<vote byWhom="otto" target="dieter" />
+</counting>
+
+<judge byWhom="jacob" target="erna" >
+<li>農夫 ヤコブ は、仕立て屋 エルナ を占った。</li>
+</judge>
+
+<assault
+  byWhom="dieter" target="peter"
+  xname="mes1246922103" time="08:15:00+09:00"
+ >
+<li>少年 ペーター ！ 今日がお前の命日だ！</li>
+</assault>
+
+<guard byWhom="erna" target="clara" >
+<li>仕立て屋 エルナ は、司書 クララ を守っている。</li>
+</guard>
+
+<murdered>
+<li>次の日の朝、少年 ペーター が無残な姿で発見された。</li>
+<li/>
+<avatarRef avatarId="peter" />
+</murdered>
+
+<survivor>
+<li>現在の生存者は、司書 クララ、シスター フリーデル、宿屋の女主人 レジーナ、ならず者 ディーター、神父 ジムゾン、青年 ヨアヒム、旅人 ニコラス、農夫 ヤコブ、負傷兵 シモン、仕立て屋 エルナ の 10 名。</li>
+<avatarRef avatarId="clara" />
+<avatarRef avatarId="fridel" />
+<avatarRef avatarId="regina" />
+<avatarRef avatarId="dieter" />
+<avatarRef avatarId="simson" />
+<avatarRef avatarId="joachim" />
+<avatarRef avatarId="nicolas" />
+<avatarRef avatarId="jacob" />
+<avatarRef avatarId="simon" />
+<avatarRef avatarId="erna" />
+</survivor>
+
+<talk
+  type="private" avatarId="fridel"
+  xname="mes1246922209" time="08:16:00+09:00"
+>
+<li>5日目</li>
+</talk>
+
+</period>
+
+<period
+  type="progress" day="6"
+  nextCommitDay="--07-11+09:00" commitTime="08:15:00+09:00"
+  sourceURI="index.rb?vid=0&amp;meslog=0_progress_5&amp;mes=all"
+  loadedTime="2009-07-12T16:23:58.000+09:00"
+>
+
+<counting victim="dieter" >
+<li>司書 クララ は ならず者 ディーター に投票した。</li>
+<li>シスター フリーデル は ならず者 ディーター に投票した。</li>
+<li>宿屋の女主人 レジーナ は ならず者 ディーター に投票した。</li>
+<li>ならず者 ディーター は 仕立て屋 エルナ に投票した。</li>
+<li>神父 ジムゾン は ならず者 ディーター に投票した。</li>
+<li>青年 ヨアヒム は ならず者 ディーター に投票した。</li>
+<li>旅人 ニコラス は ならず者 ディーター に投票した。</li>
+<li>農夫 ヤコブ は ならず者 ディーター に投票した。</li>
+<li>負傷兵 シモン は ならず者 ディーター に投票した。</li>
+<li>仕立て屋 エルナ は ならず者 ディーター に投票した。</li>
+<li/>
+<li>ならず者 ディーター は村人達の手により処刑された。</li>
+<vote byWhom="clara" target="dieter" />
+<vote byWhom="fridel" target="dieter" />
+<vote byWhom="regina" target="dieter" />
+<vote byWhom="dieter" target="erna" />
+<vote byWhom="simson" target="dieter" />
+<vote byWhom="joachim" target="dieter" />
+<vote byWhom="nicolas" target="dieter" />
+<vote byWhom="jacob" target="dieter" />
+<vote byWhom="simon" target="dieter" />
+<vote byWhom="erna" target="dieter" />
+</counting>
+
+<judge byWhom="jacob" target="simon" >
+<li>農夫 ヤコブ は、負傷兵 シモン を占った。</li>
+</judge>
+
+<assault
+  byWhom="simon" target="simson"
+  xname="mes1247008501" time="08:15:00+09:00"
+ >
+<li>神父 ジムゾン ！ 今日がお前の命日だ！</li>
+</assault>
+
+<guard byWhom="erna" target="clara" >
+<li>仕立て屋 エルナ は、司書 クララ を守っている。</li>
+</guard>
+
+<murdered>
+<li>次の日の朝、神父 ジムゾン が無残な姿で発見された。</li>
+<li/>
+<avatarRef avatarId="simson" />
+</murdered>
+
+<survivor>
+<li>現在の生存者は、司書 クララ、シスター フリーデル、宿屋の女主人 レジーナ、青年 ヨアヒム、旅人 ニコラス、農夫 ヤコブ、負傷兵 シモン、仕立て屋 エルナ の 8 名。</li>
+<avatarRef avatarId="clara" />
+<avatarRef avatarId="fridel" />
+<avatarRef avatarId="regina" />
+<avatarRef avatarId="joachim" />
+<avatarRef avatarId="nicolas" />
+<avatarRef avatarId="jacob" />
+<avatarRef avatarId="simon" />
+<avatarRef avatarId="erna" />
+</survivor>
+
+<talk
+  type="grave" avatarId="otto"
+  xname="mes1247008593" time="08:16:00+09:00"
+>
+<li>6日目</li>
+</talk>
+
+</period>
+
+<period
+  type="epilogue" day="7"
+  nextCommitDay="--07-11+09:00" commitTime="08:15:00+09:00"
+  sourceURI="index.rb?vid=0&amp;meslog=0_party_6&amp;mes=all"
+  loadedTime="2009-07-12T16:23:59.000+09:00"
+>
+
+<counting victim="simon" >
+<li>司書 クララ は 負傷兵 シモン に投票した。</li>
+<li>シスター フリーデル は 負傷兵 シモン に投票した。</li>
+<li>宿屋の女主人 レジーナ は 負傷兵 シモン に投票した。</li>
+<li>青年 ヨアヒム は 負傷兵 シモン に投票した。</li>
+<li>旅人 ニコラス は 負傷兵 シモン に投票した。</li>
+<li>農夫 ヤコブ は 負傷兵 シモン に投票した。</li>
+<li>負傷兵 シモン は 仕立て屋 エルナ に投票した。</li>
+<li>仕立て屋 エルナ は 負傷兵 シモン に投票した。</li>
+<li/>
+<li>負傷兵 シモン は村人達の手により処刑された。</li>
+<vote byWhom="clara" target="simon" />
+<vote byWhom="fridel" target="simon" />
+<vote byWhom="regina" target="simon" />
+<vote byWhom="joachim" target="simon" />
+<vote byWhom="nicolas" target="simon" />
+<vote byWhom="jacob" target="simon" />
+<vote byWhom="simon" target="erna" />
+<vote byWhom="erna" target="simon" />
+</counting>
+
+<judge byWhom="jacob" target="joachim" >
+<li>農夫 ヤコブ は、青年 ヨアヒム を占った。</li>
+</judge>
+
+<noMurder>
+<li>今日は犠牲者がいないようだ。人狼は襲撃に失敗したのだろうか。</li>
+<li/>
+</noMurder>
+
+<winVillage>
+<li>全ての人狼を退治した……。人狼に怯える日々は去ったのだ！</li>
+<li/>
+</winVillage>
+
+<playerList>
+<li>楽天家 ゲルト （master）、死亡。村人だった。</li>
+<li>司書 クララ （player1）、生存。霊能者だった。</li>
+<li>シスター フリーデル （player2）、生存。共有者だった。</li>
+<li>少女 リーザ （player3）、死亡。村人だった。</li>
+<li>宿屋の女主人 レジーナ （player4）、生存。共有者だった。</li>
+<li>ならず者 ディーター （player5）、死亡。人狼だった。</li>
+<li>神父 ジムゾン （player6）、死亡。村人だった。</li>
+<li>少年 ペーター （player7）、死亡。村人だった。</li>
+<li>青年 ヨアヒム （player8）、生存。村人だった。</li>
+<li>旅人 ニコラス （player9）、生存。村人だった。</li>
+<li>農夫 ヤコブ （player10）、生存。占い師だった。</li>
+<li>負傷兵 シモン （player11）、死亡。人狼だった。</li>
+<li>仕立て屋 エルナ （player12）、生存。狩人だった。</li>
+<li>パン屋 オットー （player13）、死亡。人狼だった。</li>
+<li>老人 モーリッツ （player14）、死亡。村人だった。</li>
+<li>羊飼い カタリナ （player15）、死亡。狂人だった。</li>
+<playerInfo playerId="master" avatarId="gerd" survive="false" role="innocent" />
+<playerInfo playerId="player1" avatarId="clara" survive="true" role="shaman" />
+<playerInfo playerId="player2" avatarId="fridel" survive="true" role="frater" uri="http://192.168.150.129/wolfbbs/player2.html" />
+<playerInfo playerId="player3" avatarId="liesa" survive="false" role="innocent" uri="http://192.168.150.129/wolfbbs/player3.html" />
+<playerInfo playerId="player4" avatarId="regina" survive="true" role="frater" />
+<playerInfo playerId="player5" avatarId="dieter" survive="false" role="wolf" uri="http://192.168.150.129/wolfbbs/player5.html" />
+<playerInfo playerId="player6" avatarId="simson" survive="false" role="innocent" />
+<playerInfo playerId="player7" avatarId="peter" survive="false" role="innocent" />
+<playerInfo playerId="player8" avatarId="joachim" survive="true" role="innocent" uri="http://192.168.150.129/wolfbbs/player8.html" />
+<playerInfo playerId="player9" avatarId="nicolas" survive="true" role="innocent" />
+<playerInfo playerId="player10" avatarId="jacob" survive="true" role="seer" uri="http://192.168.150.129/wolfbbs/player10.html" />
+<playerInfo playerId="player11" avatarId="simon" survive="false" role="wolf" uri="http://192.168.150.129/wolfbbs/player11.html" />
+<playerInfo playerId="player12" avatarId="erna" survive="true" role="hunter" uri="http://192.168.150.129/wolfbbs/player12.html" />
+<playerInfo playerId="player13" avatarId="otto" survive="false" role="wolf" uri="http://192.168.150.129/wolfbbs/player13.html" />
+<playerInfo playerId="player14" avatarId="moritz" survive="false" role="innocent" uri="http://192.168.150.129/wolfbbs/player14.html" />
+<playerInfo playerId="player15" avatarId="katharina" survive="false" role="madman" uri="http://192.168.150.129/wolfbbs/player15.html" />
+</playerList>
+
+<talk
+  type="public" avatarId="jacob"
+  xname="mes1247094913" time="08:15:00+09:00"
+>
+<li>えぴです</li>
+</talk>
+
+</period>
+
+</village>
+
+<!-- EOF -->

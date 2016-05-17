@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		501F95491CE61C7A00628E29 /* ArchiveLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F95481CE61C7A00628E29 /* ArchiveLoader.swift */; };
+		501F95491CE61C7A00628E29 /* ArchiveToJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F95481CE61C7A00628E29 /* ArchiveToJSON.swift */; };
 		501F954B1CE61CA700628E29 /* ArchiveSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F954A1CE61CA700628E29 /* ArchiveSchema.swift */; };
 		501F954F1CE9B77E00628E29 /* XMLPullitic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 501F954E1CE9B77E00628E29 /* XMLPullitic.framework */; };
+		501F95511CEB440400628E29 /* ArchiveKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F95501CEB440400628E29 /* ArchiveKeys.swift */; };
 		5025EFE11CDF15A70032AD67 /* WorkspaceList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */; };
 		5025EFE31CDF16530032AD67 /* WorkspaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */; };
 		5025EFE71CDF17470032AD67 /* WorkspaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */; };
@@ -24,6 +25,9 @@
 		5025EFFB1CE1FEF70032AD67 /* SelectArchiveFile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5025EFFA1CE1FEF70032AD67 /* SelectArchiveFile.storyboard */; };
 		5025EFFD1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift */; };
 		5025EFFF1CE2139B0032AD67 /* DismissingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFFE1CE2139B0032AD67 /* DismissingMessage.swift */; };
+		503AC72A1CEDD8A500A379AB /* ArchiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503AC7291CEDD8A500A379AB /* ArchiveTests.swift */; };
+		503AC72C1CEDDCA700A379AB /* jin_wolff_00000.xml in Resources */ = {isa = PBXBuildFile; fileRef = 503AC72B1CEDDCA700A379AB /* jin_wolff_00000.xml */; };
+		503AC72D1CEDE6F300A379AB /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */; };
 		5045BD111CDED11500A8A0FA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5045BD101CDED11500A8A0FA /* AppDelegate.swift */; };
 		5045BD181CDED11500A8A0FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5045BD171CDED11500A8A0FA /* Assets.xcassets */; };
 		5045BD1B1CDED11500A8A0FA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5045BD191CDED11500A8A0FA /* LaunchScreen.storyboard */; };
@@ -44,9 +48,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		501F95481CE61C7A00628E29 /* ArchiveLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveLoader.swift; sourceTree = "<group>"; };
+		501F95481CE61C7A00628E29 /* ArchiveToJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveToJSON.swift; sourceTree = "<group>"; };
 		501F954A1CE61CA700628E29 /* ArchiveSchema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveSchema.swift; sourceTree = "<group>"; };
 		501F954E1CE9B77E00628E29 /* XMLPullitic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XMLPullitic.framework; path = Carthage/Build/iOS/XMLPullitic.framework; sourceTree = "<group>"; };
+		501F95501CEB440400628E29 /* ArchiveKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveKeys.swift; sourceTree = "<group>"; };
 		5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = WorkspaceList.storyboard; sourceTree = "<group>"; };
 		5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceListViewController.swift; sourceTree = "<group>"; };
 		5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceListViewModel.swift; sourceTree = "<group>"; };
@@ -61,6 +66,8 @@
 		5025EFFA1CE1FEF70032AD67 /* SelectArchiveFile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SelectArchiveFile.storyboard; sourceTree = "<group>"; };
 		5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectArchiveFileListViewController.swift; sourceTree = "<group>"; };
 		5025EFFE1CE2139B0032AD67 /* DismissingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DismissingMessage.swift; sourceTree = "<group>"; };
+		503AC7291CEDD8A500A379AB /* ArchiveTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveTests.swift; sourceTree = "<group>"; };
+		503AC72B1CEDDCA700A379AB /* jin_wolff_00000.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = jin_wolff_00000.xml; sourceTree = "<group>"; };
 		5045BD0D1CDED11400A8A0FA /* Moltonf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Moltonf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5045BD101CDED11500A8A0FA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5045BD171CDED11500A8A0FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -90,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				503AC72D1CEDE6F300A379AB /* RxCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,8 +107,9 @@
 		501F95471CE61C5600628E29 /* Archive */ = {
 			isa = PBXGroup;
 			children = (
-				501F95481CE61C7A00628E29 /* ArchiveLoader.swift */,
+				501F95481CE61C7A00628E29 /* ArchiveToJSON.swift */,
 				501F954A1CE61CA700628E29 /* ArchiveSchema.swift */,
+				501F95501CEB440400628E29 /* ArchiveKeys.swift */,
 			);
 			path = Archive;
 			sourceTree = "<group>";
@@ -184,6 +193,8 @@
 			isa = PBXGroup;
 			children = (
 				5045BD251CDED11500A8A0FA /* MoltonfTests.swift */,
+				503AC7291CEDD8A500A379AB /* ArchiveTests.swift */,
+				503AC72B1CEDDCA700A379AB /* jin_wolff_00000.xml */,
 				5045BD271CDED11500A8A0FA /* Info.plist */,
 			);
 			path = MoltonfTests;
@@ -311,6 +322,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				503AC72C1CEDDCA700A379AB /* jin_wolff_00000.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,9 +363,10 @@
 				5025EFF31CE15FD30032AD67 /* TransitionMessage.swift in Sources */,
 				5025EFE71CDF17470032AD67 /* WorkspaceListViewModel.swift in Sources */,
 				5025EFFF1CE2139B0032AD67 /* DismissingMessage.swift in Sources */,
+				501F95511CEB440400628E29 /* ArchiveKeys.swift in Sources */,
 				5025EFEC1CDF6F900032AD67 /* Message.swift in Sources */,
 				5025EFF11CE0D50C0032AD67 /* ActionObserver.swift in Sources */,
-				501F95491CE61C7A00628E29 /* ArchiveLoader.swift in Sources */,
+				501F95491CE61C7A00628E29 /* ArchiveToJSON.swift in Sources */,
 				5025EFEA1CDF689E0032AD67 /* WorkspaceManager.swift in Sources */,
 				5025EFEE1CDF7EFD0032AD67 /* MessageSlot.swift in Sources */,
 			);
@@ -363,6 +376,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				503AC72A1CEDD8A500A379AB /* ArchiveTests.swift in Sources */,
 				5045BD261CDED11500A8A0FA /* MoltonfTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -508,6 +522,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = MoltonfTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hironytic.MoltonfTests;
@@ -520,6 +538,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = MoltonfTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hironytic.MoltonfTests;
