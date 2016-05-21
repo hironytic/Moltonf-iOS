@@ -67,5 +67,11 @@ class ArchiveTests: XCTestCase {
         
         let isValid = playdata![ArchiveKeys.IS_VALID] as? Bool
         XCTAssertEqual(isValid, true)
+        
+        let avatarList = playdata![ArchiveKeys.AVATAR_LIST] as? [[String: AnyObject]]
+        XCTAssertNotNil(avatarList)
+        let avatar0 = avatarList![0]
+        let avatar0Id = avatar0[ArchiveKeys.AVATAR_ID] as? String
+        XCTAssertEqual(avatar0Id, "gerd")
     }
 }

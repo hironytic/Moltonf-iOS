@@ -108,7 +108,7 @@ class ArchiveToJSON {
             S.ATTR_GENERATOR:       mapToVillage(K.GENERATOR,       asString),
         ])
         
-        // chidren
+        // children
         var periods: [AnyObject] = []
         parsing: while true {
             let event = try _parser.next()
@@ -147,7 +147,53 @@ class ArchiveToJSON {
     }
 
     private func convertAvatarListElement(element: XMLElement) throws -> [[String: AnyObject]] {
-        return []   // TODO
+        // children
+        var avatars: [[String: AnyObject]] = []
+        parsing: while true {
+            let event = try _parser.next()
+            switch event {
+            case .StartElement(name: S.ELEM_AVATAR, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                avatars.append(try convertAvatarElement(element))
+            case .StartElement:
+                try skipElement()
+                break
+            case .EndElement:
+                break parsing
+            default:
+                break
+            }
+        }
+        
+        return avatars
+    }
+
+    private func convertAvatarElement(element: XMLElement) throws -> [String: AnyObject] {
+        let avatarWrapper = ObjectWrapper(object: [:])
+        
+        // attributes
+        let mapToAvatar = map(toObject: avatarWrapper)
+        try convertAttribute(element, [
+            S.ATTR_AVATAR_ID:       mapToAvatar(K.AVATAR_ID,        asString),
+            S.ATTR_FULL_NAME:       mapToAvatar(K.FULL_NAME,        asString),
+            S.ATTR_SHORT_NAME:      mapToAvatar(K.SHORT_NAME,       asString),
+            S.ATTR_FACE_ICON_URI:   mapToAvatar(K.FACE_ICON_URI,    asString),
+        ])
+
+        // children
+        parsing: while true {
+            let event = try _parser.next()
+            switch event {
+            case .StartElement:
+                try skipElement()
+                break
+            case .EndElement:
+                break parsing
+            default:
+                break
+            }
+        }
+
+        return avatarWrapper.object
     }
     
     private func convertPeriodElement(element: XMLElement) throws -> [String: AnyObject] {
