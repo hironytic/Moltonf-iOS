@@ -52,6 +52,7 @@ class ArchiveTests: XCTestCase {
             try converter.convert()
         } catch let error {
             XCTFail("error: \(error)")
+            return
         }
         
         let playdataFilePath = (outDir as NSString).stringByAppendingPathComponent("playdata.json")
@@ -59,19 +60,19 @@ class ArchiveTests: XCTestCase {
         let playdata = (try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())) as? [String: AnyObject]
         XCTAssertNotNil(playdata)
         
-        let landName = playdata![ArchiveKeys.LAND_NAME] as? String
+        let landName = playdata?[ArchiveKeys.LAND_NAME] as? String
         XCTAssertEqual(landName, "人狼BBS:F国")
         
-        let vid = playdata![ArchiveKeys.VID] as? Int
+        let vid = playdata?[ArchiveKeys.VID] as? Int
         XCTAssertEqual(vid, 0)
         
-        let isValid = playdata![ArchiveKeys.IS_VALID] as? Bool
+        let isValid = playdata?[ArchiveKeys.IS_VALID] as? Bool
         XCTAssertEqual(isValid, true)
         
-        let avatarList = playdata![ArchiveKeys.AVATAR_LIST] as? [[String: AnyObject]]
+        let avatarList = playdata?[ArchiveKeys.AVATAR_LIST] as? [[String: AnyObject]]
         XCTAssertNotNil(avatarList)
-        let avatar0 = avatarList![0]
-        let avatar0Id = avatar0[ArchiveKeys.AVATAR_ID] as? String
+        let avatar0 = avatarList?[0]
+        let avatar0Id = avatar0?[ArchiveKeys.AVATAR_ID] as? String
         XCTAssertEqual(avatar0Id, "gerd")
     }
 }

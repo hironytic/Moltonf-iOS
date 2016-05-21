@@ -59,6 +59,9 @@ class ArchiveKeys {
     static let NEXT_COMMIT_DAY = "nextCommitDay"
     // static let COMMIT_TIME = "commitTime"    // defined in another place
     static let SOURCE_URI = "sourceURI"
+    static let LOADED_TIME = "loadedTime"
+    static let LOADED_BY = "loadedBy"
+    static let HREF = "href"
     static let ELEMENTS = "elements"
     
     // MARK: period["elements"][n]

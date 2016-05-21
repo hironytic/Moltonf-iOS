@@ -180,6 +180,24 @@ class ArchiveSchema {
     // attribute "day"
     static let ATTR_DAY = "day"
     
+    // attribute "disclosure"
+    // static let ATTR_DISCLOSURE = "disclosure"    // defined in other place
+    
+    // attribute "nextCommitDay"
+    static let ATTR_NEXT_COMMIT_DAY = "nextCommitDay"
+    
+    // attribute "commitTime"
+    // static let ATTR_COMMIT_TIME = "commitTime"   // defined in other place
+    
+    // attribute "sourceURI"
+    static let ATTR_SOURCE_URI = "sourceURI"
+
+    // attribute "loadedTime"
+    static let ATTR_LOADED_TIME = "loadedTime"
+    
+    // attribute "loadedBy"
+    static let ATTR_LOADED_BY = "loadedBy"
+    
     //
     // --------------------------------------------------
     // MARK: EventAnnounceGroup の要素

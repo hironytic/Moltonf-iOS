@@ -38,6 +38,7 @@ class ArchiveToJSON {
         case InvalidOutputDirectory(innerError: ErrorType)
         case ParseError(innerError: ErrorType)
         case InvalidAttrValue(attribute: String, value: String)
+        case MissingAttr(attribute: String)
         case FailedInWritingFile(filePath: String, innerError: ErrorType?)
     }
     
@@ -88,25 +89,32 @@ class ArchiveToJSON {
         
         // attributes
         let mapToVillage = map(toObject: villageWrapper)
-        try convertAttribute(element, [
-            S.ATTR_LANG:            mapToVillage(K.LANG,            asString),
-            S.ATTR_BASE:            mapToVillage(K.BASE,            asString),
-            S.ATTR_FULL_NAME:       mapToVillage(K.FULL_NAME,       asString),
-            S.ATTR_VID:             mapToVillage(K.VID,             asInt),
-            S.ATTR_COMMIT_TIME:     mapToVillage(K.COMMIT_TIME,     asString),
-            S.ATTR_STATE:           mapToVillage(K.STATE,           asString),
-            S.ATTR_DISCLOSURE:      mapToVillage(K.DISCLOSURE,      asString),
-            S.ATTR_IS_VALID:        mapToVillage(K.IS_VALID,        asBool),
-            S.ATTR_LAND_NAME:       mapToVillage(K.LAND_NAME,       asString),
-            S.ATTR_FORMAL_NAME:     mapToVillage(K.FORMAL_NAME,     asString),
-            S.ATTR_LAND_ID:         mapToVillage(K.LAND_ID,         asString),
-            S.ATTR_LAND_PREFIX:     mapToVillage(K.LAND_PREFIX,     asString),
-            S.ATTR_LOCALE:          mapToVillage(K.LOCALE,          asString),
-            S.ATTR_ORGENCODING:     mapToVillage(K.ORGENCODING,     asString),
-            S.ATTR_TIMEZONE:        mapToVillage(K.TIMEZONE,        asString),
-            S.ATTR_GRAVE_ICON_URI:  mapToVillage(K.GRAVE_ICON_URI,  asString),
-            S.ATTR_GENERATOR:       mapToVillage(K.GENERATOR,       asString),
-        ])
+        try convertAttribute(element,
+            mapping: [
+                S.ATTR_LANG:            mapToVillage(K.LANG,            asString),
+                S.ATTR_BASE:            mapToVillage(K.BASE,            asString),
+                S.ATTR_FULL_NAME:       mapToVillage(K.FULL_NAME,       asString),
+                S.ATTR_VID:             mapToVillage(K.VID,             asInt),
+                S.ATTR_COMMIT_TIME:     mapToVillage(K.COMMIT_TIME,     asString),
+                S.ATTR_STATE:           mapToVillage(K.STATE,           asString),
+                S.ATTR_DISCLOSURE:      mapToVillage(K.DISCLOSURE,      asString),
+                S.ATTR_IS_VALID:        mapToVillage(K.IS_VALID,        asBool),
+                S.ATTR_LAND_NAME:       mapToVillage(K.LAND_NAME,       asString),
+                S.ATTR_FORMAL_NAME:     mapToVillage(K.FORMAL_NAME,     asString),
+                S.ATTR_LAND_ID:         mapToVillage(K.LAND_ID,         asString),
+                S.ATTR_LAND_PREFIX:     mapToVillage(K.LAND_PREFIX,     asString),
+                S.ATTR_LOCALE:          mapToVillage(K.LOCALE,          asString),
+                S.ATTR_ORGENCODING:     mapToVillage(K.ORGENCODING,     asString),
+                S.ATTR_TIMEZONE:        mapToVillage(K.TIMEZONE,        asString),
+                S.ATTR_GRAVE_ICON_URI:  mapToVillage(K.GRAVE_ICON_URI,  asString),
+                S.ATTR_GENERATOR:       mapToVillage(K.GENERATOR,       asString),
+            ],
+            required: [
+                S.ATTR_BASE, S.ATTR_FULL_NAME, S.ATTR_VID, S.ATTR_STATE,
+                S.ATTR_LAND_NAME, S.ATTR_FORMAL_NAME, S.ATTR_LAND_ID,
+                S.ATTR_LAND_PREFIX, S.ATTR_GRAVE_ICON_URI,
+            ]
+        )
         
         // children
         var periods: [AnyObject] = []
@@ -172,12 +180,17 @@ class ArchiveToJSON {
         
         // attributes
         let mapToAvatar = map(toObject: avatarWrapper)
-        try convertAttribute(element, [
-            S.ATTR_AVATAR_ID:       mapToAvatar(K.AVATAR_ID,        asString),
-            S.ATTR_FULL_NAME:       mapToAvatar(K.FULL_NAME,        asString),
-            S.ATTR_SHORT_NAME:      mapToAvatar(K.SHORT_NAME,       asString),
-            S.ATTR_FACE_ICON_URI:   mapToAvatar(K.FACE_ICON_URI,    asString),
-        ])
+        try convertAttribute(element,
+            mapping: [
+                S.ATTR_AVATAR_ID:       mapToAvatar(K.AVATAR_ID,        asString),
+                S.ATTR_FULL_NAME:       mapToAvatar(K.FULL_NAME,        asString),
+                S.ATTR_SHORT_NAME:      mapToAvatar(K.SHORT_NAME,       asString),
+                S.ATTR_FACE_ICON_URI:   mapToAvatar(K.FACE_ICON_URI,    asString),
+            ],
+            required: [
+                S.ATTR_AVATAR_ID, S.ATTR_FULL_NAME, S.ATTR_SHORT_NAME
+            ]
+        )
 
         // children
         parsing: while true {
@@ -197,7 +210,63 @@ class ArchiveToJSON {
     }
     
     private func convertPeriodElement(element: XMLElement) throws -> [String: AnyObject] {
-        return [:]  // TODO
+        let shallowPeriodWrapper = ObjectWrapper(object: [:])
+        let deepPeriodWrapper = ObjectWrapper(object: [:])
+        
+        // attributes
+        let mapToPeriod = map(toObjects: [shallowPeriodWrapper, deepPeriodWrapper])
+        try convertAttribute(element,
+            mapping: [
+                S.ATTR_TYPE:            mapToPeriod(K.TYPE,             asString),
+                S.ATTR_DAY:             mapToPeriod(K.DAY,              asInt),
+                S.ATTR_DISCLOSURE:      mapToPeriod(K.DISCLOSURE,       asString),
+                S.ATTR_NEXT_COMMIT_DAY: mapToPeriod(K.NEXT_COMMIT_DAY,  asString),
+                S.ATTR_COMMIT_TIME:     mapToPeriod(K.COMMIT_TIME,      asString),
+                S.ATTR_SOURCE_URI:      mapToPeriod(K.SOURCE_URI,       asString),
+                S.ATTR_LOADED_TIME:     mapToPeriod(K.LOADED_TIME,      asString),
+                S.ATTR_LOADED_BY:       mapToPeriod(K.LOADED_BY,        asString),
+            ],
+            required: [
+                S.ATTR_TYPE, S.ATTR_DAY, S.ATTR_NEXT_COMMIT_DAY,
+                S.ATTR_COMMIT_TIME, S.ATTR_SOURCE_URI
+            ]
+        )
+        
+        // children
+        parsing: while true {
+            let event = try _parser.next()
+            switch event {
+            case .StartElement:
+                try skipElement()
+                break
+            case .EndElement:
+                break parsing
+            default:
+                break
+            }
+        }
+
+        // write to period[n].json
+        let deepPeriod = deepPeriodWrapper.object
+        let day = deepPeriod[K.DAY] as! Int
+        let periodFileName = String(format: PERIOD_JSON_FORMAT, day)
+        let periodFilePath = (_outDirPath as NSString).stringByAppendingPathComponent(periodFileName)
+        guard let outStream = NSOutputStream(toFileAtPath: periodFilePath, append: false) else {
+            throw ConvertError.FailedInWritingFile(filePath: periodFilePath, innerError: nil)
+        }
+        do {
+            outStream.open()
+            defer { outStream.close() }
+            
+            var error: NSError?
+            let result = NSJSONSerialization.writeJSONObject(deepPeriod, toStream: outStream, options: NSJSONWritingOptions(), error: &error)
+            if (result == 0) {
+                throw ConvertError.FailedInWritingFile(filePath: periodFilePath, innerError: error)
+            }
+        }
+
+        shallowPeriodWrapper.object[K.HREF] = periodFileName
+        return shallowPeriodWrapper.object
     }
     
     private func skipElement() throws {
@@ -225,7 +294,8 @@ private class ObjectWrapper {
     }
 }
 
-private func convertAttribute(element: XMLElement, _ converters: [String: String throws -> Void]) throws {
+private func convertAttribute(element: XMLElement, mapping converters: [String: String throws -> Void], required requiredAttrs: [String]) throws {
+    var requiredAttrSet = Set<String>(requiredAttrs)
     for (attrName, value) in element.attributes {
         if let converter = converters[attrName] {
             do {
@@ -234,6 +304,10 @@ private func convertAttribute(element: XMLElement, _ converters: [String: String
                 throw ArchiveToJSON.ConvertError.InvalidAttrValue(attribute: attrName, value: value)
             }
         }
+        requiredAttrSet.remove(attrName)
+    }
+    if !requiredAttrSet.isEmpty {
+        throw ArchiveToJSON.ConvertError.MissingAttr(attribute: requiredAttrSet.first!)
     }
 }
 
@@ -241,6 +315,17 @@ private func map(toObject wrapper: ObjectWrapper) -> (String, (String throws -> 
     return { (key, valueConverter) in
         return { value in
             wrapper.object[key] = try valueConverter(value)
+        }
+    }
+}
+
+private func map(toObjects wrappers: [ObjectWrapper]) -> (String, (String throws -> AnyObject)) -> String throws -> Void {
+    return { (key, valueConverter) in
+        return { value in
+            let convertedValue = try valueConverter(value)
+            for wrapper in wrappers {
+                wrapper.object[key] = convertedValue
+            }
         }
     }
 }
