@@ -66,8 +66,7 @@ class ArchiveKeys {
     
     // MARK: period["elements"][n]
     // static let TYPE = "type" // defined in another place
-    // static let DAY = "day"   // defined in another place
-    // static let NEXT_COMMIT_DAY = "nextCommitDay" // defined in another place
+    static let LINES = "lines"
     
     // MARK: value of period["elements"][n]["type"]
     static let VAL_START_ENTRY = "startEntry"
@@ -101,7 +100,19 @@ class ArchiveKeys {
     static let VAL_ASSAULT = "assault"
     static let VAL_TALK = "talk"
     
+    // MARK: period["elements"][n] (talk)
+    static let TALK_TYPE = "talkType"
+    // static let AVATAR_ID = "avatarId"        // defined in another place
+    static let XNAME = "xname"
+    static let TIME = "time"
+    // static let FACE_ICON_URI = "faceIconURI" // defined in another place
     
+    // MARK: period["elements"][n] (Event)
+    static let EVENT_FAMILY = "eventFamily"
     
+    // MARK: period["elements"][n]["lines"][m]
+    static let ENCODING = "encoding"
+    static let HEX_BIN = "hexBin"
+    static let CHAR = "char"
     
 }

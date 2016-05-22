@@ -65,6 +65,9 @@ class ArchiveSchema {
 
     // attribute "xml:lang"
     static let ATTR_LANG = "xml:lang"
+
+    // lang: "ja-JP"
+    static let VAL_LANG_JA_JP = "ja-JP"
     
     // attribute "xml:base"
     static let ATTR_BASE = "xml:base"
@@ -96,8 +99,23 @@ class ArchiveSchema {
     // attribute "disclosure"
     static let ATTR_DISCLOSURE = "disclosure"
     
+    // value of disclosure: "hot"
+    static let VAL_DISCLOSURE_HOT = "hot"
+    
+    // value of disclosure: "uncomplete"
+    static let VAL_DISCLOSURE_UNCOMPLETE = "uncomplete"
+    
+    // value of disclosure: "complete"
+    static let VAL_DISCLOSURE_COMPLETE = "complete"
+    
     // attribute "isValid"
     static let ATTR_IS_VALID = "isValid"
+    
+    // boolean value: "true"
+    static let VAL_BOOLEAN_TRUE = "true"
+
+    // boolean value: "false"
+    static let VAL_BOOLEAN_FALSE = "false"
     
     // attribute "landName"
     static let ATTR_LAND_NAME = "landName"
@@ -117,8 +135,14 @@ class ArchiveSchema {
     // attribute "orgencoding"
     static let ATTR_ORGENCODING = "origencoding"
     
+    // encoding: "Shift_JIS"
+    static let VAL_ENCODING_SHIFT_JIS = "Shift_JIS"
+    
     // attribute "timezone"
     static let ATTR_TIMEZONE = "timezone"
+
+    // timezone +0900
+    static let VAL_TIMEZONE_0900 = "GMT+09:00"
     
     // attribute "graveIconURI"
     static let ATTR_GRAVE_ICON_URI = "graveIconURI"
@@ -249,6 +273,12 @@ class ArchiveSchema {
     // element "panic"
     static let ELEM_PANIC = "panic"
 
+    // element "eventFamily"
+    static let ATTR_EVENT_FAMILY = "eventFamily"
+
+    // type of eventFamily: announce
+    static let VAL_EVENT_FAMILY_ANNOUNCE = "announce"
+    
     //
     // --------------------------------------------------
     // MARK: elements in EventOrderGroup
@@ -270,6 +300,12 @@ class ArchiveSchema {
     // element "gameOver"
     static let ELEM_GAME_OVER = "gameOver"
 
+    // element "eventFamily"
+    // static let ATTR_EVENT_FAMILY = "eventFamily" // defined in other place
+    
+    // type of eventFamily: announce
+    static let VAL_EVENT_FAMILY_ORDER = "order"
+    
     //
     // --------------------------------------------------
     // MARK: elements in EventExtraGroup
@@ -281,6 +317,12 @@ class ArchiveSchema {
     
     // element "guard"
     static let ELEM_GUARD = "guard"
+    
+    // element "eventFamily"
+    // static let ATTR_EVENT_FAMILY = "eventFamily" // defined in other place
+    
+    // type of eventFamily: extra
+    static let VAL_EVENT_FAMILY_EXTRA = "extra"
     
     //
     // --------------------------------------------------
@@ -321,8 +363,14 @@ class ArchiveSchema {
     // attribute "avatarId"
     // static let ATTR_AVATAR_ID = "avatarId" // defined in other place
 
+    // attribute "xname"
+    static let ATTR_XNAME = "xname"
+    
     // attribute "time"
     static let ATTR_TIME = "time"
+    
+    // attribute "faceIconURI"
+    // static let ATTR_FACE_ICON_URI = "faceIconURI"    // defined in other place
     
     //
     // --------------------------------------------------
@@ -341,6 +389,12 @@ class ArchiveSchema {
     
     // element "rawdata"
     static let ELEM_RAWDATA = "rawdata"
+    
+    // attribute "encoding"
+    static let ATTR_ENCODING = "encoding"
+    
+    // attribute "hexBin"
+    static let ATTR_HEX_BIN = "hexBin"
     
     //
     // --------------------------------------------------

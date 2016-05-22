@@ -113,6 +113,14 @@ class ArchiveToJSON {
                 S.ATTR_BASE, S.ATTR_FULL_NAME, S.ATTR_VID, S.ATTR_STATE,
                 S.ATTR_LAND_NAME, S.ATTR_FORMAL_NAME, S.ATTR_LAND_ID,
                 S.ATTR_LAND_PREFIX, S.ATTR_GRAVE_ICON_URI,
+            ],
+            defaultValues: [
+                S.ATTR_LANG:        S.VAL_LANG_JA_JP,
+                S.ATTR_DISCLOSURE:  S.VAL_DISCLOSURE_COMPLETE,
+                S.ATTR_IS_VALID:    S.VAL_BOOLEAN_TRUE,
+                S.ATTR_LOCALE:      S.VAL_LANG_JA_JP,
+                S.ATTR_ORGENCODING: S.VAL_ENCODING_SHIFT_JIS,
+                S.ATTR_TIMEZONE:    S.VAL_TIMEZONE_0900,
             ]
         )
         
@@ -189,7 +197,8 @@ class ArchiveToJSON {
             ],
             required: [
                 S.ATTR_AVATAR_ID, S.ATTR_FULL_NAME, S.ATTR_SHORT_NAME
-            ]
+            ],
+            defaultValues: [:]
         )
 
         // children
@@ -229,17 +238,79 @@ class ArchiveToJSON {
             required: [
                 S.ATTR_TYPE, S.ATTR_DAY, S.ATTR_NEXT_COMMIT_DAY,
                 S.ATTR_COMMIT_TIME, S.ATTR_SOURCE_URI
+            ],
+            defaultValues: [
+                S.ATTR_DISCLOSURE:      S.VAL_DISCLOSURE_COMPLETE,
             ]
         )
         
         // children
+        var elements: [[String: AnyObject]] = []
         parsing: while true {
             let event = try _parser.next()
             switch event {
+            case .StartElement(name: S.ELEM_TALK, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                elements.append(try convertTalkElement(element))
+            case .StartElement(name: S.ELEM_START_ENTRY, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                elements.append(try convertStartEntryElement(element))
+            case .StartElement(name: S.ELEM_ON_STAGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_START_MIRROR, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_OPEN_ROLE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_MURDERED, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_START_ASSAULT, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_SURVIVOR, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_COUNTING, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_SUDDEN_DEATH, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_NO_MURDER, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_WIN_VILLAGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_WIN_WOLF, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_WIN_HAMSTER, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_PLAYER_LIST, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_PANIC, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+//            case .StartElement(name: S.ELEM_EXECUTION, namespaceURI: S.NS_ARCHIVE?, element: let element):
+//                try skipElement()   // TODO
+//            case .StartElement(name: S.ELEM_VANISH, namespaceURI: S.NS_ARCHIVE?, element: let element):
+//                try skipElement()   // TODO
+//            case .StartElement(name: S.ELEM_CHECKOUG, namespaceURI: S.NS_ARCHIVE?, element: let element):
+//                try skipElement()   // TODO
+//            case .StartElement(name: S.ELEM_SHORT_MEMBER, namespaceURI: S.NS_ARCHIVE?, element: let element):
+//                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_ASK_ENTRY, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_ASK_COMMIT, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_NO_COMMENT, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_STAY_EPILOGUE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_GAME_OVER, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_JUDGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_GUARD, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
+//            case .StartElement(name: S.ELEM_COUNTING2, namespaceURI: S.NS_ARCHIVE?, element: let element):
+//                try skipElement()   // TODO
+            case .StartElement(name: S.ELEM_ASSAULT, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                try skipElement()   // TODO
             case .StartElement:
                 try skipElement()
-                break
             case .EndElement:
+                deepPeriodWrapper.object[K.ELEMENTS] = elements
                 break parsing
             default:
                 break
@@ -269,6 +340,139 @@ class ArchiveToJSON {
         return shallowPeriodWrapper.object
     }
     
+    private func convertTalkElement(element: XMLElement) throws -> [String: AnyObject] {
+        return try convertTextLines(element) { talkWrapper in
+            talkWrapper.object[K.TYPE] = K.VAL_TALK
+            
+            // attributes
+            let mapToTalk = map(toObject: talkWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_TYPE:            mapToTalk(K.TALK_TYPE,      asString),
+                    S.ATTR_AVATAR_ID:       mapToTalk(K.AVATAR_ID,      asString),
+                    S.ATTR_XNAME:           mapToTalk(K.XNAME,          asString),
+                    S.ATTR_TIME:            mapToTalk(K.TIME,           asString),
+                    S.ATTR_FACE_ICON_URI:   mapToTalk(K.FACE_ICON_URI,  asString),
+                ],
+                required: [
+                    S.ATTR_TYPE, S.ATTR_AVATAR_ID, S.ATTR_XNAME, S.ATTR_TIME,
+                ],
+                defaultValues: [:]
+            )
+        }
+    }
+    
+    private func convertStartEntryElement(element: XMLElement) throws -> [String: AnyObject] {
+        return try convertEvent(element, family: S.VAL_EVENT_FAMILY_ANNOUNCE) { eventWrapper in
+            eventWrapper.object[K.TYPE] = K.VAL_START_ENTRY
+        }
+    }
+    
+    private func convertEvent(element: XMLElement, family: String, _ additionalConverter: ObjectWrapper throws -> Void) throws -> [String: AnyObject] {
+        return try convertTextLines(element) { eventWrapper in
+            try additionalConverter(eventWrapper)
+            
+            // attributes
+            let mapToEvent = map(toObject: eventWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_EVENT_FAMILY:    mapToEvent(K.EVENT_FAMILY,  asString),
+                ],
+                required: [],
+                defaultValues: [
+                    S.ATTR_EVENT_FAMILY:    family
+                ]
+            )            
+        }
+    }
+    
+    private func convertTextLines(element: XMLElement, _ additionalConverter: ObjectWrapper throws -> Void) throws -> [String: AnyObject] {
+        let objectWrapper = ObjectWrapper(object: [:])
+
+        try additionalConverter(objectWrapper)
+        
+        // children
+        var lines: [AnyObject] = []
+        parsing: while true {
+            let event = try _parser.next()
+            switch event {
+            case .StartElement(name: S.ELEM_LI, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                lines.append(try convertLiElement(element))
+                break
+            case .EndElement:
+                objectWrapper.object[K.LINES] = lines
+                break parsing
+            default:
+                break
+            }
+        }
+        
+        return objectWrapper.object
+    }
+    
+    private func convertLiElement(element: XMLElement) throws -> AnyObject {
+        var contents: [AnyObject] = []
+        
+        parsing: while true {
+            let event = try _parser.next()
+            switch event {
+            case .Characters(let string):
+                contents.append(string)
+            case .StartElement(name: S.ELEM_RAWDATA, namespaceURI: S.NS_ARCHIVE?, element: _):
+                try skipElement()   // TODO:
+            case .StartElement:
+                try skipElement()
+            case .EndElement:
+                break parsing
+            default:
+                break
+            }
+        }
+
+        switch contents.count {
+        case 0:
+            return ""
+        case 1:
+            return contents[0]
+        default:
+            return contents
+        }
+    }
+    
+    private func convertRawdataElement(element: XMLElement) throws -> AnyObject {
+        let contentWrapper = ObjectWrapper(object: [:])
+        
+        // attributes
+        let mapToContent = map(toObject: contentWrapper)
+        try convertAttribute(element,
+            mapping: [
+                S.ATTR_ENCODING:        mapToContent(K.ENCODING,    asString),
+                S.ATTR_HEX_BIN:         mapToContent(K.HEX_BIN,     asString),
+            ],
+            required: [
+                S.ATTR_ENCODING, S.ATTR_HEX_BIN,
+            ],
+            defaultValues: [:]
+        )
+        
+        // children
+        parsing: while true {
+            let event = try _parser.next()
+            switch event {
+            case .Characters(let string):
+                contentWrapper.object[K.CHAR] = string
+            case .StartElement:
+                try skipElement()
+            case .EndElement:
+                break parsing
+            default:
+                break
+            }
+        }
+
+        return contentWrapper.object
+    }
+    
     private func skipElement() throws {
         parsing: while true {
             let event = try _parser.next()
@@ -294,9 +498,16 @@ private class ObjectWrapper {
     }
 }
 
-private func convertAttribute(element: XMLElement, mapping converters: [String: String throws -> Void], required requiredAttrs: [String]) throws {
+private func convertAttribute(element: XMLElement, mapping converters: [String: String throws -> Void], required requiredAttrs: [String], defaultValues: [String: String]) throws {
+    var attributes = element.attributes
+    for (attrName, defaultValue) in defaultValues {
+        if !attributes.keys.contains(attrName) {
+            attributes[attrName] = defaultValue
+        }
+    }
+    
     var requiredAttrSet = Set<String>(requiredAttrs)
-    for (attrName, value) in element.attributes {
+    for (attrName, value) in attributes {
         if let converter = converters[attrName] {
             do {
                 try converter(value)
@@ -306,6 +517,7 @@ private func convertAttribute(element: XMLElement, mapping converters: [String: 
         }
         requiredAttrSet.remove(attrName)
     }
+
     if !requiredAttrSet.isEmpty {
         throw ArchiveToJSON.ConvertError.MissingAttr(attribute: requiredAttrSet.first!)
     }
