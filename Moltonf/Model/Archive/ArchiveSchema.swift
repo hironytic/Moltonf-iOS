@@ -234,6 +234,12 @@ class ArchiveSchema {
     // element "onStage"
     static let ELEM_ON_STAGE = "onStage"
     
+    // element "eventFamily"
+    static let ATTR_ENTRY_NO = "entryNo"
+    
+    // attribute "avatarId"
+    // static let ATTR_AVATAR_ID = "avatarId" // defined in other place
+    
     // element "startMirror"
     static let ELEM_START_MIRROR = "startMirror"
     

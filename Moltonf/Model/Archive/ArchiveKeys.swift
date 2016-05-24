@@ -109,6 +109,10 @@ class ArchiveKeys {
     
     // MARK: period["elements"][n] (Event)
     static let EVENT_FAMILY = "eventFamily"
+
+    // MARK: period["elements"][n] (onStage)
+    static let ENTRY_NO = "entryNo"
+    // static let AVATAR_ID = "avatarId"        // defined in another place
     
     // MARK: period["elements"][n]["lines"][m]
     static let ENCODING = "encoding"

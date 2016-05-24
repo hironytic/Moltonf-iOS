@@ -254,9 +254,9 @@ class ArchiveToJSON {
             case .StartElement(name: S.ELEM_START_ENTRY, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 elements.append(try convertStartEntryElement(element))
             case .StartElement(name: S.ELEM_ON_STAGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                try skipElement()   // TODO
+                elements.append(try convertOnStageElement(element))
             case .StartElement(name: S.ELEM_START_MIRROR, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                try skipElement()   // TODO
+                elements.append(try convertStartMirrorElement(element))
             case .StartElement(name: S.ELEM_OPEN_ROLE, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 try skipElement()   // TODO
             case .StartElement(name: S.ELEM_MURDERED, namespaceURI: S.NS_ARCHIVE?, element: let element):
@@ -368,6 +368,40 @@ class ArchiveToJSON {
         }
     }
     
+    private func convertOnStageElement(element: XMLElement) throws -> [String: AnyObject] {
+        return try convertEvent(element, family: S.VAL_EVENT_FAMILY_ANNOUNCE) { eventWrapper in
+            eventWrapper.object[K.TYPE] = K.VAL_ON_STAGE
+            
+            // attributes
+            let mapToEvent = map(toObject: eventWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_ENTRY_NO:    mapToEvent(K.ENTRY_NO,  asInt),
+                    S.ATTR_AVATAR_ID:   mapToEvent(K.AVATAR_ID, asString),
+                ],
+                required: [
+                    S.ATTR_ENTRY_NO, S.ATTR_AVATAR_ID,
+                ],
+                defaultValues: [:]
+            )
+        }
+    }
+    
+    private func convertStartMirrorElement(element: XMLElement) throws -> [String: AnyObject] {
+        return try convertEvent(element, family: S.VAL_EVENT_FAMILY_ANNOUNCE) { eventWrapper in
+            eventWrapper.object[K.TYPE] = K.VAL_START_MIRROR
+        }
+    }
+    
+//    private func convertOpenRoleElement(element: XMLElement) throws -> [String: AnyObject] {
+//        return try convertEvent(element, family: S.VAL_EVENT_FAMILY_ANNOUNCE) { eventWrapper in
+//            eventWrapper.object[K.TYPE] = K.VAL_OPEN_ROLE
+//            
+//            
+//        }
+//    }
+    
+    
     private func convertEvent(element: XMLElement, family: String, _ additionalConverter: ObjectWrapper throws -> Void) throws -> [String: AnyObject] {
         return try convertTextLines(element) { eventWrapper in
             try additionalConverter(eventWrapper)
@@ -398,7 +432,8 @@ class ArchiveToJSON {
             switch event {
             case .StartElement(name: S.ELEM_LI, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 lines.append(try convertLiElement(element))
-                break
+            case .StartElement:
+                try skipElement()
             case .EndElement:
                 objectWrapper.object[K.LINES] = lines
                 break parsing
