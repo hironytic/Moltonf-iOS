@@ -425,6 +425,18 @@ class ArchiveSchema {
     
     //
     // --------------------------------------------------
+    // MARK: element "avatarRef"
+    // --------------------------------------------------
+    //
+    
+    // element "avatarRef"
+    static let ELEM_AVATAR_REF = "avatarRef"
+    
+    // attribute "avatarId"
+    // static let ATTR_AVATAR_ID = "avatarId" // defined in other place
+        
+    //
+    // --------------------------------------------------
     // MARK: element "playerInfo"
     // --------------------------------------------------
     //
