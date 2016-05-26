@@ -264,7 +264,7 @@ class ArchiveToJSON {
             case .StartElement(name: S.ELEM_START_ASSAULT, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 elements.append(try convertStartAssaultElement(element))
             case .StartElement(name: S.ELEM_SURVIVOR, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                try skipElement()   // TODO
+                elements.append(try convertSurvivorElement(element))
             case .StartElement(name: S.ELEM_COUNTING, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 try skipElement()   // TODO
             case .StartElement(name: S.ELEM_SUDDEN_DEATH, namespaceURI: S.NS_ARCHIVE?, element: let element):
@@ -477,6 +477,28 @@ class ArchiveToJSON {
         guard let avatarId = element.attributes[S.ATTR_AVATAR_ID] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_AVATAR_ID) }
         try skipElement()
         return avatarId
+    }
+    
+    private func convertSurvivorElement(element: XMLElement) throws -> [String: AnyObject] {
+        let eventWrapper = ObjectWrapper(object: [:])
+        
+        eventWrapper.object[K.TYPE] = K.VAL_SURVIVOR
+        
+        var avatarId: [String] = []
+        try convertEvent(element, toObject: eventWrapper, family: S.VAL_EVENT_FAMILY_ANNOUNCE) { event in
+            switch event {
+            case .StartElement(name: S.ELEM_AVATAR_REF, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                avatarId.append(try self.convertAvatarRefElement(element))
+            case .StartElement:
+                try self.skipElement()
+            default:
+                break
+            }
+        }
+        
+        eventWrapper.object[K.AVATAR_ID] = avatarId
+        
+        return eventWrapper.object
     }
     
     private func convertEvent(element: XMLElement, toObject eventWrapper: ObjectWrapper, family: String, onChild: XMLEvent throws -> Void) throws {
