@@ -137,12 +137,12 @@ class ArchiveToJSON {
                 try skipElement()
                 break
             case .EndElement:
-                villageWrapper.object[K.PERIODS] = periods
                 break parsing
             default:
                 break
             }
         }
+        villageWrapper.object[K.PERIODS] = periods
         
         // write to playdata.json
         let village = villageWrapper.object
@@ -258,7 +258,7 @@ class ArchiveToJSON {
             case .StartElement(name: S.ELEM_START_MIRROR, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 elements.append(try convertStartMirrorElement(element))
             case .StartElement(name: S.ELEM_OPEN_ROLE, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                try skipElement()   // TODO
+                elements.append(try convertOpenRoleElement(element))
             case .StartElement(name: S.ELEM_MURDERED, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 try skipElement()   // TODO
             case .StartElement(name: S.ELEM_START_ASSAULT, namespaceURI: S.NS_ARCHIVE?, element: let element):
@@ -310,12 +310,12 @@ class ArchiveToJSON {
             case .StartElement:
                 try skipElement()
             case .EndElement:
-                deepPeriodWrapper.object[K.ELEMENTS] = elements
                 break parsing
             default:
                 break
             }
         }
+        deepPeriodWrapper.object[K.ELEMENTS] = elements
 
         // write to period[n].json
         let deepPeriod = deepPeriodWrapper.object
@@ -341,90 +341,123 @@ class ArchiveToJSON {
     }
     
     private func convertTalkElement(element: XMLElement) throws -> [String: AnyObject] {
-        return try convertTextLines(element) { talkWrapper in
-            talkWrapper.object[K.TYPE] = K.VAL_TALK
-            
-            // attributes
-            let mapToTalk = map(toObject: talkWrapper)
-            try convertAttribute(element,
-                mapping: [
-                    S.ATTR_TYPE:            mapToTalk(K.TALK_TYPE,      asString),
-                    S.ATTR_AVATAR_ID:       mapToTalk(K.AVATAR_ID,      asString),
-                    S.ATTR_XNAME:           mapToTalk(K.XNAME,          asString),
-                    S.ATTR_TIME:            mapToTalk(K.TIME,           asString),
-                    S.ATTR_FACE_ICON_URI:   mapToTalk(K.FACE_ICON_URI,  asString),
-                ],
-                required: [
-                    S.ATTR_TYPE, S.ATTR_AVATAR_ID, S.ATTR_XNAME, S.ATTR_TIME,
-                ],
-                defaultValues: [:]
-            )
-        }
+        let talkWrapper = ObjectWrapper(object: [:])
+        
+        talkWrapper.object[K.TYPE] = K.VAL_TALK
+        
+        // attributes
+        let mapToTalk = map(toObject: talkWrapper)
+        try convertAttribute(element,
+            mapping: [
+                S.ATTR_TYPE:            mapToTalk(K.TALK_TYPE,      asString),
+                S.ATTR_AVATAR_ID:       mapToTalk(K.AVATAR_ID,      asString),
+                S.ATTR_XNAME:           mapToTalk(K.XNAME,          asString),
+                S.ATTR_TIME:            mapToTalk(K.TIME,           asString),
+                S.ATTR_FACE_ICON_URI:   mapToTalk(K.FACE_ICON_URI,  asString),
+            ],
+            required: [
+                S.ATTR_TYPE, S.ATTR_AVATAR_ID, S.ATTR_XNAME, S.ATTR_TIME,
+            ],
+            defaultValues: [:]
+        )
+        
+        try convertTextLines(element, toObject: talkWrapper, onChild: skipStartElement)
+        
+        return talkWrapper.object
     }
     
     private func convertStartEntryElement(element: XMLElement) throws -> [String: AnyObject] {
-        return try convertEvent(element, family: S.VAL_EVENT_FAMILY_ANNOUNCE) { eventWrapper in
-            eventWrapper.object[K.TYPE] = K.VAL_START_ENTRY
-        }
+        let eventWrapper = ObjectWrapper(object: [:])
+
+        eventWrapper.object[K.TYPE] = K.VAL_START_ENTRY
+        
+        try convertEvent(element, toObject: eventWrapper, family: S.VAL_EVENT_FAMILY_ANNOUNCE, onChild: skipStartElement)
+        
+        return eventWrapper.object
     }
     
     private func convertOnStageElement(element: XMLElement) throws -> [String: AnyObject] {
-        return try convertEvent(element, family: S.VAL_EVENT_FAMILY_ANNOUNCE) { eventWrapper in
-            eventWrapper.object[K.TYPE] = K.VAL_ON_STAGE
-            
-            // attributes
-            let mapToEvent = map(toObject: eventWrapper)
-            try convertAttribute(element,
-                mapping: [
-                    S.ATTR_ENTRY_NO:    mapToEvent(K.ENTRY_NO,  asInt),
-                    S.ATTR_AVATAR_ID:   mapToEvent(K.AVATAR_ID, asString),
-                ],
-                required: [
-                    S.ATTR_ENTRY_NO, S.ATTR_AVATAR_ID,
-                ],
-                defaultValues: [:]
-            )
-        }
+        let eventWrapper = ObjectWrapper(object: [:])
+
+        eventWrapper.object[K.TYPE] = K.VAL_ON_STAGE
+
+        // attributes
+        let mapToEvent = map(toObject: eventWrapper)
+        try convertAttribute(element,
+            mapping: [
+                S.ATTR_ENTRY_NO:    mapToEvent(K.ENTRY_NO,  asInt),
+                S.ATTR_AVATAR_ID:   mapToEvent(K.AVATAR_ID, asString),
+            ],
+            required: [
+                S.ATTR_ENTRY_NO, S.ATTR_AVATAR_ID,
+            ],
+            defaultValues: [:]
+        )
+
+        try convertEvent(element, toObject: eventWrapper, family: S.VAL_EVENT_FAMILY_ANNOUNCE, onChild: skipStartElement)
+        
+        return eventWrapper.object
     }
     
     private func convertStartMirrorElement(element: XMLElement) throws -> [String: AnyObject] {
-        return try convertEvent(element, family: S.VAL_EVENT_FAMILY_ANNOUNCE) { eventWrapper in
-            eventWrapper.object[K.TYPE] = K.VAL_START_MIRROR
-        }
-    }
-    
-//    private func convertOpenRoleElement(element: XMLElement) throws -> [String: AnyObject] {
-//        return try convertEvent(element, family: S.VAL_EVENT_FAMILY_ANNOUNCE) { eventWrapper in
-//            eventWrapper.object[K.TYPE] = K.VAL_OPEN_ROLE
-//            
-//            
-//        }
-//    }
-    
-    
-    private func convertEvent(element: XMLElement, family: String, _ additionalConverter: ObjectWrapper throws -> Void) throws -> [String: AnyObject] {
-        return try convertTextLines(element) { eventWrapper in
-            try additionalConverter(eventWrapper)
-            
-            // attributes
-            let mapToEvent = map(toObject: eventWrapper)
-            try convertAttribute(element,
-                mapping: [
-                    S.ATTR_EVENT_FAMILY:    mapToEvent(K.EVENT_FAMILY,  asString),
-                ],
-                required: [],
-                defaultValues: [
-                    S.ATTR_EVENT_FAMILY:    family
-                ]
-            )            
-        }
-    }
-    
-    private func convertTextLines(element: XMLElement, _ additionalConverter: ObjectWrapper throws -> Void) throws -> [String: AnyObject] {
-        let objectWrapper = ObjectWrapper(object: [:])
-
-        try additionalConverter(objectWrapper)
+        let eventWrapper = ObjectWrapper(object: [:])
         
+        eventWrapper.object[K.TYPE] = K.VAL_START_MIRROR
+        
+        try convertEvent(element, toObject: eventWrapper, family: S.VAL_EVENT_FAMILY_ANNOUNCE, onChild: skipStartElement)
+        
+        return eventWrapper.object
+    }
+    
+    private func convertOpenRoleElement(element: XMLElement) throws -> [String: AnyObject] {
+        let eventWrapper = ObjectWrapper(object: [:])
+        
+        eventWrapper.object[K.TYPE] = K.VAL_OPEN_ROLE
+
+        var roleHeads: [String: AnyObject] = [:]
+        try convertEvent(element, toObject: eventWrapper, family: S.VAL_EVENT_FAMILY_ANNOUNCE) { event in
+            switch event {
+            case .StartElement(name: S.ELEM_ROLE_HEADS, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                let (role, heads) = try self.convertRoleHeadsElement(element)
+                roleHeads[role] = heads
+            case .StartElement:
+                try self.skipElement()
+            default:
+                break
+            }
+        }
+        eventWrapper.object[K.ROLE_HEADS] = roleHeads
+        
+        return eventWrapper.object
+    }
+    
+    private func convertRoleHeadsElement(element: XMLElement) throws -> (role: String, heads: AnyObject) {
+        guard let role = element.attributes[S.ATTR_ROLE] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_ROLE) }
+        guard let headsStr = element.attributes[S.ATTR_HEADS] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_HEADS) }
+        let heads = try asInt(headsStr)
+        
+        try self.skipElement()
+        
+        return (role: role, heads: heads)
+    }
+    
+    private func convertEvent(element: XMLElement, toObject eventWrapper: ObjectWrapper, family: String, onChild: XMLEvent throws -> Void) throws {
+        // attributes
+        let mapToEvent = map(toObject: eventWrapper)
+        try convertAttribute(element,
+            mapping: [
+                S.ATTR_EVENT_FAMILY:    mapToEvent(K.EVENT_FAMILY,  asString),
+            ],
+            required: [],
+            defaultValues: [
+                S.ATTR_EVENT_FAMILY:    family
+            ]
+        )
+        
+        try convertTextLines(element, toObject: eventWrapper, onChild: onChild)
+    }
+    
+    private func convertTextLines(element: XMLElement, toObject objectWrapper: ObjectWrapper, onChild: XMLEvent throws -> Void) throws {
         // children
         var lines: [AnyObject] = []
         parsing: while true {
@@ -432,17 +465,13 @@ class ArchiveToJSON {
             switch event {
             case .StartElement(name: S.ELEM_LI, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 lines.append(try convertLiElement(element))
-            case .StartElement:
-                try skipElement()
             case .EndElement:
-                objectWrapper.object[K.LINES] = lines
                 break parsing
             default:
-                break
+                try onChild(event)
             }
         }
-        
-        return objectWrapper.object
+        objectWrapper.object[K.LINES] = lines
     }
     
     private func convertLiElement(element: XMLElement) throws -> AnyObject {
@@ -454,7 +483,7 @@ class ArchiveToJSON {
             case .Characters(let string):
                 contents.append(string)
             case .StartElement(name: S.ELEM_RAWDATA, namespaceURI: S.NS_ARCHIVE?, element: _):
-                try skipElement()   // TODO:
+                contents.append(try convertRawdataElement(element))
             case .StartElement:
                 try skipElement()
             case .EndElement:
@@ -520,6 +549,15 @@ class ArchiveToJSON {
             default:
                 break
             }
+        }
+    }
+    
+    private func skipStartElement(event: XMLEvent) throws {
+        switch event {
+        case .StartElement:
+            try skipElement()
+        default:
+            break
         }
     }
 }

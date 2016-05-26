@@ -114,6 +114,9 @@ class ArchiveKeys {
     static let ENTRY_NO = "entryNo"
     // static let AVATAR_ID = "avatarId"        // defined in another place
     
+    // MARK: period["elements"][n] (openRole)
+    static let ROLE_HEADS = "roleHeads"
+    
     // MARK: period["elements"][n]["lines"][m]
     static let ENCODING = "encoding"
     static let HEX_BIN = "hexBin"

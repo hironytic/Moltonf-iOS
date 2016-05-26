@@ -56,7 +56,7 @@ class ArchiveSchema {
     
     //
     // --------------------------------------------------
-    // MARK: village
+    // MARK: element "village"
     // --------------------------------------------------
     //
     
@@ -152,7 +152,7 @@ class ArchiveSchema {
 
     //
     // --------------------------------------------------
-    // MARK: avatarList
+    // MARK: element "avatarList"
     // --------------------------------------------------
     //
     
@@ -161,7 +161,7 @@ class ArchiveSchema {
     
     //
     // --------------------------------------------------
-    // MARK: avatar
+    // MARK: element "avatar"
     // --------------------------------------------------
     //
     
@@ -182,7 +182,7 @@ class ArchiveSchema {
     
     //
     // --------------------------------------------------
-    // MARK: period
+    // MARK: element "period"
     // --------------------------------------------------
     //
     
@@ -221,25 +221,34 @@ class ArchiveSchema {
     
     // attribute "loadedBy"
     static let ATTR_LOADED_BY = "loadedBy"
+
+    //
+    // --------------------------------------------------
+    // MARK: event
+    // --------------------------------------------------
+    //
+
+    // attribute "eventFamily"
+    static let ATTR_EVENT_FAMILY = "eventFamily"
+    
+    // type of eventFamily: announce
+    static let VAL_EVENT_FAMILY_ANNOUNCE = "announce"
+    
+    // type of eventFamily: announce
+    static let VAL_EVENT_FAMILY_ORDER = "order"
+    
+    // type of eventFamily: extra
+    static let VAL_EVENT_FAMILY_EXTRA = "extra"
     
     //
     // --------------------------------------------------
-    // MARK: EventAnnounceGroup の要素
+    // MARK: elements of EventAnnounceGroup
     // --------------------------------------------------
     //
     
     // element "startEntry"
     static let ELEM_START_ENTRY = "startEntry"
-    
-    // element "onStage"
-    static let ELEM_ON_STAGE = "onStage"
-    
-    // element "eventFamily"
-    static let ATTR_ENTRY_NO = "entryNo"
-    
-    // attribute "avatarId"
-    // static let ATTR_AVATAR_ID = "avatarId" // defined in other place
-    
+
     // element "startMirror"
     static let ELEM_START_MIRROR = "startMirror"
     
@@ -279,15 +288,24 @@ class ArchiveSchema {
     // element "panic"
     static let ELEM_PANIC = "panic"
 
-    // element "eventFamily"
-    static let ATTR_EVENT_FAMILY = "eventFamily"
-
-    // type of eventFamily: announce
-    static let VAL_EVENT_FAMILY_ANNOUNCE = "announce"
+    //
+    // --------------------------------------------------
+    // MARK: element "onStage" of EventAnnounceGroup
+    // --------------------------------------------------
+    //
+    
+    // element "onStage"
+    static let ELEM_ON_STAGE = "onStage"
+    
+    // attribute "entryNo"
+    static let ATTR_ENTRY_NO = "entryNo"
+    
+    // attribute "avatarId"
+    // static let ATTR_AVATAR_ID = "avatarId" // defined in other place
     
     //
     // --------------------------------------------------
-    // MARK: elements in EventOrderGroup
+    // MARK: elements of EventOrderGroup
     // --------------------------------------------------
     //
     
@@ -306,15 +324,9 @@ class ArchiveSchema {
     // element "gameOver"
     static let ELEM_GAME_OVER = "gameOver"
 
-    // element "eventFamily"
-    // static let ATTR_EVENT_FAMILY = "eventFamily" // defined in other place
-    
-    // type of eventFamily: announce
-    static let VAL_EVENT_FAMILY_ORDER = "order"
-    
     //
     // --------------------------------------------------
-    // MARK: elements in EventExtraGroup
+    // MARK: elements of EventExtraGroup
     // --------------------------------------------------
     //
     
@@ -324,15 +336,9 @@ class ArchiveSchema {
     // element "guard"
     static let ELEM_GUARD = "guard"
     
-    // element "eventFamily"
-    // static let ATTR_EVENT_FAMILY = "eventFamily" // defined in other place
-    
-    // type of eventFamily: extra
-    static let VAL_EVENT_FAMILY_EXTRA = "extra"
-    
     //
     // --------------------------------------------------
-    // MARK: assault
+    // MARK: element "assault" of EventExtraGroup
     // --------------------------------------------------
     //
     
@@ -344,7 +350,7 @@ class ArchiveSchema {
     
     //
     // --------------------------------------------------
-    // MARK: talk
+    // MARK: element "talk"
     // --------------------------------------------------
     //
     
@@ -380,7 +386,7 @@ class ArchiveSchema {
     
     //
     // --------------------------------------------------
-    // MARK: li
+    // MARK: element "li"
     // --------------------------------------------------
     //
     
@@ -389,7 +395,7 @@ class ArchiveSchema {
     
     //
     // --------------------------------------------------
-    // MARK: rawdata
+    // MARK: element "rawdata"
     // --------------------------------------------------
     //
     
@@ -401,10 +407,25 @@ class ArchiveSchema {
     
     // attribute "hexBin"
     static let ATTR_HEX_BIN = "hexBin"
+
+    //
+    // --------------------------------------------------
+    // MARK: element "roleHeads"
+    // --------------------------------------------------
+    //
+    
+    // element "roleHeads"
+    static let ELEM_ROLE_HEADS = "roleHeads"
+    
+    // attribute "role"
+    static let ATTR_ROLE = "role"
+    
+    // attribute "heads"
+    static let ATTR_HEADS = "heads"
     
     //
     // --------------------------------------------------
-    // MARK: playerInfo
+    // MARK: element "playerInfo"
     // --------------------------------------------------
     //
     
@@ -415,7 +436,7 @@ class ArchiveSchema {
     // static let ATTR_AVATAR_ID = "avatarId" // defined in other place
 
     // attribute "role"
-    static let ATTR_ROLE = "role"
+    // static let ATTR_ROLE = "role" // defined in other place
     
     // role: ordinary villager
     static let VAL_ROLE_INNOCENT = "innocent"
