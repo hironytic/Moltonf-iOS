@@ -42,9 +42,9 @@ class ArchiveToJSON {
         case FailedInWritingFile(filePath: String, innerError: ErrorType?)
     }
     
-    let _archivePath: String
-    let _outDirPath: String
-    var _parser: XMLPullParser!
+    private let _archivePath: String
+    private let _outDirPath: String
+    private var _parser: XMLPullParser!
 
     init(fromArchive archivePath: String, toDirectory outDirPath: String) {
         _archivePath = archivePath
