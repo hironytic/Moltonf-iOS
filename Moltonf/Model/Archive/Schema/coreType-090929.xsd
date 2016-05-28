@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xsd:schema
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns      ="http://jindolf.sourceforge.jp/xml/ns/401"
+    targetNamespace="http://jindolf.sourceforge.jp/xml/ns/401"
+    elementFormDefault="qualified"
+    version="2315"
+    xml:lang="ja-JP"
+>
+
+
+    <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+
+人狼BBS 共通型 スキーム定義
+
+by olyutorskii [ http://sourceforge.jp/users/olyutorskii/ ]
+License : The MIT License
+※ カタログ化はご自由に
+
+Copyright(c) 2009 olyutorskii
+$Id: coreType-090929.xsd 850 2009-09-29 08:33:59Z olyutorskii $
+
+############################################################################
+]]></xsd:documentation>
+    </xsd:annotation>
+
+
+    <!-- ================================================================ -->
+
+    <xsd:simpleType name="LandIdentifier">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+Jindolfで管理している国別識別子。国ごとにユニークな識別子が割り当てられる。
+F国なら「wolff」。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[A-Za-z]([A-Za-z0-9_])*"/>
+        </xsd:restriction>
+
+    </xsd:simpleType>
+
+    <xsd:simpleType name="LandState">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+国の状態。
+「closed」ならアクセス不可。
+「historical」なら過去ログ提供のみ。
+「active」なら随時新規村参加者募集中。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="closed"/>
+            <xsd:enumeration value="historical"/>
+            <xsd:enumeration value="active"/>
+        </xsd:restriction>
+
+    </xsd:simpleType>
+
+    <!-- ================================================================ -->
+
+    <xsd:simpleType name="Timezone">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+タイムゾーン。
+GMT表記のみ。例）「GMT+09:00」
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="GMT(\+|\-)[0-9][0-9]?(:?[0-9][0-9])?"/>
+        </xsd:restriction>
+
+    </xsd:simpleType>
+
+    <!-- ================================================================ -->
+
+    <xsd:simpleType name="EncodingDecl">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+元XHTMLデータのエンコーディング／文字集合指定。
+人狼BBSの場合は事実上「Shift_JIS」一本か。
+資料 : http://www.w3.org/TR/2008/REC-xml-20081126/#NT-EncName
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[A-Za-z]([A-Za-z0-9\._\-])*"/>
+        </xsd:restriction>
+
+    </xsd:simpleType>
+
+    <!-- ================================================================ -->
+
+    <xsd:simpleType name="VillageState">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+村の状態
+
+prologue => プロローグ中
+progress => 進行中
+epilogue => エピローグ中
+gameover => ゲーム終了
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="prologue" />
+            <xsd:enumeration value="progress" />
+            <xsd:enumeration value="epilogue" />
+            <xsd:enumeration value="gameover" />
+        </xsd:restriction>
+
+    </xsd:simpleType>
+
+    <!-- ================================================================ -->
+
+    <xsd:simpleType name="PeriodType">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+Period(日)の種類
+
+prologue => プロローグ
+progress => 進行中の日
+epilogue => エピローグ
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="prologue" />
+            <xsd:enumeration value="progress" />
+            <xsd:enumeration value="epilogue" />
+        </xsd:restriction>
+
+    </xsd:simpleType>
+
+    <!-- ================================================================ -->
+
+    <xsd:simpleType name="TalkType">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+発言種別
+
+public => 白発言
+wolf => 赤発言
+private => 灰発言
+grave => 青発言
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="public"  />
+            <xsd:enumeration value="wolf"    />
+            <xsd:enumeration value="private" />
+            <xsd:enumeration value="grave"   />
+        </xsd:restriction>
+
+    </xsd:simpleType>
+
+    <!-- ================================================================ -->
+
+    <xsd:simpleType name="EventFamily">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムイベント種別
+
+announce => システムイベント白
+order => システムイベント赤
+extra => システムイベント灰
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="announce" />
+            <xsd:enumeration value="order"    />
+            <xsd:enumeration value="extra"    />
+        </xsd:restriction>
+
+    </xsd:simpleType>
+
+    <!-- ================================================================ -->
+
+    <xsd:simpleType name="Team">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+陣営
+
+village => 村人
+wolf => 人狼
+hamster => ハムスター人間
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="village" />
+            <xsd:enumeration value="wolf"    />
+            <xsd:enumeration value="hamster" />
+        </xsd:restriction>
+
+    </xsd:simpleType>
+
+    <!-- ================================================================ -->
+
+    <xsd:simpleType name="Role">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+役職
+
+innocent => 村人
+wolf => 人狼
+seer => 占い師
+shaman => 霊能者
+madman => 狂人
+hunter => 狩人
+frater => 共有者
+hamster => ハムスター人間
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="innocent" />
+            <xsd:enumeration value="wolf"     />
+            <xsd:enumeration value="seer"     />
+            <xsd:enumeration value="shaman"   />
+            <xsd:enumeration value="madman"   />
+            <xsd:enumeration value="hunter"   />
+            <xsd:enumeration value="frater"   />
+            <xsd:enumeration value="hamster"  />
+        </xsd:restriction>
+
+    </xsd:simpleType>
+
+    <!-- ================================================================ -->
+
+    <xsd:simpleType name="AvatarId">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+Avatarの識別子。
+日本語OK。ハイフン禁止。
+XMLのID(xsd:ID)の一部としてハイフンなどと繋げて再利用される可能性あり。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:NCName">
+            <xsd:pattern value="[^\-]+"/>
+        </xsd:restriction>
+
+    </xsd:simpleType>
+
+    <!-- ================================================================ -->
+
+    <xsd:simpleType name="PlayerId">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+各プレイヤーのログイン名。
+各国ログイン名の制約詳細は不明。とりあえずタブと改行禁止。
+E国TypeKeyIDからニックネームを分離認識する作業はアプリ側の責務。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[^\n\r\t]+" />
+            <xsd:whiteSpace value="preserve" fixed="true"/>
+        </xsd:restriction>
+
+    </xsd:simpleType>
+
+    <!-- ================================================================ -->
+
+    <xsd:simpleType name="DisclosureType">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+発言の公開状況。
+「hot」ならその日はプレイ真っ最中の最新日。
+「uncomplete」ならまだその日の未公開発言を取得していない可能性がある。
+「complete」ならその日の全発言は完全に公開された。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="hot" />
+            <xsd:enumeration value="uncomplete" />
+            <xsd:enumeration value="complete" />
+        </xsd:restriction>
+
+    </xsd:simpleType>
+
+    <!-- ================================================================ -->
+
+    <xsd:simpleType name="IntList">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+整数の並び。
+コンマ','で数字を区切る。
+ハイフン'-'を使って範囲指定も可能。
+例) 「1,2,7-15,21」
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[0-9]+( *\- *[0-9]+)?( *, *[0-9]+( *\- *[0-9]+)?)*" />
+            <xsd:whiteSpace value="preserve" fixed="true"/>
+        </xsd:restriction>
+
+    </xsd:simpleType>
+
+</xsd:schema>
+
+<!-- EOF -->

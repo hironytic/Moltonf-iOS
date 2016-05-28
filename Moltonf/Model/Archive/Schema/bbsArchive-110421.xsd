@@ -1,0 +1,1529 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xsd:schema
+    xmlns:xsd      ="http://www.w3.org/2001/XMLSchema"
+    xmlns:core     ="http://jindolf.sourceforge.jp/xml/ns/401"
+    xmlns:tns      ="http://jindolf.sourceforge.jp/xml/ns/501"
+    targetNamespace="http://jindolf.sourceforge.jp/xml/ns/501"
+    elementFormDefault="qualified"
+    xml:lang="ja-JP"
+    version="225"
+>
+
+    <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+
+人狼BBS 共通アーカイブ基盤用 スキーム定義
+
+by olyutorskii [ http://sourceforge.jp/users/olyutorskii/ ]
+License : The MIT License
+※ カタログ化はご自由に
+
+Copyright(c) 2009 olyutorskii
+
+############################################################################
+]]></xsd:documentation>
+    </xsd:annotation>
+
+
+    <xsd:import
+        namespace="http://www.w3.org/XML/1998/namespace"
+        schemaLocation="http://www.w3.org/2001/xml.xsd"
+    />
+
+    <xsd:import
+        namespace="http://jindolf.sourceforge.jp/xml/ns/401"
+        schemaLocation="http://jindolf.sourceforge.jp/xml/xsd/coreType-090929.xsd"
+    />
+
+
+<!-- 各種複合型定義 ################################ -->
+
+    <!-- ================================================================ -->
+
+    <xsd:complexType name="TextLines">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+li要素を子に持つ複数行コンテンツ。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element ref="tns:li" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="li">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+会話文字列やシステムメッセージの各行を記述する混合モデル。
+元XHTMLデータ内会話<div>要素内のスペースとタブは
+すべて保存されなければならない。
+それ以外の余分な改行とスペースとタブを入れてはならない。
+生データ記述<rawdata>を途中に挿入可能。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:choice>
+                <xsd:element
+                    ref="tns:rawdata"
+                    minOccurs="0" maxOccurs="unbounded"
+                />
+            </xsd:choice>
+            <xsd:attribute
+                ref="xml:space"
+                use="optional"
+                default="preserve"
+            />
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:simpleType name="Onechar">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+1文字限定の文字列
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:length value="1" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="rawdata">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+・人狼BBS元データのエンコーディングが変だった。
+・もしくは文字集合制約を満たさなかった。(機種依存文字)
+などの事実を記述するための1byteもしくは2byteの生データの情報。
+類似するエンコーディングから代替文字1文字を推測して埋めておく事が可能。
+
+内容 : 代替文字列1文字。推測不可能な場合はU+FFFDなどが望ましい。
+encoding : 元データのエンコーディングおよび文字集合指定。
+           F国以前の人狼BBSでは事実上「Shift_JIS」固定。
+hexBin : 元データの16進データ文字列。2文字か4文字。例)「874a」「FF」
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="tns:Onechar">
+                    <xsd:attribute
+                        name="encoding"
+                        type="core:EncodingDecl"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="hexBin"
+                        type="xsd:hexBinary"
+                        use="required"
+                    />
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:complexType name="EventAnnounce">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+Announceイベント共通型。
+eventFamily属性値は"announce"固定。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="tns:TextLines">
+                <xsd:attribute
+                    name="eventFamily"
+                    type="core:EventFamily"
+                    fixed="announce"
+                />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- ================================================================ -->
+
+    <xsd:complexType name="EventOrder">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+Orderイベント共通型。
+eventFamily属性値は"order"固定。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="tns:TextLines">
+                <xsd:attribute
+                    name="eventFamily"
+                    type="core:EventFamily"
+                    fixed="order"
+                />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!-- ================================================================ -->
+
+    <xsd:complexType name="EventExtra">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+Extraイベント共通型。
+eventFamily属性値は"extra"固定。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="tns:TextLines">
+                <xsd:attribute
+                    name="eventFamily"
+                    type="core:EventFamily"
+                    fixed="extra"
+                />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+
+<!-- 各種グループ定義 ################################ -->
+
+    <!-- ================================================================ -->
+
+    <xsd:group name="EventAnnounceGroup">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+Announce型システムメッセージ要素のグループ
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:choice>
+            <xsd:element ref="tns:startEntry" />
+            <xsd:element ref="tns:onStage" />
+            <xsd:element ref="tns:startMirror" />
+            <xsd:element ref="tns:openRole" />
+            <xsd:element ref="tns:murdered" />
+            <xsd:element ref="tns:startAssault" />
+            <xsd:element ref="tns:survivor" />
+            <xsd:element ref="tns:counting" />
+            <xsd:element ref="tns:suddenDeath" />
+            <xsd:element ref="tns:noMurder" />
+            <xsd:element ref="tns:winVillage" />
+            <xsd:element ref="tns:winWolf" />
+            <xsd:element ref="tns:winHamster" />
+            <xsd:element ref="tns:playerList" />
+            <xsd:element ref="tns:panic" />
+            <xsd:element ref="tns:execution" />
+            <xsd:element ref="tns:vanish" />
+            <xsd:element ref="tns:checkout" />
+            <xsd:element ref="tns:shortMember" />
+        </xsd:choice>
+    </xsd:group>
+
+    <!-- ================================================================ -->
+
+    <xsd:group name="EventOrderGroup">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+Order型システムメッセージ要素のグループ
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:choice>
+            <xsd:element ref="tns:askEntry" />
+            <xsd:element ref="tns:askCommit" />
+            <xsd:element ref="tns:noComment" />
+            <xsd:element ref="tns:stayEpilogue" />
+            <xsd:element ref="tns:gameOver" />
+        </xsd:choice>
+    </xsd:group>
+
+    <!-- ================================================================ -->
+
+    <xsd:group name="EventExtraGroup">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+Extra型システムメッセージ要素のグループ
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:choice>
+            <xsd:element ref="tns:judge" />
+            <xsd:element ref="tns:guard" />
+            <xsd:element ref="tns:counting2" />
+            <xsd:element ref="tns:assault" />
+        </xsd:choice>
+    </xsd:group>
+
+
+<!-- 各種要素定義 ################################ -->
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="village">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+このスキーマ中の最高位ルート要素。
+１つの「村」に対応する。
+period並びは日順で並んでいなければならない。
+
+xml:lang => この要素内部で使われる言語。デフォルトは「ja-JP」
+xml:base => この要素内で現れる相対URIのベース。
+            人狼BBSの運営方針によっては将来無効になる可能性もある。
+xml:space => li要素より上位要素内のホワイトスペースのパース方針。
+fullName => 村のフルネーム(ex.「F1784 日の沈まぬ村」)
+vid => 村の識別ID(ex.「1784」)
+commitTime => 更新時刻。24時間村なら出力するのが望ましい。
+              GMTとの時差も出力するのが望ましい。
+              午後1時30分更新の例)「13:30:00+09:00」
+              時差表記がないならtimezone属性を使って
+              読み込み時に補正すべき。
+state => 村の状態
+disclosure => 発言の開示状況。
+              「hot」ならプレイ真っ最中の最新日が含まれている。
+              「uncomplete」なら未開示発言を含む日が含まれている。
+              「complete」なら全発言は完全に開示されている。
+isValid => システムのトラブルでゲーム勝敗が成り立っていないと
+           判断できるならfalse
+landName => 国の名前。「人狼BBS:F国」など。
+formalName => 正式名称。http://homepage2.nifty.com/ninjinia/ に準ずる。
+landId => JinCoreライブラリで管理している国の識別子。F国なら「wolff」
+landPrefix => 村名の前置詞。F国なら「F」。
+              無い国も複数ある。
+locale => この国で使われている言葉・文化。
+origencoding => この国で使われているエンコーディング
+timezone => この国の時刻表記で使われているタイムゾーン。
+graveIconURI => 墓アイコン画像のURI
+generator => XMLを吐き出したアプリ、サブシステム、ライブラリの名前。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:avatarList" />
+                <xsd:element
+                    ref="tns:period"
+                    minOccurs="0" maxOccurs="unbounded"
+                />
+            </xsd:sequence>
+            <xsd:attribute
+                ref="xml:lang"
+                use="optional"
+                default="ja-JP"
+            />
+            <xsd:attribute
+                ref="xml:base"
+                use="required"
+            />
+            <xsd:attribute
+                ref="xml:space"
+                use="optional"
+                default="default"
+            />
+            <xsd:attribute
+                name="fullName"
+                type="xsd:normalizedString"
+                use="required"
+            />
+            <xsd:attribute
+                name="vid"
+                type="xsd:nonNegativeInteger"
+                use="required"
+            />
+            <xsd:attribute
+                name="commitTime"
+                type="xsd:time"
+                use="optional"
+            />
+            <xsd:attribute
+                name="state"
+                type="core:VillageState"
+                use="required"
+            />
+            <xsd:attribute
+                name="disclosure"
+                type="core:DisclosureType"
+                use="optional"
+                default="complete"
+            />
+            <xsd:attribute
+                name="isValid"
+                type="xsd:boolean"
+                use="optional"
+                default="true"
+            />
+            <xsd:attribute
+                name="landName"
+                type="xsd:normalizedString"
+                use="required"
+            />
+            <xsd:attribute
+                name="formalName"
+                type="xsd:normalizedString"
+                use="required"
+            />
+            <xsd:attribute
+                name="landId"
+                type="core:LandIdentifier"
+                use="required"
+            />
+            <xsd:attribute
+                name="landPrefix"
+                type="xsd:token"
+                use="required"
+            />
+            <xsd:attribute
+                name="locale"
+                type="xsd:language"
+                use="optional"
+                default="ja-JP"
+            />
+            <xsd:attribute
+                name="origencoding"
+                type="core:EncodingDecl"
+                use="optional"
+                default="Shift_JIS"
+            />
+            <xsd:attribute
+                name="timezone"
+                type="core:Timezone"
+                use="optional"
+                default="GMT+09:00"
+            />
+            <xsd:attribute
+                name="graveIconURI"
+                type="xsd:anyURI"
+                use="required"
+            />
+            <xsd:attribute
+                name="generator"
+                type="xsd:normalizedString"
+                use="optional"
+            />
+        </xsd:complexType>
+
+        <!-- ここからキー定義 -->
+
+        <xsd:key name="avatar-id">
+            <xsd:selector xpath="./tns:avatarList/tns:avatar" />
+            <xsd:field xpath="@avatarId" />
+        </xsd:key>
+
+        <xsd:keyref name="avatarRef-avatar" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:avatarRef" />
+            <xsd:field xpath="@avatarId" />
+        </xsd:keyref>
+
+        <xsd:keyref name="onStage-avatar" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:onStage" />
+            <xsd:field xpath="@avatarId" />
+        </xsd:keyref>
+
+        <xsd:keyref name="vanish-avatar" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:vanish" />
+            <xsd:field xpath="@avatarId" />
+        </xsd:keyref>
+
+        <xsd:keyref name="checkout-avatar" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:checkout" />
+            <xsd:field xpath="@avatarId" />
+        </xsd:keyref>
+
+        <xsd:keyref name="execution-avatar-victim" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:execution" />
+            <xsd:field xpath="@victim" />
+        </xsd:keyref>
+
+        <xsd:keyref name="nominated-avatar" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:nominated" />
+            <xsd:field xpath="@avatarId" />
+        </xsd:keyref>
+
+        <xsd:keyref name="counting-avatar-victim" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:counting" />
+            <xsd:field xpath="@victim" />
+        </xsd:keyref>
+
+        <xsd:keyref name="vote-avatar-by" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:vote" />
+            <xsd:field xpath="@byWhom" />
+        </xsd:keyref>
+
+        <xsd:keyref name="vote-avatar-to" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:vote" />
+            <xsd:field xpath="@target" />
+        </xsd:keyref>
+
+        <xsd:keyref name="suddenDeath-avatar" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:suddenDeath" />
+            <xsd:field xpath="@avatarId" />
+        </xsd:keyref>
+
+        <xsd:keyref name="playerInfo-avatar" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:playerInfo" />
+            <xsd:field xpath="@avatarId" />
+        </xsd:keyref>
+
+        <xsd:keyref name="examine-avatar-by" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:judge" />
+            <xsd:field xpath="@byWhom" />
+        </xsd:keyref>
+
+        <xsd:keyref name="examine-avatar-to" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:judge" />
+            <xsd:field xpath="@target" />
+        </xsd:keyref>
+
+        <xsd:keyref name="guard-avatar-by" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:guard" />
+            <xsd:field xpath="@byWhom" />
+        </xsd:keyref>
+
+        <xsd:keyref name="guard-avatar-to" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:guard" />
+            <xsd:field xpath="@target" />
+        </xsd:keyref>
+
+        <xsd:keyref name="assault-avatar-by" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:assault" />
+            <xsd:field xpath="@byWhom" />
+        </xsd:keyref>
+
+        <xsd:keyref name="assault-avatar-to" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:assault" />
+            <xsd:field xpath="@target" />
+        </xsd:keyref>
+
+        <xsd:keyref name="talk-avatar" refer="tns:avatar-id">
+            <xsd:selector xpath=".//tns:talk" />
+            <xsd:field xpath="@avatarId" />
+        </xsd:keyref>
+
+        <xsd:unique name="period-day">
+            <xsd:selector xpath="./tns:period" />
+            <xsd:field xpath="@day" />
+        </xsd:unique>
+
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="avatarList">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+Avatar(キャラクター)の集合。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+                <xsd:element ref="tns:avatar" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="avatar">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+Avatar(キャラクター)の定義。
+
+avatarId => Avatarの識別名。
+      Avatarを連想させる簡潔なアルファベット列が望ましい。(例:「gerd」)
+      適当にユニークで簡素なアルファベットを割り振ってもよい。
+      短縮名で代用してもよい。
+      ハイフン禁止。
+fullName => Avatarのフルネーム。(ex.「楽天家 ゲルト」)
+shortName => Avatarの短縮名。(ex.「ゲルト」)スペース禁止。
+faceIconURI => 顔画像アイコンへのURI。
+               プロローグから一言も発言せずに突然死した場合は省略してもよい。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence />
+            <xsd:attribute
+                name="avatarId"
+                type="core:AvatarId"
+                use="required"
+            />
+            <xsd:attribute
+                name="fullName"
+                type="xsd:normalizedString"
+                use="required"
+            />
+            <xsd:attribute
+                name="shortName"
+                type="xsd:token"
+                use="required"
+            />
+            <xsd:attribute
+                name="faceIconURI"
+                type="xsd:anyURI"
+                use="optional"
+            />
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="period">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+Period(日)の定義。
+子要素として、会話およびシステムメッセージを0個以上抱える。
+各システムメッセージの出現順に関する制約
+(「突然死の次は投票結果のはず」、etc.)は、
+このスキーマでは定義しない。
+
+type => このPeriodの種類。
+day => プロローグは0、n日目はn、n日目の次にエピローグが来たなら、
+       エピローグはn+1となる。
+disclosure => 発言の開示状況。
+              「hot」ならその日はプレイ真っ最中の最新日。
+              「uncomplete」ならまだその日の未開示発言を取得していない可能性がある。
+              「complete」ならその日の全発言は完全に開示された。
+nextCommitDay => 次回更新月日。年はなし。
+                 GMTとの時差も出力するのが望ましい。
+                 8月31日の例）「--08-31+09:00」
+                 時差表記がないならlandInfo要素のtimezone属性を使って
+                 読み込み時に補正すべき。
+commitTime => 更新時刻。秒以下の単位は切り捨て。
+              GMTとの時差も出力するのが望ましい。
+              午後1時30分更新の例)「13:30:00+09:00」
+              時差表記がないならland要素のtimezone属性を使って
+              読み込み時に補正すべき。
+sourceURI => このPeriodを取り込んだときの元となったURI。
+             同じ村の同じ日でも、進行によってURIが変わることが
+             ありうる。
+loadedTime => このPeriodを取り込んだ時刻。
+              GMTとの時差も出力するのが望ましい。
+              人狼BBSサーバからのHTTP応答内部から算出するのが望ましい。
+              無理ならローカルカレンダから。
+loadedBy => 進行中の村を参加者が読み込んだ場合、その時のログインIDを出力する。
+            windows31jに由来する文字が含まれる場合もある。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                <xsd:element ref="tns:talk" />
+                <xsd:group ref="tns:EventAnnounceGroup" />
+                <xsd:group ref="tns:EventOrderGroup" />
+                <xsd:group ref="tns:EventExtraGroup" />
+            </xsd:choice>
+            <xsd:attribute
+                name="type"
+                type="core:PeriodType"
+                use="required"
+            />
+            <xsd:attribute
+                name="day"
+                type="xsd:nonNegativeInteger"
+                use="required"
+            />
+            <xsd:attribute
+                name="disclosure"
+                type="core:DisclosureType"
+                use="optional"
+                default="complete"
+            />
+            <xsd:attribute
+                name="nextCommitDay"
+                type="xsd:gMonthDay"
+                use="required"
+            />
+            <xsd:attribute
+                name="commitTime"
+                type="xsd:time"
+                use="required"
+            />
+            <xsd:attribute
+                name="sourceURI"
+                type="xsd:anyURI"
+                use="required"
+            />
+            <xsd:attribute
+                name="loadedTime"
+                type="xsd:dateTime"
+                use="optional"
+            />
+            <xsd:attribute
+                name="loadedBy"
+                type="core:PlayerId"
+                use="optional"
+            />
+        </xsd:complexType>
+
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="avatarRef">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+Avatarへの参照。
+avatarId => Avatar識別子
+※ IDREFS属性を使うのやめた。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute
+                name="avatarId"
+                type="core:AvatarId"
+                use="required"
+            />
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="startEntry" type="tns:EventAnnounce">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：エントリ開始
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="onStage" >
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：参加者登場
+entryNo => 登場順番号。ごくまれにAvatar間で重複することあり。
+avatarId => Avatar識別子
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventAnnounce">
+                    <xsd:attribute
+                        name="entryNo"
+                        type="xsd:positiveInteger"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="avatarId"
+                        type="core:AvatarId"
+                        use="required"
+                    />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="startMirror" type="tns:EventAnnounce">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：1日目開始
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="openRole">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：役職構成開示
+roleHeads要素(各役職の人数記述)を複数かかえる。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventAnnounce">
+                    <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+                        <xsd:element ref="tns:roleHeads" />
+                    </xsd:sequence>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="roleHeads">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+役職とその人数
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute
+                name="role"
+                type="core:Role"
+                use="required"
+            />
+            <xsd:attribute
+                name="heads"
+                type="xsd:positiveInteger"
+                use="required"
+            />
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="murdered">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：突然死でない犠牲者
+avatarRef(Avatar参照)要素を1つ持つ。E国では2つ(ハム溶け)の場合も。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventAnnounce">
+                    <xsd:sequence>
+                        <xsd:element
+                            ref="tns:avatarRef"
+                            minOccurs="1" maxOccurs="2"
+                        />
+                    </xsd:sequence>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="startAssault" type="tns:EventAnnounce">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：最初の襲撃
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="survivor">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：生存者一覧
+生存者を表すavatarRef(Avatar参照)要素を1つ以上持つ。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventAnnounce">
+                    <xsd:sequence>
+                        <xsd:element
+                            ref="tns:avatarRef"
+                            minOccurs="1"
+                            maxOccurs="unbounded"
+                        />
+                    </xsd:sequence>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="counting">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：投票開示
+vote要素(個々の投票)を1つ以上持つ。
+victim => 処刑された人のAvatar識別子。誰も処刑されなかったら省略。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventAnnounce">
+                    <xsd:sequence>
+                        <xsd:element
+                            ref="tns:vote"
+                            minOccurs="1"
+                            maxOccurs="unbounded"
+                        />
+                    </xsd:sequence>
+                    <xsd:attribute
+                        name="victim"
+                        type="core:AvatarId"
+                        use="optional"
+                    />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="vote">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+処刑投票した人とされた人のペア。
+voteBy => 投票した人のAvatar識別子
+voteTo => 投票された人のAvatar識別子
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute
+                name="byWhom"
+                type="core:AvatarId"
+                use="required"
+            />
+            <xsd:attribute
+                name="target"
+                type="core:AvatarId"
+                use="required"
+            />
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="suddenDeath" >
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：突然死
+avatarId => 突然死者のAvatar識別子
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventAnnounce">
+                    <xsd:attribute
+                        name="avatarId"
+                        type="core:AvatarId"
+                        use="required"
+                    />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="noMurder" type="tns:EventAnnounce">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：襲撃による犠牲者なし。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="winVillage" type="tns:EventAnnounce">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：村陣営の勝利
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="winWolf" type="tns:EventAnnounce">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：狼陣営の勝利
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="winHamster" type="tns:EventAnnounce">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：ハムスター陣営の勝利
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="playerList">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：プレイヤー一覧開示
+プレイヤーに関する情報(playerInfo要素)を1つ以上持つ。
+avatar総数より少ない場合もあるかもしれない。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventAnnounce">
+                    <xsd:sequence>
+                        <xsd:element
+                            ref="tns:playerInfo"
+                            minOccurs="1" maxOccurs="unbounded"
+                        />
+                    </xsd:sequence>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="playerInfo">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+プレイヤー情報。
+playerId => プレイヤーのログインID。E国では@やTypeKeyニックネームを含む全部。
+            windows31jに由来する文字が含まれる場合もある。
+avatarId => Avatar識別子
+survive => 最終日まで生きていたか否か。
+role => 担当した役職
+uri => プレイヤーの指定した連絡先URI。URI条件を満たすかどうかは不明。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute
+                name="playerId"
+                type="core:PlayerId"
+                use="required"
+            />
+            <xsd:attribute
+                name="avatarId"
+                type="core:AvatarId"
+                use="required"
+            />
+            <xsd:attribute
+                name="survive"
+                type="xsd:boolean"
+                use="required"
+            />
+            <xsd:attribute
+                name="role"
+                type="core:Role"
+                use="required"
+            />
+            <xsd:attribute
+                name="uri"
+                type="xsd:token"
+                use="optional"
+            />
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="panic" type="tns:EventAnnounce">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：システム上のパニック
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="execution">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：処刑結果開示 (G国)
+nominated要素(個々の投票集計)を1つ以上持つ。
+誰が投票したかは開示されない。
+victim => 処刑された人のAvatar識別子。誰も処刑されなかったら省略。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventAnnounce">
+                    <xsd:sequence>
+                        <xsd:element
+                            ref="tns:nominated"
+                            minOccurs="1"
+                            maxOccurs="unbounded"
+                        />
+                    </xsd:sequence>
+                    <xsd:attribute
+                        name="victim"
+                        type="core:AvatarId"
+                        use="optional"
+                    />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="nominated">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+G国投票状況。
+誰が投票したかは開示されない。
+voteと異なり既に集計済みの結果が表される。
+avatarId => 被投票者
+count => 集票数
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute
+                name="avatarId"
+                type="core:AvatarId"
+                use="required"
+            />
+            <xsd:attribute
+                name="count"
+                type="xsd:positiveInteger"
+                use="required"
+            />
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="vanish">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：失踪 (G国)
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventAnnounce">
+                    <xsd:attribute
+                        name="avatarId"
+                        type="core:AvatarId"
+                        use="required"
+                    />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="checkout">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：チェックアウト (G国)
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventAnnounce">
+                    <xsd:attribute
+                        name="avatarId"
+                        type="core:AvatarId"
+                        use="required"
+                    />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="shortMember" type="tns:EventAnnounce">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：定員不足 (G国)
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="askEntry" >
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：プロローグ中の参加促し。
+commitTime => 更新時刻
+minMembers => 最少人数
+maxMembers => 最大人数
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventOrder">
+                    <xsd:attribute
+                        name="commitTime"
+                        type="xsd:time"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="minMembers"
+                        type="xsd:positiveInteger"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="maxMembers"
+                        type="xsd:positiveInteger"
+                        use="required"
+                    />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="askCommit" >
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：投票促し
+limitVote => 投票期限
+limitSpecial => 特殊行動期限
+※ 両者とも同じ値のはず。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventOrder">
+                    <xsd:attribute
+                        name="limitVote"
+                        type="xsd:time"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="limitSpecial"
+                        type="xsd:time"
+                        use="required"
+                    />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="noComment">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：発言促し
+未発言AvatarのAvatar参照要素(avatarRef)を1つ以上含む。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventOrder">
+                    <xsd:sequence>
+                        <xsd:element
+                            ref="tns:avatarRef"
+                            minOccurs="1"
+                            maxOccurs="unbounded"
+                        />
+                    </xsd:sequence>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="stayEpilogue" >
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：エピローグ終了予告
+winner => 勝利陣営
+limitTime => エピローグ終了時刻
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventOrder">
+                    <xsd:attribute
+                        name="winner"
+                        type="core:Team"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="limitTime"
+                        type="xsd:time"
+                        use="required"
+                    />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="gameOver" type="tns:EventOrder">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：ゲーム終了
+エピローグの次の日にしか出ないけど一応。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="judge">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：占い師と占われた人
+byWhom => 占い師Avatarの識別子。
+target => 占われたAvatarの識別子。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventExtra">
+                    <xsd:attribute
+                        name="byWhom"
+                        type="core:AvatarId"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="target"
+                        type="core:AvatarId"
+                        use="required"
+                    />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="guard" >
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：狩人と護衛された人。
+byWhom => 狩人Avatarの識別子。
+target => 護衛されたAvatarの識別子。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventExtra">
+                    <xsd:attribute
+                        name="byWhom"
+                        type="core:AvatarId"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="target"
+                        type="core:AvatarId"
+                        use="required"
+                    />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="counting2">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：投票開示(G国以降)
+vote要素(個々の投票)を1つ以上持つ。
+countingと異なりvictim属性は定義されていない。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventExtra">
+                    <xsd:sequence>
+                        <xsd:element
+                            ref="tns:vote"
+                            minOccurs="1"
+                            maxOccurs="unbounded"
+                        />
+                    </xsd:sequence>
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="assault" >
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+システムメッセージ：襲撃
+人狼BBSのXHTML上は赤ログに見える。
+byWhom => 襲撃した人狼のAvatar識別子
+target => 襲撃されたAvatarの識別子
+xname => 人狼BBS XHTML上のname属性値
+time => 襲撃時刻。秒以下の単位は切り捨て。
+faceIconURI => アイコン画像URI
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:EventExtra">
+                    <xsd:attribute
+                        name="byWhom"
+                        type="core:AvatarId"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="target"
+                        type="core:AvatarId"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="xname"
+                        type="xsd:NCName"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="time"
+                        type="xsd:time"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="faceIconURI"
+                        type="xsd:anyURI"
+                        use="optional"
+                    />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+    <xsd:element name="talk">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+会話データ。
+
+type => 発言種別。
+avatarId => 話したAvatarの識別子。
+xname => 村の中ではほぼユニークな識別子だが、たまに重複もありえる。
+         人狼BBS元データXHTMLのname属性の値に由来する。例：(「mes1239694501」)
+         後半の数値列はエポック時からのミリ秒らしい。
+time => 発言時刻。秒以下の単位は切り捨て。時差も付けるべし。
+faceIconURI => avatar要素の顔アイコンURIと同一なら省略。
+               もし指定されていたら、avatar要素の顔アイコンURIより
+               こちらを使ってイメージ表示した方が望ましい。
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:extension base="tns:TextLines">
+                    <xsd:attribute
+                        name="type"
+                        type="core:TalkType"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="avatarId"
+                        type="core:AvatarId"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="xname"
+                        type="xsd:NCName"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="time"
+                        type="xsd:time"
+                        use="required"
+                    />
+                    <xsd:attribute
+                        name="faceIconURI"
+                        type="xsd:anyURI"
+                        use="optional"
+                    />
+                </xsd:extension>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- ================================================================ -->
+
+</xsd:schema>
+
+<!-- EOF -->

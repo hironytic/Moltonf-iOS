@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xsd:schema
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns      ="http://jindolf.sourceforge.jp/xml/ns/401"
+    targetNamespace="http://jindolf.sourceforge.jp/xml/ns/401"
+    elementFormDefault="qualified"
+    version="1023"
+    xml:lang="ja-JP"
+>
+
+
+    <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+
+人狼BBS 各種定義記述 スキーム定義
+
+by olyutorskii [ http://sourceforge.jp/users/olyutorskii/ ]
+License : The MIT License
+※ カタログ化はご自由に
+
+Copyright(c) 2009 olyutorskii
+$Id: coreXML-090929.xsd 850 2009-09-29 08:33:59Z olyutorskii $
+
+############################################################################
+]]></xsd:documentation>
+    </xsd:annotation>
+
+
+    <xsd:import
+        namespace="http://www.w3.org/XML/1998/namespace"
+        schemaLocation="http://www.w3.org/2001/xml.xsd" />
+
+
+    <xsd:include
+        schemaLocation="http://jindolf.sourceforge.jp/xml/xsd/coreType-090929.xsd" />
+
+
+    <xsd:element name="landDefList">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+国定義の列挙。
+子要素としてlandDefを1つ以上含む。
+xml:lang => 国定義XML記述で用いられる言語
+update => 国定義情報の更新日
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:complexType>
+            <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+                <xsd:element ref="tns:landDef" />
+            </xsd:sequence>
+
+            <xsd:attribute
+                ref="xml:lang"
+                use="optional"
+                default="ja-JP"
+            />
+            <xsd:attribute
+                name="update"
+                type="xsd:dateTime"
+                use="required"
+            />
+        </xsd:complexType>
+
+        <xsd:unique name="landDef-landId">
+            <xsd:selector xpath="./tns:landDef" />
+            <xsd:field xpath="@landId" />
+        </xsd:unique>
+
+    </xsd:element>
+
+    <xsd:element name="landDef">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+国定義。
+landName => アプリケーション上の国選択肢などに使われる文字列。
+            「古国」「本国」はここでの表現。
+landId => 国の識別子文字列。URL,ファイル名などでの利用を想定。
+formalName => ninjin氏のポータル[http://homepage2.nifty.com/ninjinia/]上での
+              正式名称。
+landPrefix => 村名の前置記号。F国なら「F」。古国と本国は空文字列。
+landState => 国の状態。
+minMembers => 国内各村の最小定員。
+maxMembers => 国内各村の最大定員。
+webURI => Webブラウザ用の国エントリ。
+cgiURI => クエリーを与えるCGI。国定義内の各種相対URIのベース。
+tombFaceIconURI => 墓小アイコン画像のURI
+tombBodyIconURI => 墓大アイコン画像のURI
+faceIconURITemplate => キャラクタの顔アイコン画像URIを生成するテンプレート。
+                       java.text.MessageFormat用書式。省略可能。
+                       引数{0}はキャラ定義の通し番号。
+bodyIconURITemplate => キャラクタの全身画像URIを生成するテンプレート。
+                       java.text.MessageFormat用書式。省略可能。
+                       引数{0}はキャラ定義の通し番号。
+locale => この国で用いられるロケール
+encoding => この国がXHTMLで使うエンコーディング
+timezone => この国の時刻表記で用いられるタイムゾーン
+startDate => この国が開始した日。
+endDate => この国の最後の日
+description => この国の説明
+contactInfo => この国の連絡先
+invalidVid => システム障害によるゲーム不成立を起こした村の列挙
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:complexType>
+            <xsd:sequence />
+
+            <xsd:attribute
+                name="landName"
+                type="xsd:normalizedString"
+                use="required"
+            />
+            <xsd:attribute
+                name="landId"
+                type="tns:LandIdentifier"
+                use="required"
+            />
+            <xsd:attribute
+                name="formalName"
+                type="xsd:normalizedString"
+                use="required"
+            />
+            <xsd:attribute
+                name="landPrefix"
+                type="xsd:token"
+                use="required"
+            />
+            <xsd:attribute
+                name="landState"
+                type="tns:LandState"
+                use="required"
+            />
+            <xsd:attribute
+                name="minMembers"
+                type="xsd:positiveInteger"
+                use="required"
+            />
+            <xsd:attribute
+                name="maxMembers"
+                type="xsd:positiveInteger"
+                use="required"
+            />
+            <xsd:attribute
+                name="webURI"
+                type="xsd:anyURI"
+                use="required"
+            />
+            <xsd:attribute
+                name="cgiURI"
+                type="xsd:anyURI"
+                use="required"
+            />
+            <xsd:attribute
+                name="tombFaceIconURI"
+                type="xsd:anyURI"
+                use="required"
+            />
+            <xsd:attribute
+                name="tombBodyIconURI"
+                type="xsd:anyURI"
+                use="required"
+            />
+            <xsd:attribute
+                name="faceIconURITemplate"
+                type="xsd:token"
+                use="required"
+            />
+            <xsd:attribute
+                name="bodyIconURITemplate"
+                type="xsd:token"
+                use="required"
+            />
+            <xsd:attribute
+                name="locale"
+                type="xsd:language"
+                use="required"
+            />
+            <xsd:attribute
+                name="encoding"
+                type="tns:EncodingDecl"
+                use="required"
+            />
+            <xsd:attribute
+                name="timeZone"
+                type="tns:Timezone"
+                use="required"
+            />
+            <xsd:attribute
+                name="startDate"
+                type="xsd:dateTime"
+                use="required"
+            />
+            <xsd:attribute
+                name="endDate"
+                type="xsd:dateTime"
+                use="optional"
+            />
+            <xsd:attribute
+                name="description"
+                type="xsd:normalizedString"
+                use="required"
+            />
+            <xsd:attribute
+                name="contactInfo"
+                type="xsd:normalizedString"
+                use="required"
+            />
+            <xsd:attribute
+                name="invalidVid"
+                type="tns:IntList"
+                use="optional"
+            />
+
+        </xsd:complexType>
+
+    </xsd:element>
+
+    <xsd:element name="preDefinedAvatarList">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+事前定義キャラクタ情報の列挙。
+子要素preDefinedAvatarを1つ以上持つ。
+xml:lang => 定義を記述する言語
+update => 定義情報の更新日
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:complexType>
+
+            <xsd:sequence minOccurs="1" maxOccurs="unbounded">
+                <xsd:element ref="tns:preDefinedAvatar" />
+            </xsd:sequence>
+
+            <xsd:attribute
+                ref="xml:lang"
+                use="optional"
+                default="ja-JP"
+            />
+            <xsd:attribute
+                name="update"
+                type="xsd:dateTime"
+                use="required"
+            />
+
+        </xsd:complexType>
+
+        <xsd:unique name="preDefinedAvatar-avatarId">
+            <xsd:selector xpath="./tns:preDefinedAvatar" />
+            <xsd:field xpath="@avatarId" />
+        </xsd:unique>
+
+        <xsd:unique name="preDefinedAvatar-serialNum">
+            <xsd:selector xpath="./tns:preDefinedAvatar" />
+            <xsd:field xpath="@serialNum" />
+        </xsd:unique>
+
+        <xsd:unique name="preDefinedAvatar-fullName">
+            <xsd:selector xpath="./tns:preDefinedAvatar" />
+            <xsd:field xpath="@jobTitle" />
+            <xsd:field xpath="@shortName" />
+        </xsd:unique>
+
+    </xsd:element>
+
+    <xsd:element name="preDefinedAvatar">
+        <xsd:annotation>
+<xsd:documentation><![CDATA[
+############################################################################
+事前定義キャラクタ(Avatar)情報。
+avatarId => Avatar識別子。URIやファイル名での利用を想定。
+jobTitle => 職業名
+shortName => 短縮名
+serialNum => 通し番号
+############################################################################
+]]></xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:complexType>
+
+            <xsd:sequence />
+
+            <xsd:attribute
+                name="avatarId"
+                type="tns:AvatarId"
+                use="required"
+            />
+            <xsd:attribute
+                name="jobTitle"
+                type="xsd:token"
+                use="required"
+            />
+            <xsd:attribute
+                name="shortName"
+                type="xsd:token"
+                use="required"
+            />
+            <xsd:attribute
+                name="serialNum"
+                type="xsd:nonNegativeInteger"
+                use="required"
+            />
+
+        </xsd:complexType>
+
+    </xsd:element>
+
+</xsd:schema>
+
+<!-- EOF -->
