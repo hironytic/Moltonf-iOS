@@ -25,6 +25,7 @@
 
 import XCTest
 import XMLPullitic
+import SwiftyJSON
 @testable import Moltonf
 
 private class MockJSONWriter: ArchiveJSONWriter {
@@ -72,13 +73,8 @@ class ArchiveTests: XCTestCase {
             XCTFail("failed to load playdata.json")
             return
         }
-        
-        guard let playdata = (try? NSJSONSerialization.JSONObjectWithData(playdataData, options: NSJSONReadingOptions())) as? [String: AnyObject] else {
-            XCTFail("failed to read playdata.json")
-            return
-        }
-        
-        let landName = playdata[ArchiveKeys.LAND_NAME] as? String
+        let playdata = JSON(data: playdataData)
+        let landName = playdata[ArchiveKeys.LAND_NAME].string
         XCTAssertEqual(landName, "人狼BBS:F国")
 
         let period0FilePath = (outDir as NSString).stringByAppendingPathComponent("period-0.json")
@@ -86,13 +82,8 @@ class ArchiveTests: XCTestCase {
             XCTFail("failed to load period-0.json")
             return
         }
-        
-        guard let period0 = (try? NSJSONSerialization.JSONObjectWithData(period0Data, options: NSJSONReadingOptions())) as? [String: AnyObject] else {
-            XCTFail("failed to read period-0.json")
-            return
-        }
-        
-        let line = (((period0[ArchiveKeys.ELEMENTS] as? [AnyObject])?[2] as? [String: AnyObject])?[ArchiveKeys.LINES] as? [AnyObject])?[0] as? String
+        let period0 = JSON(data: period0Data)
+        let line = period0[ArchiveKeys.ELEMENTS][2][ArchiveKeys.LINES][0].string
         XCTAssertEqual(line, "人狼なんているわけないじゃん。みんな大げさだなあ")
     }
     
@@ -145,20 +136,20 @@ class ArchiveTests: XCTestCase {
             try ArchiveToJSON.VillageElementConverter(parser: parser).convert(element, writer: writer)
             
             let output = writer.output[0]
-            let playdata = output.object
+            let playdata = JSON(output.object)
 
             XCTAssertEqual(output.fileName, "playdata.json")
             
-            let landName = playdata[ArchiveKeys.LAND_NAME] as? String
+            let landName = playdata[ArchiveKeys.LAND_NAME].string
             XCTAssertEqual(landName, "人狼BBS:F国")
             
-            let vid = playdata[ArchiveKeys.VID] as? Int
+            let vid = playdata[ArchiveKeys.VID].int
             XCTAssertEqual(vid, 0)
             
-            let isValid = playdata[ArchiveKeys.IS_VALID] as? Bool
+            let isValid = playdata[ArchiveKeys.IS_VALID].bool
             XCTAssertEqual(isValid, true)
             
-            let avatarList = playdata[ArchiveKeys.AVATAR_LIST] as? [[String: AnyObject]]
+            let avatarList = playdata[ArchiveKeys.AVATAR_LIST].array
             XCTAssertNotNil(avatarList)
         } catch let error {
             XCTFail("error: \(error)")
@@ -186,7 +177,7 @@ class ArchiveTests: XCTestCase {
                 "  />\n" +
                 "</avatarList>\n"
             )
-            let avatarList = try ArchiveToJSON.AvatarListElementConverter(parser: parser).convert(element)
+            let avatarList = JSON(try ArchiveToJSON.AvatarListElementConverter(parser: parser).convert(element))
             XCTAssertEqual(avatarList.count, 3)
         } catch let error {
             XCTFail("error: \(error)")
