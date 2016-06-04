@@ -68,12 +68,32 @@ class ArchiveTests: XCTestCase {
         }
         
         let playdataFilePath = (outDir as NSString).stringByAppendingPathComponent("playdata.json")
-        let data = NSData(contentsOfFile: playdataFilePath)
-        let playdata = (try? NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions())) as? [String: AnyObject]
-        XCTAssertNotNil(playdata)
+        guard let playdataData = NSData(contentsOfFile: playdataFilePath) else {
+            XCTFail("failed to load playdata.json")
+            return
+        }
         
-        let landName = playdata?[ArchiveKeys.LAND_NAME] as? String
+        guard let playdata = (try? NSJSONSerialization.JSONObjectWithData(playdataData, options: NSJSONReadingOptions())) as? [String: AnyObject] else {
+            XCTFail("failed to read playdata.json")
+            return
+        }
+        
+        let landName = playdata[ArchiveKeys.LAND_NAME] as? String
         XCTAssertEqual(landName, "人狼BBS:F国")
+
+        let period0FilePath = (outDir as NSString).stringByAppendingPathComponent("period-0.json")
+        guard let period0Data = NSData(contentsOfFile: period0FilePath) else {
+            XCTFail("failed to load period-0.json")
+            return
+        }
+        
+        guard let period0 = (try? NSJSONSerialization.JSONObjectWithData(period0Data, options: NSJSONReadingOptions())) as? [String: AnyObject] else {
+            XCTFail("failed to read period-0.json")
+            return
+        }
+        
+        let line = (((period0[ArchiveKeys.ELEMENTS] as? [AnyObject])?[2] as? [String: AnyObject])?[ArchiveKeys.LINES] as? [AnyObject])?[0] as? String
+        XCTAssertEqual(line, "人狼なんているわけないじゃん。みんな大げさだなあ")
     }
     
     func setupTargetElement(xml: String) throws -> (parser: XMLPullParser, element: XMLElement) {
@@ -142,7 +162,34 @@ class ArchiveTests: XCTestCase {
             XCTAssertNotNil(avatarList)
         } catch let error {
             XCTFail("error: \(error)")
-            return
+        }
+    }
+    
+    func testConvertAvaterList() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<avatarList xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "  <avatar\n" +
+                "    avatarId=\"gerd\"\n" +
+                "    fullName=\"楽天家 ゲルト\" shortName=\"ゲルト\"\n" +
+                "    faceIconURI=\"plugin_wolf/img/face01.jpg\"\n" +
+                "  />\n" +
+                "  <avatar\n" +
+                "    avatarId=\"clara\"\n" +
+                "    fullName=\"司書 クララ\" shortName=\"クララ\"\n" +
+                "    faceIconURI=\"plugin_wolf/img/face19.jpg\"\n" +
+                "  />\n" +
+                "  <avatar\n" +
+                "    avatarId=\"fridel\"\n" +
+                "    fullName=\"シスター フリーデル\" shortName=\"フリーデル\"\n" +
+                "    faceIconURI=\"plugin_wolf/img/face17.jpg\"\n" +
+                "  />\n" +
+                "</avatarList>\n"
+            )
+            let avatarList = try ArchiveToJSON.AvatarListElementConverter(parser: parser).convert(element)
+            XCTAssertEqual(avatarList.count, 3)
+        } catch let error {
+            XCTFail("error: \(error)")
         }
     }
 }
