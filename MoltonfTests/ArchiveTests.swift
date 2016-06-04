@@ -40,6 +40,7 @@ private enum TestError: ErrorType {
 }
 
 class ArchiveTests: XCTestCase {
+    typealias K = ArchiveKeys
     var outDir: String = ""
     
     override func setUp() {
@@ -74,7 +75,7 @@ class ArchiveTests: XCTestCase {
             return
         }
         let playdata = JSON(data: playdataData)
-        let landName = playdata[ArchiveKeys.LAND_NAME].string
+        let landName = playdata[K.LAND_NAME].string
         XCTAssertEqual(landName, "人狼BBS:F国")
 
         let period0FilePath = (outDir as NSString).stringByAppendingPathComponent("period-0.json")
@@ -83,7 +84,7 @@ class ArchiveTests: XCTestCase {
             return
         }
         let period0 = JSON(data: period0Data)
-        let line = period0[ArchiveKeys.ELEMENTS][2][ArchiveKeys.LINES][0].string
+        let line = period0[K.ELEMENTS][2][K.LINES][0].string
         XCTAssertEqual(line, "人狼なんているわけないじゃん。みんな大げさだなあ")
     }
     
@@ -140,16 +141,16 @@ class ArchiveTests: XCTestCase {
 
             XCTAssertEqual(output.fileName, "playdata.json")
             
-            let landName = playdata[ArchiveKeys.LAND_NAME].string
+            let landName = playdata[K.LAND_NAME].string
             XCTAssertEqual(landName, "人狼BBS:F国")
             
-            let vid = playdata[ArchiveKeys.VID].int
+            let vid = playdata[K.VID].int
             XCTAssertEqual(vid, 0)
             
-            let isValid = playdata[ArchiveKeys.IS_VALID].bool
+            let isValid = playdata[K.IS_VALID].bool
             XCTAssertEqual(isValid, true)
             
-            let avatarList = playdata[ArchiveKeys.AVATAR_LIST].array
+            let avatarList = playdata[K.AVATAR_LIST].array
             XCTAssertNotNil(avatarList)
         } catch let error {
             XCTFail("error: \(error)")
@@ -179,6 +180,25 @@ class ArchiveTests: XCTestCase {
             )
             let avatarList = JSON(try ArchiveToJSON.AvatarListElementConverter(parser: parser).convert(element))
             XCTAssertEqual(avatarList.count, 3)
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertAvatar() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<avatar xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\"\n" +
+                "  avatarId=\"gerd\"\n" +
+                "  fullName=\"楽天家 ゲルト\" shortName=\"ゲルト\"\n" +
+                "  faceIconURI=\"plugin_wolf/img/face01.jpg\"\n" +
+                "/>\n"
+            )
+            let avatar = JSON(try ArchiveToJSON.AvatarElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(avatar[K.AVATAR_ID], "gerd")
+            XCTAssertEqual(avatar[K.FULL_NAME], "楽天家 ゲルト")
+            XCTAssertEqual(avatar[K.SHORT_NAME], "ゲルト")
+            XCTAssertEqual(avatar[K.FACE_ICON_URI], "plugin_wolf/img/face01.jpg")
         } catch let error {
             XCTFail("error: \(error)")
         }
