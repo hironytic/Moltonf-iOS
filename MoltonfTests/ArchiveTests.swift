@@ -311,4 +311,46 @@ class ArchiveTests: XCTestCase {
             XCTFail("error: \(error)")
         }
     }
+    
+    func testMurdered() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<murdered xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>次の日の朝、楽天家 ゲルト が無残な姿で発見された。</li>\n" +
+                "<li/>\n" +
+                "<avatarRef avatarId=\"gerd\" />\n" +
+                "</murdered>\n"
+            )
+            let murdered = JSON(try ArchiveToJSON.MurderedElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(murdered[K.TYPE].string, K.VAL_MURDERED)
+            XCTAssertEqual(murdered[K.AVATAR_ID][0].string, "gerd")
+            let line = murdered[K.LINES][0].string
+            XCTAssertEqual(line, "次の日の朝、楽天家 ゲルト が無残な姿で発見された。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testStartAssault() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<startAssault xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>ついに犠牲者が出た。人狼はこの村人達のなかにいる。</li>\n" +
+                "<li>しかし、それを見分ける手段はない。</li>\n" +
+                "<li/>\n" +
+                "<li>村人達は、疑わしい者を排除するため、投票を行う事にした。</li>\n" +
+                "<li>無実の犠牲者が出るのもやむをえない。村が全滅するよりは……。</li>\n" +
+                "<li/>\n" +
+                "<li>最後まで残るのは村人か、それとも人狼か。</li>\n" +
+                "<li/>\n" +
+                "</startAssault>\n"
+            )
+            let startAssault = JSON(try ArchiveToJSON.StartAssaultElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(startAssault[K.TYPE].string, K.VAL_START_ASSAULT)
+            let line = startAssault[K.LINES][0].string
+            XCTAssertEqual(line, "ついに犠牲者が出た。人狼はこの村人達のなかにいる。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
 }

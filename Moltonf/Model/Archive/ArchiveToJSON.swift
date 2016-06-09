@@ -499,7 +499,7 @@ class ArchiveToJSON: ArchiveJSONWriter {
     
     class StartAssaultElementConverter: EventAnnounceConverter {
         init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_ASSAULT)
+            super.init(parser: parser, type: K.VAL_START_ASSAULT)
         }
     }
     
