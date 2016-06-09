@@ -434,6 +434,8 @@ class ArchiveToJSON: ArchiveJSONWriter {
         }
 
         override func onBegin() throws {
+            try super.onBegin()
+            
             _roleHeads = [:]
         }
         
@@ -449,7 +451,9 @@ class ArchiveToJSON: ArchiveJSONWriter {
         
         override func onEnd() throws {
             _objectWrapper.object[K.ROLE_HEADS] = _roleHeads
-        }        
+            
+            try super.onEnd()
+        }
     }
     
     class RoleHeadsElementConverter: ElementConverter {

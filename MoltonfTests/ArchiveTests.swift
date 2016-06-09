@@ -195,10 +195,118 @@ class ArchiveTests: XCTestCase {
                 "/>\n"
             )
             let avatar = JSON(try ArchiveToJSON.AvatarElementConverter(parser: parser).convert(element))
-            XCTAssertEqual(avatar[K.AVATAR_ID], "gerd")
-            XCTAssertEqual(avatar[K.FULL_NAME], "楽天家 ゲルト")
-            XCTAssertEqual(avatar[K.SHORT_NAME], "ゲルト")
-            XCTAssertEqual(avatar[K.FACE_ICON_URI], "plugin_wolf/img/face01.jpg")
+            XCTAssertEqual(avatar[K.AVATAR_ID].string, "gerd")
+            XCTAssertEqual(avatar[K.FULL_NAME].string, "楽天家 ゲルト")
+            XCTAssertEqual(avatar[K.SHORT_NAME].string, "ゲルト")
+            XCTAssertEqual(avatar[K.FACE_ICON_URI].string, "plugin_wolf/img/face01.jpg")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertTalk() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<talk xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\"\n" +
+                "  type=\"public\" avatarId=\"gerd\"\n" +
+                "  xname=\"mes1246576501\" time=\"08:15:00+09:00\"\n" +
+                ">\n" +
+                "<li>ふぁーあ……ねむいな……寝てていい？</li>\n" +
+                "<li/>\n" +
+                "</talk>\n"
+            )
+            let talk = JSON(try ArchiveToJSON.TalkElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(talk[K.TYPE].string, K.VAL_TALK)
+            XCTAssertEqual(talk[K.TALK_TYPE].string, "public")
+            XCTAssertEqual(talk[K.AVATAR_ID].string, "gerd")
+            XCTAssertEqual(talk[K.XNAME].string, "mes1246576501")
+            XCTAssertEqual(talk[K.TIME].string, "08:15:00+09:00")
+            let line = talk[K.LINES][0].string
+            XCTAssertEqual(line, "ふぁーあ……ねむいな……寝てていい？")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertStartEntry() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<startEntry xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>昼間は人間のふりをして、夜に正体を現すという人狼。</li>\n" +
+                "<li>その人狼が、この村に紛れ込んでいるという噂が広がった。</li>\n" +
+                "<li/>\n" +
+                "<li>村人達は半信半疑ながらも、村はずれの宿に集められることになった。</li>\n" +
+                "<li/>\n" +
+                "</startEntry>\n"
+            )
+            let startEntry = JSON(try ArchiveToJSON.StartEntryElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(startEntry[K.TYPE].string, K.VAL_START_ENTRY)
+            let line = startEntry[K.LINES][0].string
+            XCTAssertEqual(line, "昼間は人間のふりをして、夜に正体を現すという人狼。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testOnStage() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<onStage xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\" entryNo=\"1\" avatarId=\"gerd\" >\n" +
+                "<li>1人目、楽天家 ゲルト。</li>\n" +
+                "</onStage>\n"
+            )
+            let onStage = JSON(try ArchiveToJSON.OnStageElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(onStage[K.TYPE].string, K.VAL_ON_STAGE)
+            XCTAssertEqual(onStage[K.ENTRY_NO].int, 1)
+            XCTAssertEqual(onStage[K.AVATAR_ID].string, "gerd")
+            let line = onStage[K.LINES][0].string
+            XCTAssertEqual(line, "1人目、楽天家 ゲルト。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testStartMirror() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<startMirror xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>さあ、自らの姿を鏡に映してみよう。</li>\n" +
+                "<li>そこに映るのはただの村人か、それとも血に飢えた人狼か。</li>\n" +
+                "<li/>\n" +
+                "<li>例え人狼でも、多人数で立ち向かえば怖くはない。</li>\n" +
+                "<li>問題は、だれが人狼なのかという事だ。</li>\n" +
+                "<li>占い師の能力を持つ人間ならば、それを見破れるだろう。</li>\n" +
+                "<li/>\n" +
+                "</startMirror>\n"
+            )
+            let startMirror = JSON(try ArchiveToJSON.StartMirrorElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(startMirror[K.TYPE].string, K.VAL_START_MIRROR)
+            let line = startMirror[K.LINES][0].string
+            XCTAssertEqual(line, "さあ、自らの姿を鏡に映してみよう。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testOpenRole() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<openRole xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>どうやらこの中には、村人が7名、人狼が3名、占い師が1名、霊能者が1名、狂人が1名、狩人が1名、共有者が2名いるようだ。</li>\n" +
+                "<roleHeads role=\"innocent\" heads=\"7\" />\n" +
+                "<roleHeads role=\"wolf\" heads=\"3\" />\n" +
+                "<roleHeads role=\"seer\" heads=\"1\" />\n" +
+                "<roleHeads role=\"shaman\" heads=\"1\" />\n" +
+                "<roleHeads role=\"madman\" heads=\"1\" />\n" +
+                "<roleHeads role=\"hunter\" heads=\"1\" />\n" +
+                "<roleHeads role=\"frater\" heads=\"2\" />\n" +
+                "</openRole>\n"
+            )
+            let openRole = JSON(try ArchiveToJSON.OpenRoleElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(openRole[K.TYPE].string, K.VAL_OPEN_ROLE)
+            XCTAssertEqual(openRole[K.ROLE_HEADS]["innocent"].int, 7)
+            let line = openRole[K.LINES][0].string
+            XCTAssertEqual(line, "どうやらこの中には、村人が7名、人狼が3名、占い師が1名、霊能者が1名、狂人が1名、狩人が1名、共有者が2名いるようだ。")
         } catch let error {
             XCTFail("error: \(error)")
         }
