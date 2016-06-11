@@ -248,7 +248,7 @@ class ArchiveTests: XCTestCase {
         }
     }
     
-    func testOnStage() {
+    func testConvertOnStage() {
         do {
             let (parser, element) = try setupTargetElement(
                 "<onStage xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\" entryNo=\"1\" avatarId=\"gerd\" >\n" +
@@ -266,7 +266,7 @@ class ArchiveTests: XCTestCase {
         }
     }
     
-    func testStartMirror() {
+    func testConvertStartMirror() {
         do {
             let (parser, element) = try setupTargetElement(
                 "<startMirror xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
@@ -288,7 +288,7 @@ class ArchiveTests: XCTestCase {
         }
     }
     
-    func testOpenRole() {
+    func testConvertOpenRole() {
         do {
             let (parser, element) = try setupTargetElement(
                 "<openRole xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
@@ -312,7 +312,7 @@ class ArchiveTests: XCTestCase {
         }
     }
     
-    func testMurdered() {
+    func testConvertMurdered() {
         do {
             let (parser, element) = try setupTargetElement(
                 "<murdered xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
@@ -331,7 +331,7 @@ class ArchiveTests: XCTestCase {
         }
     }
     
-    func testStartAssault() {
+    func testConvertStartAssault() {
         do {
             let (parser, element) = try setupTargetElement(
                 "<startAssault xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
@@ -349,6 +349,38 @@ class ArchiveTests: XCTestCase {
             XCTAssertEqual(startAssault[K.TYPE].string, K.VAL_START_ASSAULT)
             let line = startAssault[K.LINES][0].string
             XCTAssertEqual(line, "ついに犠牲者が出た。人狼はこの村人達のなかにいる。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertSurvivor() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<survivor xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>現在の生存者は、司書 クララ、シスター フリーデル、少女 リーザ、宿屋の女主人 レジーナ、ならず者 ディーター、神父 ジムゾン、少年 ペーター、青年 ヨアヒム、旅人 ニコラス、農夫 ヤコブ、負傷兵 シモン、仕立て屋 エルナ、パン屋 オットー、老人 モーリッツ、羊飼い カタリナ の 15 名。</li>\n" +
+                "<avatarRef avatarId=\"clara\" />\n" +
+                "<avatarRef avatarId=\"fridel\" />\n" +
+                "<avatarRef avatarId=\"liesa\" />\n" +
+                "<avatarRef avatarId=\"regina\" />\n" +
+                "<avatarRef avatarId=\"dieter\" />\n" +
+                "<avatarRef avatarId=\"simson\" />\n" +
+                "<avatarRef avatarId=\"peter\" />\n" +
+                "<avatarRef avatarId=\"joachim\" />\n" +
+                "<avatarRef avatarId=\"nicolas\" />\n" +
+                "<avatarRef avatarId=\"jacob\" />\n" +
+                "<avatarRef avatarId=\"simon\" />\n" +
+                "<avatarRef avatarId=\"erna\" />\n" +
+                "<avatarRef avatarId=\"otto\" />\n" +
+                "<avatarRef avatarId=\"moritz\" />\n" +
+                "<avatarRef avatarId=\"katharina\" />\n" +
+                "</survivor>\n"
+            )
+            let survivor = JSON(try ArchiveToJSON.SurvivorElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(survivor[K.TYPE].string, K.VAL_SURVIVOR)
+            XCTAssert(survivor[K.AVATAR_ID].arrayValue.contains("liesa"))
+            let line = survivor[K.LINES][0].string
+            XCTAssertEqual(line, "現在の生存者は、司書 クララ、シスター フリーデル、少女 リーザ、宿屋の女主人 レジーナ、ならず者 ディーター、神父 ジムゾン、少年 ペーター、青年 ヨアヒム、旅人 ニコラス、農夫 ヤコブ、負傷兵 シモン、仕立て屋 エルナ、パン屋 オットー、老人 モーリッツ、羊飼い カタリナ の 15 名。")
         } catch let error {
             XCTFail("error: \(error)")
         }
