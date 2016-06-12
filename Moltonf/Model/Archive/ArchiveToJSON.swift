@@ -304,15 +304,15 @@ class ArchiveToJSON: ArchiveJSONWriter {
                 case .StartElement(name: S.ELEM_COUNTING, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try CountingElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_SUDDEN_DEATH, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try SuddenDeathElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_NO_MURDER, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try NoMurderElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_WIN_VILLAGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try WinVillageElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_WIN_WOLF, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try WinWolfElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_WIN_HAMSTER, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try WinHamsterElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_PLAYER_LIST, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     try skipElement()   // TODO
                 case .StartElement(name: S.ELEM_PANIC, namespaceURI: S.NS_ARCHIVE?, element: let element):
@@ -585,6 +585,52 @@ class ArchiveToJSON: ArchiveJSONWriter {
             try self.skipElement()
             
             return (byWhom: byWhom, target: target)
+        }
+    }
+    
+    class SuddenDeathElementConverter: EventAnnounceConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_SUDDEN_DEATH)
+        }
+        
+        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+            // attributes
+            let mapToEvent = map(toObject: _objectWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_AVATAR_ID:   mapToEvent(K.AVATAR_ID,  asString),
+                ],
+                required: [
+                    S.ATTR_AVATAR_ID
+                ],
+                defaultValues: [:]
+            )
+            
+            return try super.convert(element)
+        }
+    }
+
+    class NoMurderElementConverter: EventAnnounceConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_NO_MURDER)
+        }
+    }
+
+    class WinVillageElementConverter: EventAnnounceConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_WIN_VILLAGE)
+        }
+    }
+    
+    class WinWolfElementConverter: EventAnnounceConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_WIN_WOLF)
+        }
+    }
+    
+    class WinHamsterElementConverter: EventAnnounceConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_WIN_HAMSTER)
         }
     }
     

@@ -434,4 +434,91 @@ class ArchiveTests: XCTestCase {
             XCTFail("error: \(error)")
         }
     }
+    
+    func testConvertSuddenDeath() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<suddenDeath avatarId=\"otto\" xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>パン屋 オットー は、突然死した。</li>\n" +
+                "</suddenDeath>\n"
+            )
+            let suddenDeath = JSON(try ArchiveToJSON.SuddenDeathElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(suddenDeath[K.TYPE].string, K.VAL_SUDDEN_DEATH)
+            XCTAssertEqual(suddenDeath[K.AVATAR_ID].string, "otto")
+            let line = suddenDeath[K.LINES][0].string
+            XCTAssertEqual(line, "パン屋 オットー は、突然死した。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertNoMurder() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<noMurder xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>今日は犠牲者がいないようだ。人狼は襲撃に失敗したのだろうか。</li>\n" +
+                "<li/>\n" +
+                "</noMurder>\n"
+            )
+            let noMurder = JSON(try ArchiveToJSON.NoMurderElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(noMurder[K.TYPE].string, K.VAL_NO_MURDER)
+            let line = noMurder[K.LINES][0].string
+            XCTAssertEqual(line, "今日は犠牲者がいないようだ。人狼は襲撃に失敗したのだろうか。")            
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertWinVillage() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<winVillage xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>全ての人狼を退治した……。人狼に怯える日々は去ったのだ！</li>\n" +
+                "<li/>\n" +
+                "</winVillage>\n"
+            )
+            let winVillage = JSON(try ArchiveToJSON.WinVillageElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(winVillage[K.TYPE].string, K.VAL_WIN_VILLAGE)
+            let line = winVillage[K.LINES][0].string
+            XCTAssertEqual(line, "全ての人狼を退治した……。人狼に怯える日々は去ったのだ！")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertWinWolf() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<winWolf xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>もう人狼に抵抗できるほど村人は残っていない……。</li>\n" +
+                "<li>人狼は残った村人を全て食らい、別の獲物を求めてこの村を去っていった。</li>\n" +
+                "<li/>\n" +
+                "</winWolf>\n"
+            )
+            let winWolf = JSON(try ArchiveToJSON.WinWolfElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(winWolf[K.TYPE].string, K.VAL_WIN_WOLF)
+            let line = winWolf[K.LINES][0].string
+            XCTAssertEqual(line, "もう人狼に抵抗できるほど村人は残っていない……。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertWinHamster() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<winHamster xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>全ては終わったかのように見えた。</li>\n" +
+                "<li>だが、奴が生き残っていた……。</li>\n" +
+                "<li/>\n" +
+                "</winHamster>\n"
+            )
+            let winHamster = JSON(try ArchiveToJSON.WinHamsterElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(winHamster[K.TYPE].string, K.VAL_WIN_HAMSTER)
+            let line = winHamster[K.LINES][0].string
+            XCTAssertEqual(line, "全ては終わったかのように見えた。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
 }
