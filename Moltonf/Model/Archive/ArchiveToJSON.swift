@@ -302,7 +302,7 @@ class ArchiveToJSON: ArchiveJSONWriter {
                 case .StartElement(name: S.ELEM_SURVIVOR, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try SurvivorElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_COUNTING, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try CountingElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_SUDDEN_DEATH, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     try skipElement()   // TODO
                 case .StartElement(name: S.ELEM_NO_MURDER, namespaceURI: S.NS_ARCHIVE?, element: let element):
@@ -529,6 +529,62 @@ class ArchiveToJSON: ArchiveJSONWriter {
             _objectWrapper.object[K.AVATAR_ID] = _avatarId
             
             try super.onEnd()
+        }
+    }
+    
+    class CountingElementConverter: EventAnnounceConverter {
+        var _votes: [String: AnyObject] = [:]
+        
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_COUNTING)
+        }
+        
+        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+            // attributes
+            let mapToEvent = map(toObject: _objectWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_VICTIM:    mapToEvent(K.VICTIM,  asString),
+                ],
+                required: [
+                ],
+                defaultValues: [:]
+            )
+            
+            return try super.convert(element)
+        }
+
+        override func onBegin() throws {
+            try super.onBegin()
+            
+            _votes = [:]
+        }
+
+        override func onEvent(event: XMLEvent) throws {
+            switch event {
+            case .StartElement(name: S.ELEM_VOTE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                let (byWhom, target) = try VoteElementConverter(parser: _parser).convert(element)
+                _votes[byWhom] = target
+            default:
+                try super.onEvent(event)
+            }
+        }
+        
+        override func onEnd() throws {
+            _objectWrapper.object[K.VOTES] = _votes
+            
+            try super.onEnd()
+        }
+    }
+    
+    class VoteElementConverter: ElementConverter {
+        func convert(element: XMLElement) throws -> (byWhom: String, target: AnyObject) {
+            guard let byWhom = element.attributes[S.ATTR_BY_WHOM] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_BY_WHOM) }
+            guard let target = element.attributes[S.ATTR_TARGET] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_TARGET) }
+            
+            try self.skipElement()
+            
+            return (byWhom: byWhom, target: target)
         }
     }
     

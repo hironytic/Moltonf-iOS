@@ -120,6 +120,13 @@ class ArchiveKeys {
     // MARK: period["elements"][n] (murdered)
     // static let AVATAR_ID = "avatarId"        // defined in another place
     
+    // MARK: period["elements"][n] (survivor)
+    // static let AVATAR_ID = "avatarId"        // defined in another place
+
+    // MARK: period["elements"][n] (counting)
+    static let VICTIM = "victim"
+    static let VOTES = "votes"
+    
     // MARK: period["elements"][n]["lines"][m]
     static let ENCODING = "encoding"
     static let HEX_BIN = "hexBin"

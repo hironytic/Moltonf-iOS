@@ -385,4 +385,53 @@ class ArchiveTests: XCTestCase {
             XCTFail("error: \(error)")
         }
     }
+    
+    func testConvertCounting() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<counting victim=\"moritz\" xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>司書 クララ は 老人 モーリッツ に投票した。</li>\n" +
+                "<li>シスター フリーデル は 少年 ペーター に投票した。</li>\n" +
+                "<li>少女 リーザ は 少年 ペーター に投票した。</li>\n" +
+                "<li>宿屋の女主人 レジーナ は 老人 モーリッツ に投票した。</li>\n" +
+                "<li>ならず者 ディーター は 少年 ペーター に投票した。</li>\n" +
+                "<li>神父 ジムゾン は 老人 モーリッツ に投票した。</li>\n" +
+                "<li>少年 ペーター は 老人 モーリッツ に投票した。</li>\n" +
+                "<li>青年 ヨアヒム は 老人 モーリッツ に投票した。</li>\n" +
+                "<li>旅人 ニコラス は 少年 ペーター に投票した。</li>\n" +
+                "<li>農夫 ヤコブ は 少年 ペーター に投票した。</li>\n" +
+                "<li>負傷兵 シモン は 農夫 ヤコブ に投票した。</li>\n" +
+                "<li>仕立て屋 エルナ は 司書 クララ に投票した。</li>\n" +
+                "<li>パン屋 オットー は 老人 モーリッツ に投票した。</li>\n" +
+                "<li>老人 モーリッツ は 負傷兵 シモン に投票した。</li>\n" +
+                "<li>羊飼い カタリナ は 少年 ペーター に投票した。</li>\n" +
+                "<li/>\n" +
+                "<li>老人 モーリッツ は村人達の手により処刑された。</li>\n" +
+                "<vote byWhom=\"clara\" target=\"moritz\" />\n" +
+                "<vote byWhom=\"fridel\" target=\"peter\" />\n" +
+                "<vote byWhom=\"liesa\" target=\"peter\" />\n" +
+                "<vote byWhom=\"regina\" target=\"moritz\" />\n" +
+                "<vote byWhom=\"dieter\" target=\"peter\" />\n" +
+                "<vote byWhom=\"simson\" target=\"moritz\" />\n" +
+                "<vote byWhom=\"peter\" target=\"moritz\" />\n" +
+                "<vote byWhom=\"joachim\" target=\"moritz\" />\n" +
+                "<vote byWhom=\"nicolas\" target=\"peter\" />\n" +
+                "<vote byWhom=\"jacob\" target=\"peter\" />\n" +
+                "<vote byWhom=\"simon\" target=\"jacob\" />\n" +
+                "<vote byWhom=\"erna\" target=\"clara\" />\n" +
+                "<vote byWhom=\"otto\" target=\"moritz\" />\n" +
+                "<vote byWhom=\"moritz\" target=\"simon\" />\n" +
+                "<vote byWhom=\"katharina\" target=\"peter\" />\n" +
+                "</counting>\n"
+            )
+            let counting = JSON(try ArchiveToJSON.CountingElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(counting[K.TYPE].string, K.VAL_COUNTING)
+            XCTAssertEqual(counting[K.VICTIM].string, "moritz")
+            XCTAssertEqual(counting[K.VOTES]["liesa"].string, "peter")
+            let line = counting[K.LINES][0].string
+            XCTAssertEqual(line, "司書 クララ は 老人 モーリッツ に投票した。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
 }

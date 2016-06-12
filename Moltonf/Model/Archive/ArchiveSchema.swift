@@ -264,9 +264,6 @@ class ArchiveSchema {
     // element "survivor"
     static let ELEM_SURVIVOR = "survivor"
     
-    // element "counting"
-    static let ELEM_COUNTING = "counting"
-    
     // element "suddenDeath"
     static let ELEM_SUDDEN_DEATH = "suddenDeath"
     
@@ -302,6 +299,33 @@ class ArchiveSchema {
     
     // attribute "avatarId"
     // static let ATTR_AVATAR_ID = "avatarId" // defined in other place
+    
+    //
+    // --------------------------------------------------
+    // MARK: element "counting" of EventAnnounceGroup
+    // --------------------------------------------------
+    //
+    
+    // element "counting"
+    static let ELEM_COUNTING = "counting"
+    
+    // attribute "victim"
+    static let ATTR_VICTIM = "victim"
+    
+    //
+    // --------------------------------------------------
+    // MARK: element "vote"
+    // --------------------------------------------------
+    //
+    
+    // element "vote"
+    static let ELEM_VOTE = "vote"
+
+    // attribute "byWhom"
+    static let ATTR_BY_WHOM = "byWhom"
+    
+    // attribute "target"
+    static let ATTR_TARGET = "target"
     
     //
     // --------------------------------------------------
@@ -346,7 +370,7 @@ class ArchiveSchema {
     static let ELEM_ASSAULT = "assault"
     
     // attribute "byWhom"
-    static let ATTR_BY_WHOM = "byWhom"
+    // static let ATTR_BY_WHOM = "byWhom"   // defined in other place
     
     //
     // --------------------------------------------------
