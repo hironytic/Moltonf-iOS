@@ -236,18 +236,7 @@ class ArchiveToJSON: ArchiveJSONWriter {
             )
 
             // children
-            parsing: while true {
-                let event = try _parser.next()
-                switch event {
-                case .StartElement:
-                    try skipElement()
-                    break
-                case .EndElement:
-                    break parsing
-                default:
-                    break
-                }
-            }
+            try skipElement()
 
             return avatarWrapper.object            
         }
@@ -314,7 +303,7 @@ class ArchiveToJSON: ArchiveJSONWriter {
                 case .StartElement(name: S.ELEM_WIN_HAMSTER, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try WinHamsterElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_PLAYER_LIST, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try PlayerListElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_PANIC, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     try skipElement()   // TODO
     //            case .StartElement(name: S.ELEM_EXECUTION, namespaceURI: S.NS_ARCHIVE?, element: let element):
@@ -532,6 +521,14 @@ class ArchiveToJSON: ArchiveJSONWriter {
         }
     }
     
+    class AvatarRefElementConverter: ElementConverter {
+        func convert(element: XMLElement) throws -> String {
+            guard let avatarId = element.attributes[S.ATTR_AVATAR_ID] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_AVATAR_ID) }
+            try skipElement()
+            return avatarId
+        }
+    }
+    
     class CountingElementConverter: EventAnnounceConverter {
         var _votes: [String: AnyObject] = [:]
         
@@ -634,11 +631,59 @@ class ArchiveToJSON: ArchiveJSONWriter {
         }
     }
     
-    class AvatarRefElementConverter: ElementConverter {
-        func convert(element: XMLElement) throws -> String {
-            guard let avatarId = element.attributes[S.ATTR_AVATAR_ID] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_AVATAR_ID) }
+    class PlayerListElementConverter: EventAnnounceConverter {
+        var _playerInfos: [[String: AnyObject]] = []
+        
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_PLAYER_LIST)
+        }
+        
+        override func onBegin() throws {
+            try super.onBegin()
+            
+            _playerInfos = []
+        }
+        
+        override func onEvent(event: XMLEvent) throws {
+            switch event {
+            case .StartElement(name: S.ELEM_PLAYER_INFO, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                _playerInfos.append(try PlayerInfoElementConverter(parser: _parser).convert(element))
+            default:
+                try super.onEvent(event)
+            }
+        }
+        
+        override func onEnd() throws {
+            _objectWrapper.object[K.PLAYER_INFOS] = _playerInfos
+            
+            try super.onEnd()
+        }
+    }
+
+    class PlayerInfoElementConverter: ElementConverter {
+        func convert(element: XMLElement) throws -> [String: AnyObject] {
+            let playerInfoWrapper = ObjectWrapper(object: [:])
+            
+            // attributes
+            let mapToPlayerInfo = map(toObject: playerInfoWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_PLAYER_ID:   mapToPlayerInfo(K.PLAYER_ID,    asString),
+                    S.ATTR_AVATAR_ID:   mapToPlayerInfo(K.AVATAR_ID,    asString),
+                    S.ATTR_SURVIVE:     mapToPlayerInfo(K.SURVIVE,      asBool),
+                    S.ATTR_ROLE:        mapToPlayerInfo(K.ROLE,         asString),
+                    S.ATTR_URI:         mapToPlayerInfo(K.URI,          asString),
+                ],
+                required: [
+                    S.ATTR_PLAYER_ID, S.ATTR_AVATAR_ID, S.ATTR_SURVIVE, S.ATTR_ROLE
+                ],
+                defaultValues: [:]
+            )
+
+            // children
             try skipElement()
-            return avatarId
+            
+            return playerInfoWrapper.object
         }
     }
     

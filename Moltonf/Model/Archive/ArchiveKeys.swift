@@ -127,6 +127,14 @@ class ArchiveKeys {
     static let VICTIM = "victim"
     static let VOTES = "votes"
     
+    // MARK: period["elements"][n] (playerList)
+    static let PLAYER_INFOS = "playerInfos"
+    static let PLAYER_ID = "playerId"
+    // static let AVATAR_ID = "avatarId"        // defined in another place
+    static let SURVIVE = "survive"
+    static let ROLE = "role"
+    static let URI = "uri"
+    
     // MARK: period["elements"][n]["lines"][m]
     static let ENCODING = "encoding"
     static let HEX_BIN = "hexBin"

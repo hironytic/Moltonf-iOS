@@ -521,4 +521,44 @@ class ArchiveTests: XCTestCase {
             XCTFail("error: \(error)")
         }
     }
+    
+    func testConvertPlayerList() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<playerList xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>楽天家 ゲルト （master）、死亡。村人だった。</li>\n" +
+                "<li>司書 クララ （player1）、生存。霊能者だった。</li>\n" +
+                "<li>シスター フリーデル （player2）、生存。共有者だった。</li>\n" +
+                "<li>少女 リーザ （player3）、死亡。村人だった。</li>\n" +
+                "<li>宿屋の女主人 レジーナ （player4）、生存。共有者だった。</li>\n" +
+                "<li>ならず者 ディーター （player5）、死亡。人狼だった。</li>\n" +
+                "<li>農夫 ヤコブ （player10）、生存。占い師だった。</li>\n" +
+                "<li>仕立て屋 エルナ （player12）、生存。狩人だった。</li>\n" +
+                "<li>羊飼い カタリナ （player15）、死亡。狂人だった。</li>\n" +
+                "<playerInfo playerId=\"master\" avatarId=\"gerd\" survive=\"false\" role=\"innocent\" />\n" +
+                "<playerInfo playerId=\"player1\" avatarId=\"clara\" survive=\"true\" role=\"shaman\" />\n" +
+                "<playerInfo playerId=\"player2\" avatarId=\"fridel\" survive=\"true\" role=\"frater\" uri=\"http://192.168.150.129/wolfbbs/player2.html\" />\n" +
+                "<playerInfo playerId=\"player3\" avatarId=\"liesa\" survive=\"false\" role=\"innocent\" uri=\"http://192.168.150.129/wolfbbs/player3.html\" />\n" +
+                "<playerInfo playerId=\"player4\" avatarId=\"regina\" survive=\"true\" role=\"frater\" />\n" +
+                "<playerInfo playerId=\"player5\" avatarId=\"dieter\" survive=\"false\" role=\"wolf\" uri=\"http://192.168.150.129/wolfbbs/player5.html\" />\n" +
+                "<playerInfo playerId=\"player10\" avatarId=\"jacob\" survive=\"true\" role=\"seer\" uri=\"http://192.168.150.129/wolfbbs/player10.html\" />\n" +
+                "<playerInfo playerId=\"player12\" avatarId=\"erna\" survive=\"true\" role=\"hunter\" uri=\"http://192.168.150.129/wolfbbs/player12.html\" />\n" +
+                "<playerInfo playerId=\"player15\" avatarId=\"katharina\" survive=\"false\" role=\"madman\" uri=\"http://192.168.150.129/wolfbbs/player15.html\" />\n" +
+                "</playerList>\n"
+            )
+            let playerList = JSON(try ArchiveToJSON.PlayerListElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(playerList[K.TYPE].string, K.VAL_PLAYER_LIST)
+            XCTAssertEqual(playerList[K.PLAYER_INFOS].array?.count, 9)
+            XCTAssertEqual(playerList[K.PLAYER_INFOS][0][K.PLAYER_ID].string, "master")
+            XCTAssertEqual(playerList[K.PLAYER_INFOS][0][K.SURVIVE].bool, false)
+            XCTAssertEqual(playerList[K.PLAYER_INFOS][1][K.AVATAR_ID].string, "clara")
+            XCTAssertEqual(playerList[K.PLAYER_INFOS][1][K.SURVIVE].bool, true)
+            XCTAssertNil(playerList[K.PLAYER_INFOS][1][K.URI].string)
+            XCTAssertEqual(playerList[K.PLAYER_INFOS][2][K.URI].string, "http://192.168.150.129/wolfbbs/player2.html")
+            let line = playerList[K.LINES][0].string
+            XCTAssertEqual(line, "楽天家 ゲルト （master）、死亡。村人だった。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
 }

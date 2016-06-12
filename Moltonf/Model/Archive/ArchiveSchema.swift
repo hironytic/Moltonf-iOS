@@ -467,10 +467,16 @@ class ArchiveSchema {
     
     // element "playerInfo"
     static let ELEM_PLAYER_INFO = "playerInfo"
+
+    // attribute "playerId"
+    static let ATTR_PLAYER_ID = "playerId"
     
     // attribute "avatarId"
     // static let ATTR_AVATAR_ID = "avatarId" // defined in other place
 
+    // attribute "survive"
+    static let ATTR_SURVIVE = "survive"
+    
     // attribute "role"
     // static let ATTR_ROLE = "role" // defined in other place
     
@@ -497,4 +503,7 @@ class ArchiveSchema {
     
     // role: werehamster
     static let VAL_ROLE_HAMSTER = "hamster"
+    
+    // attribute "uri"
+    static let ATTR_URI = "uri"
 }
