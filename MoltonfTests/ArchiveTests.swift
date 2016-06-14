@@ -561,4 +561,20 @@ class ArchiveTests: XCTestCase {
             XCTFail("error: \(error)")
         }
     }
+    
+    func testConvertPanic() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<panic xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>……。</li>\n" +
+                "</panic>\n"
+            )
+            let panic = JSON(try ArchiveToJSON.PanicElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(panic[K.TYPE].string, K.VAL_PANIC)
+            let line = panic[K.LINES][0].string
+            XCTAssertEqual(line, "……。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
 }

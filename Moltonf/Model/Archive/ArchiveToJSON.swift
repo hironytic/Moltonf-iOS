@@ -305,7 +305,7 @@ class ArchiveToJSON: ArchiveJSONWriter {
                 case .StartElement(name: S.ELEM_PLAYER_LIST, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try PlayerListElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_PANIC, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try PanicElementConverter(parser: _parser).convert(element))
     //            case .StartElement(name: S.ELEM_EXECUTION, namespaceURI: S.NS_ARCHIVE?, element: let element):
     //                try skipElement()   // TODO
     //            case .StartElement(name: S.ELEM_VANISH, namespaceURI: S.NS_ARCHIVE?, element: let element):
@@ -684,6 +684,12 @@ class ArchiveToJSON: ArchiveJSONWriter {
             try skipElement()
             
             return playerInfoWrapper.object
+        }
+    }
+    
+    class PanicElementConverter: EventAnnounceConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_PANIC)
         }
     }
     
