@@ -309,9 +309,9 @@ class ArchiveToJSON: ArchiveJSONWriter {
                 case .StartElement(name: S.ELEM_EXECUTION, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try ExecutionElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_VANISH, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try VanishElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_CHECKOUT, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try CheckoutElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_SHORT_MEMBER, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     try skipElement()   // TODO
                 case .StartElement(name: S.ELEM_ASK_ENTRY, namespaceURI: S.NS_ARCHIVE?, element: let element):
@@ -747,6 +747,50 @@ class ArchiveToJSON: ArchiveJSONWriter {
             try self.skipElement()
             
             return (avatarId: avatarId, count: count)
+        }
+    }
+
+    class VanishElementConverter: EventAnnounceConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_VANISH)
+        }
+        
+        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+            // attributes
+            let mapToEvent = map(toObject: _objectWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_AVATAR_ID:   mapToEvent(K.AVATAR_ID,  asString),
+                ],
+                required: [
+                    S.ATTR_AVATAR_ID
+                ],
+                defaultValues: [:]
+            )
+            
+            return try super.convert(element)
+        }
+    }
+
+    class CheckoutElementConverter: EventAnnounceConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_CHECKOUT)
+        }
+        
+        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+            // attributes
+            let mapToEvent = map(toObject: _objectWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_AVATAR_ID:   mapToEvent(K.AVATAR_ID,  asString),
+                ],
+                required: [
+                    S.ATTR_AVATAR_ID
+                ],
+                defaultValues: [:]
+            )
+            
+            return try super.convert(element)
         }
     }
     

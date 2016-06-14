@@ -602,4 +602,38 @@ class ArchiveTests: XCTestCase {
             XCTFail("error: \(error)")
         }
     }
+    
+    func testConvertVanish() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<vanish xmlns=\"http://jindolf.sourceforge.jp/xml/ns/501\" avatarId=\"erna\" >\n" +
+                "<li>仕立て屋 エルナ は、失踪した。</li>\n" +
+                "</vanish>\n"
+            )
+            let vanish = JSON(try ArchiveToJSON.VanishElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(vanish[K.TYPE].string, K.VAL_VANISH)
+            XCTAssertEqual(vanish[K.AVATAR_ID].string, "erna")
+            let line = vanish[K.LINES][0].string
+            XCTAssertEqual(line, "仕立て屋 エルナ は、失踪した。")            
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertCheckout() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<checkout xmlns=\"http://jindolf.sourceforge.jp/xml/ns/501\" avatarId=\"joachim\" >\n" +
+                "<li>青年 ヨアヒム は、宿を去った。</li>\n" +
+                "</checkout>\n"
+            )
+            let checkout = JSON(try ArchiveToJSON.CheckoutElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(checkout[K.TYPE].string, K.VAL_CHECKOUT)
+            XCTAssertEqual(checkout[K.AVATAR_ID].string, "joachim")
+            let line = checkout[K.LINES][0].string
+            XCTAssertEqual(line, "青年 ヨアヒム は、宿を去った。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
 }
