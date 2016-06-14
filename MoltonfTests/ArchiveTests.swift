@@ -577,4 +577,29 @@ class ArchiveTests: XCTestCase {
             XCTFail("error: \(error)")
         }
     }
+    
+    func testConvertExecution() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<execution xmlns=\"http://jindolf.sourceforge.jp/xml/ns/501\" victim=\"dieter\" >\n" +
+                "<li>負傷兵 シモン、1票。</li>\n" +
+                "<li>青年 ヨアヒム、1票。</li>\n" +
+                "<li>ならず者 ディーター、8票。</li>\n" +
+                "<li/>\n" +
+                "<li>ならず者 ディーター は村人達の手により処刑された。</li>\n" +
+                "<nominated avatarId=\"simon\" count=\"1\" />\n" +
+                "<nominated avatarId=\"joachim\" count=\"1\" />\n" +
+                "<nominated avatarId=\"dieter\" count=\"8\" />\n" +
+                "</execution>\n"
+            )
+            let execution = JSON(try ArchiveToJSON.ExecutionElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(execution[K.TYPE].string, K.VAL_EXECUTION)
+            XCTAssertEqual(execution[K.VICTIM].string, "dieter")
+            XCTAssertEqual(execution[K.NOMINATEDS]["simon"].int, 1)
+            let line = execution[K.LINES][0].string
+            XCTAssertEqual(line, "負傷兵 シモン、1票。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
 }

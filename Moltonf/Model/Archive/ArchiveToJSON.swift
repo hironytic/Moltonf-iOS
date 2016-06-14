@@ -306,14 +306,14 @@ class ArchiveToJSON: ArchiveJSONWriter {
                     elements.append(try PlayerListElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_PANIC, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try PanicElementConverter(parser: _parser).convert(element))
-    //            case .StartElement(name: S.ELEM_EXECUTION, namespaceURI: S.NS_ARCHIVE?, element: let element):
-    //                try skipElement()   // TODO
-    //            case .StartElement(name: S.ELEM_VANISH, namespaceURI: S.NS_ARCHIVE?, element: let element):
-    //                try skipElement()   // TODO
-    //            case .StartElement(name: S.ELEM_CHECKOUG, namespaceURI: S.NS_ARCHIVE?, element: let element):
-    //                try skipElement()   // TODO
-    //            case .StartElement(name: S.ELEM_SHORT_MEMBER, namespaceURI: S.NS_ARCHIVE?, element: let element):
-    //                try skipElement()   // TODO
+                case .StartElement(name: S.ELEM_EXECUTION, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                    elements.append(try ExecutionElementConverter(parser: _parser).convert(element))
+                case .StartElement(name: S.ELEM_VANISH, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                    try skipElement()   // TODO
+                case .StartElement(name: S.ELEM_CHECKOUT, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                    try skipElement()   // TODO
+                case .StartElement(name: S.ELEM_SHORT_MEMBER, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                    try skipElement()   // TODO
                 case .StartElement(name: S.ELEM_ASK_ENTRY, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     try skipElement()   // TODO
                 case .StartElement(name: S.ELEM_ASK_COMMIT, namespaceURI: S.NS_ARCHIVE?, element: let element):
@@ -690,6 +690,63 @@ class ArchiveToJSON: ArchiveJSONWriter {
     class PanicElementConverter: EventAnnounceConverter {
         init(parser: XMLPullParser) {
             super.init(parser: parser, type: K.VAL_PANIC)
+        }
+    }
+    
+    class ExecutionElementConverter: EventAnnounceConverter {
+        var _nominateds: [String: AnyObject] = [:]
+        
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_EXECUTION)
+        }
+        
+        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+            // attributes
+            let mapToEvent = map(toObject: _objectWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_VICTIM:    mapToEvent(K.VICTIM,  asString),
+                ],
+                required: [
+                ],
+                defaultValues: [:]
+            )
+            
+            return try super.convert(element)
+        }
+        
+        override func onBegin() throws {
+            try super.onBegin()
+            
+            _nominateds = [:]
+        }
+        
+        override func onEvent(event: XMLEvent) throws {
+            switch event {
+            case .StartElement(name: S.ELEM_NOMINATED, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                let (avatarId, count) = try NominatedElementConverter(parser: _parser).convert(element)
+                _nominateds[avatarId] = count
+            default:
+                try super.onEvent(event)
+            }
+        }
+        
+        override func onEnd() throws {
+            _objectWrapper.object[K.NOMINATEDS] = _nominateds
+            
+            try super.onEnd()
+        }
+    }
+    
+    class NominatedElementConverter: ElementConverter {
+        func convert(element: XMLElement) throws -> (avatarId: String, count: AnyObject) {
+            guard let avatarId = element.attributes[S.ATTR_AVATAR_ID] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_AVATAR_ID) }
+            guard let countStr = element.attributes[S.ATTR_COUNT] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_COUNT) }
+            let count = try asInt(countStr)
+            
+            try self.skipElement()
+            
+            return (avatarId: avatarId, count: count)
         }
     }
     

@@ -135,6 +135,10 @@ class ArchiveKeys {
     static let ROLE = "role"
     static let URI = "uri"
     
+    // MARK: period["elements"][n] (execution)
+    // static let VICTIM = "victim"             // defined in another place
+    static let NOMINATEDS = "nominateds"
+    
     // MARK: period["elements"][n]["lines"][m]
     static let ENCODING = "encoding"
     static let HEX_BIN = "hexBin"

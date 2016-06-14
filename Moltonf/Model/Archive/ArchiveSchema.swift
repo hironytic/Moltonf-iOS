@@ -285,6 +285,9 @@ class ArchiveSchema {
     // element "panic"
     static let ELEM_PANIC = "panic"
 
+    // element "shortMember"
+    static let ELEM_SHORT_MEMBER = "shortMember"
+    
     //
     // --------------------------------------------------
     // MARK: element "onStage" of EventAnnounceGroup
@@ -326,6 +329,58 @@ class ArchiveSchema {
     
     // attribute "target"
     static let ATTR_TARGET = "target"
+    
+    //
+    // --------------------------------------------------
+    // MARK: element "execution" of EventAnnounceGroup
+    // --------------------------------------------------
+    //
+    
+    // element "execution"
+    static let ELEM_EXECUTION = "execution"
+    
+    // attribute "victim"
+    // static let ATTR_VICTIM = "victim"    // defined in other place
+    
+    //
+    // --------------------------------------------------
+    // MARK: element "nominated"
+    // --------------------------------------------------
+    //
+    
+    // element "nominated"
+    static let ELEM_NOMINATED = "nominated"
+    
+    // attribute "avatarId"
+    // static let ATTR_AVATAR_ID = "avatarId" // defined in other place
+    
+    // attribute "count"
+    static let ATTR_COUNT = "count"
+    
+    //
+    // --------------------------------------------------
+    // MARK: element "vanish" of EventAnnounceGroup
+    // --------------------------------------------------
+    //
+    
+    // element "vanish"
+    static let ELEM_VANISH = "vanish"
+    
+    // attribute "avatarId"
+    // static let ATTR_AVATAR_ID = "avatarId" // defined in other place
+
+    //
+    // --------------------------------------------------
+    // MARK: element "checkout" of EventAnnounceGroup
+    // --------------------------------------------------
+    //
+    
+    // element "vanish"
+    static let ELEM_CHECKOUT = "checkout"
+    
+    // attribute "avatarId"
+    // static let ATTR_AVATAR_ID = "avatarId" // defined in other place
+    
     
     //
     // --------------------------------------------------
