@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		501F954B1CE61CA700628E29 /* ArchiveSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F954A1CE61CA700628E29 /* ArchiveSchema.swift */; };
 		501F954F1CE9B77E00628E29 /* XMLPullitic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 501F954E1CE9B77E00628E29 /* XMLPullitic.framework */; };
-		501F95511CEB440400628E29 /* ArchiveKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F95501CEB440400628E29 /* ArchiveKeys.swift */; };
+		501F95511CEB440400628E29 /* ArchiveConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F95501CEB440400628E29 /* ArchiveConstants.swift */; };
 		5025EFE11CDF15A70032AD67 /* WorkspaceList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */; };
 		5025EFE31CDF16530032AD67 /* WorkspaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */; };
 		5025EFE71CDF17470032AD67 /* WorkspaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */; };
@@ -51,7 +51,7 @@
 /* Begin PBXFileReference section */
 		501F954A1CE61CA700628E29 /* ArchiveSchema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveSchema.swift; sourceTree = "<group>"; };
 		501F954E1CE9B77E00628E29 /* XMLPullitic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XMLPullitic.framework; path = Carthage/Build/iOS/XMLPullitic.framework; sourceTree = "<group>"; };
-		501F95501CEB440400628E29 /* ArchiveKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveKeys.swift; sourceTree = "<group>"; };
+		501F95501CEB440400628E29 /* ArchiveConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveConstants.swift; sourceTree = "<group>"; };
 		5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = WorkspaceList.storyboard; sourceTree = "<group>"; };
 		5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceListViewController.swift; sourceTree = "<group>"; };
 		5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceListViewModel.swift; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				50B24E251CF95E9A0035D573 /* Schema */,
-				501F95501CEB440400628E29 /* ArchiveKeys.swift */,
+				501F95501CEB440400628E29 /* ArchiveConstants.swift */,
 				501F954A1CE61CA700628E29 /* ArchiveSchema.swift */,
 				50B24E1D1CF8734F0035D573 /* ArchiveToJSON.swift */,
 			);
@@ -382,7 +382,7 @@
 				5025EFF31CE15FD30032AD67 /* TransitionMessage.swift in Sources */,
 				5025EFE71CDF17470032AD67 /* WorkspaceListViewModel.swift in Sources */,
 				5025EFFF1CE2139B0032AD67 /* DismissingMessage.swift in Sources */,
-				501F95511CEB440400628E29 /* ArchiveKeys.swift in Sources */,
+				501F95511CEB440400628E29 /* ArchiveConstants.swift in Sources */,
 				5025EFEC1CDF6F900032AD67 /* Message.swift in Sources */,
 				5025EFF11CE0D50C0032AD67 /* ActionObserver.swift in Sources */,
 				5025EFEA1CDF689E0032AD67 /* WorkspaceManager.swift in Sources */,

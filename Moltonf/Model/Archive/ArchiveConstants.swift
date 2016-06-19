@@ -1,5 +1,5 @@
 //
-// ArchiveKeys.swift
+// ArchiveConstants.swift
 // Moltonf
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -25,7 +25,7 @@
 
 import Foundation
 
-class ArchiveKeys {
+class ArchiveConstants {
     // MARK: playdata
     static let LANG = "lang"
     static let BASE = "base"
@@ -174,5 +174,4 @@ class ArchiveKeys {
     static let ENCODING = "encoding"
     static let HEX_BIN = "hexBin"
     static let CHAR = "char"
-    
 }

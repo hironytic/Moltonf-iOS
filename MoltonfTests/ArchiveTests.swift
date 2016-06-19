@@ -40,7 +40,7 @@ private enum TestError: ErrorType {
 }
 
 class ArchiveTests: XCTestCase {
-    typealias K = ArchiveKeys
+    typealias K = ArchiveConstants
     var outDir: String = ""
     
     override func setUp() {

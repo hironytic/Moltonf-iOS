@@ -36,7 +36,7 @@ protocol ArchiveJSONWriter {
 
 class ArchiveToJSON: ArchiveJSONWriter {
     private typealias S = ArchiveSchema
-    private typealias K = ArchiveKeys
+    private typealias K = ArchiveConstants
     
     enum ConvertError: ErrorType {
         case CantReadArchive
