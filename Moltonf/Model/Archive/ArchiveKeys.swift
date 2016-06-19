@@ -139,6 +139,22 @@ class ArchiveKeys {
     // static let VICTIM = "victim"             // defined in another place
     static let NOMINATEDS = "nominateds"
     
+    // MARK: period["elements"][n] (askEntry)
+    // static let COMMIT_TIME = "commitTime"    // defined in another place
+    static let MIN_MEMBERS = "minMembers"
+    static let MAX_MEMBERS = "maxMembers"
+    
+    // MARK: period["elements"][n] (askCommit)
+    static let LIMIT_VOTE = "limitVote"
+    static let LIMIT_SPECIAL = "limitSpecial"
+    
+    // MARK: period["elements"][n] (noComment)
+    // static let AVATAR_ID = "avatarId"        // defined in another place
+    
+    // MARK: period["elements"][n] (stayEpilogue)
+    static let WINNER = "winner"
+    static let LIMIT_TIME = "limitTime"
+    
     // MARK: period["elements"][n]["lines"][m]
     static let ENCODING = "encoding"
     static let HEX_BIN = "hexBin"

@@ -381,28 +381,66 @@ class ArchiveSchema {
     // attribute "avatarId"
     // static let ATTR_AVATAR_ID = "avatarId" // defined in other place
     
-    
     //
     // --------------------------------------------------
     // MARK: elements of EventOrderGroup
     // --------------------------------------------------
     //
     
-    // element "askEntry"
-    static let ELEM_ASK_ENTRY = "askEntry"
-    
-    // element "askCommit"
-    static let ELEM_ASK_COMMIT = "askCommit"
-    
     // element "noComment"
     static let ELEM_NO_COMMENT = "noComment"
-    
-    // element "stayEpilogue"
-    static let ELEM_STAY_EPILOGUE = "stayEpilogue"
     
     // element "gameOver"
     static let ELEM_GAME_OVER = "gameOver"
 
+    //
+    // --------------------------------------------------
+    // MARK: element "askEntry" of EventOrderGroup
+    // --------------------------------------------------
+    //
+    
+    // element "askEntry"
+    static let ELEM_ASK_ENTRY = "askEntry"
+    
+    // attribute "commitTime"
+    // static let ATTR_COMMIT_TIME = "commitTime"   // defined in other place
+    
+    // attribute "minMembers"
+    static let ATTR_MIN_MEMBERS = "minMembers"
+    
+    // attribute "maxMembers"
+    static let ATTR_MAX_MEMBERS = "maxMembers"
+
+    //
+    // --------------------------------------------------
+    // MARK: element "askCommit" of EventOrderGroup
+    // --------------------------------------------------
+    //
+
+    // element "askCommit"
+    static let ELEM_ASK_COMMIT = "askCommit"
+
+    // attribute "limitVote"
+    static let ATTR_LIMIT_VOTE = "limitVote"
+    
+    // attribute "limitSpecial"
+    static let ATTR_LIMIT_SPECIAL = "limitSpecial"
+    
+    //
+    // --------------------------------------------------
+    // MARK: element "stayEpilogue" of EventOrderGroup
+    // --------------------------------------------------
+    //
+    
+    // element "stayEpilogue"
+    static let ELEM_STAY_EPILOGUE = "stayEpilogue"
+    
+    // attribute "winner"
+    static let ATTR_WINNER = "winner"
+    
+    // attribute "limitTime"
+    static let ATTR_LIMIT_TIME = "limitTime"
+    
     //
     // --------------------------------------------------
     // MARK: elements of EventExtraGroup

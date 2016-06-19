@@ -636,4 +636,107 @@ class ArchiveTests: XCTestCase {
             XCTFail("error: \(error)")
         }
     }
+    
+    func testConvertShortMember() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<shortMember xmlns=\"http://jindolf.sourceforge.jp/xml/ns/501\">\n" +
+                "<li>まだ村人達は揃っていないようだ。</li>\n" +
+                "<li/>\n" +
+                "</shortMember>\n"
+            )
+            let shortMember = JSON(try ArchiveToJSON.ShortMemberElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(shortMember[K.TYPE].string, K.VAL_SHORT_MEMBER)
+            let line = shortMember[K.LINES][0].string
+            XCTAssertEqual(line, "まだ村人達は揃っていないようだ。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertAskEntry() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<askEntry xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\" commitTime=\"10:00:00+09:00\" minMembers=\"11\" maxMembers=\"16\">\n" +
+                "<li>演じたいキャラクターを選び、発言してください。</li>\n" +
+                "<li>午前 10時 0分 に11名以上がエントリーしていれば進行します。</li>\n" +
+                "<li>最大16名まで参加可能です。</li>\n" +
+                "<li />\n" +
+                "<li>※エントリーは取り消せません。ルールをよく理解した上でご参加下さい。</li>\n" +
+                "<li>※始めての方は、村人希望での参加となります。</li>\n" +
+                "<li>※希望能力についての発言は控えてください。</li>\n" +
+                "<li/>\n" +
+                "</askEntry>\n"
+            )
+            let askEntry = JSON(try ArchiveToJSON.AskEntryElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(askEntry[K.TYPE].string, K.VAL_ASK_ENTRY)
+            XCTAssertEqual(askEntry[K.COMMIT_TIME].string, "10:00:00+09:00")
+            XCTAssertEqual(askEntry[K.MIN_MEMBERS].int, 11)
+            XCTAssertEqual(askEntry[K.MAX_MEMBERS].int, 16)
+            let line = askEntry[K.LINES][0].string
+            XCTAssertEqual(line, "演じたいキャラクターを選び、発言してください。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertAskCommit() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<askCommit xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\" limitVote=\"23:00:00+09:00\" limitSpecial=\"23:00:00+09:00\">\n" +
+                "<li>午後 11時 0分 までに、誰を処刑するべきかの投票先を決定して下さい。</li>\n" +
+                "<li>一番票を集めた人物が処刑されます。同数だった場合はランダムで決定されます。</li>\n" +
+                "<li/>\n" +
+                "<li>特殊な能力を持つ人は、午後 11時 0分 までに行動を確定して下さい。</li>\n" +
+                "<li/>\n" +
+                "</askCommit>\n"
+            )
+            let askCommit = JSON(try ArchiveToJSON.AskCommitElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(askCommit[K.TYPE].string, K.VAL_ASK_COMMIT)
+            XCTAssertEqual(askCommit[K.LIMIT_VOTE].string, "23:00:00+09:00")
+            XCTAssertEqual(askCommit[K.LIMIT_SPECIAL].string, "23:00:00+09:00")
+            let line = askCommit[K.LINES][0].string
+            XCTAssertEqual(line, "午後 11時 0分 までに、誰を処刑するべきかの投票先を決定して下さい。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertNoComment() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<noComment xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>本日まだ発言していない者は、羊飼い カタリナ、以上 1 名。</li>\n" +
+                "<avatarRef avatarId=\"katharina\" />\n" +
+                "</noComment>\n"
+            )
+            let noComment = JSON(try ArchiveToJSON.NoCommentElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(noComment[K.TYPE].string, K.VAL_NO_COMMENT)
+            XCTAssertEqual(noComment[K.AVATAR_ID][0].string, "katharina")
+            let line = noComment[K.LINES][0].string
+            XCTAssertEqual(line, "本日まだ発言していない者は、羊飼い カタリナ、以上 1 名。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testStayEpilogue() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<stayEpilogue xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\" winner=\"village\" limitTime=\"02:00:00+09:00\">\n" +
+                "<li>村人側の勝利です！</li>\n" +
+                "<li>全てのログとユーザー名を公開します。午前 2時 0分 まで自由に書き込めますので、今回の感想などをどうぞ。</li>\n" +
+                "<li/>\n" +
+                "</stayEpilogue>\n"
+            )
+            let stayEpilogue = JSON(try ArchiveToJSON.StayEpilogueElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(stayEpilogue[K.TYPE].string, K.VAL_STAY_EPILOGUE)
+            XCTAssertEqual(stayEpilogue[K.WINNER].string, "village")
+            XCTAssertEqual(stayEpilogue[K.LIMIT_TIME].string, "02:00:00+09:00")
+            let line = stayEpilogue[K.LINES][0].string
+            XCTAssertEqual(line, "村人側の勝利です！")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
 }

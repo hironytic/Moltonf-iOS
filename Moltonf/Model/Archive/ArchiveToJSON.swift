@@ -313,15 +313,15 @@ class ArchiveToJSON: ArchiveJSONWriter {
                 case .StartElement(name: S.ELEM_CHECKOUT, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try CheckoutElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_SHORT_MEMBER, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try ShortMemberElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_ASK_ENTRY, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try AskEntryElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_ASK_COMMIT, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try AskCommitElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_NO_COMMENT, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try NoCommentElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_STAY_EPILOGUE, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try StayEpilogueElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_GAME_OVER, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     try skipElement()   // TODO
                 case .StartElement(name: S.ELEM_JUDGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
@@ -793,6 +793,115 @@ class ArchiveToJSON: ArchiveJSONWriter {
             return try super.convert(element)
         }
     }
+
+    class ShortMemberElementConverter: EventAnnounceConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_SHORT_MEMBER)
+        }
+    }
+
+    class AskEntryElementConverter: EventOrderConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_ASK_ENTRY)
+        }
+        
+        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+            // attributes
+            let mapToEvent = map(toObject: _objectWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_COMMIT_TIME:   mapToEvent(K.COMMIT_TIME,  asString),
+                    S.ATTR_MIN_MEMBERS:   mapToEvent(K.MIN_MEMBERS,  asInt),
+                    S.ATTR_MAX_MEMBERS:   mapToEvent(K.MAX_MEMBERS,  asInt),
+                ],
+                required: [
+                    S.ATTR_COMMIT_TIME,
+                    S.ATTR_MIN_MEMBERS,
+                    S.ATTR_MAX_MEMBERS,
+                ],
+                defaultValues: [:]
+            )
+            
+            return try super.convert(element)
+        }
+    }
+
+    class AskCommitElementConverter: EventOrderConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_ASK_COMMIT)
+        }
+        
+        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+            // attributes
+            let mapToEvent = map(toObject: _objectWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_LIMIT_VOTE:      mapToEvent(K.LIMIT_VOTE,    asString),
+                    S.ATTR_LIMIT_SPECIAL:   mapToEvent(K.LIMIT_SPECIAL, asString),
+                ],
+                required: [
+                    S.ATTR_LIMIT_VOTE,
+                    S.ATTR_LIMIT_SPECIAL,
+                ],
+                defaultValues: [:]
+            )
+            
+            return try super.convert(element)
+        }
+    }
+    
+    class NoCommentElementConverter: EventOrderConverter {
+        var _avatarId: [String] = []
+        
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_NO_COMMENT)
+        }
+
+        override func onBegin() throws {
+            try super.onBegin()
+            
+            _avatarId = []
+        }
+        
+        override func onEvent(event: XMLEvent) throws {
+            switch event {
+            case .StartElement(name: S.ELEM_AVATAR_REF, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                _avatarId.append(try AvatarRefElementConverter(parser: _parser).convert(element))
+            default:
+                try super.onEvent(event)
+            }
+        }
+        
+        override func onEnd() throws {
+            _objectWrapper.object[K.AVATAR_ID] = _avatarId
+            
+            try super.onEnd()
+        }
+    }
+    
+    class StayEpilogueElementConverter: EventOrderConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_STAY_EPILOGUE)
+        }
+        
+        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+            // attributes
+            let mapToEvent = map(toObject: _objectWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_WINNER:      mapToEvent(K.WINNER,        asString),
+                    S.ATTR_LIMIT_TIME:  mapToEvent(K.LIMIT_TIME,    asString),
+                ],
+                required: [
+                    S.ATTR_WINNER,
+                    S.ATTR_LIMIT_TIME,
+                ],
+                defaultValues: [:]
+            )
+            
+            return try super.convert(element)
+        }
+    }
     
     class EventAnnounceConverter: EventConverter {
         init(parser: XMLPullParser, type: String) {
@@ -927,9 +1036,6 @@ class ArchiveToJSON: ArchiveJSONWriter {
             return contentWrapper.object
         }
     }
-    
-    
-    
 }
 
 // MARK: - Helper Class and Functions
