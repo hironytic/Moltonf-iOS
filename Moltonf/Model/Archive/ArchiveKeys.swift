@@ -155,6 +155,21 @@ class ArchiveKeys {
     static let WINNER = "winner"
     static let LIMIT_TIME = "limitTime"
     
+    // MARK: period["elements"][n] (judge)
+    static let BY_WHOM = "byWhom"
+    static let TARGET = "target"
+
+    // MARK: period["elements"][n] (guard)
+    // static let BY_WHOM = "byWhom"            // defined in another place
+    // static let TARGET = "target"             // defined in another place
+    
+    // MARK: perild["elements"][n] (assault)
+    // static let BY_WHOM = "byWhom"            // defined in another place
+    // static let TARGET = "target"             // defined in another place
+    // static let XNAME = "xname"               // defined in another place
+    // static let TIME = "time"                 // defined in another place
+    // static let FACE_ICON_URI = "faceIconURI" // defined in another place
+    
     // MARK: period["elements"][n]["lines"][m]
     static let ENCODING = "encoding"
     static let HEX_BIN = "hexBin"

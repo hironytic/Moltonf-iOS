@@ -720,7 +720,7 @@ class ArchiveTests: XCTestCase {
         }
     }
     
-    func testStayEpilogue() {
+    func testConvertStayEpilogue() {
         do {
             let (parser, element) = try setupTargetElement(
                 "<stayEpilogue xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\" winner=\"village\" limitTime=\"02:00:00+09:00\">\n" +
@@ -735,6 +735,122 @@ class ArchiveTests: XCTestCase {
             XCTAssertEqual(stayEpilogue[K.LIMIT_TIME].string, "02:00:00+09:00")
             let line = stayEpilogue[K.LINES][0].string
             XCTAssertEqual(line, "村人側の勝利です！")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertGameOver() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<gameOver xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
+                "<li>終了しました</li>\n" +
+                "<li/>\n" +
+                "</gameOver>\n"
+            )
+            let gameOver = JSON(try ArchiveToJSON.GameOverElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(gameOver[K.TYPE].string, K.VAL_GAME_OVER)
+            let line = gameOver[K.LINES][0].string
+            XCTAssertEqual(line, "終了しました")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertJudge() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<judge xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\" byWhom=\"albin\" target=\"liesa\" >\n" +
+                "<li>行商人 アルビン は、少女 リーザ を占った。</li>\n" +
+                "</judge>\n"
+            )
+            let judge = JSON(try ArchiveToJSON.JudgeElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(judge[K.TYPE].string, K.VAL_JUDGE)
+            XCTAssertEqual(judge[K.BY_WHOM].string, "albin")
+            XCTAssertEqual(judge[K.TARGET].string, "liesa")
+            let line = judge[K.LINES][0].string
+            XCTAssertEqual(line, "行商人 アルビン は、少女 リーザ を占った。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertGuard() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<guard xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\" byWhom=\"jacob\" target=\"peter\" >\n" +
+                "<li>農夫 ヤコブ は、少年 ペーター を守っている。</li>\n" +
+                "</guard>\n"
+            )
+            let guardObject = JSON(try ArchiveToJSON.GuardElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(guardObject[K.TYPE].string, K.VAL_GUARD)
+            XCTAssertEqual(guardObject[K.BY_WHOM].string, "jacob")
+            XCTAssertEqual(guardObject[K.TARGET].string, "peter")
+            let line = guardObject[K.LINES][0].string
+            XCTAssertEqual(line, "農夫 ヤコブ は、少年 ペーター を守っている。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertCounting2() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<counting2 xmlns=\"http://jindolf.sourceforge.jp/xml/ns/501\">\n" +
+                "<li>負傷兵 シモン は 青年 ヨアヒム に投票した。</li>\n" +
+                "<li>村娘 パメラ は 青年 ヨアヒム に投票した。</li>\n" +
+                "<li>少女 リーザ は 青年 ヨアヒム に投票した。</li>\n" +
+                "<li>少年 ペーター は 青年 ヨアヒム に投票した。</li>\n" +
+                "<li>ならず者 ディーター は 青年 ヨアヒム に投票した。</li>\n" +
+                "<li>青年 ヨアヒム は 青年 ヨアヒム に投票した。</li>\n" +
+                "<li>パン屋 オットー は 青年 ヨアヒム に投票した。</li>\n" +
+                "<li>旅人 ニコラス は 青年 ヨアヒム に投票した。</li>\n" +
+                "<li>神父 ジムゾン は 青年 ヨアヒム に投票した。</li>\n" +
+                "<li>村長 ヴァルター は 青年 ヨアヒム に投票した。</li>\n" +
+                "<li>行商人 アルビン は 青年 ヨアヒム に投票した。</li>\n" +
+                "<li>農夫 ヤコブ は 青年 ヨアヒム に投票した。</li>\n" +
+                "<vote byWhom=\"simon\" target=\"joachim\" />\n" +
+                "<vote byWhom=\"pamela\" target=\"joachim\" />\n" +
+                "<vote byWhom=\"liesa\" target=\"joachim\" />\n" +
+                "<vote byWhom=\"peter\" target=\"joachim\" />\n" +
+                "<vote byWhom=\"dieter\" target=\"joachim\" />\n" +
+                "<vote byWhom=\"joachim\" target=\"joachim\" />\n" +
+                "<vote byWhom=\"otto\" target=\"joachim\" />\n" +
+                "<vote byWhom=\"nicolas\" target=\"joachim\" />\n" +
+                "<vote byWhom=\"simson\" target=\"joachim\" />\n" +
+                "<vote byWhom=\"walter\" target=\"joachim\" />\n" +
+                "<vote byWhom=\"albin\" target=\"joachim\" />\n" +
+                "<vote byWhom=\"jacob\" target=\"joachim\" />\n" +
+                "</counting2>\n"
+            )
+            let counting2 = JSON(try ArchiveToJSON.Counting2ElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(counting2[K.TYPE].string, K.VAL_COUNTING2)
+            XCTAssertEqual(counting2[K.VOTES]["simon"].string, "joachim")
+            let line = counting2[K.LINES][0].string
+            XCTAssertEqual(line, "負傷兵 シモン は 青年 ヨアヒム に投票した。")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+
+    func testConvertAssault() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<assault xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\"\n" +
+                "  byWhom=\"walter\" target=\"simon\"\n" +
+                "  xname=\"mes1268151301\" time=\"01:15:00+09:00\"\n" +
+                " >\n" +
+                "<li>負傷兵 シモン ！ 今日がお前の命日だ！</li>\n" +
+                "</assault>\n"
+            )
+            let assault = JSON(try ArchiveToJSON.AssaultElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(assault[K.TYPE].string, K.VAL_ASSAULT)
+            XCTAssertEqual(assault[K.BY_WHOM].string, "walter")
+            XCTAssertEqual(assault[K.TARGET].string, "simon")
+            XCTAssertEqual(assault[K.XNAME].string, "mes1268151301")
+            XCTAssertEqual(assault[K.TIME].string, "01:15:00+09:00")
+            let line = assault[K.LINES][0].string
+            XCTAssertEqual(line, "負傷兵 シモン ！ 今日がお前の命日だ！")
         } catch let error {
             XCTFail("error: \(error)")
         }

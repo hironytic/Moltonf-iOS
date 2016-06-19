@@ -443,15 +443,42 @@ class ArchiveSchema {
     
     //
     // --------------------------------------------------
-    // MARK: elements of EventExtraGroup
+    // MARK: element "judge" of EventExtraGroup
     // --------------------------------------------------
     //
-    
+
     // element "judge"
     static let ELEM_JUDGE = "judge"
     
+    // attribute "byWhom"
+    // static let ATTR_BY_WHOM = "byWhom"   // defined in other place
+    
+    // attribute "target"
+    // static let ATTR_TARGET = "target"    // defined in other place
+    
+    //
+    // --------------------------------------------------
+    // MARK: element "guard" of EventExtraGroup
+    // --------------------------------------------------
+    //
+    
     // element "guard"
     static let ELEM_GUARD = "guard"
+    
+    // attribute "byWhom"
+    // static let ATTR_BY_WHOM = "byWhom"   // defined in other place
+    
+    // attribute "target"
+    // static let ATTR_TARGET = "target"    // defined in other place
+    
+    //
+    // --------------------------------------------------
+    // MARK: element "counting2 of EventExtraGroup
+    // --------------------------------------------------
+    //
+    
+    // element "counting2"
+    static let ELEM_COUNTING2 = "counting2"
     
     //
     // --------------------------------------------------
@@ -464,6 +491,18 @@ class ArchiveSchema {
     
     // attribute "byWhom"
     // static let ATTR_BY_WHOM = "byWhom"   // defined in other place
+
+    // attribute "target"
+    // static let ATTR_TARGET = "target"    // defined in other place
+    
+    // attribute "xname"
+    // static let ATTR_XNAME = "xname"      // defined in other place
+    
+    // attribute "time"
+    // static let ATTR_TIME = "time"        // defined in other place
+    
+    // attribute "faceIconURI"
+    // static let ATTR_FACE_ICON_URI = "faceIconURI"    // defined in other place
     
     //
     // --------------------------------------------------

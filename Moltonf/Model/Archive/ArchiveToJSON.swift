@@ -323,15 +323,15 @@ class ArchiveToJSON: ArchiveJSONWriter {
                 case .StartElement(name: S.ELEM_STAY_EPILOGUE, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try StayEpilogueElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_GAME_OVER, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try GameOverElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_JUDGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try JudgeElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_GUARD, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
-    //            case .StartElement(name: S.ELEM_COUNTING2, namespaceURI: S.NS_ARCHIVE?, element: let element):
-    //                try skipElement()   // TODO
+                    elements.append(try GuardElementConverter(parser: _parser).convert(element))
+                case .StartElement(name: S.ELEM_COUNTING2, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                    elements.append(try Counting2ElementConverter(parser: _parser).convert(element))
                 case .StartElement(name: S.ELEM_ASSAULT, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try skipElement()   // TODO
+                    elements.append(try AssaultElementConverter(parser: _parser).convert(element))
                 case .StartElement:
                     try skipElement()
                 case .EndElement:
@@ -895,6 +895,119 @@ class ArchiveToJSON: ArchiveJSONWriter {
                 required: [
                     S.ATTR_WINNER,
                     S.ATTR_LIMIT_TIME,
+                ],
+                defaultValues: [:]
+            )
+            
+            return try super.convert(element)
+        }
+    }
+    
+    class GameOverElementConverter: EventOrderConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_GAME_OVER)
+        }
+    }
+    
+    class JudgeElementConverter: EventExtraConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_JUDGE)
+        }
+        
+        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+            // attributes
+            let mapToEvent = map(toObject: _objectWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_BY_WHOM: mapToEvent(K.BY_WHOM,   asString),
+                    S.ATTR_TARGET:  mapToEvent(K.TARGET,    asString),
+                ],
+                required: [
+                    S.ATTR_BY_WHOM,
+                    S.ATTR_TARGET,
+                ],
+                defaultValues: [:]
+            )
+            
+            return try super.convert(element)
+        }
+    }
+
+    class GuardElementConverter: EventExtraConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_GUARD)
+        }
+        
+        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+            // attributes
+            let mapToEvent = map(toObject: _objectWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_BY_WHOM: mapToEvent(K.BY_WHOM,   asString),
+                    S.ATTR_TARGET:  mapToEvent(K.TARGET,    asString),
+                ],
+                required: [
+                    S.ATTR_BY_WHOM,
+                    S.ATTR_TARGET,
+                ],
+                defaultValues: [:]
+            )
+            
+            return try super.convert(element)
+        }
+    }
+
+    class Counting2ElementConverter: EventExtraConverter {
+        var _votes: [String: AnyObject] = [:]
+        
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_COUNTING2)
+        }
+        
+        override func onBegin() throws {
+            try super.onBegin()
+            
+            _votes = [:]
+        }
+
+        override func onEvent(event: XMLEvent) throws {
+            switch event {
+            case .StartElement(name: S.ELEM_VOTE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                let (byWhom, target) = try VoteElementConverter(parser: _parser).convert(element)
+                _votes[byWhom] = target
+            default:
+                try super.onEvent(event)
+            }
+        }
+        
+        override func onEnd() throws {
+            _objectWrapper.object[K.VOTES] = _votes
+            
+            try super.onEnd()
+        }
+    }
+
+    class AssaultElementConverter: EventExtraConverter {
+        init(parser: XMLPullParser) {
+            super.init(parser: parser, type: K.VAL_ASSAULT)
+        }
+        
+        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+            // attributes
+            let mapToEvent = map(toObject: _objectWrapper)
+            try convertAttribute(element,
+                mapping: [
+                    S.ATTR_BY_WHOM:         mapToEvent(K.BY_WHOM,       asString),
+                    S.ATTR_TARGET:          mapToEvent(K.TARGET,        asString),
+                    S.ATTR_XNAME:           mapToEvent(K.XNAME,         asString),
+                    S.ATTR_TIME:            mapToEvent(K.TIME,          asString),
+                    S.ATTR_FACE_ICON_URI:   mapToEvent(K.FACE_ICON_URI, asString),
+                ],
+                required: [
+                    S.ATTR_BY_WHOM,
+                    S.ATTR_TARGET,
+                    S.ATTR_XNAME,
+                    S.ATTR_TIME,
                 ],
                 defaultValues: [:]
             )
