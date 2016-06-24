@@ -42,7 +42,7 @@ public class SelectArchiveFileViewModel: ViewModel {
         case Selected(String)
         case Cancelled
     }
-    public var resultFunc: (Result -> Void)? = nil
+    public var onResult: (Result -> Void)? = nil
     
     private let _listenerStore = ListenerStore()
     private let _messageSlot = MessageSlot()
@@ -76,7 +76,7 @@ public class SelectArchiveFileViewModel: ViewModel {
     
     private func cancel() {
         _messageSlot.send(DismissingMessage())
-        resultFunc?(.Cancelled)
+        onResult?(.Cancelled)
     }
     
     private func refresh() {
@@ -85,6 +85,6 @@ public class SelectArchiveFileViewModel: ViewModel {
     
     private func select(item: ArchiveFileManager.FileItem) {
         _messageSlot.send(DismissingMessage())
-        resultFunc?(.Selected(item.filePath))
+        onResult?(.Selected(item.filePath))
     }
 }

@@ -42,7 +42,7 @@ public class WorkspaceListViewModel: ViewModel {
     
     private func addNew() {
         let selectArchiveFileViewModel = SelectArchiveFileViewModel()
-        selectArchiveFileViewModel.resultFunc = { [weak self] result in
+        selectArchiveFileViewModel.onResult = { [weak self] result in
             self?.processSelectArchiveFileResult(result)
         }
         _messageSlot.send(TransitionMessage(viewModel: selectArchiveFileViewModel))
