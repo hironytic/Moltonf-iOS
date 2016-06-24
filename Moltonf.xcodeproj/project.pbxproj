@@ -24,13 +24,12 @@
 		5025EFFB1CE1FEF70032AD67 /* SelectArchiveFile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5025EFFA1CE1FEF70032AD67 /* SelectArchiveFile.storyboard */; };
 		5025EFFD1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift */; };
 		5025EFFF1CE2139B0032AD67 /* DismissingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFFE1CE2139B0032AD67 /* DismissingMessage.swift */; };
-		503AC72A1CEDD8A500A379AB /* ArchiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503AC7291CEDD8A500A379AB /* ArchiveTests.swift */; };
+		503AC72A1CEDD8A500A379AB /* ArchiveToJSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503AC7291CEDD8A500A379AB /* ArchiveToJSONTests.swift */; };
 		503AC72C1CEDDCA700A379AB /* jin_wolff_00000.xml in Resources */ = {isa = PBXBuildFile; fileRef = 503AC72B1CEDDCA700A379AB /* jin_wolff_00000.xml */; };
 		503AC72D1CEDE6F300A379AB /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */; };
 		5045BD111CDED11500A8A0FA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5045BD101CDED11500A8A0FA /* AppDelegate.swift */; };
 		5045BD181CDED11500A8A0FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5045BD171CDED11500A8A0FA /* Assets.xcassets */; };
 		5045BD1B1CDED11500A8A0FA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5045BD191CDED11500A8A0FA /* LaunchScreen.storyboard */; };
-		5045BD261CDED11500A8A0FA /* MoltonfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5045BD251CDED11500A8A0FA /* MoltonfTests.swift */; };
 		5045BD331CDEDE2E00A8A0FA /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */; };
 		5045BD351CDEDE3200A8A0FA /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5045BD341CDEDE3200A8A0FA /* RxSwift.framework */; };
 		5052D3401D026301002B1A17 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5052D33F1D026301002B1A17 /* SwiftyJSON.framework */; };
@@ -66,7 +65,7 @@
 		5025EFFA1CE1FEF70032AD67 /* SelectArchiveFile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SelectArchiveFile.storyboard; sourceTree = "<group>"; };
 		5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectArchiveFileListViewController.swift; sourceTree = "<group>"; };
 		5025EFFE1CE2139B0032AD67 /* DismissingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DismissingMessage.swift; sourceTree = "<group>"; };
-		503AC7291CEDD8A500A379AB /* ArchiveTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveTests.swift; sourceTree = "<group>"; };
+		503AC7291CEDD8A500A379AB /* ArchiveToJSONTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveToJSONTests.swift; sourceTree = "<group>"; };
 		503AC72B1CEDDCA700A379AB /* jin_wolff_00000.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = jin_wolff_00000.xml; sourceTree = "<group>"; };
 		5045BD0D1CDED11400A8A0FA /* Moltonf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Moltonf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5045BD101CDED11500A8A0FA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -74,7 +73,6 @@
 		5045BD1A1CDED11500A8A0FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5045BD1C1CDED11500A8A0FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5045BD211CDED11500A8A0FA /* MoltonfTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoltonfTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5045BD251CDED11500A8A0FA /* MoltonfTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoltonfTests.swift; sourceTree = "<group>"; };
 		5045BD271CDED11500A8A0FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		5045BD341CDEDE3200A8A0FA /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
@@ -199,9 +197,7 @@
 		5045BD241CDED11500A8A0FA /* MoltonfTests */ = {
 			isa = PBXGroup;
 			children = (
-				5045BD251CDED11500A8A0FA /* MoltonfTests.swift */,
-				503AC7291CEDD8A500A379AB /* ArchiveTests.swift */,
-				503AC72B1CEDDCA700A379AB /* jin_wolff_00000.xml */,
+				50AF2EAE1D1D291C00337A53 /* Model */,
 				5045BD271CDED11500A8A0FA /* Info.plist */,
 			);
 			path = MoltonfTests;
@@ -235,6 +231,23 @@
 				5025EFF21CE15FD30032AD67 /* TransitionMessage.swift */,
 			);
 			path = Message;
+			sourceTree = "<group>";
+		};
+		50AF2EAE1D1D291C00337A53 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				50AF2EB01D1D292A00337A53 /* Archive */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		50AF2EB01D1D292A00337A53 /* Archive */ = {
+			isa = PBXGroup;
+			children = (
+				503AC7291CEDD8A500A379AB /* ArchiveToJSONTests.swift */,
+				503AC72B1CEDDCA700A379AB /* jin_wolff_00000.xml */,
+			);
+			path = Archive;
 			sourceTree = "<group>";
 		};
 		50B24E251CF95E9A0035D573 /* Schema */ = {
@@ -395,8 +408,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				503AC72A1CEDD8A500A379AB /* ArchiveTests.swift in Sources */,
-				5045BD261CDED11500A8A0FA /* MoltonfTests.swift in Sources */,
+				503AC72A1CEDD8A500A379AB /* ArchiveToJSONTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

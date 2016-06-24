@@ -1,5 +1,5 @@
 //
-// ArchiveTests.swift
+// ArchiveToJSONTests.swift
 // MoltonfTests
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -39,7 +39,7 @@ private enum TestError: ErrorType {
     case CreateParser
 }
 
-class ArchiveTests: XCTestCase {
+class ArchiveToJSONTests: XCTestCase {
     typealias K = ArchiveConstants
     var outDir: String = ""
     
