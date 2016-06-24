@@ -63,23 +63,23 @@ class SelectArchiveFileListViewController: UITableViewController {
                 .addDisposableTo(disposeBag)
             
             viewModel.noItemsMessageHidden
-                .driveNext { [weak self] hidden in
+                .subscribeNext { [weak self] hidden in
                     self?.tableView.separatorStyle = hidden ? .SingleLine : .None
                 }
                 .addDisposableTo(disposeBag)
             
             viewModel.noItemsMessageHidden
-                .drive(noItemsLabel.rx_hidden)
+                .bindTo(noItemsLabel.rx_hidden)
                 .addDisposableTo(disposeBag)
             
             viewModel.archiveFiles
-                .drive(tableView.rx_itemsWithCellIdentifier("Cell", cellType: UITableViewCell.self)) { (row, element, cell) in
+                .bindTo(tableView.rx_itemsWithCellIdentifier("Cell", cellType: UITableViewCell.self)) { (row, element, cell) in
                     cell.textLabel?.text = element.title
                 }
                 .addDisposableTo(disposeBag)
             
             viewModel.refreshing
-                .driveNext { [weak self] refreshing in
+                .subscribeNext { [weak self] refreshing in
                     if (refreshing) {
                         self?.refreshControl?.beginRefreshing()
                     } else {

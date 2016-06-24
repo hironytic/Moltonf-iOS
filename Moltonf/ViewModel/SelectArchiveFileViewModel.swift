@@ -31,9 +31,9 @@ import RxSwift
 class SelectArchiveFileViewModel: ViewModel {
     var messenger: Observable<Message>!
     
-    var archiveFiles: Driver<[ArchiveFileManager.FileItem]>!
-    var noItemsMessageHidden: Driver<Bool>!
-    var refreshing: Driver<Bool>!
+    var archiveFiles: Observable<[ArchiveFileManager.FileItem]>!
+    var noItemsMessageHidden: Observable<Bool>!
+    var refreshing: Observable<Bool>!
     var cancelAction: AnyObserver<Void>!
     var refreshAction: AnyObserver<Void>!
     var selectAction: AnyObserver<ArchiveFileManager.FileItem>!
@@ -55,9 +55,9 @@ class SelectArchiveFileViewModel: ViewModel {
         _archiveFileManager = ArchiveFileManager(directory: directory)
         
         messenger = _messageSlot.messenger
-        archiveFiles = _archiveFilesSource.asDriver()
+        archiveFiles = _archiveFilesSource.asDriver().asObservable()
         noItemsMessageHidden = archiveFiles.map { !$0.isEmpty }
-        refreshing = _refreshingSource.asDriver()
+        refreshing = _refreshingSource.asDriver().asObservable()
 
         cancelAction = ActionObserver.asObserver { [weak self] in self?.cancel() }
         refreshAction = ActionObserver.asObserver { [weak self] in self?.refresh() }
