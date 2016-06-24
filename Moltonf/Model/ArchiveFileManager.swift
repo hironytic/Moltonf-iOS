@@ -26,8 +26,8 @@
 import Foundation
 import Eventitic
 
-class ArchiveFileManager {
-    class FileItem {
+public class ArchiveFileManager {
+    public class FileItem {
         let filePath: String
         let title: String
         
@@ -37,15 +37,15 @@ class ArchiveFileManager {
         }
     }
 
-    let archiveFilesChanged = EventSource<[FileItem]>()
-    private(set) var archiveFiles: [FileItem] = [] {
+    public let archiveFilesChanged = EventSource<[FileItem]>()
+    public private(set) var archiveFiles: [FileItem] = [] {
         didSet {
             archiveFilesChanged.fire(archiveFiles)
         }
     }
     
-    let refreshingChanged = EventSource<Bool>()
-    private(set) var refreshing: Bool = false {
+    public let refreshingChanged = EventSource<Bool>()
+    public private(set) var refreshing: Bool = false {
         didSet {
             refreshingChanged.fire(refreshing)
         }
@@ -53,13 +53,13 @@ class ArchiveFileManager {
     
     private let _directory: String
     
-    init(directory: String) {
+    public init(directory: String) {
         _directory = directory
         
         reloadFileList()
     }
 
-    func reloadFileList() {
+    public func reloadFileList() {
         do {
             refreshing = true
             defer { refreshing = false }

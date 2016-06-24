@@ -28,7 +28,7 @@ import Foundation
 public class TransitionMessage: Message {
     public let viewModel: ViewModel
     
-    init(viewModel: ViewModel) {
+    public init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
 }

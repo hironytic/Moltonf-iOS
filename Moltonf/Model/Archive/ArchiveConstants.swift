@@ -25,153 +25,153 @@
 
 import Foundation
 
-class ArchiveConstants {
+public class ArchiveConstants {
     // MARK: playdata
-    static let LANG = "lang"
-    static let BASE = "base"
-    static let FULL_NAME = "fullName"
-    static let VID = "vid"
-    static let COMMIT_TIME = "commitTime"
-    static let STATE = "state"
-    static let DISCLOSURE = "disclosure"
-    static let IS_VALID = "isValid"
-    static let LAND_NAME = "landName"
-    static let FORMAL_NAME = "formalName"
-    static let LAND_ID = "landId"
-    static let LAND_PREFIX = "landPrefix"
-    static let LOCALE = "locale"
-    static let ORGENCODING = "origencoding"
-    static let TIMEZONE = "timezone"
-    static let GRAVE_ICON_URI = "graveIconURI"
-    static let GENERATOR = "generator"
-    static let AVATAR_LIST = "avatarList"
-    static let PERIODS = "periods"
+    public static let LANG = "lang"
+    public static let BASE = "base"
+    public static let FULL_NAME = "fullName"
+    public static let VID = "vid"
+    public static let COMMIT_TIME = "commitTime"
+    public static let STATE = "state"
+    public static let DISCLOSURE = "disclosure"
+    public static let IS_VALID = "isValid"
+    public static let LAND_NAME = "landName"
+    public static let FORMAL_NAME = "formalName"
+    public static let LAND_ID = "landId"
+    public static let LAND_PREFIX = "landPrefix"
+    public static let LOCALE = "locale"
+    public static let ORGENCODING = "origencoding"
+    public static let TIMEZONE = "timezone"
+    public static let GRAVE_ICON_URI = "graveIconURI"
+    public static let GENERATOR = "generator"
+    public static let AVATAR_LIST = "avatarList"
+    public static let PERIODS = "periods"
     
     // MARK: playdata["avatarList"][n]
-    static let AVATAR_ID = "avatarId"
-    // static let FULL_NAME = "fullName"    // defined in another place
-    static let SHORT_NAME = "shortName"
-    static let FACE_ICON_URI = "faceIconURI"
+    public static let AVATAR_ID = "avatarId"
+    // public static let FULL_NAME = "fullName"    // defined in another place
+    public static let SHORT_NAME = "shortName"
+    public static let FACE_ICON_URI = "faceIconURI"
     
     // MARK: playdata["periods"][n] or period
-    static let TYPE = "type"
-    static let DAY = "day"
-    static let NEXT_COMMIT_DAY = "nextCommitDay"
-    // static let COMMIT_TIME = "commitTime"    // defined in another place
-    static let SOURCE_URI = "sourceURI"
-    static let LOADED_TIME = "loadedTime"
-    static let LOADED_BY = "loadedBy"
-    static let HREF = "href"
-    static let ELEMENTS = "elements"
+    public static let TYPE = "type"
+    public static let DAY = "day"
+    public static let NEXT_COMMIT_DAY = "nextCommitDay"
+    // public static let COMMIT_TIME = "commitTime"    // defined in another place
+    public static let SOURCE_URI = "sourceURI"
+    public static let LOADED_TIME = "loadedTime"
+    public static let LOADED_BY = "loadedBy"
+    public static let HREF = "href"
+    public static let ELEMENTS = "elements"
     
     // MARK: period["elements"][n]
-    // static let TYPE = "type" // defined in another place
-    static let LINES = "lines"
+    // public static let TYPE = "type" // defined in another place
+    public static let LINES = "lines"
     
     // MARK: value of period["elements"][n]["type"]
-    static let VAL_START_ENTRY = "startEntry"
-    static let VAL_ON_STAGE = "onStage"
-    static let VAL_START_MIRROR = "startMirror"
-    static let VAL_OPEN_ROLE = "openRole"
-    static let VAL_MURDERED = "murdered"
-    static let VAL_START_ASSAULT = "startAssault"
-    static let VAL_SURVIVOR = "survivor"
-    static let VAL_COUNTING = "counting"
-    static let VAL_VOTE = "vote"
-    static let VAL_SUDDEN_DEATH = "suddenDeath"
-    static let VAL_NO_MURDER = "noMurder"
-    static let VAL_WIN_VILLAGE = "winVillage"
-    static let VAL_WIN_WOLF = "winWolf"
-    static let VAL_WIN_HAMSTER = "winHamster"
-    static let VAL_PLAYER_LIST = "playerList"
-    static let VAL_PANIC = "panic"
-    static let VAL_EXECUTION = "execution"
-    static let VAL_VANISH = "vanish"
-    static let VAL_CHECKOUT = "checkout"
-    static let VAL_SHORT_MEMBER = "shortMember"
-    static let VAL_ASK_ENTRY = "askEntry"
-    static let VAL_ASK_COMMIT = "askCommit"
-    static let VAL_NO_COMMENT = "noComment"
-    static let VAL_STAY_EPILOGUE = "stayEpilogue"
-    static let VAL_GAME_OVER = "gameOver"
-    static let VAL_JUDGE = "judge"
-    static let VAL_GUARD = "guard"
-    static let VAL_COUNTING2 = "counting2"
-    static let VAL_ASSAULT = "assault"
-    static let VAL_TALK = "talk"
+    public static let VAL_START_ENTRY = "startEntry"
+    public static let VAL_ON_STAGE = "onStage"
+    public static let VAL_START_MIRROR = "startMirror"
+    public static let VAL_OPEN_ROLE = "openRole"
+    public static let VAL_MURDERED = "murdered"
+    public static let VAL_START_ASSAULT = "startAssault"
+    public static let VAL_SURVIVOR = "survivor"
+    public static let VAL_COUNTING = "counting"
+    public static let VAL_VOTE = "vote"
+    public static let VAL_SUDDEN_DEATH = "suddenDeath"
+    public static let VAL_NO_MURDER = "noMurder"
+    public static let VAL_WIN_VILLAGE = "winVillage"
+    public static let VAL_WIN_WOLF = "winWolf"
+    public static let VAL_WIN_HAMSTER = "winHamster"
+    public static let VAL_PLAYER_LIST = "playerList"
+    public static let VAL_PANIC = "panic"
+    public static let VAL_EXECUTION = "execution"
+    public static let VAL_VANISH = "vanish"
+    public static let VAL_CHECKOUT = "checkout"
+    public static let VAL_SHORT_MEMBER = "shortMember"
+    public static let VAL_ASK_ENTRY = "askEntry"
+    public static let VAL_ASK_COMMIT = "askCommit"
+    public static let VAL_NO_COMMENT = "noComment"
+    public static let VAL_STAY_EPILOGUE = "stayEpilogue"
+    public static let VAL_GAME_OVER = "gameOver"
+    public static let VAL_JUDGE = "judge"
+    public static let VAL_GUARD = "guard"
+    public static let VAL_COUNTING2 = "counting2"
+    public static let VAL_ASSAULT = "assault"
+    public static let VAL_TALK = "talk"
     
     // MARK: period["elements"][n] (talk)
-    static let TALK_TYPE = "talkType"
-    // static let AVATAR_ID = "avatarId"        // defined in another place
-    static let XNAME = "xname"
-    static let TIME = "time"
-    // static let FACE_ICON_URI = "faceIconURI" // defined in another place
+    public static let TALK_TYPE = "talkType"
+    // public static let AVATAR_ID = "avatarId"        // defined in another place
+    public static let XNAME = "xname"
+    public static let TIME = "time"
+    // public static let FACE_ICON_URI = "faceIconURI" // defined in another place
     
     // MARK: period["elements"][n] (Event)
-    static let EVENT_FAMILY = "eventFamily"
+    public static let EVENT_FAMILY = "eventFamily"
 
     // MARK: period["elements"][n] (onStage)
-    static let ENTRY_NO = "entryNo"
-    // static let AVATAR_ID = "avatarId"        // defined in another place
+    public static let ENTRY_NO = "entryNo"
+    // public static let AVATAR_ID = "avatarId"        // defined in another place
     
     // MARK: period["elements"][n] (openRole)
-    static let ROLE_HEADS = "roleHeads"
+    public static let ROLE_HEADS = "roleHeads"
     
     // MARK: period["elements"][n] (murdered)
-    // static let AVATAR_ID = "avatarId"        // defined in another place
+    // public static let AVATAR_ID = "avatarId"        // defined in another place
     
     // MARK: period["elements"][n] (survivor)
-    // static let AVATAR_ID = "avatarId"        // defined in another place
+    // public static let AVATAR_ID = "avatarId"        // defined in another place
 
     // MARK: period["elements"][n] (counting)
-    static let VICTIM = "victim"
-    static let VOTES = "votes"
+    public static let VICTIM = "victim"
+    public static let VOTES = "votes"
     
     // MARK: period["elements"][n] (playerList)
-    static let PLAYER_INFOS = "playerInfos"
-    static let PLAYER_ID = "playerId"
-    // static let AVATAR_ID = "avatarId"        // defined in another place
-    static let SURVIVE = "survive"
-    static let ROLE = "role"
-    static let URI = "uri"
+    public static let PLAYER_INFOS = "playerInfos"
+    public static let PLAYER_ID = "playerId"
+    // public static let AVATAR_ID = "avatarId"        // defined in another place
+    public static let SURVIVE = "survive"
+    public static let ROLE = "role"
+    public static let URI = "uri"
     
     // MARK: period["elements"][n] (execution)
-    // static let VICTIM = "victim"             // defined in another place
-    static let NOMINATEDS = "nominateds"
+    // public static let VICTIM = "victim"             // defined in another place
+    public static let NOMINATEDS = "nominateds"
     
     // MARK: period["elements"][n] (askEntry)
-    // static let COMMIT_TIME = "commitTime"    // defined in another place
-    static let MIN_MEMBERS = "minMembers"
-    static let MAX_MEMBERS = "maxMembers"
+    // public static let COMMIT_TIME = "commitTime"    // defined in another place
+    public static let MIN_MEMBERS = "minMembers"
+    public static let MAX_MEMBERS = "maxMembers"
     
     // MARK: period["elements"][n] (askCommit)
-    static let LIMIT_VOTE = "limitVote"
-    static let LIMIT_SPECIAL = "limitSpecial"
+    public static let LIMIT_VOTE = "limitVote"
+    public static let LIMIT_SPECIAL = "limitSpecial"
     
     // MARK: period["elements"][n] (noComment)
-    // static let AVATAR_ID = "avatarId"        // defined in another place
+    // public static let AVATAR_ID = "avatarId"        // defined in another place
     
     // MARK: period["elements"][n] (stayEpilogue)
-    static let WINNER = "winner"
-    static let LIMIT_TIME = "limitTime"
+    public static let WINNER = "winner"
+    public static let LIMIT_TIME = "limitTime"
     
     // MARK: period["elements"][n] (judge)
-    static let BY_WHOM = "byWhom"
-    static let TARGET = "target"
+    public static let BY_WHOM = "byWhom"
+    public static let TARGET = "target"
 
     // MARK: period["elements"][n] (guard)
-    // static let BY_WHOM = "byWhom"            // defined in another place
-    // static let TARGET = "target"             // defined in another place
+    // public static let BY_WHOM = "byWhom"            // defined in another place
+    // public static let TARGET = "target"             // defined in another place
     
     // MARK: perild["elements"][n] (assault)
-    // static let BY_WHOM = "byWhom"            // defined in another place
-    // static let TARGET = "target"             // defined in another place
-    // static let XNAME = "xname"               // defined in another place
-    // static let TIME = "time"                 // defined in another place
-    // static let FACE_ICON_URI = "faceIconURI" // defined in another place
+    // public static let BY_WHOM = "byWhom"            // defined in another place
+    // public static let TARGET = "target"             // defined in another place
+    // public static let XNAME = "xname"               // defined in another place
+    // public static let TIME = "time"                 // defined in another place
+    // public static let FACE_ICON_URI = "faceIconURI" // defined in another place
     
     // MARK: period["elements"][n]["lines"][m]
-    static let ENCODING = "encoding"
-    static let HEX_BIN = "hexBin"
-    static let CHAR = "char"
+    public static let ENCODING = "encoding"
+    public static let HEX_BIN = "hexBin"
+    public static let CHAR = "char"
 }

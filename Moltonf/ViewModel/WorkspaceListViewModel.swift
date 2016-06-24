@@ -27,14 +27,14 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class WorkspaceListViewModel: ViewModel {
-    var messenger: Observable<Message>!
-    var addNewAction: AnyObserver<Void>!
+public class WorkspaceListViewModel: ViewModel {
+    public var messenger: Observable<Message>!
+    public var addNewAction: AnyObserver<Void>!
     
     private let _workspaceManager = WorkspaceManager.sharedInstance
     private let _messageSlot = MessageSlot()
     
-    init() {
+    public init() {
         messenger = _messageSlot.messenger
         
         addNewAction = ActionObserver.asObserver { [weak self] in self?.addNew() }

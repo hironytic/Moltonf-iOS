@@ -31,7 +31,7 @@ public class MessageSlot {
     private let _subject = PublishSubject<Message>()
     public let messenger: Observable<Message>
 
-    init() {
+    public init() {
         self.messenger = _subject
             .share()
             .observeOn(MainScheduler.instance)

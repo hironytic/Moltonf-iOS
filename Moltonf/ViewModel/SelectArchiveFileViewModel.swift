@@ -28,21 +28,21 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-class SelectArchiveFileViewModel: ViewModel {
-    var messenger: Observable<Message>!
+public class SelectArchiveFileViewModel: ViewModel {
+    public var messenger: Observable<Message>!
     
-    var archiveFiles: Observable<[ArchiveFileManager.FileItem]>!
-    var noItemsMessageHidden: Observable<Bool>!
-    var refreshing: Observable<Bool>!
-    var cancelAction: AnyObserver<Void>!
-    var refreshAction: AnyObserver<Void>!
-    var selectAction: AnyObserver<ArchiveFileManager.FileItem>!
+    public var archiveFiles: Observable<[ArchiveFileManager.FileItem]>!
+    public var noItemsMessageHidden: Observable<Bool>!
+    public var refreshing: Observable<Bool>!
+    public var cancelAction: AnyObserver<Void>!
+    public var refreshAction: AnyObserver<Void>!
+    public var selectAction: AnyObserver<ArchiveFileManager.FileItem>!
     
-    enum Result {
+    public enum Result {
         case Selected(String)
         case Cancelled
     }
-    var resultFunc: (Result -> Void)? = nil
+    public var resultFunc: (Result -> Void)? = nil
     
     private let _listenerStore = ListenerStore()
     private let _messageSlot = MessageSlot()
@@ -50,7 +50,7 @@ class SelectArchiveFileViewModel: ViewModel {
     private let _archiveFilesSource = Variable<[ArchiveFileManager.FileItem]>([])
     private let _refreshingSource = Variable<Bool>(false)
     
-    init() {
+    public init() {
         let directory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true)[0]
         _archiveFileManager = ArchiveFileManager(directory: directory)
         

@@ -25,7 +25,7 @@
 
 import Foundation
 
-class WorkspaceManager {
+public class WorkspaceManager {
     static let sharedInstance = WorkspaceManager()
     
     private init() {
