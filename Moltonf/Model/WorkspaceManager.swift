@@ -45,13 +45,14 @@ public class WorkspaceManager {
         }
     }
     
-    enum Error: ErrorType {
+    public enum Error: ErrorType {
         case CreateNewWorkspaceFailed(String)
     }
     
     public typealias WorkspacesChanges = (workspaces: Results<Workspace>, deletions: [Int], insertions: [Int], modifications: [Int])
     public let workspacesChanged = EventSource<WorkspacesChanges>()
     public private(set) var workspaces: Results<Workspace>
+    public let errorOccurred = EventSource<ErrorType>()
     
     private let _realm: Realm
     private var _notificationToken: NotificationToken!
@@ -127,12 +128,14 @@ public class WorkspaceManager {
             } catch let error {
                 return Task<Void, Void, ErrorType>(error: error)
             }
-        }.failure { (error, isCancelled) in
+        }.failure { [weak self] (error, _) in
+            print("error in creating a new workspace: \(error)")
+            
             // remove failed workspace directory
             _ = try? NSFileManager.defaultManager().removeItemAtPath(archiveJSONDir)
             
-            // TODO:
-            print("error: \(error)")
+            let error2 = error ?? Error.CreateNewWorkspaceFailed("unknown error")
+            self?.errorOccurred.fire(error2)
         }
     }
 }
