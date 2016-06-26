@@ -855,4 +855,32 @@ class ArchiveToJSONTests: XCTestCase {
             XCTFail("error: \(error)")
         }
     }
+    
+    func testConvertNormalLi() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<li xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">人狼なんているわけないじゃん。みんな大げさだなあ</li>\n"
+            )
+            let li = JSON(try ArchiveToJSON.LiElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(li.string, "人狼なんているわけないじゃん。みんな大げさだなあ")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+    
+    func testConvertLiWithRawdata() {
+        do {
+            let (parser, element) = try setupTargetElement(
+                "<li xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">パメおかえりー。<rawdata encoding=\"Shift_JIS\" hexBin=\"8794\" >∑</rawdata>閉村までって！</li>\n"
+            )
+            let li = JSON(try ArchiveToJSON.LiElementConverter(parser: parser).convert(element))
+            XCTAssertEqual(li[0].string, "パメおかえりー。")
+            XCTAssertEqual(li[1][K.ENCODING].string, "Shift_JIS")
+            XCTAssertEqual(li[1][K.HEX_BIN].string, "8794")
+            XCTAssertEqual(li[1][K.CHAR].string, "∑")
+            XCTAssertEqual(li[2].string, "閉村までって！")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
 }

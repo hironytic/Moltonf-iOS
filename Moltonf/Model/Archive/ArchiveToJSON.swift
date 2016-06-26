@@ -1092,7 +1092,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
                 switch event {
                 case .Characters(let string):
                     contents.append(string)
-                case .StartElement(name: S.ELEM_RAWDATA, namespaceURI: S.NS_ARCHIVE?, element: _):
+                case .StartElement(name: S.ELEM_RAWDATA, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     contents.append(try RawdataElementConverter(parser: _parser).convert(element))
                 case .StartElement:
                     try skipElement()
