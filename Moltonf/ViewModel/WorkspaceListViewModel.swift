@@ -28,16 +28,35 @@ import RxSwift
 import RxCocoa
 
 public class WorkspaceListViewModel: ViewModel {
+    public class WorkspaceListItem {
+        let core: WorkspaceManager.WorkspaceItem
+        
+        public init(core: WorkspaceManager.WorkspaceItem) {
+            self.core = core
+        }
+    }
+    
     public var messenger: Observable<Message>!
+    public var workspaceList: Observable<[WorkspaceListItem]>!
     public var addNewAction: AnyObserver<Void>!
     
     private let _workspaceManager = WorkspaceManager.sharedInstance
     private let _messageSlot = MessageSlot()
+    private let _workspaceListSource = Variable<[WorkspaceListItem]>([])
     
     public init() {
         messenger = _messageSlot.messenger
+        workspaceList = _workspaceListSource.asDriver().asObservable()
         
         addNewAction = ActionObserver.asObserver { [weak self] in self?.addNew() }
+        
+        // FIXME: dummy
+        let list = [
+            WorkspaceListItem(core: WorkspaceManager.WorkspaceItem(id: "1", title: "title 1", path: "foo")),
+            WorkspaceListItem(core: WorkspaceManager.WorkspaceItem(id: "2", title: "title 2", path: "bar")),
+            WorkspaceListItem(core: WorkspaceManager.WorkspaceItem(id: "3", title: "title 3", path: "baz")),
+        ]
+        _workspaceListSource.value = list
     }
     
     private func addNew() {
@@ -49,6 +68,9 @@ public class WorkspaceListViewModel: ViewModel {
     }
     
     private func processSelectArchiveFileResult(result: SelectArchiveFileViewModel.Result) {
-        
+        // FIXME:
+        var list = _workspaceListSource.value
+        list.append(WorkspaceListItem(core: WorkspaceManager.WorkspaceItem(id: "xxx", title: "xxx", path: "fff")))
+        _workspaceListSource.value = list
     }
 }

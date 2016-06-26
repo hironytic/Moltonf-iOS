@@ -24,8 +24,21 @@
 //
 
 import Foundation
+import Eventitic
 
 public class WorkspaceManager {
+    public class WorkspaceItem {
+        let id: String
+        let title: String
+        let path: String
+        
+        public init(id: String, title: String, path: String) {
+            self.id = id
+            self.title = title
+            self.path = path
+        }
+    }
+    
     static let sharedInstance = WorkspaceManager()
     
     private init() {
