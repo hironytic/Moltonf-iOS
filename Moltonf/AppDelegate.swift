@@ -30,7 +30,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    static var privateDataDirectory: String {
+        get {
+            let libraryDir = NSSearchPathForDirectoriesInDomains(.LibraryDirectory, .UserDomainMask, true)[0]
+            let privateDir = (libraryDir as NSString).stringByAppendingPathComponent("com.hironytic")
+            return privateDir
+        }
+    }
 
+    override init() {
+        super.init()
+        
+        // create private data directory if not found
+        _ = try? NSFileManager.defaultManager().createDirectoryAtPath(self.dynamicType.privateDataDirectory, withIntermediateDirectories: true, attributes: nil)
+    }
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         return true
