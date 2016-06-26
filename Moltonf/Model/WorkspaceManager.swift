@@ -27,6 +27,7 @@ import Foundation
 import Eventitic
 import RealmSwift
 import SwiftyJSON
+import SwiftTask
 
 private let WORKSPACE_DIR = "workspace"
 private let WORKSPACE_DB = "workspace.realm"
@@ -44,7 +45,7 @@ public class WorkspaceManager {
         }
     }
     
-    public enum Error: ErrorType {
+    enum Error: ErrorType {
         case CreateNewWorkspaceFailed(String)
     }
     
@@ -84,28 +85,49 @@ public class WorkspaceManager {
         let id = NSUUID().UUIDString
 
         guard let archiveJSONDir = _workspaceDirURL.URLByAppendingPathComponent(id).path else { return /* TODO: throw Error.CreateNewWorkspaceFailed("Failed to get playdata directory") */ }
+        let playdataFilePath = (archiveJSONDir as NSString).stringByAppendingPathComponent(ArchiveConstants.FILE_PLAYDATA_JSON)
         
-        do {
-            // convert archive file (XML) to JSON file
-            let converter = ArchiveToJSON(fromArchive: archiveFile, toDirectory: archiveJSONDir)
-            try converter.convert()
+        Task<Void, String, ErrorType> { (fulfill, reject) in
+            // convert archive file (XML) to JSON file in background
+            // then notify on main thread
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                do {
+                    // convert archive file (XML) to JSON file
+                    let converter = ArchiveToJSON(fromArchive: archiveFile, toDirectory: archiveJSONDir)
+                    try converter.convert()
 
-            // read converted playdata
-            let playdataFilePath = (archiveJSONDir as NSString).stringByAppendingPathComponent(ArchiveConstants.FILE_PLAYDATA_JSON)
-            guard let playdataData = NSData(contentsOfFile: playdataFilePath) else { throw Error.CreateNewWorkspaceFailed("Failed to load playdata.json") }
-            let playdata = JSON(data: playdataData)
-            let title = playdata[ArchiveConstants.FULL_NAME].stringValue
-            
-            // create new Workspace object
-            let ws = Workspace()
-            ws.id = id
-            ws.path = playdataFilePath
-            ws.title = title
-            
-            try _realm.write {
-                _realm.add(ws)
+                    // read converted playdata
+                    guard let playdataData = NSData(contentsOfFile: playdataFilePath) else { throw Error.CreateNewWorkspaceFailed("Failed to load playdata.json") }
+                    let playdata = JSON(data: playdataData)
+                    let title = playdata[ArchiveConstants.FULL_NAME].stringValue
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        fulfill(title)
+                    }
+                } catch let error {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        reject(error)
+                    }
+                }
             }
-        } catch let error {
+        }.success { [weak self] (title) -> Task<Void, Void, ErrorType> in
+            do {
+                // create new Workspace object
+                if let realm = self?._realm {
+                    let ws = Workspace()
+                    ws.id = id
+                    ws.path = playdataFilePath
+                    ws.title = title
+                    
+                    try realm.write {
+                        realm.add(ws)
+                    }
+                }
+                return Task<Void, Void, ErrorType>(value: ())
+            } catch let error {
+                return Task<Void, Void, ErrorType>(error: error)
+            }
+        }.failure { (error, isCancelled) in
             // remove failed workspace directory
             _ = try? NSFileManager.defaultManager().removeItemAtPath(archiveJSONDir)
             
