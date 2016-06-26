@@ -26,13 +26,14 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import Eventitic
 
 public class WorkspaceListViewModel: ViewModel {
     public class WorkspaceListItem {
-        let core: WorkspaceManager.WorkspaceItem
+        let workspace: Workspace
         
-        public init(core: WorkspaceManager.WorkspaceItem) {
-            self.core = core
+        public init(workspace: Workspace) {
+            self.workspace = workspace
         }
     }
     
@@ -40,6 +41,7 @@ public class WorkspaceListViewModel: ViewModel {
     public var workspaceList: Observable<[WorkspaceListItem]>!
     public var addNewAction: AnyObserver<Void>!
     
+    private let _listenerStore = ListenerStore()
     private let _workspaceManager = WorkspaceManager.sharedInstance
     private let _messageSlot = MessageSlot()
     private let _workspaceListSource = Variable<[WorkspaceListItem]>([])
@@ -49,14 +51,16 @@ public class WorkspaceListViewModel: ViewModel {
         workspaceList = _workspaceListSource.asDriver().asObservable()
         
         addNewAction = ActionObserver.asObserver { [weak self] in self?.addNew() }
-        
-        // FIXME: dummy
-        let list = [
-            WorkspaceListItem(core: WorkspaceManager.WorkspaceItem(id: "1", title: "title 1", path: "foo")),
-            WorkspaceListItem(core: WorkspaceManager.WorkspaceItem(id: "2", title: "title 2", path: "bar")),
-            WorkspaceListItem(core: WorkspaceManager.WorkspaceItem(id: "3", title: "title 3", path: "baz")),
-        ]
-        _workspaceListSource.value = list
+
+        _workspaceListSource.value = Array(_workspaceManager.workspaces)
+            .map { workspace in
+                WorkspaceListItem(workspace: workspace)
+            }
+        _workspaceManager.workspacesChanged
+            .listen { [weak self] changes in
+                self?.workspaceChanged(changes)
+            }
+            .addToStore(_listenerStore)
     }
     
     private func addNew() {
@@ -68,9 +72,33 @@ public class WorkspaceListViewModel: ViewModel {
     }
     
     private func processSelectArchiveFileResult(result: SelectArchiveFileViewModel.Result) {
-        // FIXME:
+        switch result {
+        case .Selected(let path):
+            _workspaceManager.createNewWorkspace(archiveFile: path)
+        default:
+            break
+        }
+    }
+    
+    private func workspaceChanged(changes: WorkspaceManager.WorkspacesChanges) {
         var list = _workspaceListSource.value
-        list.append(WorkspaceListItem(core: WorkspaceManager.WorkspaceItem(id: "xxx", title: "xxx", path: "fff")))
+            
+        // remove deleted items
+        for index in changes.deletions.reverse() {
+            list.removeAtIndex(index)
+        }
+        
+        // insert new items
+        for index in changes.insertions {
+            list.insert(WorkspaceListItem(workspace: changes.workspaces[index]), atIndex: index)
+        }
+        
+        // replace modified items
+        for index in changes.modifications {
+            let item = WorkspaceListItem(workspace: changes.workspaces[index])
+            list[index] = item
+        }
+
         _workspaceListSource.value = list
     }
 }

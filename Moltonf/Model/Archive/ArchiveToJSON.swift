@@ -27,7 +27,6 @@ import Foundation
 
 import XMLPullitic
 
-private let PLAYDATA_JSON = "playdata.json"
 private let PERIOD_JSON_FORMAT = "period-%ld.json"
 
 protocol ArchiveJSONWriter {
@@ -189,7 +188,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             
             // write to playdata.json
             let village = villageWrapper.object
-            try writer.writeArchiveJSON(fileName: PLAYDATA_JSON, object: village)
+            try writer.writeArchiveJSON(fileName: K.FILE_PLAYDATA_JSON, object: village)
         }
     }
     

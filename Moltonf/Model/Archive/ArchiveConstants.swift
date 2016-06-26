@@ -26,6 +26,9 @@
 import Foundation
 
 public class ArchiveConstants {
+    // MARK: filename
+    public static let FILE_PLAYDATA_JSON = "playdata.json"
+    
     // MARK: playdata
     public static let LANG = "lang"
     public static let BASE = "base"

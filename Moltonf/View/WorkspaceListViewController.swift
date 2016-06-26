@@ -55,7 +55,7 @@ public class WorkspaceListViewController: UITableViewController {
 
         viewModel.workspaceList
             .bindTo(tableView.rx_itemsWithCellIdentifier("Cell")) { (row, element, cell) in
-                cell.textLabel?.text = element.core.title
+                cell.textLabel?.text = element.workspace.title
             }
             .addDisposableTo(disposeBag)
         

@@ -36,6 +36,7 @@
 		5080FAD81CE3F73300ECD5A0 /* Eventitic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5080FAD71CE3F73300ECD5A0 /* Eventitic.framework */; };
 		50AF2EB41D1FC20F00337A53 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50AF2EB21D1FC20F00337A53 /* Realm.framework */; };
 		50AF2EB51D1FC20F00337A53 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50AF2EB31D1FC20F00337A53 /* RealmSwift.framework */; };
+		50AF2EB81D1FC45700337A53 /* Workspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AF2EB71D1FC45700337A53 /* Workspace.swift */; };
 		50B24E1E1CF8734F0035D573 /* ArchiveToJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B24E1D1CF8734F0035D573 /* ArchiveToJSON.swift */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +83,7 @@
 		5080FAD71CE3F73300ECD5A0 /* Eventitic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Eventitic.framework; path = Carthage/Build/iOS/Eventitic.framework; sourceTree = "<group>"; };
 		50AF2EB21D1FC20F00337A53 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		50AF2EB31D1FC20F00337A53 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
+		50AF2EB71D1FC45700337A53 /* Workspace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Workspace.swift; sourceTree = "<group>"; };
 		50B24E1D1CF8734F0035D573 /* ArchiveToJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveToJSON.swift; sourceTree = "<group>"; };
 		50B24E1F1CF95D280035D573 /* bbsArchive-110421.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "bbsArchive-110421.xsd"; sourceTree = "<group>"; };
 		50B24E201CF95D280035D573 /* coreType-090929.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "coreType-090929.xsd"; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				501F95471CE61C5600628E29 /* Archive */,
+				50AF2EB61D1FC3CC00337A53 /* Workspace */,
 				5025EFF81CE1EFFB0032AD67 /* ArchiveFileManager.swift */,
 				5025EFE91CDF689E0032AD67 /* WorkspaceManager.swift */,
 			);
@@ -256,6 +259,14 @@
 				503AC72B1CEDDCA700A379AB /* jin_wolff_00000.xml */,
 			);
 			path = Archive;
+			sourceTree = "<group>";
+		};
+		50AF2EB61D1FC3CC00337A53 /* Workspace */ = {
+			isa = PBXGroup;
+			children = (
+				50AF2EB71D1FC45700337A53 /* Workspace.swift */,
+			);
+			path = Workspace;
 			sourceTree = "<group>";
 		};
 		50B24E251CF95E9A0035D573 /* Schema */ = {
@@ -410,6 +421,7 @@
 				5025EFF11CE0D50C0032AD67 /* ActionObserver.swift in Sources */,
 				5025EFEA1CDF689E0032AD67 /* WorkspaceManager.swift in Sources */,
 				5025EFEE1CDF7EFD0032AD67 /* MessageSlot.swift in Sources */,
+				50AF2EB81D1FC45700337A53 /* Workspace.swift in Sources */,
 				50B24E1E1CF8734F0035D573 /* ArchiveToJSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
