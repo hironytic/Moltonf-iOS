@@ -3,3 +3,4 @@ github "hironytic/Eventitic" ~> 1.0
 github "hironytic/XMLPullitic"
 github "SwiftyJSON/SwiftyJSON"
 github "realm/realm-cocoa"
+github "ReactKit/SwiftTask"

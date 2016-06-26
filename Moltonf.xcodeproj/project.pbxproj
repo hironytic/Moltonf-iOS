@@ -37,6 +37,7 @@
 		50AF2EB41D1FC20F00337A53 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50AF2EB21D1FC20F00337A53 /* Realm.framework */; };
 		50AF2EB51D1FC20F00337A53 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50AF2EB31D1FC20F00337A53 /* RealmSwift.framework */; };
 		50AF2EB81D1FC45700337A53 /* Workspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AF2EB71D1FC45700337A53 /* Workspace.swift */; };
+		50AF2EBA1D20089E00337A53 /* SwiftTask.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50AF2EB91D20089E00337A53 /* SwiftTask.framework */; };
 		50B24E1E1CF8734F0035D573 /* ArchiveToJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B24E1D1CF8734F0035D573 /* ArchiveToJSON.swift */; };
 /* End PBXBuildFile section */
 
@@ -84,6 +85,7 @@
 		50AF2EB21D1FC20F00337A53 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		50AF2EB31D1FC20F00337A53 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
 		50AF2EB71D1FC45700337A53 /* Workspace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Workspace.swift; sourceTree = "<group>"; };
+		50AF2EB91D20089E00337A53 /* SwiftTask.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftTask.framework; path = Carthage/Build/iOS/SwiftTask.framework; sourceTree = "<group>"; };
 		50B24E1D1CF8734F0035D573 /* ArchiveToJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveToJSON.swift; sourceTree = "<group>"; };
 		50B24E1F1CF95D280035D573 /* bbsArchive-110421.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "bbsArchive-110421.xsd"; sourceTree = "<group>"; };
 		50B24E201CF95D280035D573 /* coreType-090929.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "coreType-090929.xsd"; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 				50AF2EB51D1FC20F00337A53 /* RealmSwift.framework in Frameworks */,
 				5045BD331CDEDE2E00A8A0FA /* RxCocoa.framework in Frameworks */,
 				5045BD351CDEDE3200A8A0FA /* RxSwift.framework in Frameworks */,
+				50AF2EBA1D20089E00337A53 /* SwiftTask.framework in Frameworks */,
 				5052D3401D026301002B1A17 /* SwiftyJSON.framework in Frameworks */,
 				501F954F1CE9B77E00628E29 /* XMLPullitic.framework in Frameworks */,
 			);
@@ -215,6 +218,7 @@
 		5045BD381CDEDF8300A8A0FA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				50AF2EB91D20089E00337A53 /* SwiftTask.framework */,
 				50AF2EB21D1FC20F00337A53 /* Realm.framework */,
 				50AF2EB31D1FC20F00337A53 /* RealmSwift.framework */,
 				5052D33F1D026301002B1A17 /* SwiftyJSON.framework */,
@@ -392,6 +396,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Realm.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RealmSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftTask.framework",
 			);
 			outputPaths = (
 			);
