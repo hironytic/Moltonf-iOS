@@ -48,8 +48,6 @@ public class WorkspaceManager {
         case CreateNewWorkspaceFailed(String)
     }
     
-    public static let sharedInstance = WorkspaceManager()
-
     public typealias WorkspacesChanges = (workspaces: Results<Workspace>, deletions: [Int], insertions: [Int], modifications: [Int])
     public let workspacesChanged = EventSource<WorkspacesChanges>()
     public private(set) var workspaces: Results<Workspace>
@@ -58,7 +56,7 @@ public class WorkspaceManager {
     private var _notificationToken: NotificationToken!
     private let _workspaceDirURL: NSURL
     
-    private init() {
+    public init() {
         _workspaceDirURL = NSURL(fileURLWithPath: AppDelegate.privateDataDirectory).URLByAppendingPathComponent(WORKSPACE_DIR)
         _ = try? NSFileManager.defaultManager().createDirectoryAtURL(_workspaceDirURL, withIntermediateDirectories: true, attributes: nil)
         

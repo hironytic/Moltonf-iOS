@@ -42,7 +42,7 @@ public class WorkspaceListViewModel: ViewModel {
     public var addNewAction: AnyObserver<Void>!
     
     private let _listenerStore = ListenerStore()
-    private let _workspaceManager = WorkspaceManager.sharedInstance
+    private let _workspaceManager = WorkspaceManager()
     private let _messageSlot = MessageSlot()
     private let _workspaceListSource = Variable<[WorkspaceListItem]>([])
     
