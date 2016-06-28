@@ -90,12 +90,12 @@ public class WorkspaceListViewModel: ViewModel {
         
         // insert new items
         for index in changes.insertions {
-            list.insert(WorkspaceListItem(workspace: changes.workspaces[index]), atIndex: index)
+            list.insert(WorkspaceListItem(workspace: changes.workspaces[AnyRandomAccessIndex(index)]), atIndex: index)
         }
         
         // replace modified items
         for index in changes.modifications {
-            let item = WorkspaceListItem(workspace: changes.workspaces[index])
+            let item = WorkspaceListItem(workspace: changes.workspaces[AnyRandomAccessIndex(index)])
             list[index] = item
         }
 

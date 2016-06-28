@@ -49,14 +49,15 @@ public class WorkspaceManager {
         case CreateNewWorkspaceFailed(String)
     }
     
-    public typealias WorkspacesChanges = (workspaces: Results<Workspace>, deletions: [Int], insertions: [Int], modifications: [Int])
+    public typealias WorkspacesChanges = (workspaces: AnyRandomAccessCollection<Workspace>, deletions: [Int], insertions: [Int], modifications: [Int])
     public let workspacesChanged = EventSource<WorkspacesChanges>()
-    public private(set) var workspaces: Results<Workspace>
+    public private(set) var workspaces: AnyRandomAccessCollection<Workspace>
     public let errorOccurred = EventSource<ErrorType>()
     
     private let _realm: Realm
     private var _notificationToken: NotificationToken!
     private let _workspaceDirURL: NSURL
+    private let _workspaces: Results<Workspace>
     
     public init() {
         _workspaceDirURL = NSURL(fileURLWithPath: AppDelegate.privateDataDirectory).URLByAppendingPathComponent(WORKSPACE_DIR)
@@ -65,12 +66,13 @@ public class WorkspaceManager {
         let workspaceDBURL = _workspaceDirURL.URLByAppendingPathComponent(WORKSPACE_DB)
         let config = Realm.Configuration(fileURL: workspaceDBURL)
         _realm = try! Realm(configuration: config)
-        workspaces = _realm.objects(Workspace)
+        _workspaces = _realm.objects(Workspace)
+        workspaces = AnyRandomAccessCollection<Workspace>(_workspaces)
       
-        _notificationToken = workspaces.addNotificationBlock { [weak self] changes in
+        _notificationToken = _workspaces.addNotificationBlock { [weak self] changes in
             switch changes {
             case .Update(let results, let deletions, let insertions, let modifications):
-                self?.workspacesChanged.fire((workspaces: results, deletions: deletions, insertions: insertions, modifications: modifications))
+                self?.workspacesChanged.fire((workspaces: AnyRandomAccessCollection(results), deletions: deletions, insertions: insertions, modifications: modifications))
                 break
             default:
                 break
