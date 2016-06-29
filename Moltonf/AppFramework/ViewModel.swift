@@ -24,7 +24,17 @@
 //
 
 import Foundation
+import RxSwift
 
-public protocol ViewModel {
+public class ViewModel {
+    public let messenger: Observable<Message>
+    private let _messageSlot = MessageSlot()
     
+    public init() {
+        messenger = _messageSlot.messenger
+    }
+    
+    public func sendMessage(message: Message) {
+        _messageSlot.send(message)
+    }
 }

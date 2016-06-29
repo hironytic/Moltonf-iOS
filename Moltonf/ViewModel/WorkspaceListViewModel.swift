@@ -28,33 +28,36 @@ import RxSwift
 import RxCocoa
 import Eventitic
 
+public class WorkspaceListViewModelItem {
+    public let workspace: Workspace
+    
+    public init(workspace: Workspace) {
+        self.workspace = workspace
+    }
+}
+
 public class WorkspaceListViewModel: ViewModel {
-    public class WorkspaceListItem {
-        let workspace: Workspace
-        
-        public init(workspace: Workspace) {
-            self.workspace = workspace
+    public private(set) var workspaceList: Observable<[WorkspaceListViewModelItem]>
+    public var addNewAction: AnyObserver<Void> {
+        get {
+            return _addNewAction
         }
     }
     
-    public var messenger: Observable<Message>!
-    public var workspaceList: Observable<[WorkspaceListItem]>!
-    public var addNewAction: AnyObserver<Void>!
-    
     private let _listenerStore = ListenerStore()
     private let _workspaceStore = WorkspaceStore()
-    private let _messageSlot = MessageSlot()
-    private let _workspaceListSource = Variable<[WorkspaceListItem]>([])
+    private let _workspaceListSource = Variable<[WorkspaceListViewModelItem]>([])
+    private var _addNewAction: AnyObserver<Void>!
     
-    public init() {
-        messenger = _messageSlot.messenger
+    public override init() {
         workspaceList = _workspaceListSource.asDriver().asObservable()
+        super.init()
         
-        addNewAction = ActionObserver.asObserver { [weak self] in self?.addNew() }
+        _addNewAction = ActionObserver.asObserver { [weak self] in self?.addNew() }
 
         _workspaceListSource.value = Array(_workspaceStore.workspaces)
             .map { workspace in
-                WorkspaceListItem(workspace: workspace)
+                WorkspaceListViewModelItem(workspace: workspace)
             }
         _workspaceStore.workspacesChanged
             .listen { [weak self] changes in
@@ -68,7 +71,7 @@ public class WorkspaceListViewModel: ViewModel {
         selectArchiveFileViewModel.onResult = { [weak self] result in
             self?.processSelectArchiveFileResult(result)
         }
-        _messageSlot.send(TransitionMessage(viewModel: selectArchiveFileViewModel))
+        sendMessage(TransitionMessage(viewModel: selectArchiveFileViewModel))
     }
     
     private func processSelectArchiveFileResult(result: SelectArchiveFileViewModelResult) {
@@ -90,12 +93,12 @@ public class WorkspaceListViewModel: ViewModel {
         
         // insert new items
         for index in changes.insertions {
-            list.insert(WorkspaceListItem(workspace: changes.workspaces[AnyRandomAccessIndex(index)]), atIndex: index)
+            list.insert(WorkspaceListViewModelItem(workspace: changes.workspaces[AnyRandomAccessIndex(index)]), atIndex: index)
         }
         
         // replace modified items
         for index in changes.modifications {
-            let item = WorkspaceListItem(workspace: changes.workspaces[AnyRandomAccessIndex(index)])
+            let item = WorkspaceListViewModelItem(workspace: changes.workspaces[AnyRandomAccessIndex(index)])
             list[index] = item
         }
 

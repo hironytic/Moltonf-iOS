@@ -34,35 +34,48 @@ public enum SelectArchiveFileViewModelResult {
 }
 
 public class SelectArchiveFileViewModel: ViewModel {
-    public var messenger: Observable<Message>!
-    
-    public var archiveFiles: Observable<[FileItem]>!
-    public var noItemsMessageHidden: Observable<Bool>!
-    public var refreshing: Observable<Bool>!
-    public var cancelAction: AnyObserver<Void>!
-    public var refreshAction: AnyObserver<Void>!
-    public var selectAction: AnyObserver<FileItem>!
+    public private(set) var archiveFiles: Observable<[FileItem]>
+    public private(set) var noItemsMessageHidden: Observable<Bool>
+    public private(set) var refreshing: Observable<Bool>
+    public var cancelAction: AnyObserver<Void> {
+        get {
+            return _cancelAction
+        }
+    }
+    public var refreshAction: AnyObserver<Void> {
+        get {
+            return _refreshAction
+        }
+    }
+    public var selectAction: AnyObserver<FileItem> {
+        get {
+            return _selectAction
+        }
+    }
     
     public var onResult: (SelectArchiveFileViewModelResult -> Void)? = nil
     
     private let _listenerStore = ListenerStore()
-    private let _messageSlot = MessageSlot()
     private let _fileList: FileList
     private let _archiveFilesSource = Variable<[FileItem]>([])
     private let _refreshingSource = Variable<Bool>(false)
+    private var _cancelAction: AnyObserver<Void>!
+    private var _refreshAction: AnyObserver<Void>!
+    private var _selectAction: AnyObserver<FileItem>!
     
-    public init() {
+    public override init() {
         let directory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true)[0]
         _fileList = FileList(directory: directory)
         
-        messenger = _messageSlot.messenger
         archiveFiles = _archiveFilesSource.asDriver().asObservable()
         noItemsMessageHidden = archiveFiles.map { !$0.isEmpty }
         refreshing = _refreshingSource.asDriver().asObservable()
 
-        cancelAction = ActionObserver.asObserver { [weak self] in self?.cancel() }
-        refreshAction = ActionObserver.asObserver { [weak self] in self?.refresh() }
-        selectAction = ActionObserver.asObserver { [weak self] item in self?.select(item) }
+        super.init()
+        
+        _cancelAction = ActionObserver.asObserver { [weak self] in self?.cancel() }
+        _refreshAction = ActionObserver.asObserver { [weak self] in self?.refresh() }
+        _selectAction = ActionObserver.asObserver { [weak self] item in self?.select(item) }
         
         _archiveFilesSource.value = _fileList.list
         _fileList.listChanged
@@ -80,7 +93,7 @@ public class SelectArchiveFileViewModel: ViewModel {
     }
     
     private func cancel() {
-        _messageSlot.send(DismissingMessage())
+        sendMessage(DismissingMessage())
         onResult?(.Cancelled)
     }
     
@@ -89,7 +102,7 @@ public class SelectArchiveFileViewModel: ViewModel {
     }
     
     private func select(item: FileItem) {
-        _messageSlot.send(DismissingMessage())
+        sendMessage(DismissingMessage())
         onResult?(.Selected(item.filePath))
     }
 }
