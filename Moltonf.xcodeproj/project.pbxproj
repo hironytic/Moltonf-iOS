@@ -13,7 +13,7 @@
 		5025EFE11CDF15A70032AD67 /* WorkspaceList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */; };
 		5025EFE31CDF16530032AD67 /* WorkspaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */; };
 		5025EFE71CDF17470032AD67 /* WorkspaceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */; };
-		5025EFEA1CDF689E0032AD67 /* WorkspaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE91CDF689E0032AD67 /* WorkspaceManager.swift */; };
+		5025EFEA1CDF689E0032AD67 /* WorkspaceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFE91CDF689E0032AD67 /* WorkspaceStore.swift */; };
 		5025EFEC1CDF6F900032AD67 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFEB1CDF6F900032AD67 /* Message.swift */; };
 		5025EFEE1CDF7EFD0032AD67 /* MessageSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFED1CDF7EFD0032AD67 /* MessageSlot.swift */; };
 		5025EFF11CE0D50C0032AD67 /* ActionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFF01CE0D50C0032AD67 /* ActionObserver.swift */; };
@@ -58,7 +58,7 @@
 		5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = WorkspaceList.storyboard; sourceTree = "<group>"; };
 		5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceListViewController.swift; sourceTree = "<group>"; };
 		5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceListViewModel.swift; sourceTree = "<group>"; };
-		5025EFE91CDF689E0032AD67 /* WorkspaceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceManager.swift; sourceTree = "<group>"; };
+		5025EFE91CDF689E0032AD67 /* WorkspaceStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceStore.swift; sourceTree = "<group>"; };
 		5025EFEB1CDF6F900032AD67 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		5025EFED1CDF7EFD0032AD67 /* MessageSlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageSlot.swift; sourceTree = "<group>"; };
 		5025EFF01CE0D50C0032AD67 /* ActionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionObserver.swift; sourceTree = "<group>"; };
@@ -167,7 +167,6 @@
 				501F95471CE61C5600628E29 /* Archive */,
 				50AF2EB61D1FC3CC00337A53 /* Workspace */,
 				5025EFF81CE1EFFB0032AD67 /* ArchiveFileManager.swift */,
-				5025EFE91CDF689E0032AD67 /* WorkspaceManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -269,6 +268,7 @@
 			isa = PBXGroup;
 			children = (
 				50AF2EB71D1FC45700337A53 /* Workspace.swift */,
+				5025EFE91CDF689E0032AD67 /* WorkspaceStore.swift */,
 			);
 			path = Workspace;
 			sourceTree = "<group>";
@@ -424,7 +424,7 @@
 				501F95511CEB440400628E29 /* ArchiveConstants.swift in Sources */,
 				5025EFEC1CDF6F900032AD67 /* Message.swift in Sources */,
 				5025EFF11CE0D50C0032AD67 /* ActionObserver.swift in Sources */,
-				5025EFEA1CDF689E0032AD67 /* WorkspaceManager.swift in Sources */,
+				5025EFEA1CDF689E0032AD67 /* WorkspaceStore.swift in Sources */,
 				5025EFEE1CDF7EFD0032AD67 /* MessageSlot.swift in Sources */,
 				50AF2EB81D1FC45700337A53 /* Workspace.swift in Sources */,
 				50B24E1E1CF8734F0035D573 /* ArchiveToJSON.swift in Sources */,

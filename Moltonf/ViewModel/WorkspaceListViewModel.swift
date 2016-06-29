@@ -42,7 +42,7 @@ public class WorkspaceListViewModel: ViewModel {
     public var addNewAction: AnyObserver<Void>!
     
     private let _listenerStore = ListenerStore()
-    private let _workspaceManager = WorkspaceManager()
+    private let _workspaceStore = WorkspaceStore()
     private let _messageSlot = MessageSlot()
     private let _workspaceListSource = Variable<[WorkspaceListItem]>([])
     
@@ -52,11 +52,11 @@ public class WorkspaceListViewModel: ViewModel {
         
         addNewAction = ActionObserver.asObserver { [weak self] in self?.addNew() }
 
-        _workspaceListSource.value = Array(_workspaceManager.workspaces)
+        _workspaceListSource.value = Array(_workspaceStore.workspaces)
             .map { workspace in
                 WorkspaceListItem(workspace: workspace)
             }
-        _workspaceManager.workspacesChanged
+        _workspaceStore.workspacesChanged
             .listen { [weak self] changes in
                 self?.workspaceChanged(changes)
             }
@@ -74,13 +74,13 @@ public class WorkspaceListViewModel: ViewModel {
     private func processSelectArchiveFileResult(result: SelectArchiveFileViewModel.Result) {
         switch result {
         case .Selected(let path):
-            _workspaceManager.createNewWorkspace(archiveFile: path)
+            _workspaceStore.createNewWorkspace(archiveFile: path)
         default:
             break
         }
     }
     
-    private func workspaceChanged(changes: WorkspaceManager.WorkspacesChanges) {
+    private func workspaceChanged(changes: WorkspaceStore.WorkspacesChanges) {
         var list = _workspaceListSource.value
             
         // remove deleted items

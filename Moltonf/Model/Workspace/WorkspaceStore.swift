@@ -1,5 +1,5 @@
 //
-// WorkspaceManager.swift
+// WorkspaceStore.swift
 // Moltonf
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -32,19 +32,7 @@ import SwiftTask
 private let WORKSPACE_DIR = "workspace"
 private let WORKSPACE_DB = "workspace.realm"
 
-public class WorkspaceManager {
-    public class WorkspaceItem {
-        let id: String
-        let title: String
-        let path: String
-        
-        public init(id: String, title: String, path: String) {
-            self.id = id
-            self.title = title
-            self.path = path
-        }
-    }
-    
+public class WorkspaceStore {
     public enum Error: ErrorType {
         case CreateNewWorkspaceFailed(String)
     }
