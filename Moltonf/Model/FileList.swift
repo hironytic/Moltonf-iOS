@@ -1,5 +1,5 @@
 //
-// ArchiveFileManager.swift
+// FileList.swift
 // Moltonf
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -26,21 +26,21 @@
 import Foundation
 import Eventitic
 
-public class ArchiveFileManager {
-    public class FileItem {
-        let filePath: String
-        let title: String
-        
-        init(filePath: String, title: String) {
-            self.filePath = filePath
-            self.title = title
-        }
+public class FileItem {
+    let filePath: String
+    let title: String
+    
+    init(filePath: String, title: String) {
+        self.filePath = filePath
+        self.title = title
     }
+}
 
-    public let archiveFilesChanged = EventSource<[FileItem]>()
-    public private(set) var archiveFiles: [FileItem] = [] {
+public class FileList {
+    public let listChanged = EventSource<[FileItem]>()
+    public private(set) var list: [FileItem] = [] {
         didSet {
-            archiveFilesChanged.fire(archiveFiles)
+            listChanged.fire(list)
         }
     }
     
@@ -66,7 +66,7 @@ public class ArchiveFileManager {
         
             let fm = NSFileManager.defaultManager()
             let contents = (try? fm.contentsOfDirectoryAtPath(_directory)) ?? []
-            archiveFiles = contents
+            list = contents
                 .filter { $0[$0.startIndex] != "." }    // exclude hidden files
                 .map { FileItem(filePath: (_directory as NSString).stringByAppendingPathComponent($0), title: $0) }
                 .filter { item in   // exclude directories

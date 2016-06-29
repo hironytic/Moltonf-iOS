@@ -28,31 +28,32 @@ import Foundation
 import RxCocoa
 import RxSwift
 
+public enum SelectArchiveFileViewModelResult {
+    case Selected(String)
+    case Cancelled
+}
+
 public class SelectArchiveFileViewModel: ViewModel {
     public var messenger: Observable<Message>!
     
-    public var archiveFiles: Observable<[ArchiveFileManager.FileItem]>!
+    public var archiveFiles: Observable<[FileItem]>!
     public var noItemsMessageHidden: Observable<Bool>!
     public var refreshing: Observable<Bool>!
     public var cancelAction: AnyObserver<Void>!
     public var refreshAction: AnyObserver<Void>!
-    public var selectAction: AnyObserver<ArchiveFileManager.FileItem>!
+    public var selectAction: AnyObserver<FileItem>!
     
-    public enum Result {
-        case Selected(String)
-        case Cancelled
-    }
-    public var onResult: (Result -> Void)? = nil
+    public var onResult: (SelectArchiveFileViewModelResult -> Void)? = nil
     
     private let _listenerStore = ListenerStore()
     private let _messageSlot = MessageSlot()
-    private let _archiveFileManager: ArchiveFileManager
-    private let _archiveFilesSource = Variable<[ArchiveFileManager.FileItem]>([])
+    private let _fileList: FileList
+    private let _archiveFilesSource = Variable<[FileItem]>([])
     private let _refreshingSource = Variable<Bool>(false)
     
     public init() {
         let directory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true)[0]
-        _archiveFileManager = ArchiveFileManager(directory: directory)
+        _fileList = FileList(directory: directory)
         
         messenger = _messageSlot.messenger
         archiveFiles = _archiveFilesSource.asDriver().asObservable()
@@ -63,15 +64,19 @@ public class SelectArchiveFileViewModel: ViewModel {
         refreshAction = ActionObserver.asObserver { [weak self] in self?.refresh() }
         selectAction = ActionObserver.asObserver { [weak self] item in self?.select(item) }
         
-        _archiveFilesSource.value = _archiveFileManager.archiveFiles
-        _archiveFileManager.archiveFilesChanged.listen { [weak self] fileItem in
-            self?._archiveFilesSource.value = fileItem
-        }.addToStore(_listenerStore)
+        _archiveFilesSource.value = _fileList.list
+        _fileList.listChanged
+            .listen { [weak self] fileItem in
+                self?._archiveFilesSource.value = fileItem
+            }
+            .addToStore(_listenerStore)
         
-        _refreshingSource.value = _archiveFileManager.refreshing
-        _archiveFileManager.refreshingChanged.listen { [weak self] value in
-            self?._refreshingSource.value = value
-        }.addToStore(_listenerStore)
+        _refreshingSource.value = _fileList.refreshing
+        _fileList.refreshingChanged
+            .listen { [weak self] value in
+                self?._refreshingSource.value = value
+            }
+            .addToStore(_listenerStore)
     }
     
     private func cancel() {
@@ -80,10 +85,10 @@ public class SelectArchiveFileViewModel: ViewModel {
     }
     
     private func refresh() {
-        _archiveFileManager.reloadFileList()
+        _fileList.reloadFileList()
     }
     
-    private func select(item: ArchiveFileManager.FileItem) {
+    private func select(item: FileItem) {
         _messageSlot.send(DismissingMessage())
         onResult?(.Selected(item.filePath))
     }

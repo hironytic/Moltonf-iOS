@@ -20,7 +20,7 @@
 		5025EFF31CE15FD30032AD67 /* TransitionMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFF21CE15FD30032AD67 /* TransitionMessage.swift */; };
 		5025EFF51CE160580032AD67 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFF41CE160580032AD67 /* ViewModel.swift */; };
 		5025EFF71CE161470032AD67 /* SelectArchiveFileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFF61CE161470032AD67 /* SelectArchiveFileViewModel.swift */; };
-		5025EFF91CE1EFFB0032AD67 /* ArchiveFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFF81CE1EFFB0032AD67 /* ArchiveFileManager.swift */; };
+		5025EFF91CE1EFFB0032AD67 /* FileList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFF81CE1EFFB0032AD67 /* FileList.swift */; };
 		5025EFFB1CE1FEF70032AD67 /* SelectArchiveFile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5025EFFA1CE1FEF70032AD67 /* SelectArchiveFile.storyboard */; };
 		5025EFFD1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift */; };
 		5025EFFF1CE2139B0032AD67 /* DismissingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFFE1CE2139B0032AD67 /* DismissingMessage.swift */; };
@@ -65,7 +65,7 @@
 		5025EFF21CE15FD30032AD67 /* TransitionMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionMessage.swift; sourceTree = "<group>"; };
 		5025EFF41CE160580032AD67 /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		5025EFF61CE161470032AD67 /* SelectArchiveFileViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectArchiveFileViewModel.swift; sourceTree = "<group>"; };
-		5025EFF81CE1EFFB0032AD67 /* ArchiveFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveFileManager.swift; sourceTree = "<group>"; };
+		5025EFF81CE1EFFB0032AD67 /* FileList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileList.swift; sourceTree = "<group>"; };
 		5025EFFA1CE1FEF70032AD67 /* SelectArchiveFile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SelectArchiveFile.storyboard; sourceTree = "<group>"; };
 		5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectArchiveFileListViewController.swift; sourceTree = "<group>"; };
 		5025EFFE1CE2139B0032AD67 /* DismissingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DismissingMessage.swift; sourceTree = "<group>"; };
@@ -166,7 +166,7 @@
 			children = (
 				501F95471CE61C5600628E29 /* Archive */,
 				50AF2EB61D1FC3CC00337A53 /* Workspace */,
-				5025EFF81CE1EFFB0032AD67 /* ArchiveFileManager.swift */,
+				5025EFF81CE1EFFB0032AD67 /* FileList.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -416,7 +416,7 @@
 				501F954B1CE61CA700628E29 /* ArchiveSchema.swift in Sources */,
 				5045BD111CDED11500A8A0FA /* AppDelegate.swift in Sources */,
 				5025EFF51CE160580032AD67 /* ViewModel.swift in Sources */,
-				5025EFF91CE1EFFB0032AD67 /* ArchiveFileManager.swift in Sources */,
+				5025EFF91CE1EFFB0032AD67 /* FileList.swift in Sources */,
 				5025EFE31CDF16530032AD67 /* WorkspaceListViewController.swift in Sources */,
 				5025EFF31CE15FD30032AD67 /* TransitionMessage.swift in Sources */,
 				5025EFE71CDF17470032AD67 /* WorkspaceListViewModel.swift in Sources */,

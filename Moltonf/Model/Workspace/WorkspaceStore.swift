@@ -32,13 +32,14 @@ import SwiftTask
 private let WORKSPACE_DIR = "workspace"
 private let WORKSPACE_DB = "workspace.realm"
 
+public enum WorkspaceStoreError: ErrorType {
+    case CreateNewWorkspaceFailed(String)
+}
+
+public typealias WorkspaceStoresChanges = (workspaces: AnyRandomAccessCollection<Workspace>, deletions: [Int], insertions: [Int], modifications: [Int])
+
 public class WorkspaceStore {
-    public enum Error: ErrorType {
-        case CreateNewWorkspaceFailed(String)
-    }
-    
-    public typealias WorkspacesChanges = (workspaces: AnyRandomAccessCollection<Workspace>, deletions: [Int], insertions: [Int], modifications: [Int])
-    public let workspacesChanged = EventSource<WorkspacesChanges>()
+    public let workspacesChanged = EventSource<WorkspaceStoresChanges>()
     public private(set) var workspaces: AnyRandomAccessCollection<Workspace>
     public let errorOccurred = EventSource<ErrorType>()
     
@@ -88,7 +89,7 @@ public class WorkspaceStore {
                     try converter.convert()
 
                     // read converted playdata
-                    guard let playdataData = NSData(contentsOfFile: playdataFilePath) else { throw Error.CreateNewWorkspaceFailed("Failed to load playdata.json") }
+                    guard let playdataData = NSData(contentsOfFile: playdataFilePath) else { throw WorkspaceStoreError.CreateNewWorkspaceFailed("Failed to load playdata.json") }
                     let playdata = JSON(data: playdataData)
                     let title = playdata[ArchiveConstants.FULL_NAME].stringValue
                     
@@ -124,7 +125,7 @@ public class WorkspaceStore {
             // remove failed workspace directory
             _ = try? NSFileManager.defaultManager().removeItemAtPath(archiveJSONDir)
             
-            let error2 = error ?? Error.CreateNewWorkspaceFailed("unknown error")
+            let error2 = error ?? WorkspaceStoreError.CreateNewWorkspaceFailed("unknown error")
             self?.errorOccurred.fire(error2)
         }
     }

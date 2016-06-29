@@ -71,7 +71,7 @@ public class WorkspaceListViewModel: ViewModel {
         _messageSlot.send(TransitionMessage(viewModel: selectArchiveFileViewModel))
     }
     
-    private func processSelectArchiveFileResult(result: SelectArchiveFileViewModel.Result) {
+    private func processSelectArchiveFileResult(result: SelectArchiveFileViewModelResult) {
         switch result {
         case .Selected(let path):
             _workspaceStore.createNewWorkspace(archiveFile: path)
@@ -80,7 +80,7 @@ public class WorkspaceListViewModel: ViewModel {
         }
     }
     
-    private func workspaceChanged(changes: WorkspaceStore.WorkspacesChanges) {
+    private func workspaceChanged(changes: WorkspaceStoresChanges) {
         var list = _workspaceListSource.value
             
         // remove deleted items

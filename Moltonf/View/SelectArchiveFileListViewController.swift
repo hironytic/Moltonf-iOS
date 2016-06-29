@@ -88,7 +88,7 @@ public class SelectArchiveFileListViewController: UITableViewController {
                 }
                 .addDisposableTo(disposeBag)
             
-            tableView.rx_modelSelected(ArchiveFileManager.FileItem.self)
+            tableView.rx_modelSelected(FileItem.self)
                 .bindTo(viewModel.selectAction)
                 .addDisposableTo(disposeBag)
             
