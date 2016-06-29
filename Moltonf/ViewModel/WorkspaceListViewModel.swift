@@ -43,17 +43,24 @@ public class WorkspaceListViewModel: ViewModel {
             return _addNewAction
         }
     }
+    public var deleteAction: AnyObserver<NSIndexPath> {
+        get {
+            return _deleteAction
+        }
+    }
     
     private let _listenerStore = ListenerStore()
     private let _workspaceStore = WorkspaceStore()
     private let _workspaceListSource = Variable<[WorkspaceListViewModelItem]>([])
     private var _addNewAction: AnyObserver<Void>!
+    private var _deleteAction: AnyObserver<NSIndexPath>!
     
     public override init() {
         workspaceList = _workspaceListSource.asDriver().asObservable()
         super.init()
         
         _addNewAction = ActionObserver.asObserver { [weak self] in self?.addNew() }
+        _deleteAction = ActionObserver.asObserver { [weak self] indexPath in self?.delete(at: indexPath) }
 
         _workspaceListSource.value = Array(_workspaceStore.workspaces)
             .map { workspace in
@@ -81,6 +88,11 @@ public class WorkspaceListViewModel: ViewModel {
         default:
             break
         }
+    }
+    
+    private func delete(at indexPath: NSIndexPath) {
+        let listItem = _workspaceListSource.value[indexPath.row]
+        _workspaceStore.deleteWorkspace(listItem.workspace)
     }
     
     private func workspaceChanged(changes: WorkspaceStoresChanges) {

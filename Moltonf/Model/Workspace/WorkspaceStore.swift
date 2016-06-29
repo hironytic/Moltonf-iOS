@@ -129,4 +129,14 @@ public class WorkspaceStore {
             self?.errorOccurred.fire(error2)
         }
     }
+    
+    public func deleteWorkspace(workspace: Workspace) {
+        do {
+            try _realm.write {
+                _realm.delete(workspace)
+            }
+        } catch let error {
+            errorOccurred.fire(error)
+        }
+    }
 }
