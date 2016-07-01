@@ -36,8 +36,7 @@ public class WorkspaceListViewController: UITableViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.navigationItem.rightBarButtonItem = self.editButtonItem()
 
         bindViewModel()
     }
@@ -57,6 +56,10 @@ public class WorkspaceListViewController: UITableViewController {
             .bindTo(tableView.rx_itemsWithCellIdentifier("Cell")) { (row, element, cell) in
                 cell.textLabel?.text = element.workspace.title
             }
+            .addDisposableTo(disposeBag)
+        
+        tableView.rx_itemDeleted
+            .bindTo(viewModel.deleteAction)
             .addDisposableTo(disposeBag)
         
         viewModel.messenger

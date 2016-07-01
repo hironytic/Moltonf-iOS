@@ -30,7 +30,6 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Play Data" id="4Ih-6J-p3P">
                         <barButtonItem key="leftBarButtonItem" systemItem="add" id="Jud-xO-txA"/>
-                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="XQ4-Bv-c2n"/>
                     </navigationItem>
                     <connections>
                         <outlet property="addNewButton" destination="Jud-xO-txA" id="X4S-La-rhh"/>
