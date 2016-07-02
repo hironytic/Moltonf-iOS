@@ -108,7 +108,7 @@ public class WorkspaceStore {
                 if let realm = self?._realm {
                     let ws = Workspace()
                     ws.id = id
-                    ws.path = playdataFilePath
+                    ws.path = id
                     ws.title = title
                     
                     try realm.write {
@@ -132,6 +132,10 @@ public class WorkspaceStore {
     
     public func deleteWorkspace(workspace: Workspace) {
         do {
+            if let archiveJSONDir = _workspaceDirURL.URLByAppendingPathComponent(workspace.id).path {
+                _ = try? NSFileManager.defaultManager().removeItemAtPath(archiveJSONDir)
+            }
+            
             try _realm.write {
                 _realm.delete(workspace)
             }
