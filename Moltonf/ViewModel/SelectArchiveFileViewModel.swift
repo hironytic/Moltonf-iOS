@@ -34,24 +34,12 @@ public enum SelectArchiveFileViewModelResult {
 }
 
 public class SelectArchiveFileViewModel: ViewModel {
-    public private(set) var archiveFiles: Observable<[FileItem]>
-    public private(set) var noItemsMessageHidden: Observable<Bool>
-    public private(set) var refreshing: Observable<Bool>
-    public var cancelAction: AnyObserver<Void> {
-        get {
-            return _cancelAction
-        }
-    }
-    public var refreshAction: AnyObserver<Void> {
-        get {
-            return _refreshAction
-        }
-    }
-    public var selectAction: AnyObserver<FileItem> {
-        get {
-            return _selectAction
-        }
-    }
+    public let archiveFiles: Observable<[FileItem]>
+    public let noItemsMessageHidden: Observable<Bool>
+    public let refreshing: Observable<Bool>
+    public let cancelAction: AnyObserver<Void>
+    public let refreshAction: AnyObserver<Void>
+    public let selectAction: AnyObserver<FileItem>
     
     public var onResult: (SelectArchiveFileViewModelResult -> Void)? = nil
     
@@ -59,9 +47,9 @@ public class SelectArchiveFileViewModel: ViewModel {
     private let _fileList: FileList
     private let _archiveFilesSource = Variable<[FileItem]>([])
     private let _refreshingSource = Variable<Bool>(false)
-    private var _cancelAction: AnyObserver<Void>!
-    private var _refreshAction: AnyObserver<Void>!
-    private var _selectAction: AnyObserver<FileItem>!
+    private let _cancelAction = ActionObserver<Void>()
+    private let _refreshAction = ActionObserver<Void>()
+    private let _selectAction = ActionObserver<FileItem>()
     
     public override init() {
         let directory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true)[0]
@@ -70,12 +58,15 @@ public class SelectArchiveFileViewModel: ViewModel {
         archiveFiles = _archiveFilesSource.asDriver().asObservable()
         noItemsMessageHidden = archiveFiles.map { !$0.isEmpty }
         refreshing = _refreshingSource.asDriver().asObservable()
+        cancelAction = _cancelAction.asObserver()
+        refreshAction = _refreshAction.asObserver()
+        selectAction = _selectAction.asObserver()
 
         super.init()
         
-        _cancelAction = ActionObserver.asObserver { [weak self] in self?.cancel() }
-        _refreshAction = ActionObserver.asObserver { [weak self] in self?.refresh() }
-        _selectAction = ActionObserver.asObserver { [weak self] item in self?.select(item) }
+        _cancelAction.handler = { [weak self] in self?.cancel() }
+        _refreshAction.handler = { [weak self] in self?.refresh() }
+        _selectAction.handler = { [weak self] item in self?.select(item) }
         
         _archiveFilesSource.value = _fileList.list
         _fileList.listChanged

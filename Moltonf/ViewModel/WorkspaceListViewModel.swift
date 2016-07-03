@@ -37,30 +37,25 @@ public class WorkspaceListViewModelItem {
 }
 
 public class WorkspaceListViewModel: ViewModel {
-    public private(set) var workspaceList: Observable<[WorkspaceListViewModelItem]>
-    public var addNewAction: AnyObserver<Void> {
-        get {
-            return _addNewAction
-        }
-    }
-    public var deleteAction: AnyObserver<NSIndexPath> {
-        get {
-            return _deleteAction
-        }
-    }
+    public let workspaceList: Observable<[WorkspaceListViewModelItem]>
+    public let addNewAction: AnyObserver<Void>
+    public let deleteAction: AnyObserver<NSIndexPath>
     
     private let _listenerStore = ListenerStore()
     private let _workspaceStore = WorkspaceStore()
     private let _workspaceListSource = Variable<[WorkspaceListViewModelItem]>([])
-    private var _addNewAction: AnyObserver<Void>!
-    private var _deleteAction: AnyObserver<NSIndexPath>!
+    private let _addNewAction = ActionObserver<Void>()
+    private let _deleteAction = ActionObserver<NSIndexPath>()
     
     public override init() {
         workspaceList = _workspaceListSource.asDriver().asObservable()
+        addNewAction = _addNewAction.asObserver()
+        deleteAction = _deleteAction.asObserver()
+        
         super.init()
         
-        _addNewAction = ActionObserver.asObserver { [weak self] in self?.addNew() }
-        _deleteAction = ActionObserver.asObserver { [weak self] indexPath in self?.delete(at: indexPath) }
+        _addNewAction.handler = { [weak self] in self?.addNew() }
+        _deleteAction.handler = { [weak self] indexPath in self?.delete(at: indexPath) }
 
         _workspaceListSource.value = Array(_workspaceStore.workspaces)
             .map { workspace in

@@ -30,16 +30,20 @@ public class ActionObserver<Element>: ObserverType {
     public typealias E = Element
     public typealias Handler = (Element) -> Void
     
-    private let _handler: Handler
+    public var handler: Handler
+
+    public convenience init() {
+        self.init { _ in }
+    }
     
     public init(handler: Handler) {
-        _handler = handler
+        self.handler = handler
     }
 
     public func on(event: Event<Element>) {
         switch event {
         case .Next(let element):
-            _handler(element)
+            handler(element)
         case .Error(_):
             break
         case .Completed:
