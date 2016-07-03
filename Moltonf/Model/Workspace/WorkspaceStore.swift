@@ -108,7 +108,6 @@ public class WorkspaceStore {
                 if let realm = self?._realm {
                     let ws = Workspace()
                     ws.id = id
-                    ws.path = id
                     ws.title = title
                     
                     try realm.write {

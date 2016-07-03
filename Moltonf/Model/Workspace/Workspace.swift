@@ -29,7 +29,6 @@ import RealmSwift
 public class Workspace: Object {
     dynamic var id = ""
     dynamic var title = ""
-    dynamic var path = ""
     
     override public static func primaryKey() -> String? {
         return "id"
