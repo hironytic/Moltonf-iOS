@@ -38,7 +38,6 @@ public class SelectArchiveFileListViewController: UITableViewController {
         super.viewDidLoad()
 
         refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(SelectArchiveFileListViewController.refresh(_:)), forControlEvents: .ValueChanged)
         
         let noItemsLabelParent = UIView()
         tableView.backgroundView = noItemsLabelParent
@@ -88,6 +87,10 @@ public class SelectArchiveFileListViewController: UITableViewController {
                 }
                 .addDisposableTo(disposeBag)
             
+            refreshControl?.rx_controlEvent(.ValueChanged)
+                .bindTo(viewModel.refreshAction)
+                .addDisposableTo(disposeBag)
+            
             tableView.rx_modelSelected(FileItem.self)
                 .bindTo(viewModel.selectAction)
                 .addDisposableTo(disposeBag)
@@ -103,10 +106,5 @@ public class SelectArchiveFileListViewController: UITableViewController {
                 }
                 .addDisposableTo(disposeBag)
         }
-    }
-    
-    @objc
-    private func refresh(sender: AnyObject) {
-        self.viewModel?.refreshAction.onNext()
     }
 }
