@@ -53,9 +53,7 @@ public class WorkspaceListViewController: UITableViewController {
         addNewButton.rx_tap.bindTo(viewModel.addNewAction).addDisposableTo(disposeBag)
 
         viewModel.workspaceList
-            .bindTo(tableView.rx_itemsWithCellIdentifier("Cell")) { (row, element, cell) in
-                cell.textLabel?.text = element.workspace.title
-            }
+            .bindTo(tableView.rx_itemsWithDataSource(WorkspaceListDataSource()))
             .addDisposableTo(disposeBag)
         
         tableView.rx_itemDeleted
@@ -88,4 +86,43 @@ public class WorkspaceListViewController: UITableViewController {
     }
     
 
+}
+
+public class WorkspaceListDataSource: NSObject, UITableViewDataSource, RxTableViewDataSourceType {
+    public typealias Element = [WorkspaceListViewModelItem]
+    
+    private var _itemModels: Element = []
+    
+    public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return _itemModels.count
+    }
+
+    public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+        let element = _itemModels[indexPath.row]
+        
+        cell.textLabel?.text = element.workspace.title
+        
+        return cell
+    }
+    
+    public func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return tableView.editing
+    }
+    
+    public func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return false
+    }
+    
+    public func tableView(tableView: UITableView, observedEvent: Event<Element>) {
+        UIBindingObserver(UIElement: self) { (dataSource, element) in
+            dataSource._itemModels = element
+            tableView.reloadData()
+        }
+        .on(observedEvent)
+    }
 }
