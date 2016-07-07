@@ -224,24 +224,6 @@ public class ArchiveSchema {
 
     //
     // --------------------------------------------------
-    // MARK: event
-    // --------------------------------------------------
-    //
-
-    // attribute "eventFamily"
-    public static let ATTR_EVENT_FAMILY = "eventFamily"
-    
-    // type of eventFamily: announce
-    public static let VAL_EVENT_FAMILY_ANNOUNCE = "announce"
-    
-    // type of eventFamily: announce
-    public static let VAL_EVENT_FAMILY_ORDER = "order"
-    
-    // type of eventFamily: extra
-    public static let VAL_EVENT_FAMILY_EXTRA = "extra"
-    
-    //
-    // --------------------------------------------------
     // MARK: elements of EventAnnounceGroup
     // --------------------------------------------------
     //

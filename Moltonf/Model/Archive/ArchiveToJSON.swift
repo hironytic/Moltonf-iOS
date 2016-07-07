@@ -1016,27 +1016,17 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class EventAnnounceConverter: EventConverter {
-        init(parser: XMLPullParser, type: String) {
-            super.init(parser: parser, family: S.VAL_EVENT_FAMILY_ANNOUNCE, type: type)
-        }
     }
     
     class EventOrderConverter: EventConverter {
-        init(parser: XMLPullParser, type: String) {
-            super.init(parser: parser, family: S.VAL_EVENT_FAMILY_ORDER, type: type)
-        }
     }
     
     class EventExtraConverter: EventConverter {
-        init(parser: XMLPullParser, type: String) {
-            super.init(parser: parser, family: S.VAL_EVENT_FAMILY_EXTRA, type: type)
-        }
     }
     
     class EventConverter: TextLinesConverter {
-        init(parser: XMLPullParser, family: String, type: String) {
+        init(parser: XMLPullParser, type: String) {
             super.init(parser: parser)
-            _objectWrapper.object[K.EVENT_FAMILY] = family
             _objectWrapper.object[K.TYPE] = type
         }
     }

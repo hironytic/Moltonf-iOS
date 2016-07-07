@@ -110,9 +110,6 @@ public class ArchiveConstants {
     public static let TIME = "time"
     // public static let FACE_ICON_URI = "faceIconURI" // defined in another place
     
-    // MARK: period["elements"][n] (Event)
-    public static let EVENT_FAMILY = "eventFamily"
-
     // MARK: period["elements"][n] (onStage)
     public static let ENTRY_NO = "entryNo"
     // public static let AVATAR_ID = "avatarId"        // defined in another place
