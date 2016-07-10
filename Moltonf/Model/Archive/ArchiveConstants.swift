@@ -67,6 +67,11 @@ public class ArchiveConstants {
     public static let HREF = "href"
     public static let ELEMENTS = "elements"
     
+    // MARK: value of period["type"]
+    public static let VAL_PROLOGUE = "prologue"
+    public static let VAL_PROGRESS = "progress"
+    public static let VAL_EPILOGUE = "epilogue"
+    
     // MARK: period["elements"][n]
     // public static let TYPE = "type" // defined in another place
     public static let LINES = "lines"
@@ -109,6 +114,12 @@ public class ArchiveConstants {
     public static let XNAME = "xname"
     public static let TIME = "time"
     // public static let FACE_ICON_URI = "faceIconURI" // defined in another place
+    
+    // MARK: value of period["elements"][n] (talk) ["talkType"]
+    public static let VAL_PUBLIC = "public"
+    public static let VAL_WOLF = "wolf"
+    public static let VAL_PRIVATE = "private"
+    public static let VAL_GRAVE = "grave"
     
     // MARK: period["elements"][n] (onStage)
     public static let ENTRY_NO = "entryNo"

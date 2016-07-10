@@ -28,6 +28,8 @@ import XMLPullitic
 import SwiftyJSON
 @testable import Moltonf
 
+private typealias K = ArchiveConstants
+
 private class MockJSONWriter: ArchiveJSONWriter {
     var output: [(fileName: String, object: [String: AnyObject])] = []
     func writeArchiveJSON(fileName fileName: String, object: [String: AnyObject]) throws {
@@ -40,7 +42,6 @@ private enum TestError: ErrorType {
 }
 
 class ArchiveToJSONTests: XCTestCase {
-    typealias K = ArchiveConstants
     var outDir: String = ""
     
     override func setUp() {

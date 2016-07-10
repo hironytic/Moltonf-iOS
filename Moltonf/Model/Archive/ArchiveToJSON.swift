@@ -24,8 +24,10 @@
 //
 
 import Foundation
-
 import XMLPullitic
+
+private typealias S = ArchiveSchema
+private typealias K = ArchiveConstants
 
 private let PERIOD_JSON_FORMAT = "period-%ld.json"
 
@@ -34,9 +36,6 @@ protocol ArchiveJSONWriter {
 }
 
 public class ArchiveToJSON: ArchiveJSONWriter {
-    private typealias S = ArchiveSchema
-    private typealias K = ArchiveConstants
-    
     public enum ConvertError: ErrorType {
         case CantReadArchive
         case InvalidOutputDirectory(innerError: ErrorType)
