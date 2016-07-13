@@ -45,11 +45,13 @@
 		509C5C5F1D3204650045B0AB /* Talk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C5E1D3204650045B0AB /* Talk.swift */; };
 		509C5C611D3220C30045B0AB /* TalkType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C601D3220C30045B0AB /* TalkType.swift */; };
 		509C5C631D3270210045B0AB /* TimePart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C621D3270210045B0AB /* TimePart.swift */; };
+		509C5C661D350D2F0045B0AB /* TimePartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C651D350D2F0045B0AB /* TimePartTests.swift */; };
 		50AF2EB41D1FC20F00337A53 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50AF2EB21D1FC20F00337A53 /* Realm.framework */; };
 		50AF2EB51D1FC20F00337A53 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50AF2EB31D1FC20F00337A53 /* RealmSwift.framework */; };
 		50AF2EB81D1FC45700337A53 /* Workspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AF2EB71D1FC45700337A53 /* Workspace.swift */; };
 		50AF2EBA1D20089E00337A53 /* SwiftTask.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50AF2EB91D20089E00337A53 /* SwiftTask.framework */; };
 		50B24E1E1CF8734F0035D573 /* ArchiveToJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B24E1D1CF8734F0035D573 /* ArchiveToJSON.swift */; };
+		50B351031D35181100829BD0 /* StoryEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B351021D35181100829BD0 /* StoryEventTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +106,7 @@
 		509C5C5E1D3204650045B0AB /* Talk.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Talk.swift; sourceTree = "<group>"; };
 		509C5C601D3220C30045B0AB /* TalkType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalkType.swift; sourceTree = "<group>"; };
 		509C5C621D3270210045B0AB /* TimePart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimePart.swift; sourceTree = "<group>"; };
+		509C5C651D350D2F0045B0AB /* TimePartTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimePartTests.swift; sourceTree = "<group>"; };
 		50AF2EB21D1FC20F00337A53 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		50AF2EB31D1FC20F00337A53 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
 		50AF2EB71D1FC45700337A53 /* Workspace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Workspace.swift; sourceTree = "<group>"; };
@@ -112,6 +115,7 @@
 		50B24E1F1CF95D280035D573 /* bbsArchive-110421.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "bbsArchive-110421.xsd"; sourceTree = "<group>"; };
 		50B24E201CF95D280035D573 /* coreType-090929.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "coreType-090929.xsd"; sourceTree = "<group>"; };
 		50B24E211CF95D280035D573 /* coreXML-090929.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "coreXML-090929.xsd"; sourceTree = "<group>"; };
+		50B351021D35181100829BD0 /* StoryEventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryEventTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -288,10 +292,20 @@
 			path = Story;
 			sourceTree = "<group>";
 		};
+		509C5C641D350CF10045B0AB /* Story */ = {
+			isa = PBXGroup;
+			children = (
+				509C5C651D350D2F0045B0AB /* TimePartTests.swift */,
+				50B351021D35181100829BD0 /* StoryEventTests.swift */,
+			);
+			path = Story;
+			sourceTree = "<group>";
+		};
 		50AF2EAE1D1D291C00337A53 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				50AF2EB01D1D292A00337A53 /* Archive */,
+				509C5C641D350CF10045B0AB /* Story */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -487,7 +501,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50B351031D35181100829BD0 /* StoryEventTests.swift in Sources */,
 				503AC72A1CEDD8A500A379AB /* ArchiveToJSONTests.swift in Sources */,
+				509C5C661D350D2F0045B0AB /* TimePartTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

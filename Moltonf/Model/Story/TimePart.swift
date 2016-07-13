@@ -25,13 +25,22 @@
 
 import Foundation
 
+/// This class holds time components which doesn't specify a specific point of time.
+/// It is not related to any time zome, eigher.
 public class TimePart {
     private let _milliseconds: Int
     
+    /// Creates a new instance from hour, minute, second and millisecond
+    /// - parameter hour: hour (0-23)
+    /// - parameter minute: minute (0-59)
+    /// - parameter second: second (0-59)
+    /// - parameter millisecond: millisecond (0-999)
     public convenience init(hour: Int, minute: Int, second: Int, millisecond: Int) {
         self.init(milliseconds: (((hour * 60 + minute) * 60) + second) * 1000 + millisecond)
     }
-    
+
+    /// Creates a new instance from milliseconds since 00:00 a.m.
+    /// - parameter milliseconds: milliseconds
     public init(milliseconds: Int) {
         let millisecondsInADay: Int = 60 * 60 * 1000 * 24
         var value = milliseconds % millisecondsInADay
@@ -41,24 +50,28 @@ public class TimePart {
         _milliseconds = value
     }
 
+    /// Hour part value
     public var hourPart: Int {
         get {
             return _milliseconds / (1000 * 60 * 60)
         }
     }
     
+    /// Minute part value
     public var minutePart: Int {
         get {
             return (_milliseconds / (1000 * 60)) % 60
         }
     }
     
+    /// Second part value
     public var secondPart: Int {
         get {
             return (_milliseconds / 1000) % 60;
         }
     }
     
+    /// Millisecond part value
     public var millisecondPart: Int {
         get {
             return _milliseconds % 1000
@@ -75,6 +88,8 @@ extension TimePart: CustomDebugStringConvertible {
 }
 
 extension TimePart {
+    /// Creates a new instance from from a string appears in archive
+    /// - parameter timeString: string
     public convenience init?(archiveValue timeString: String) {
         // hh ':' mm ':' ss ('.' s+)? (zzzzzz)?
         //        -- see http://www.w3.org/TR/xmlschema-2/#dateTime
@@ -93,10 +108,11 @@ extension TimePart {
         guard let second = Int(secondString) else { return nil }
         
         var millisecond = 0
-        if timeString.characters.count > 8 && timeString[timeString.startIndex.advancedBy(8)] == "." {
-            var charIndex = timeString.startIndex.advancedBy(9)
-            for factor in [1000, 100, 10, 1] {
-                if timeString.characters.endIndex < charIndex {
+        let dotIndex = timeString.startIndex.advancedBy(8)
+        if dotIndex < timeString.endIndex && timeString[dotIndex] == "." {
+            var charIndex = dotIndex.successor()
+            for factor in [100, 10, 1] {
+                if timeString.endIndex <= charIndex {
                     break
                 }
                 let ch = timeString.substringWithRange(charIndex ..< charIndex.advancedBy(1))

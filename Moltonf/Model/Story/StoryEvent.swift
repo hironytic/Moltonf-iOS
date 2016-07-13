@@ -28,9 +28,14 @@ import SwiftyJSON
 
 private typealias K = ArchiveConstants
 
+/// This class represents an event which appears in story.
 public class StoryEvent: StoryElement {
+    /// Event family
     public let eventFamily: EventFamily
     
+    /// Creates a new instance
+    /// - parameter period:  period which contains this element
+    /// - parameter element: JSON fragment in archive
     public override init(period: Period, element: JSON) throws {
         guard let type = element[K.TYPE].string else {
             throw StoryError.MissingData(data: K.TYPE)

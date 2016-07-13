@@ -27,13 +27,24 @@ import Foundation
 
 private typealias K = ArchiveConstants
 
+/// Type of period
 public enum PeriodType {
+    /// Prologue
     case Prologue
+    
+    /// Progress
     case Progress
+    
+    /// Epilogue
     case Epilogue
 }
 
 extension PeriodType {
+    /**
+     Creates a new value from a string appears in archive
+     - parameter type: string
+     - returns: new value, or nil if `type` is invalid.
+     */
     public init?(archiveValue type: String) {
         switch type  {
         case K.VAL_PROLOGUE:

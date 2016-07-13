@@ -1,6 +1,6 @@
 //
-// StoryElement.swift
-// Moltonf
+// StoryEventTests.swift
+// MoltonfTests
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
 //
@@ -23,45 +23,40 @@
 // THE SOFTWARE.
 //
 
-import Foundation
+import XCTest
 import SwiftyJSON
+@testable import Moltonf
 
 private typealias K = ArchiveConstants
 
-/// This class reporesents an element of a story.
-/// This is a base class of `StoryEvent` and `Talk`.
-public class StoryElement {
-    /// Period which contains this element
-    public unowned let period: Period
-    
-    /// Lines of messages
-    public let messageLines: [String]
+class StoryEventTests: XCTestCase {
 
-    /// Creates a new instance
-    /// - parameter period:  period which contains this element
-    /// - parameter element: JSON fragment in archive
-    public init(period: Period, element: JSON) throws {
-        self.period = period
-        
-        guard let lines = element[K.LINES].array else {
-            throw StoryError.MissingData(data: K.LINES)
-        }
-        messageLines = try lines
-            .map { line in
-                if let message = line.string {
-                    return message
-                } else if let char = line[K.CHAR].string {
-                    return char
-                }
-                
-                throw StoryError.UnknownValue(data: line.description)
-            }
+    override func setUp() {
+        super.setUp()
+        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
-    /// Story which contains this element
-    public var story: Story {
-        get {
-            return period.story
-        }
+    override func tearDown() {
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        super.tearDown()
     }
+
+//    func testAnnounceEvent() {
+//        let element = JSON([
+//            K.TYPE: "startEntry",
+//            K.LINES: [
+//                "昼間は人間のふりをして、夜に正体を現すという人狼。",
+//                "その人狼が、この村に紛れ込んでいるという噂が広がった。",
+//                "",
+//                "村人達は半信半疑ながらも、村はずれの宿に集められることになった。",
+//                "",
+//            ],
+//        ])
+//
+//        
+//        
+//
+//        
+//    }
+
 }

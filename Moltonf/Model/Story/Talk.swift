@@ -28,11 +28,20 @@ import SwiftyJSON
 
 private typealias K = ArchiveConstants
 
+/// This class represents a talk which appears in story.
 public class Talk: StoryElement {
+    /// Type of talk
     public let talkType: TalkType
+    
+    /// Avatar which makes this talk
     public let speaker: Avatar
+    
+    /// Time on which this talk is made
     public let time: TimePart
     
+    /// Creates a new instance.
+    /// - parameter period: period which contains this element
+    /// - parameter element: JSON fragment in archive
     public override init(period: Period, element: JSON) throws {
         if let talkTypeValue = element[K.TALK_TYPE].string {
             if let talkType = TalkType(archiveValue: talkTypeValue) {
@@ -68,7 +77,11 @@ public class Talk: StoryElement {
     }
 }
 
+/// This class represents a special talk, wolf's attack.
 public class WolfAttackTalk: Talk {
+    /// Creates a new instance.
+    /// - parameter period: period which contains this element
+    /// - parameter element: JSON fragment in archive
     public override init(period: Period, element: JSON) throws {
         guard var talkElementDictionary = element.dictionaryObject else {
             throw StoryError.UnknownValue(data: "")

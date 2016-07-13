@@ -27,14 +27,24 @@ import Foundation
 
 private typealias K = ArchiveConstants
 
+/// Type of talk
 public enum TalkType {
+    /// Normal talk, log in white
     case Public
+    
+    /// Wolf's talk, log in red
     case Wolf
+    
+    /// Monology, log in gray
     case Private
+    
+    /// Talk under the grave, log in blue
     case Grave
 }
 
 extension TalkType {
+    /// Creates a new value from from a string appears in archive
+    /// - parameter talkType: string
     public init?(archiveValue talkType: String) {
         switch talkType  {
         case K.VAL_PUBLIC:
