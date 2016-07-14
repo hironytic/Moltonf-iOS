@@ -41,22 +41,81 @@ class StoryEventTests: XCTestCase {
         super.tearDown()
     }
 
-//    func testAnnounceEvent() {
-//        let element = JSON([
-//            K.TYPE: "startEntry",
-//            K.LINES: [
-//                "昼間は人間のふりをして、夜に正体を現すという人狼。",
-//                "その人狼が、この村に紛れ込んでいるという噂が広がった。",
-//                "",
-//                "村人達は半信半疑ながらも、村はずれの宿に集められることになった。",
-//                "",
-//            ],
-//        ])
-//
-//        
-//        
-//
-//        
-//    }
+    func testAnnounceEvent() {
+        let story = Story(villageFullName: "", graveIconURI: "")
+        let period = Period(story: story, type: .Prologue, day: 0)
+        
+        let element = JSON([
+            K.TYPE: "startEntry",
+            K.LINES: [
+                "昼間は人間のふりをして、夜に正体を現すという人狼。",
+                "その人狼が、この村に紛れ込んでいるという噂が広がった。",
+                "",
+                "村人達は半信半疑ながらも、村はずれの宿に集められることになった。",
+                "",
+            ],
+        ])
+ 
+        guard let event = try? StoryEvent(period: period, element: element) else {
+            XCTFail("Error")
+            return
+        }
+        
+        XCTAssertEqual(event.eventFamily, EventFamily.Announce)
+        XCTAssertTrue(event.period === period)
+        XCTAssertTrue(event.story === story)
+        XCTAssertEqual(event.messageLines[0], "昼間は人間のふりをして、夜に正体を現すという人狼。")
+    }
+    
+    func testOrderEvent() {
+        let story = Story(villageFullName: "", graveIconURI: "")
+        let period = Period(story: story, type: .Prologue, day: 0)
 
+        let element = JSON([
+            K.TYPE: "askCommit",
+            K.LIMIT_VOTE: "23:00:00+09:00",
+            K.LIMIT_SPECIAL: "23:00:00+09:00",
+            K.LINES: [
+                "午後 11時 0分 までに、誰を処刑するべきかの投票先を決定して下さい。",
+                "一番票を集めた人物が処刑されます。同数だった場合はランダムで決定されます。",
+                "",
+                "特殊な能力を持つ人は、午後 11時 0分 までに行動を確定して下さい。",
+                "",
+            ],
+        ])
+        
+        guard let event = try? StoryEvent(period: period, element: element) else {
+            XCTFail("Error")
+            return
+        }
+        
+        XCTAssertEqual(event.eventFamily, EventFamily.Order)
+        XCTAssertTrue(event.period === period)
+        XCTAssertTrue(event.story === story)
+        XCTAssertEqual(event.messageLines[0], "午後 11時 0分 までに、誰を処刑するべきかの投票先を決定して下さい。")
+    }
+    
+    func testExtraEvent() {
+        let story = Story(villageFullName: "", graveIconURI: "")
+        let period = Period(story: story, type: .Prologue, day: 0)
+
+        let element = JSON([
+            K.TYPE: "guard",
+            K.BY_WHOM: "jacob",
+            K.TARGET: "peter",
+            K.LINES: [
+                "農夫 ヤコブ は、少年 ペーター を守っている。",
+            ],
+        ])
+        
+        guard let event = try? StoryEvent(period: period, element: element) else {
+            XCTFail("Error")
+            return
+        }
+        
+        XCTAssertEqual(event.eventFamily, EventFamily.Extra)
+        XCTAssertTrue(event.period === period)
+        XCTAssertTrue(event.story === story)
+        XCTAssertEqual(event.messageLines[0], "農夫 ヤコブ は、少年 ペーター を守っている。")
+    }
 }

@@ -35,6 +35,15 @@ public class Avatar {
     public let shortName: String
     public let faceIconURI: String?
     
+    // for testing
+    init(story: Story, avatarId: String, fullName: String, shortName: String, faceIconURI: String?) {
+        self.story = story
+        self.avatarId = avatarId
+        self.fullName = fullName
+        self.shortName = shortName
+        self.faceIconURI = faceIconURI
+    }
+    
     public init(story: Story, avatarData: JSON) throws {
         self.story = story
         

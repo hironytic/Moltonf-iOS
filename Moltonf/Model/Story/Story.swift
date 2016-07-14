@@ -37,12 +37,10 @@ public class Story {
     
     private var _avatarMap = [String: Avatar]()
     
-    public convenience init(playdataURL: NSURL) throws {
-        guard let playdataData = NSData(contentsOfURL: playdataURL) else {
-            throw StoryError.CantLoadPlaydata
-        }
-        let playdata = JSON(data: playdataData)
-        try self.init(playdata: playdata)
+    // for testing
+    init(villageFullName: String, graveIconURI: String) {
+        self.villageFullName = villageFullName
+        self.graveIconURI = graveIconURI
     }
     
     public init(playdata: JSON) throws {
@@ -78,6 +76,14 @@ public class Story {
         } else {
             throw StoryError.MissingData(data: K.PERIODS)
         }
+    }
+
+    public convenience init(playdataURL: NSURL) throws {
+        guard let playdataData = NSData(contentsOfURL: playdataURL) else {
+            throw StoryError.CantLoadPlaydata
+        }
+        let playdata = JSON(data: playdataData)
+        try self.init(playdata: playdata)
     }
     
     public func avatar(havingId avatarId: String) -> Avatar? {

@@ -52,8 +52,17 @@ public class StoryElement {
                     return message
                 } else if let char = line[K.CHAR].string {
                     return char
+                } else if let messageParts = line.array {
+                    return try messageParts
+                        .reduce("") { acc, part in
+                            if let stringPart = part.string {
+                                return acc + stringPart
+                            } else if let rawChar = part[K.CHAR].string {
+                                return acc + rawChar
+                            }
+                            throw StoryError.UnknownValue(data: line.description)
+                    }
                 }
-                
                 throw StoryError.UnknownValue(data: line.description)
             }
     }

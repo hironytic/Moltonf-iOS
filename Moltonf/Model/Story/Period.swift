@@ -33,15 +33,14 @@ public class Period {
     public let type: PeriodType
     public let day: Int
     public private(set) var elements: [StoryElement] = []
- 
-    public convenience init(story: Story, periodURL: NSURL) throws {
-        guard let periodData = NSData(contentsOfURL: periodURL) else {
-            throw StoryError.CantLoadPeriod
-        }
-        let period = JSON(data: periodData)
-        try self.init(story: story, period: period)
-    }
 
+    // for testing
+    init(story: Story, type: PeriodType, day: Int) {
+        self.story = story
+        self.type = type
+        self.day = day
+    }
+    
     public init(story: Story, period: JSON) throws {
         self.story = story
         
@@ -69,6 +68,14 @@ public class Period {
         } else {
             throw StoryError.MissingData(data: K.ELEMENTS)
         }
+    }
+    
+    public convenience init(story: Story, periodURL: NSURL) throws {
+        guard let periodData = NSData(contentsOfURL: periodURL) else {
+            throw StoryError.CantLoadPeriod
+        }
+        let period = JSON(data: periodData)
+        try self.init(story: story, period: period)
     }
     
     private func makeElement(element: JSON) throws -> StoryElement {
