@@ -28,11 +28,27 @@ import SwiftyJSON
 
 private typealias K = ArchiveConstants
 
+/// This class represents a character.
 public class Avatar {
+    /// Story which contains this element
     public weak var story: Story?
+    
+    /// Avatar ID
+    /// 
+    /// ex. "gerd"
     public let avatarId: String
+    
+    /// Full name
+    ///
+    /// ex. "楽天家 ゲルト"
     public let fullName: String
+    
+    /// Short name
+    ///
+    /// ex. "ゲルト"
     public let shortName: String
+    
+    /// URI string of face icon
     public let faceIconURI: String?
     
     // for testing
@@ -44,6 +60,9 @@ public class Avatar {
         self.faceIconURI = faceIconURI
     }
     
+    /// Creates a new instance.
+    /// - parameter story:      story which contains this element
+    /// - parameter avatarData: JSON fragment in archive
     public init(story: Story, avatarData: JSON) throws {
         self.story = story
         
