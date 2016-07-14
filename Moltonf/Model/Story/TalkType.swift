@@ -45,6 +45,7 @@ public enum TalkType {
 extension TalkType {
     /// Creates a new value from from a string appears in archive
     /// - parameter talkType: string
+    /// - returns: new value, or nil if `type` is invalid.
     public init?(archiveValue talkType: String) {
         switch talkType  {
         case K.VAL_PUBLIC:

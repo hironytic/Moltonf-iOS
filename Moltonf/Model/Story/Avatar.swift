@@ -29,7 +29,7 @@ import SwiftyJSON
 private typealias K = ArchiveConstants
 
 public class Avatar {
-    public unowned let story: Story
+    public weak var story: Story?
     public let avatarId: String
     public let fullName: String
     public let shortName: String

@@ -35,17 +35,14 @@ public class Period {
     public private(set) var elements: [StoryElement] = []
  
     public convenience init(story: Story, periodURL: NSURL) throws {
-        guard let baseURL = periodURL.URLByDeletingLastPathComponent else {
-            throw StoryError.InvalidURL
-        }
         guard let periodData = NSData(contentsOfURL: periodURL) else {
             throw StoryError.CantLoadPeriod
         }
         let period = JSON(data: periodData)
-        try self.init(story: story, baseURL: baseURL, period: period)
+        try self.init(story: story, period: period)
     }
 
-    public init(story: Story, baseURL: NSURL, period: JSON) throws {
+    public init(story: Story, period: JSON) throws {
         self.story = story
         
         if let typeValue = period[K.TYPE].string {

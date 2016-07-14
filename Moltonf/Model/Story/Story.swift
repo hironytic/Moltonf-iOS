@@ -38,17 +38,14 @@ public class Story {
     private var _avatarMap = [String: Avatar]()
     
     public convenience init(playdataURL: NSURL) throws {
-        guard let baseURL = playdataURL.URLByDeletingLastPathComponent else {
-            throw StoryError.InvalidURL
-        }
         guard let playdataData = NSData(contentsOfURL: playdataURL) else {
             throw StoryError.CantLoadPlaydata
         }
         let playdata = JSON(data: playdataData)
-        try self.init(baseURL: baseURL, playdata: playdata)
+        try self.init(playdata: playdata)
     }
     
-    public init(baseURL: NSURL, playdata: JSON) throws {
+    public init(playdata: JSON) throws {
         if let villageFullName = playdata[K.FULL_NAME].string {
             self.villageFullName = villageFullName
         } else {
@@ -76,7 +73,7 @@ public class Story {
         if let periodList = playdata[K.PERIODS].array {
             self.periodRefs = try periodList
                 .map { data in
-                    try PeriodReference(story: self, baseURL: baseURL, periodRefData: data)
+                    try PeriodReference(story: self, periodRefData: data)
                 }
         } else {
             throw StoryError.MissingData(data: K.PERIODS)
@@ -89,12 +86,12 @@ public class Story {
 }
 
 public class PeriodReference {
-    public unowned let story: Story
+    public weak var story: Story?
     public let type: PeriodType
     public let day: Int
-    public let periodURL: NSURL
+    public let periodPath: String
     
-    public init(story: Story, baseURL: NSURL, periodRefData: JSON) throws {
+    public init(story: Story, periodRefData: JSON) throws {
         self.story = story
         
         if let typeValue = periodRefData[K.TYPE].string {
@@ -114,7 +111,7 @@ public class PeriodReference {
         }
         
         if let href = periodRefData[K.HREF].string {
-            self.periodURL = baseURL.URLByAppendingPathComponent(href)
+            self.periodPath = href
         } else {
             throw StoryError.MissingData(data: K.HREF)
         }

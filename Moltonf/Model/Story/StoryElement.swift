@@ -32,7 +32,7 @@ private typealias K = ArchiveConstants
 /// This is a base class of `StoryEvent` and `Talk`.
 public class StoryElement {
     /// Period which contains this element
-    public unowned let period: Period
+    public weak var period: Period?
     
     /// Lines of messages
     public let messageLines: [String]
@@ -59,9 +59,9 @@ public class StoryElement {
     }
     
     /// Story which contains this element
-    public var story: Story {
+    public var story: Story? {
         get {
-            return period.story
+            return period?.story
         }
     }
 }
