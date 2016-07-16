@@ -27,27 +27,14 @@ import XCTest
 import SwiftyJSON
 @testable import Moltonf
 
-private typealias K = ArchiveConstants
-
 class StoryEventTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-
     func testAnnounceEvent() {
         let story = Story(villageFullName: "", graveIconURI: "")
         let period = Period(story: story, type: .Prologue, day: 0)
         
         let element = JSON([
-            K.TYPE: "startEntry",
-            K.LINES: [
+            "type": "startEntry",
+            "lines": [
                 "昼間は人間のふりをして、夜に正体を現すという人狼。",
                 "その人狼が、この村に紛れ込んでいるという噂が広がった。",
                 "",
@@ -72,10 +59,10 @@ class StoryEventTests: XCTestCase {
         let period = Period(story: story, type: .Prologue, day: 0)
 
         let element = JSON([
-            K.TYPE: "askCommit",
-            K.LIMIT_VOTE: "23:00:00+09:00",
-            K.LIMIT_SPECIAL: "23:00:00+09:00",
-            K.LINES: [
+            "type": "askCommit",
+            "limitVote": "23:00:00+09:00",
+            "limitSpecial": "23:00:00+09:00",
+            "lines": [
                 "午後 11時 0分 までに、誰を処刑するべきかの投票先を決定して下さい。",
                 "一番票を集めた人物が処刑されます。同数だった場合はランダムで決定されます。",
                 "",
@@ -100,10 +87,10 @@ class StoryEventTests: XCTestCase {
         let period = Period(story: story, type: .Prologue, day: 0)
 
         let element = JSON([
-            K.TYPE: "guard",
-            K.BY_WHOM: "jacob",
-            K.TARGET: "peter",
-            K.LINES: [
+            "type": "guard",
+            "byWhom": "jacob",
+            "target": "peter",
+            "lines": [
                 "農夫 ヤコブ は、少年 ペーター を守っている。",
             ],
         ])

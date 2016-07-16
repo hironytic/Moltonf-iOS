@@ -27,55 +27,43 @@ import XCTest
 import SwiftyJSON
 @testable import Moltonf
 
-private typealias K = ArchiveConstants
-
 class PeriodTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-
     func testProgress() {
         let story = Story(villageFullName: "", graveIconURI: "")
         let periodJSON = JSON([
-            K.TYPE: "progress",
-            K.DAY: 1,
-            K.NEXT_COMMIT_DAY: "--05-28+09:00",
-            K.SOURCE_URI: "index.rb?vid=0&meslog=0_progress_0&mes=all",
-            K.ELEMENTS: [
+            "type": "progress",
+            "day": 1,
+            "nextCommitDay": "--05-28+09:00",
+            "commitTime": "20:30:00+09:00",
+            "sourceURI": "index.rb?vid=1100&meslog=1100_progress_0&mes=all",
+            "elements": [
                 [
-                    K.TYPE: "startMirror",
-                    K.LINES: [
-                        "さあ、自らの姿を鏡に映してみよう。",
-                        "そこに映るのはただの村人か、それとも血に飢えた人狼か。",
-                        "",
-                        "例え人狼でも、多人数で立ち向かえば怖くはない。",
-                        "問題は、だれが人狼なのかという事だ。",
-                        "占い師の能力を持つ人間ならば、それを見破れるだろう。",
+                    "type": "startMirror",
+                    "lines": [
+                    "さあ、自らの姿を鏡に映してみよう。",
+                    "そこに映るのはただの村人か、それとも血に飢えた人狼か。",
+                    "",
+                    "例え人狼でも、多人数で立ち向かえば怖くはない。",
+                    "問題は、だれが人狼なのかという事だ。",
+                    "占い師の能力を持つ人間ならば、それを見破れるだろう。"
                     ]
                 ],
                 [
-                    K.TYPE: "openRole",
-                    K.ROLE_HEADS: [
+                    "type": "openRole",
+                    "roleHeads": [
                         "innocent": 7,
                         "wolf": 3,
                         "seer": 1,
                         "shaman": 1,
                         "madman": 1,
                         "hunter": 1,
-                        "frater": 2,
+                        "frater": 2
                     ],
-                    K.LINES: [
-                        "どうやらこの中には、村人が7名、人狼が3名、占い師が1名、霊能者が1名、狂人が1名、狩人が1名、共有者が2名いるようだ。",
-                    ],
-                ],
-            ],
+                    "lines": [
+                    "どうやらこの中には、村人が7名、人狼が3名、占い師が1名、霊能者が1名、狂人が1名、狩人が1名、共有者が2名いるようだ。"
+                    ]
+                ]
+            ]
         ])
         
         guard let period = try? Period(story: story, period: periodJSON) else {

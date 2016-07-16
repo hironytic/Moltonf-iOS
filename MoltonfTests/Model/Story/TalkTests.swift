@@ -27,8 +27,6 @@ import XCTest
 import SwiftyJSON
 @testable import Moltonf
 
-private typealias K = ArchiveConstants
-
 class TalkTests: XCTestCase {
     class MockStory: Story {
         var avatarGerd: Avatar!
@@ -67,21 +65,16 @@ class TalkTests: XCTestCase {
         self.story = MockStory()
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-
     func testPublicTalk() {
         let period = Period(story: story, type: .Prologue, day: 0)
         
         let element = JSON([
-            K.TYPE: "talk",
-            K.TALK_TYPE: "public",
-            K.AVATAR_ID: "gerd",
-            K.XNAME: "mes1179549002",
-            K.TIME: "13:30:00+09:00",
-            K.LINES: [
+            "type": "talk",
+            "talkType": "public",
+            "avatarId": "gerd",
+            "xname": "mes1179549002",
+            "time": "13:30:00+09:00",
+            "lines": [
                 "人狼なんているわけないじゃん。みんな大げさだなあ",
                 "",
             ],
@@ -107,18 +100,18 @@ class TalkTests: XCTestCase {
         let period = Period(story: story, type: .Prologue, day: 0)
         
         let element = JSON([
-            K.TYPE: "talk",
-            K.TALK_TYPE: "wolf",
-            K.AVATAR_ID: "peter",
-            K.XNAME: "mes1181841039",
-            K.TIME: "02:10:00+09:00",
-            K.LINES: [
+            "type": "talk",
+            "talkType": "wolf",
+            "avatarId": "peter",
+            "xname": "mes1181841039",
+            "time": "02:10:00+09:00",
+            "lines": [
                 [
                     "パメおかえりー。",
                     [
-                        K.ENCODING: "Shift_JIS",
-                        K.HEX_BIN: "8794",
-                        K.CHAR: "∑",
+                        "encoding": "Shift_JIS",
+                        "hexBin": "8794",
+                        "char": "∑",
                     ],
                     "閉村までって！"
                 ],
@@ -142,12 +135,12 @@ class TalkTests: XCTestCase {
         let period = Period(story: story, type: .Progress, day: 2)
 
         let element = JSON([
-            K.TYPE: "assault",
-            K.BY_WHOM: "peter",
-            K.TARGET: "simon",
-            K.XNAME: "mes1268151301",
-            K.TIME: "01:15:00+09:00",
-            K.LINES: [
+            "type": "assault",
+            "byWhom": "peter",
+            "target": "simon",
+            "xname": "mes1268151301",
+            "time": "01:15:00+09:00",
+            "lines": [
                 "負傷兵 シモン ！ 今日がお前の命日だ！",
             ],
         ])

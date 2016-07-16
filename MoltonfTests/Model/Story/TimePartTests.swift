@@ -27,17 +27,6 @@ import XCTest
 @testable import Moltonf
 
 class TimePartTests: XCTestCase {
-
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-
     func testEachComponent() {
         let timePart = TimePart(hour: 3, minute: 5, second: 10, millisecond: 300)
         XCTAssertEqual(timePart.hourPart, 3)
