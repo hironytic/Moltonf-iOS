@@ -29,9 +29,6 @@ import RealmSwift
 import SwiftyJSON
 import SwiftTask
 
-private let WORKSPACE_DIR = "workspace"
-private let WORKSPACE_DB = "workspace.realm"
-
 public enum WorkspaceStoreError: ErrorType {
     case CreateNewWorkspaceFailed(String)
 }
@@ -43,20 +40,13 @@ public class WorkspaceStore {
     public let workspacesChanged = EventSource<WorkspaceStoresChanges>()
     public private(set) var workspaces: AnyRandomAccessCollection<Workspace>
     public let workspaceLoaded = EventSource<GameWatching>()
-    
-    private let _realm: Realm
+
+    private let _workspaceDB = WorkspaceDB.sharedInstance
     private var _notificationToken: NotificationToken!
-    private let _workspaceDirURL: NSURL
     private let _workspaces: Results<Workspace>
     
     public init() {
-        _workspaceDirURL = NSURL(fileURLWithPath: AppDelegate.privateDataDirectory).URLByAppendingPathComponent(WORKSPACE_DIR)
-        _ = try? NSFileManager.defaultManager().createDirectoryAtURL(_workspaceDirURL, withIntermediateDirectories: true, attributes: nil)
-        
-        let workspaceDBURL = _workspaceDirURL.URLByAppendingPathComponent(WORKSPACE_DB)
-        let config = Realm.Configuration(fileURL: workspaceDBURL)
-        _realm = try! Realm(configuration: config)
-        _workspaces = _realm.objects(Workspace)
+        _workspaces = _workspaceDB.realm.objects(Workspace)
         workspaces = AnyRandomAccessCollection<Workspace>(_workspaces)
       
         _notificationToken = _workspaces.addNotificationBlock { [weak self] changes in
@@ -77,7 +67,7 @@ public class WorkspaceStore {
     public func createNewWorkspace(archiveFile archiveFile: String) {
         let id = NSUUID().UUIDString
 
-        guard let archiveJSONDir = _workspaceDirURL.URLByAppendingPathComponent(id).path else { return /* TODO: throw Error.CreateNewWorkspaceFailed("Failed to get playdata directory") */ }
+        guard let archiveJSONDir = _workspaceDB.workspaceDirURL.URLByAppendingPathComponent(id).path else { return /* TODO: throw Error.CreateNewWorkspaceFailed("Failed to get playdata directory") */ }
         let playdataFilePath = (archiveJSONDir as NSString).stringByAppendingPathComponent(ArchiveConstants.FILE_PLAYDATA_JSON)
         
         Task<Void, String, ErrorType> { (fulfill, reject) in
@@ -106,7 +96,7 @@ public class WorkspaceStore {
         }.success { [weak self] (title) -> Task<Void, Void, ErrorType> in
             do {
                 // create new Workspace object
-                if let realm = self?._realm {
+                if let realm = self?._workspaceDB.realm {
                     let ws = Workspace()
                     ws.id = id
                     ws.title = title
@@ -132,12 +122,12 @@ public class WorkspaceStore {
     
     public func deleteWorkspace(workspace: Workspace) {
         do {
-            if let archiveJSONDir = _workspaceDirURL.URLByAppendingPathComponent(workspace.id).path {
+            if let archiveJSONDir = _workspaceDB.workspaceDirURL.URLByAppendingPathComponent(workspace.id).path {
                 _ = try? NSFileManager.defaultManager().removeItemAtPath(archiveJSONDir)
             }
             
-            try _realm.write {
-                _realm.delete(workspace)
+            try _workspaceDB.realm.write {
+                _workspaceDB.realm.delete(workspace)
             }
         } catch let error {
             errorOccurred.fire(error)
@@ -146,7 +136,7 @@ public class WorkspaceStore {
     
     public func loadWorkspace(workspace: Workspace) {
         do {
-            let workspaceURL = _workspaceDirURL.URLByAppendingPathComponent(workspace.id)
+            let workspaceURL = _workspaceDB.workspaceDirURL.URLByAppendingPathComponent(workspace.id)
             let playdataURL = workspaceURL.URLByAppendingPathComponent(ArchiveConstants.FILE_PLAYDATA_JSON)
             let story = try Story(playdataURL: playdataURL)
             let gameWatching = GameWatching(workspaceURL: workspaceURL, story: story)
