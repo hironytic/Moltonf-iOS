@@ -33,6 +33,7 @@
 		5045BD331CDEDE2E00A8A0FA /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */; };
 		5045BD351CDEDE3200A8A0FA /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5045BD341CDEDE3200A8A0FA /* RxSwift.framework */; };
 		504D703E1D37AEE5004DC566 /* TalkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D703D1D37AEE5004DC566 /* TalkTests.swift */; };
+		504D70401D39B981004DC566 /* PeriodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D703F1D39B981004DC566 /* PeriodTests.swift */; };
 		5052D3401D026301002B1A17 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5052D33F1D026301002B1A17 /* SwiftyJSON.framework */; };
 		5080FAD81CE3F73300ECD5A0 /* Eventitic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5080FAD71CE3F73300ECD5A0 /* Eventitic.framework */; };
 		509C5C4D1D306FB00045B0AB /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C4C1D306FAF0045B0AB /* Story.swift */; };
@@ -95,6 +96,7 @@
 		5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		5045BD341CDEDE3200A8A0FA /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		504D703D1D37AEE5004DC566 /* TalkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalkTests.swift; sourceTree = "<group>"; };
+		504D703F1D39B981004DC566 /* PeriodTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeriodTests.swift; sourceTree = "<group>"; };
 		5052D33F1D026301002B1A17 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		5080FAD71CE3F73300ECD5A0 /* Eventitic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Eventitic.framework; path = Carthage/Build/iOS/Eventitic.framework; sourceTree = "<group>"; };
 		509C5C4C1D306FAF0045B0AB /* Story.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 		509C5C641D350CF10045B0AB /* Story */ = {
 			isa = PBXGroup;
 			children = (
+				504D703F1D39B981004DC566 /* PeriodTests.swift */,
 				50B351021D35181100829BD0 /* StoryEventTests.swift */,
 				504D703D1D37AEE5004DC566 /* TalkTests.swift */,
 				509C5C651D350D2F0045B0AB /* TimePartTests.swift */,
@@ -507,6 +510,7 @@
 				50B351031D35181100829BD0 /* StoryEventTests.swift in Sources */,
 				504D703E1D37AEE5004DC566 /* TalkTests.swift in Sources */,
 				503AC72A1CEDD8A500A379AB /* ArchiveToJSONTests.swift in Sources */,
+				504D70401D39B981004DC566 /* PeriodTests.swift in Sources */,
 				509C5C661D350D2F0045B0AB /* TimePartTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
