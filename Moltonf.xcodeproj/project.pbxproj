@@ -35,6 +35,7 @@
 		504D703E1D37AEE5004DC566 /* TalkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D703D1D37AEE5004DC566 /* TalkTests.swift */; };
 		504D70401D39B981004DC566 /* PeriodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D703F1D39B981004DC566 /* PeriodTests.swift */; };
 		504D70421D39BFAC004DC566 /* StoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70411D39BFAC004DC566 /* StoryTests.swift */; };
+		504D70451D39CCCF004DC566 /* GameWatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70441D39CCCF004DC566 /* GameWatching.swift */; };
 		5052D3401D026301002B1A17 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5052D33F1D026301002B1A17 /* SwiftyJSON.framework */; };
 		5080FAD81CE3F73300ECD5A0 /* Eventitic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5080FAD71CE3F73300ECD5A0 /* Eventitic.framework */; };
 		509C5C4D1D306FB00045B0AB /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C4C1D306FAF0045B0AB /* Story.swift */; };
@@ -99,6 +100,7 @@
 		504D703D1D37AEE5004DC566 /* TalkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalkTests.swift; sourceTree = "<group>"; };
 		504D703F1D39B981004DC566 /* PeriodTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeriodTests.swift; sourceTree = "<group>"; };
 		504D70411D39BFAC004DC566 /* StoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryTests.swift; sourceTree = "<group>"; };
+		504D70441D39CCCF004DC566 /* GameWatching.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameWatching.swift; sourceTree = "<group>"; };
 		5052D33F1D026301002B1A17 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		5080FAD71CE3F73300ECD5A0 /* Eventitic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Eventitic.framework; path = Carthage/Build/iOS/Eventitic.framework; sourceTree = "<group>"; };
 		509C5C4C1D306FAF0045B0AB /* Story.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 			children = (
 				501F95471CE61C5600628E29 /* Archive */,
 				509C5C4B1D306F830045B0AB /* Story */,
+				504D70431D39CBF4004DC566 /* Watching */,
 				50AF2EB61D1FC3CC00337A53 /* Workspace */,
 				5025EFF81CE1EFFB0032AD67 /* FileList.swift */,
 			);
@@ -260,6 +263,14 @@
 				5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		504D70431D39CBF4004DC566 /* Watching */ = {
+			isa = PBXGroup;
+			children = (
+				504D70441D39CCCF004DC566 /* GameWatching.swift */,
+			);
+			path = Watching;
 			sourceTree = "<group>";
 		};
 		5067A9D41CE49F670079E3DA /* Storyboard */ = {
@@ -500,6 +511,7 @@
 				50AF2EB81D1FC45700337A53 /* Workspace.swift in Sources */,
 				509C5C631D3270210045B0AB /* TimePart.swift in Sources */,
 				509C5C571D31F5100045B0AB /* EventFamily.swift in Sources */,
+				504D70451D39CCCF004DC566 /* GameWatching.swift in Sources */,
 				50B24E1E1CF8734F0035D573 /* ArchiveToJSON.swift in Sources */,
 				509C5C4D1D306FB00045B0AB /* Story.swift in Sources */,
 				509C5C511D30F59E0045B0AB /* Avatar.swift in Sources */,
