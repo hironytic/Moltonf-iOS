@@ -28,11 +28,18 @@ import SwiftyJSON
 
 private typealias K = ArchiveConstants
 
+/// This class represents a story.
 public class Story {
+    /// Full name of the village
     public let villageFullName: String
+    
+    /// URI string which speficies a grave icon image
     public let graveIconURI: String
 
+    /// Reference to each period in this story
     public private(set) var periodRefs: [PeriodReference] = []
+    
+    /// Avatars in this story
     public private(set) var avatarList: [Avatar] = []
     
     private var _avatarMap = [String: Avatar]()
@@ -42,7 +49,10 @@ public class Story {
         self.villageFullName = villageFullName
         self.graveIconURI = graveIconURI
     }
-    
+
+    /// Creates a new instance.
+    /// - parameter playdata: JSON fragment in archive
+    /// - throws: if the JSON fragment has errors
     public init(playdata: JSON) throws {
         if let villageFullName = playdata[K.FULL_NAME].string {
             self.villageFullName = villageFullName
@@ -78,6 +88,9 @@ public class Story {
         }
     }
 
+    /// Creates a new instance from the file.
+    /// - parameter playdataURL: file URL
+    /// - throws: if it couldn't read the file or its content has errors
     public convenience init(playdataURL: NSURL) throws {
         guard let playdataData = NSData(contentsOfURL: playdataURL) else {
             throw StoryError.CantLoadPlaydata
@@ -85,18 +98,33 @@ public class Story {
         let playdata = JSON(data: playdataData)
         try self.init(playdata: playdata)
     }
-    
+
+    /// Retrieves an avatar from its ID.
+    /// - parameter avatarId: ID of wanted avatar
+    /// - returns: avatar, or nil if no avatar was found
     public func avatar(havingId avatarId: String) -> Avatar? {
         return _avatarMap[avatarId]
     }
 }
 
+/// This class represents a reference to a period.
 public class PeriodReference {
+    /// Story which contains this reference
     public weak var story: Story?
+    
+    /// Type of this period
     public let type: PeriodType
+    
+    /// Number of the day
     public let day: Int
+    
+    /// Path to a period file
     public let periodPath: String
     
+    /// Creates a new instance
+    /// - parameter story:         story which contains this reference
+    /// - parameter periodRefData: JSON fragment in archive
+    /// - throws: if JSON fragement has errors
     public init(story: Story, periodRefData: JSON) throws {
         self.story = story
         

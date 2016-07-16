@@ -42,6 +42,7 @@ public class Talk: StoryElement {
     /// Creates a new instance.
     /// - parameter period: period which contains this element
     /// - parameter element: JSON fragment in archive
+    /// - throws: if the JSON fragment has errors
     public override init(period: Period, element: JSON) throws {
         if let talkTypeValue = element[K.TALK_TYPE].string {
             if let talkType = TalkType(archiveValue: talkTypeValue) {
@@ -82,6 +83,7 @@ public class WolfAttackTalk: Talk {
     /// Creates a new instance.
     /// - parameter period: period which contains this element
     /// - parameter element: JSON fragment in archive
+    /// - throws: if the JSON fragment has errors
     public override init(period: Period, element: JSON) throws {
         guard var talkElementDictionary = element.dictionaryObject else {
             throw StoryError.UnknownValue(data: "")

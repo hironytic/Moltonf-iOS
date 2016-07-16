@@ -40,6 +40,7 @@ public class StoryElement {
     /// Creates a new instance
     /// - parameter period:  period which contains this element
     /// - parameter element: JSON fragment in archive
+    /// - throws: if the JSON fragment has errors
     public init(period: Period, element: JSON) throws {
         self.period = period
         

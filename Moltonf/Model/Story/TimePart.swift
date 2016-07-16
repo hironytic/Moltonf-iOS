@@ -90,6 +90,7 @@ extension TimePart: CustomDebugStringConvertible {
 extension TimePart {
     /// Creates a new instance from from a string appears in archive
     /// - parameter timeString: string
+    /// - returns: created instance, or nil if it couldn't parse the string
     public convenience init?(archiveValue timeString: String) {
         // hh ':' mm ':' ss ('.' s+)? (zzzzzz)?
         //        -- see http://www.w3.org/TR/xmlschema-2/#dateTime

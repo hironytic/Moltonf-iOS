@@ -36,6 +36,7 @@ public class StoryEvent: StoryElement {
     /// Creates a new instance
     /// - parameter period:  period which contains this element
     /// - parameter element: JSON fragment in archive
+    /// - throws: if the JSON fragment has errors
     public override init(period: Period, element: JSON) throws {
         guard let type = element[K.TYPE].string else {
             throw StoryError.MissingData(data: K.TYPE)

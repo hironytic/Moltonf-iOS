@@ -28,10 +28,18 @@ import SwiftyJSON
 
 private typealias K = ArchiveConstants
 
+/// This class represents a day, from dawn to dawn, in a story.
 public class Period {
+    /// Story which contains this period
     public let story: Story
+    
+    /// Type of this period
     public let type: PeriodType
+    
+    /// Number of the day
     public let day: Int
+    
+    /// Array of elements in this period
     public private(set) var elements: [StoryElement] = []
 
     // for testing
@@ -41,6 +49,10 @@ public class Period {
         self.day = day
     }
     
+    /// Creates a new instance.
+    /// - parameter story:  story which contains this period
+    /// - parameter period: JSON fragment in archive
+    /// - throws: if the JSON fragment has errors
     public init(story: Story, period: JSON) throws {
         self.story = story
         
@@ -70,6 +82,10 @@ public class Period {
         }
     }
     
+    /// Creates a new instance from the file.
+    /// - parameter story:     story which contains this period
+    /// - parameter periodURL: file URL
+    /// - throws: if it couldn't read the file or its content has errors
     public convenience init(story: Story, periodURL: NSURL) throws {
         guard let periodData = NSData(contentsOfURL: periodURL) else {
             throw StoryError.CantLoadPeriod
