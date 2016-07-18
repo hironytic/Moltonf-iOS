@@ -31,7 +31,7 @@ private typealias K = ArchiveConstants
 /// This class represents a character.
 public class Avatar {
     /// Story which contains this element
-    public weak var story: Story?
+    public private(set) weak var story: Story?
     
     /// Avatar ID
     /// 

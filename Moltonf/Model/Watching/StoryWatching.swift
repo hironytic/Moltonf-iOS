@@ -34,7 +34,7 @@ public class StoryWatching {
     public let errorOccurred = EventSource<ErrorType>()
 
     public let availablePeriodRefsChanged = EventSource<[PeriodReference]>()
-    public private(set) var availablePeriodRefs: [PeriodReference] {
+    public private(set) var availablePeriodRefs: [PeriodReference] = [] {
         didSet {
             availablePeriodRefsChanged.fire(availablePeriodRefs)
         }
@@ -57,6 +57,11 @@ public class StoryWatching {
     private let _workspace: Workspace
     private let _story: Story
 
+    init(workspace: Workspace, story: Story) {
+        _workspace = workspace
+        _story = story
+    }
+    
     public init(workspace: Workspace) throws {
         _workspace = workspace
 

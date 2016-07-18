@@ -110,7 +110,7 @@ public class Story {
 /// This class represents a reference to a period.
 public class PeriodReference {
     /// Story which contains this reference
-    public weak var story: Story?
+    public private(set) weak var story: Story?
     
     /// Type of this period
     public let type: PeriodType
@@ -120,6 +120,14 @@ public class PeriodReference {
     
     /// Path to a period file
     public let periodPath: String
+
+    // for testing
+    init(story: Story?, type: PeriodType, day: Int, periodPath: String) {
+        self.story = story
+        self.type = type
+        self.day = day
+        self.periodPath = periodPath
+    }
     
     /// Creates a new instance
     /// - parameter story:         story which contains this reference
