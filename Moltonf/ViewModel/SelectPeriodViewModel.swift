@@ -33,43 +33,82 @@ public enum SelectPeriodViewModelResult {
     case Cancelled
 }
 
+public class SelectPeriodViewModelItem {
+    public let title: String
+    public let checked: Bool
+    
+    public init(title: String, checked: Bool) {
+        self.title = title
+        self.checked = checked
+    }
+}
+
 public class SelectPeriodViewModel: ViewModel {
-    public let periods: Observable<[String]>
+    public let periods: Observable<[SelectPeriodViewModelItem]>
     public let cancelAction: AnyObserver<Void>
     public let selectAction: AnyObserver<NSIndexPath>
     
     public var onResult: (SelectPeriodViewModelResult -> Void)? = nil
     
+    private let _listenerStore = ListenerStore()
     private let _storyWatching: StoryWatching
-    private let _periods = Variable<[PeriodReference]>([])
+    private let _periods = Variable<([PeriodReference], Period?)>([], nil)
     private let _cancelAction = ActionObserver<Void>()
     private let _selectAction = ActionObserver<NSIndexPath>()
     
     public init(storyWatching: StoryWatching) {
         _storyWatching = storyWatching
-        
+
         periods = _periods.asDriver().asObservable()
-            .map { periodList -> [String] in
+            .map { (periodList, currentPeriod) -> [SelectPeriodViewModelItem] in
+                let currentDay = currentPeriod?.day ?? -1
                 return periodList
                     .map { periodRef in
-                        var text = ""
+                        var title = ""
                         switch periodRef.type {
                         case .Prologue:
-                            text = "Prologue"
+                            title = "Prologue"
                         case .Epilogue:
-                            text = "Epilogue"
+                            title = "Epilogue"
                         case .Progress:
-                            text = "Day \(periodRef.day)"
+                            title = "Day \(periodRef.day)"
                         }
-                        return text
+                        let checked = periodRef.day == currentDay
+                        return SelectPeriodViewModelItem(title: title, checked: checked)
                     }
             }
         cancelAction = _cancelAction.asObserver()
         selectAction = _selectAction.asObserver()
         
         super.init()
-        
-        // TODO:
-        
+
+        _cancelAction.handler = { [weak self] in self?.cancel() }
+        _selectAction.handler = { [weak self] indexPath in self?.select(indexPath) }
+
+        _periods.value = (_storyWatching.availablePeriodRefs, _storyWatching.currentPeriod)
+        _storyWatching.availablePeriodRefsChanged
+            .listen { [weak self] _ in
+                self?.updatePeriods()
+            }
+            .addToStore(_listenerStore)
+        _storyWatching.currentPeriodChanged
+            .listen { [weak self] _ in
+                self?.updatePeriods()
+            }
+    }
+    
+    private func updatePeriods() {
+        _periods.value = (_storyWatching.availablePeriodRefs, _storyWatching.currentPeriod)
+    }
+    
+    private func cancel() {
+        sendMessage(DismissingMessage())
+        onResult?(.Cancelled)
+    }
+    
+    private func select(indexPath: NSIndexPath) {
+        sendMessage(DismissingMessage())
+        let periodReference = _storyWatching.availablePeriodRefs[indexPath.row]
+        onResult?(.Selected(periodReference))
     }
 }
