@@ -38,6 +38,11 @@
 		504D70451D39CCCF004DC566 /* StoryWatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70441D39CCCF004DC566 /* StoryWatching.swift */; };
 		504D70471D3A0953004DC566 /* WorkspaceDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70461D3A0953004DC566 /* WorkspaceDB.swift */; };
 		504D70491D3A0C79004DC566 /* Synchronized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70481D3A0C79004DC566 /* Synchronized.swift */; };
+		504D704C1D3B0D83004DC566 /* StoryWatchingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D704B1D3B0D83004DC566 /* StoryWatchingViewModel.swift */; };
+		504D704E1D3B3608004DC566 /* SelectPeriodViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D704D1D3B3608004DC566 /* SelectPeriodViewModel.swift */; };
+		504D70501D3B362E004DC566 /* StoryEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D704F1D3B362E004DC566 /* StoryEventViewModel.swift */; };
+		504D70521D3B3651004DC566 /* TalkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70511D3B3651004DC566 /* TalkViewModel.swift */; };
+		504D70541D3B36D5004DC566 /* StoryElementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70531D3B36D5004DC566 /* StoryElementViewModel.swift */; };
 		5052D3401D026301002B1A17 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5052D33F1D026301002B1A17 /* SwiftyJSON.framework */; };
 		5080FAD81CE3F73300ECD5A0 /* Eventitic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5080FAD71CE3F73300ECD5A0 /* Eventitic.framework */; };
 		509C5C4D1D306FB00045B0AB /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C4C1D306FAF0045B0AB /* Story.swift */; };
@@ -105,6 +110,11 @@
 		504D70441D39CCCF004DC566 /* StoryWatching.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryWatching.swift; sourceTree = "<group>"; };
 		504D70461D3A0953004DC566 /* WorkspaceDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceDB.swift; sourceTree = "<group>"; };
 		504D70481D3A0C79004DC566 /* Synchronized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synchronized.swift; sourceTree = "<group>"; };
+		504D704B1D3B0D83004DC566 /* StoryWatchingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryWatchingViewModel.swift; sourceTree = "<group>"; };
+		504D704D1D3B3608004DC566 /* SelectPeriodViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectPeriodViewModel.swift; sourceTree = "<group>"; };
+		504D704F1D3B362E004DC566 /* StoryEventViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryEventViewModel.swift; sourceTree = "<group>"; };
+		504D70511D3B3651004DC566 /* TalkViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalkViewModel.swift; sourceTree = "<group>"; };
+		504D70531D3B36D5004DC566 /* StoryElementViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryElementViewModel.swift; sourceTree = "<group>"; };
 		5052D33F1D026301002B1A17 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		5080FAD71CE3F73300ECD5A0 /* Eventitic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Eventitic.framework; path = Carthage/Build/iOS/Eventitic.framework; sourceTree = "<group>"; };
 		509C5C4C1D306FAF0045B0AB /* Story.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
@@ -194,6 +204,11 @@
 			isa = PBXGroup;
 			children = (
 				5025EFF61CE161470032AD67 /* SelectArchiveFileViewModel.swift */,
+				504D704D1D3B3608004DC566 /* SelectPeriodViewModel.swift */,
+				504D70531D3B36D5004DC566 /* StoryElementViewModel.swift */,
+				504D704F1D3B362E004DC566 /* StoryEventViewModel.swift */,
+				504D704B1D3B0D83004DC566 /* StoryWatchingViewModel.swift */,
+				504D70511D3B3651004DC566 /* TalkViewModel.swift */,
 				5025EFE61CDF17470032AD67 /* WorkspaceListViewModel.swift */,
 			);
 			path = ViewModel;
@@ -505,6 +520,7 @@
 				5025EFFD1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift in Sources */,
 				501F954B1CE61CA700628E29 /* ArchiveSchema.swift in Sources */,
 				5045BD111CDED11500A8A0FA /* AppDelegate.swift in Sources */,
+				504D70541D3B36D5004DC566 /* StoryElementViewModel.swift in Sources */,
 				509C5C591D31F61B0045B0AB /* Period.swift in Sources */,
 				5025EFF51CE160580032AD67 /* ViewModel.swift in Sources */,
 				509C5C551D30FD6D0045B0AB /* PeriodType.swift in Sources */,
@@ -513,11 +529,14 @@
 				509C5C531D30F99A0045B0AB /* StoryError.swift in Sources */,
 				504D70471D3A0953004DC566 /* WorkspaceDB.swift in Sources */,
 				5025EFE31CDF16530032AD67 /* WorkspaceListViewController.swift in Sources */,
+				504D70501D3B362E004DC566 /* StoryEventViewModel.swift in Sources */,
+				504D704E1D3B3608004DC566 /* SelectPeriodViewModel.swift in Sources */,
 				5025EFF31CE15FD30032AD67 /* TransitionMessage.swift in Sources */,
 				5025EFE71CDF17470032AD67 /* WorkspaceListViewModel.swift in Sources */,
 				5025EFFF1CE2139B0032AD67 /* DismissingMessage.swift in Sources */,
 				501F95511CEB440400628E29 /* ArchiveConstants.swift in Sources */,
 				5025EFEC1CDF6F900032AD67 /* Message.swift in Sources */,
+				504D70521D3B3651004DC566 /* TalkViewModel.swift in Sources */,
 				5025EFF11CE0D50C0032AD67 /* ActionObserver.swift in Sources */,
 				509C5C5F1D3204650045B0AB /* Talk.swift in Sources */,
 				5025EFEA1CDF689E0032AD67 /* WorkspaceStore.swift in Sources */,
@@ -525,6 +544,7 @@
 				5025EFEE1CDF7EFD0032AD67 /* MessageSlot.swift in Sources */,
 				50AF2EB81D1FC45700337A53 /* Workspace.swift in Sources */,
 				509C5C631D3270210045B0AB /* TimePart.swift in Sources */,
+				504D704C1D3B0D83004DC566 /* StoryWatchingViewModel.swift in Sources */,
 				509C5C571D31F5100045B0AB /* EventFamily.swift in Sources */,
 				504D70491D3A0C79004DC566 /* Synchronized.swift in Sources */,
 				504D70451D39CCCF004DC566 /* StoryWatching.swift in Sources */,
