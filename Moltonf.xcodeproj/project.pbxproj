@@ -35,7 +35,7 @@
 		504D703E1D37AEE5004DC566 /* TalkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D703D1D37AEE5004DC566 /* TalkTests.swift */; };
 		504D70401D39B981004DC566 /* PeriodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D703F1D39B981004DC566 /* PeriodTests.swift */; };
 		504D70421D39BFAC004DC566 /* StoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70411D39BFAC004DC566 /* StoryTests.swift */; };
-		504D70451D39CCCF004DC566 /* GameWatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70441D39CCCF004DC566 /* GameWatching.swift */; };
+		504D70451D39CCCF004DC566 /* StoryWatching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70441D39CCCF004DC566 /* StoryWatching.swift */; };
 		504D70471D3A0953004DC566 /* WorkspaceDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70461D3A0953004DC566 /* WorkspaceDB.swift */; };
 		504D70491D3A0C79004DC566 /* Synchronized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70481D3A0C79004DC566 /* Synchronized.swift */; };
 		5052D3401D026301002B1A17 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5052D33F1D026301002B1A17 /* SwiftyJSON.framework */; };
@@ -102,7 +102,7 @@
 		504D703D1D37AEE5004DC566 /* TalkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalkTests.swift; sourceTree = "<group>"; };
 		504D703F1D39B981004DC566 /* PeriodTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeriodTests.swift; sourceTree = "<group>"; };
 		504D70411D39BFAC004DC566 /* StoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryTests.swift; sourceTree = "<group>"; };
-		504D70441D39CCCF004DC566 /* GameWatching.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameWatching.swift; sourceTree = "<group>"; };
+		504D70441D39CCCF004DC566 /* StoryWatching.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryWatching.swift; sourceTree = "<group>"; };
 		504D70461D3A0953004DC566 /* WorkspaceDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkspaceDB.swift; sourceTree = "<group>"; };
 		504D70481D3A0C79004DC566 /* Synchronized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synchronized.swift; sourceTree = "<group>"; };
 		5052D33F1D026301002B1A17 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
@@ -273,7 +273,7 @@
 		504D70431D39CBF4004DC566 /* Watching */ = {
 			isa = PBXGroup;
 			children = (
-				504D70441D39CCCF004DC566 /* GameWatching.swift */,
+				504D70441D39CCCF004DC566 /* StoryWatching.swift */,
 			);
 			path = Watching;
 			sourceTree = "<group>";
@@ -527,7 +527,7 @@
 				509C5C631D3270210045B0AB /* TimePart.swift in Sources */,
 				509C5C571D31F5100045B0AB /* EventFamily.swift in Sources */,
 				504D70491D3A0C79004DC566 /* Synchronized.swift in Sources */,
-				504D70451D39CCCF004DC566 /* GameWatching.swift in Sources */,
+				504D70451D39CCCF004DC566 /* StoryWatching.swift in Sources */,
 				50B24E1E1CF8734F0035D573 /* ArchiveToJSON.swift in Sources */,
 				509C5C4D1D306FB00045B0AB /* Story.swift in Sources */,
 				509C5C511D30F59E0045B0AB /* Avatar.swift in Sources */,

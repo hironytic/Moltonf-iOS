@@ -39,7 +39,6 @@ public class WorkspaceStore {
     public let errorOccurred = EventSource<ErrorType>()
     public let workspacesChanged = EventSource<WorkspaceStoresChanges>()
     public private(set) var workspaces: AnyRandomAccessCollection<Workspace>
-    public let workspaceLoaded = EventSource<GameWatching>()
 
     private let _workspaceDB = WorkspaceDB.sharedInstance
     private var _notificationToken: NotificationToken!
@@ -129,18 +128,6 @@ public class WorkspaceStore {
             try _workspaceDB.realm.write {
                 _workspaceDB.realm.delete(workspace)
             }
-        } catch let error {
-            errorOccurred.fire(error)
-        }
-    }
-    
-    public func loadWorkspace(workspace: Workspace) {
-        do {
-            let workspaceURL = _workspaceDB.workspaceDirURL.URLByAppendingPathComponent(workspace.id)
-            let playdataURL = workspaceURL.URLByAppendingPathComponent(ArchiveConstants.FILE_PLAYDATA_JSON)
-            let story = try Story(playdataURL: playdataURL)
-            let gameWatching = GameWatching(workspaceURL: workspaceURL, story: story)
-            workspaceLoaded.fire(gameWatching)
         } catch let error {
             errorOccurred.fire(error)
         }
