@@ -43,6 +43,7 @@
 		504D70521D3B3651004DC566 /* TalkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70511D3B3651004DC566 /* TalkViewModel.swift */; };
 		504D70541D3B36D5004DC566 /* StoryElementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70531D3B36D5004DC566 /* StoryElementViewModel.swift */; };
 		504D70571D3D050F004DC566 /* SelectPeriodViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70561D3D050F004DC566 /* SelectPeriodViewModelTests.swift */; };
+		504D70CF1D4057EB004DC566 /* FulfillObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70CE1D4057EB004DC566 /* FulfillObserver.swift */; };
 		5052D3401D026301002B1A17 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5052D33F1D026301002B1A17 /* SwiftyJSON.framework */; };
 		5080FAD81CE3F73300ECD5A0 /* Eventitic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5080FAD71CE3F73300ECD5A0 /* Eventitic.framework */; };
 		509C5C4D1D306FB00045B0AB /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C4C1D306FAF0045B0AB /* Story.swift */; };
@@ -116,6 +117,7 @@
 		504D70511D3B3651004DC566 /* TalkViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalkViewModel.swift; sourceTree = "<group>"; };
 		504D70531D3B36D5004DC566 /* StoryElementViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryElementViewModel.swift; sourceTree = "<group>"; };
 		504D70561D3D050F004DC566 /* SelectPeriodViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectPeriodViewModelTests.swift; sourceTree = "<group>"; };
+		504D70CE1D4057EB004DC566 /* FulfillObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FulfillObserver.swift; sourceTree = "<group>"; };
 		5052D33F1D026301002B1A17 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		5080FAD71CE3F73300ECD5A0 /* Eventitic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Eventitic.framework; path = Carthage/Build/iOS/Eventitic.framework; sourceTree = "<group>"; };
 		509C5C4C1D306FAF0045B0AB /* Story.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 			children = (
 				504D70551D3D04F6004DC566 /* ViewModel */,
 				50AF2EAE1D1D291C00337A53 /* Model */,
+				504D70CE1D4057EB004DC566 /* FulfillObserver.swift */,
 				5045BD271CDED11500A8A0FA /* Info.plist */,
 			);
 			path = MoltonfTests;
@@ -572,6 +575,7 @@
 				504D70421D39BFAC004DC566 /* StoryTests.swift in Sources */,
 				504D703E1D37AEE5004DC566 /* TalkTests.swift in Sources */,
 				503AC72A1CEDD8A500A379AB /* ArchiveToJSONTests.swift in Sources */,
+				504D70CF1D4057EB004DC566 /* FulfillObserver.swift in Sources */,
 				504D70401D39B981004DC566 /* PeriodTests.swift in Sources */,
 				509C5C661D350D2F0045B0AB /* TimePartTests.swift in Sources */,
 			);

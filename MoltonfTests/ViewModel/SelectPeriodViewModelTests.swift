@@ -76,13 +76,12 @@ class SelectPeriodViewModelTests: XCTestCase {
     }
     
     func testPeriods() {
-        let periodsExpectation = expectationWithDescription("periods")
+        let periodsObserver = FulfillObserver(expectationWithDescription("periods")) { (items: [SelectPeriodViewModelItem]) in
+            return items.map({ $0.title }) == ["Prologue", "Day 1", "Day 2", "Epilogue"]
+                && items.map({ $0.checked }) == [true, false, false, false]
+        }
         selectPeriodViewModel.periods
-            .subscribeNext { items in
-                XCTAssertEqual(items.map { $0.title }, ["Prologue", "Day 1", "Day 2", "Epilogue"])
-                XCTAssertEqual(items.map { $0.checked }, [true, false, false, false])
-                periodsExpectation.fulfill()
-            }
+            .bindTo(periodsObserver)
             .addDisposableTo(disposeBag)
         
         waitForExpectationsWithTimeout(3.0) { error in }
