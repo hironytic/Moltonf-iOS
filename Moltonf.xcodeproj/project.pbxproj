@@ -64,6 +64,7 @@
 		50AF2EBA1D20089E00337A53 /* SwiftTask.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50AF2EB91D20089E00337A53 /* SwiftTask.framework */; };
 		50B24E1E1CF8734F0035D573 /* ArchiveToJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B24E1D1CF8734F0035D573 /* ArchiveToJSON.swift */; };
 		50B351031D35181100829BD0 /* StoryEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B351021D35181100829BD0 /* StoryEventTests.swift */; };
+		50BAC3591D448A9B008D366C /* StoryWatchingViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BAC3581D448A9B008D366C /* StoryWatchingViewModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,6 +142,7 @@
 		50B24E201CF95D280035D573 /* coreType-090929.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "coreType-090929.xsd"; sourceTree = "<group>"; };
 		50B24E211CF95D280035D573 /* coreXML-090929.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "coreXML-090929.xsd"; sourceTree = "<group>"; };
 		50B351021D35181100829BD0 /* StoryEventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryEventTests.swift; sourceTree = "<group>"; };
+		50BAC3581D448A9B008D366C /* StoryWatchingViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryWatchingViewModelTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -309,6 +311,7 @@
 			isa = PBXGroup;
 			children = (
 				504D70561D3D050F004DC566 /* SelectPeriodViewModelTests.swift */,
+				50BAC3581D448A9B008D366C /* StoryWatchingViewModelTests.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -572,6 +575,7 @@
 			files = (
 				50B351031D35181100829BD0 /* StoryEventTests.swift in Sources */,
 				504D70571D3D050F004DC566 /* SelectPeriodViewModelTests.swift in Sources */,
+				50BAC3591D448A9B008D366C /* StoryWatchingViewModelTests.swift in Sources */,
 				504D70421D39BFAC004DC566 /* StoryTests.swift in Sources */,
 				504D703E1D37AEE5004DC566 /* TalkTests.swift in Sources */,
 				503AC72A1CEDD8A500A379AB /* ArchiveToJSONTests.swift in Sources */,
