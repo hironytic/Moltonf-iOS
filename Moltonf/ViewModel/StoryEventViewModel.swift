@@ -24,13 +24,29 @@
 //
 
 import Foundation
+import RxSwift
+import UIKit
 
 public class StoryEventViewModel: StoryElementViewModel {
-
-    // TODO:
-    
+    public let message: Observable<String>
+    public let messageColor: Observable<UIColor>
     
     public init(storyEvent: StoryEvent) {
+        message = Observable
+            .just(storyEvent.messageLines.joinWithSeparator("\n"))
+        
+        var color: UIColor
+        switch storyEvent.eventFamily {
+        case .Announce:
+            color = UIColor(red: 0xdd / 0xff, green: 0xdd / 0xff, blue: 0xdd / 0xff, alpha: 1)
+        case .Order:
+            color = UIColor(red: 0xff / 0xff, green: 0x44 / 0xff, blue: 0x44 / 0xff, alpha: 1)
+        case .Extra:
+            color = UIColor(red: 0x88 / 0xff, green: 0x88 / 0xff, blue: 0x88 / 0xff, alpha: 1)
+        }
+        messageColor = Observable
+            .just(color)
+        
         super.init(storyElement: storyEvent)
     }
 }

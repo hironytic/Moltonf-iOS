@@ -24,12 +24,44 @@
 //
 
 import Foundation
+import RxSwift
+import UIKit
 
 public class TalkViewModel: StoryElementViewModel {
-    
-    // TODO:
+    public let number: Observable<Int?>
+    public let speakerName: Observable<String>
+//    public let speakerIcon: Observable<UIImage>
+    public let time: Observable<String>
+    public let message: Observable<NSAttributedString>
+    public let balloonColor: Observable<UIColor>
     
     public init(talk: Talk) {
+        number = Observable
+            .just(1) // FIXME:
+        speakerName = Observable
+            .just(talk.speaker.fullName)
+        time = Observable
+            .just(String(format: "%02d:%02d", talk.time.hourPart, talk.time.minutePart))
+        message = Observable
+            .just(TalkViewModel.makeMessage(talk.messageLines))
+        var color: UIColor
+        switch talk.talkType {
+        case .Public:
+            color = UIColor(red: 0xff / 0xff, green: 0xff / 0xff, blue: 0xff / 0xff, alpha: 1)
+        case .Wolf:
+            color = UIColor(red: 0xff / 0xff, green: 0x77 / 0xff, blue: 0x77 / 0xff, alpha: 1)
+        case .Grave:
+            color = UIColor(red: 0x9f / 0xff, green: 0x67 / 0xff, blue: 0xcf / 0xff, alpha: 1)
+        case .Private:
+            color = UIColor(red: 0x93 / 0xff, green: 0x93 / 0xff, blue: 0x93 / 0xff, alpha: 1)
+        }
+        balloonColor = Observable
+            .just(color)
+        
         super.init(storyElement: talk)
+    }
+    
+    static func makeMessage(messageLines: [String]) -> NSAttributedString {
+        return NSAttributedString(string: messageLines.joinWithSeparator("\n"))
     }
 }

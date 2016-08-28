@@ -26,9 +26,6 @@
 import Foundation
 
 public class StoryElementViewModel: ViewModel {
-    
-    // TODO:
-    
     public init(storyElement: StoryElement) {
         super.init()
     }
