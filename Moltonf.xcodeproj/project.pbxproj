@@ -65,6 +65,8 @@
 		50B24E1E1CF8734F0035D573 /* ArchiveToJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B24E1D1CF8734F0035D573 /* ArchiveToJSON.swift */; };
 		50B351031D35181100829BD0 /* StoryEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B351021D35181100829BD0 /* StoryEventTests.swift */; };
 		50BAC3591D448A9B008D366C /* StoryWatchingViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BAC3581D448A9B008D366C /* StoryWatchingViewModelTests.swift */; };
+		50F9F2391D74787100278F48 /* StoryWatching.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50F9F2381D74787100278F48 /* StoryWatching.storyboard */; };
+		50F9F2401D77172300278F48 /* StoryEventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F9F23F1D77172300278F48 /* StoryEventTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,6 +145,8 @@
 		50B24E211CF95D280035D573 /* coreXML-090929.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "coreXML-090929.xsd"; sourceTree = "<group>"; };
 		50B351021D35181100829BD0 /* StoryEventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryEventTests.swift; sourceTree = "<group>"; };
 		50BAC3581D448A9B008D366C /* StoryWatchingViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryWatchingViewModelTests.swift; sourceTree = "<group>"; };
+		50F9F2381D74787100278F48 /* StoryWatching.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StoryWatching.storyboard; sourceTree = "<group>"; };
+		50F9F23F1D77172300278F48 /* StoryEventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryEventTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +191,7 @@
 			children = (
 				5067A9D41CE49F670079E3DA /* Storyboard */,
 				5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift */,
+				50F9F23F1D77172300278F48 /* StoryEventTableViewCell.swift */,
 				5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */,
 			);
 			path = View;
@@ -320,6 +325,7 @@
 			isa = PBXGroup;
 			children = (
 				5025EFFA1CE1FEF70032AD67 /* SelectArchiveFile.storyboard */,
+				50F9F2381D74787100278F48 /* StoryWatching.storyboard */,
 				5025EFE01CDF15A70032AD67 /* WorkspaceList.storyboard */,
 			);
 			path = Storyboard;
@@ -484,6 +490,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50F9F2391D74787100278F48 /* StoryWatching.storyboard in Resources */,
 				5045BD1B1CDED11500A8A0FA /* LaunchScreen.storyboard in Resources */,
 				5025EFFB1CE1FEF70032AD67 /* SelectArchiveFile.storyboard in Resources */,
 				5045BD181CDED11500A8A0FA /* Assets.xcassets in Resources */,
@@ -545,6 +552,7 @@
 				504D70471D3A0953004DC566 /* WorkspaceDB.swift in Sources */,
 				5025EFE31CDF16530032AD67 /* WorkspaceListViewController.swift in Sources */,
 				504D70501D3B362E004DC566 /* StoryEventViewModel.swift in Sources */,
+				50F9F2401D77172300278F48 /* StoryEventTableViewCell.swift in Sources */,
 				504D704E1D3B3608004DC566 /* SelectPeriodViewModel.swift in Sources */,
 				5025EFF31CE15FD30032AD67 /* TransitionMessage.swift in Sources */,
 				5025EFE71CDF17470032AD67 /* WorkspaceListViewModel.swift in Sources */,
