@@ -58,6 +58,7 @@
 		509C5C611D3220C30045B0AB /* TalkType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C601D3220C30045B0AB /* TalkType.swift */; };
 		509C5C631D3270210045B0AB /* TimePart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C621D3270210045B0AB /* TimePart.swift */; };
 		509C5C661D350D2F0045B0AB /* TimePartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C651D350D2F0045B0AB /* TimePartTests.swift */; };
+		50AC41801D7851190093C02D /* StoryWatchingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC417F1D7851190093C02D /* StoryWatchingViewController.swift */; };
 		50AF2EB41D1FC20F00337A53 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50AF2EB21D1FC20F00337A53 /* Realm.framework */; };
 		50AF2EB51D1FC20F00337A53 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50AF2EB31D1FC20F00337A53 /* RealmSwift.framework */; };
 		50AF2EB81D1FC45700337A53 /* Workspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AF2EB71D1FC45700337A53 /* Workspace.swift */; };
@@ -135,6 +136,7 @@
 		509C5C601D3220C30045B0AB /* TalkType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalkType.swift; sourceTree = "<group>"; };
 		509C5C621D3270210045B0AB /* TimePart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimePart.swift; sourceTree = "<group>"; };
 		509C5C651D350D2F0045B0AB /* TimePartTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimePartTests.swift; sourceTree = "<group>"; };
+		50AC417F1D7851190093C02D /* StoryWatchingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryWatchingViewController.swift; sourceTree = "<group>"; };
 		50AF2EB21D1FC20F00337A53 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		50AF2EB31D1FC20F00337A53 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
 		50AF2EB71D1FC45700337A53 /* Workspace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Workspace.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				5067A9D41CE49F670079E3DA /* Storyboard */,
 				5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift */,
 				50F9F23F1D77172300278F48 /* StoryEventTableViewCell.swift */,
+				50AC417F1D7851190093C02D /* StoryWatchingViewController.swift */,
 				5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */,
 			);
 			path = View;
@@ -538,6 +541,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5025EFF71CE161470032AD67 /* SelectArchiveFileViewModel.swift in Sources */,
+				50AC41801D7851190093C02D /* StoryWatchingViewController.swift in Sources */,
 				509C5C611D3220C30045B0AB /* TalkType.swift in Sources */,
 				5025EFFD1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift in Sources */,
 				501F954B1CE61CA700628E29 /* ArchiveSchema.swift in Sources */,

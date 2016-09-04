@@ -40,22 +40,26 @@ public class WorkspaceListViewModel: ViewModel {
     public let workspaceList: Observable<[WorkspaceListViewModelItem]>
     public let addNewAction: AnyObserver<Void>
     public let deleteAction: AnyObserver<NSIndexPath>
+    public let selectAction: AnyObserver<NSIndexPath>
     
     private let _listenerStore = ListenerStore()
     private let _workspaceStore = WorkspaceStore()
     private let _workspaceListSource = Variable<[WorkspaceListViewModelItem]>([])
     private let _addNewAction = ActionObserver<Void>()
     private let _deleteAction = ActionObserver<NSIndexPath>()
+    private let _selectAction = ActionObserver<NSIndexPath>()
     
     public override init() {
         workspaceList = _workspaceListSource.asDriver().asObservable()
         addNewAction = _addNewAction.asObserver()
         deleteAction = _deleteAction.asObserver()
+        selectAction = _selectAction.asObserver()
         
         super.init()
         
         _addNewAction.handler = { [weak self] in self?.addNew() }
         _deleteAction.handler = { [weak self] indexPath in self?.delete(at: indexPath) }
+        _selectAction.handler = { [weak self] indexPath in self?.select(indexPath) }
 
         _workspaceListSource.value = Array(_workspaceStore.workspaces)
             .map { workspace in
@@ -88,6 +92,19 @@ public class WorkspaceListViewModel: ViewModel {
     private func delete(at indexPath: NSIndexPath) {
         let listItem = _workspaceListSource.value[indexPath.row]
         _workspaceStore.deleteWorkspace(listItem.workspace)
+    }
+
+    private func select(indexPath: NSIndexPath) {
+        let listItem = _workspaceListSource.value[indexPath.row]
+        let workspace = listItem.workspace
+        do {
+            let storyWatching = try StoryWatching(workspace: workspace)
+            let storyWatchingViewModel = StoryWatchingViewModel(storyWatching: storyWatching)
+            sendMessage(TransitionMessage(viewModel: storyWatchingViewModel))
+        } catch let error {
+            print(error)
+            // TODO:
+        }
     }
     
     private func workspaceChanged(changes: WorkspaceStoresChanges) {

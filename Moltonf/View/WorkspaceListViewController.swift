@@ -60,6 +60,10 @@ public class WorkspaceListViewController: UITableViewController {
             .bindTo(viewModel.deleteAction)
             .addDisposableTo(disposeBag)
         
+        tableView.rx_itemSelected
+            .bindTo(viewModel.selectAction)
+            .addDisposableTo(disposeBag)
+        
         viewModel.messenger
             .subscribeNext { [weak self] message in
                 switch message {
@@ -78,6 +82,11 @@ public class WorkspaceListViewController: UITableViewController {
             let storyboard: UIStoryboard = UIStoryboard(name: "SelectArchiveFile", bundle: NSBundle.mainBundle())
             let viewController: UINavigationController = storyboard.instantiateInitialViewController() as! UINavigationController
             (viewController.topViewController as! SelectArchiveFileListViewController).viewModel = viewModel
+            presentViewController(viewController, animated: true, completion: nil)
+        case let viewModel as StoryWatchingViewModel:
+            let storyboard: UIStoryboard = UIStoryboard(name: "StoryWatching", bundle: NSBundle.mainBundle())
+            let viewController: UINavigationController = storyboard.instantiateInitialViewController() as! UINavigationController
+            (viewController.topViewController as! StoryWatchingViewController).viewModel = viewModel
             presentViewController(viewController, animated: true, completion: nil)
         default:
             break
