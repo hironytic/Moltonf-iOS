@@ -32,6 +32,18 @@ public class StoryEventTableViewCell: UITableViewCell {
 
     var disposeBag: DisposeBag?
     
+    public override func awakeFromNib() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StoryEventTableViewCell.preferredContentSizeChanged(_:)), name: UIContentSizeCategoryDidChangeNotification, object: nil)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIContentSizeCategoryDidChangeNotification, object: nil)
+    }
+    
+    public func preferredContentSizeChanged(notification: NSNotification) {
+        messageLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+    }
+    
     public var viewModel: StoryEventViewModel! {
         didSet {
             let disposeBag = DisposeBag()

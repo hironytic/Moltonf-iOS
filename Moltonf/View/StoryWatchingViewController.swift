@@ -34,6 +34,9 @@ public class StoryWatchingViewController: UITableViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.estimatedRowHeight = 132
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
         bindViewModel()
     }
     
@@ -41,18 +44,19 @@ public class StoryWatchingViewController: UITableViewController {
         let viewModel = self.viewModel
         disposeBag = DisposeBag()
         
+        let dataSource = StoryWatchingDataSource()
         viewModel.elementsList
-            .bindTo(tableView.rx_itemsWithDataSource(StoryWatchingDataSource()))
+            .bindTo(tableView.rx_itemsWithDataSource(dataSource))
             .addDisposableTo(disposeBag)
     }
 
 }
 
-public class StoryWatchingDataSource: NSObject, UITableViewDataSource, RxTableViewDataSourceType {
-    public typealias Element = [StoryElementViewModel]
-    
+public class StoryWatchingDataSource: NSObject {
     private var _itemModels: Element = []
-    
+}
+
+extension StoryWatchingDataSource: UITableViewDataSource {
     public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -79,6 +83,10 @@ public class StoryWatchingDataSource: NSObject, UITableViewDataSource, RxTableVi
 
         fatalError()
     }
+}
+
+extension StoryWatchingDataSource: RxTableViewDataSourceType {
+    public typealias Element = [StoryElementViewModel]
     
     public func tableView(tableView: UITableView, observedEvent: Event<Element>) {
         UIBindingObserver(UIElement: self) { (dataSource, element) in
