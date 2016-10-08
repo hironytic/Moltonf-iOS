@@ -24,55 +24,68 @@
 //
 
 import Foundation
-import Eventitic
+import RxSwift
 
-public class FileItem {
+public struct FileItem {
     let filePath: String
     let title: String
-    
-    init(filePath: String, title: String) {
-        self.filePath = filePath
-        self.title = title
-    }
 }
 
-public class FileList {
-    public let listChanged = EventSource<[FileItem]>()
-    public private(set) var list: [FileItem] = [] {
-        didSet {
-            listChanged.fire(list)
-        }
-    }
+public protocol IFileList {
+    var list: Observable<[FileItem]> { get }
+    var refreshing: Observable<Bool> { get }
     
-    public let refreshingChanged = EventSource<Bool>()
-    public private(set) var refreshing: Bool = false {
-        didSet {
-            refreshingChanged.fire(refreshing)
-        }
-    }
+    var reloadAction: AnyObserver<Void> { get }
+}
+
+public class FileList: IFileList {
+    public private(set) var list: Observable<[FileItem]>
+    public private(set) var refreshing: Observable<Bool>
+    public private(set) var reloadAction: AnyObserver<Void>
     
-    private let _directory: String
+    private let _reloadAction = PublishSubject<Void>()
+    
+    private struct RefreshState {
+        let list: [FileItem]?
+        let refreshing: Bool
+    }
     
     public init(directory: String) {
-        _directory = directory
+        reloadAction = _reloadAction.asObserver()
+      
+        let refreshState = _reloadAction
+            .startWith(())
+            .flatMapLatest {
+                return FileList.reloadFileList(directory)
+            }
+            .shareReplay(1)
         
-        reloadFileList()
+        list = refreshState
+            .filter { $0.list != nil }
+            .map { $0.list! }
+        
+        refreshing = refreshState
+            .map { $0.refreshing }
     }
-
-    public func reloadFileList() {
-        do {
-            refreshing = true
-            defer { refreshing = false }
-        
-            let fm = NSFileManager.defaultManager()
-            let contents = (try? fm.contentsOfDirectoryAtPath(_directory)) ?? []
-            list = contents
-                .filter { $0[$0.startIndex] != "." }    // exclude hidden files
-                .map { FileItem(filePath: (_directory as NSString).stringByAppendingPathComponent($0), title: $0) }
-                .filter { item in   // exclude directories
-                    var isDirectory: ObjCBool = false
-                    return fm.fileExistsAtPath(item.filePath, isDirectory: &isDirectory) && !isDirectory.boolValue
-                }
-        }
+    
+    private static func reloadFileList(directory: String) -> Observable<RefreshState> {
+        return Observable
+            .create { observer -> Disposable in
+                observer.onNext(RefreshState(list: nil, refreshing: true))
+                
+                let fm = NSFileManager.defaultManager()
+                let contents = (try? fm.contentsOfDirectoryAtPath(directory)) ?? []
+                let list = contents
+                    .filter { $0[$0.startIndex] != "." }    // exclude hidden files
+                    .map { FileItem(filePath: (directory as NSString).stringByAppendingPathComponent($0), title: $0) }
+                    .filter { item in   // exclude directories
+                        var isDirectory: ObjCBool = false
+                        return fm.fileExistsAtPath(item.filePath, isDirectory: &isDirectory) && !isDirectory.boolValue
+                    }
+                
+                observer.onNext(RefreshState(list: list, refreshing: false))
+                return NopDisposable.instance
+            }
+            .subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
     }
 }

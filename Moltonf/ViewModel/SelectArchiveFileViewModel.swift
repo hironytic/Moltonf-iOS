@@ -43,10 +43,7 @@ public class SelectArchiveFileViewModel: ViewModel {
     
     public var onResult: (SelectArchiveFileViewModelResult -> Void)? = nil
     
-    private let _listenerStore = ListenerStore()
-    private let _fileList: FileList
-    private let _archiveFilesSource = Variable<[FileItem]>([])
-    private let _refreshingSource = Variable<Bool>(false)
+    private let _fileList: IFileList
     private let _cancelAction = ActionObserver<Void>()
     private let _refreshAction = ActionObserver<Void>()
     private let _selectAction = ActionObserver<FileItem>()
@@ -55,9 +52,10 @@ public class SelectArchiveFileViewModel: ViewModel {
         let directory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true)[0]
         _fileList = FileList(directory: directory)
         
-        archiveFiles = _archiveFilesSource.asDriver().asObservable()
+        archiveFiles = _fileList.list.asDriver(onErrorJustReturn: []).asObservable()
         noItemsMessageHidden = archiveFiles.map { !$0.isEmpty }
-        refreshing = _refreshingSource.asDriver().asObservable()
+        refreshing = _fileList.refreshing.asDriver(onErrorJustReturn: false).asObservable()
+        
         cancelAction = _cancelAction.asObserver()
         refreshAction = _refreshAction.asObserver()
         selectAction = _selectAction.asObserver()
@@ -67,20 +65,6 @@ public class SelectArchiveFileViewModel: ViewModel {
         _cancelAction.handler = { [weak self] in self?.cancel() }
         _refreshAction.handler = { [weak self] in self?.refresh() }
         _selectAction.handler = { [weak self] item in self?.select(item) }
-        
-        _archiveFilesSource.value = _fileList.list
-        _fileList.listChanged
-            .listen { [weak self] fileItem in
-                self?._archiveFilesSource.value = fileItem
-            }
-            .addToStore(_listenerStore)
-        
-        _refreshingSource.value = _fileList.refreshing
-        _fileList.refreshingChanged
-            .listen { [weak self] value in
-                self?._refreshingSource.value = value
-            }
-            .addToStore(_listenerStore)
     }
     
     private func cancel() {
@@ -89,7 +73,7 @@ public class SelectArchiveFileViewModel: ViewModel {
     }
     
     private func refresh() {
-        _fileList.reloadFileList()
+        _fileList.reloadAction.onNext(())
     }
     
     private func select(item: FileItem) {
