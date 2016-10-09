@@ -234,6 +234,7 @@
 				504D70431D39CBF4004DC566 /* Watching */,
 				50AF2EB61D1FC3CC00337A53 /* Workspace */,
 				5025EFF81CE1EFFB0032AD67 /* FileList.swift */,
+				5025EFE91CDF689E0032AD67 /* WorkspaceStore.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -396,7 +397,6 @@
 			children = (
 				50AF2EB71D1FC45700337A53 /* Workspace.swift */,
 				504D70461D3A0953004DC566 /* WorkspaceDB.swift */,
-				5025EFE91CDF689E0032AD67 /* WorkspaceStore.swift */,
 			);
 			path = Workspace;
 			sourceTree = "<group>";
