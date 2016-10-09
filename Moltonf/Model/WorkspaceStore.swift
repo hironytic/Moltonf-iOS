@@ -24,112 +24,141 @@
 //
 
 import Foundation
-import Eventitic
+import RxSwift
 import RealmSwift
 import SwiftyJSON
-import SwiftTask
 
 public enum WorkspaceStoreError: ErrorType {
     case CreateNewWorkspaceFailed(String)
 }
 
-public typealias WorkspaceStoresChanges = (workspaces: AnyRandomAccessCollection<Workspace>, deletions: [Int], insertions: [Int], modifications: [Int])
+public struct WorkspaceStoreChanges {
+    let workspaces: AnyRandomAccessCollection<Workspace>
+    let deletions: [Int]
+    let insertions: [Int]
+    let modifications: [Int]
+}
 
-public class WorkspaceStore {
-    public let errorOccurred = EventSource<ErrorType>()
-    public let workspacesChanged = EventSource<WorkspaceStoresChanges>()
-    public private(set) var workspaces: AnyRandomAccessCollection<Workspace>
+public protocol IWorkspaceStore {
+    var error: Observable<ErrorType> { get }
+    var workspaces: Observable<WorkspaceStoreChanges> { get }
 
+    var createNewWorkspaceAction: AnyObserver</* archiveFile: */ String> { get }
+    var deleteWorkspaceAction: AnyObserver<Workspace> { get }
+}
+
+public class WorkspaceStore: IWorkspaceStore {
+    public var error: Observable<ErrorType> { get { return _error } }
+    public var workspaces: Observable<WorkspaceStoreChanges> { get { return _workspaces } }
+    
+    public private(set) var createNewWorkspaceAction: AnyObserver<String>
+    public private(set) var deleteWorkspaceAction: AnyObserver<Workspace>
+    
+    private let _disposeBag = DisposeBag()
+    
     private let _workspaceDB = WorkspaceDB.sharedInstance
     private var _notificationToken: NotificationToken!
-    private let _workspaces: Results<Workspace>
+    private let _workspaces = BehaviorSubject<WorkspaceStoreChanges>(value: WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection([]), deletions: [], insertions: [], modifications: []))
+    private let _error = PublishSubject<ErrorType>()
     
+    private let _createNewWorkspaceAction = PublishSubject<String>()
+    private let _deleteWorkspaceAction = PublishSubject<Workspace>()
+
     public init() {
-        _workspaces = _workspaceDB.realm.objects(Workspace)
-        workspaces = AnyRandomAccessCollection<Workspace>(_workspaces)
-      
-        _notificationToken = _workspaces.addNotificationBlock { [weak self] changes in
-            switch changes {
-            case .Update(let results, let deletions, let insertions, let modifications):
-                self?.workspacesChanged.fire((workspaces: AnyRandomAccessCollection(results), deletions: deletions, insertions: insertions, modifications: modifications))
-                break
-            default:
-                break
-            }
-        }
+        createNewWorkspaceAction = _createNewWorkspaceAction.asObserver()
+        deleteWorkspaceAction = _deleteWorkspaceAction.asObserver()
+
+        configureWorkspaces()
+        configureCreateNewWorkspaceAction()
+        configureDeleteWorkspaceAction()
     }
     
     deinit {
-        _notificationToken.stop()
+        self._notificationToken.stop()
+    }
+
+    private func configureWorkspaces() {
+        dispatch_async(dispatch_get_main_queue()) {
+            let workspaceResults = self._workspaceDB.realm.objects(Workspace)
+            let changes = WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection<Workspace>(workspaceResults),
+                                                deletions: [],
+                                                insertions: (0..<workspaceResults.count).map { $0 },
+                                                modifications: [])
+            self._workspaces.onNext(changes)
+            self._notificationToken = workspaceResults.addNotificationBlock { [unowned self] changes in
+                switch changes {
+                case .Update(let results, let deletions, let insertions, let modifications):
+                    self._workspaces.onNext(WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection(results), deletions: deletions, insertions: insertions, modifications: modifications))
+                default:
+                    break
+                }
+            }
+        }
     }
     
-    public func createNewWorkspace(archiveFile archiveFile: String) {
-        let id = NSUUID().UUIDString
-
-        guard let archiveJSONDir = _workspaceDB.workspaceDirURL.URLByAppendingPathComponent(id).path else { return /* TODO: throw Error.CreateNewWorkspaceFailed("Failed to get playdata directory") */ }
-        let playdataFilePath = (archiveJSONDir as NSString).stringByAppendingPathComponent(ArchiveConstants.FILE_PLAYDATA_JSON)
-        
-        Task<Void, String, ErrorType> { (fulfill, reject) in
+    private struct ConvertResult {
+        let id: String
+        let title: String
+    }
+    
+    private func configureCreateNewWorkspaceAction() {
+        _createNewWorkspaceAction
             // convert archive file (XML) to JSON file in background
-            // then notify on main thread
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                do {
-                    // convert archive file (XML) to JSON file
-                    let converter = ArchiveToJSON(fromArchive: archiveFile, toDirectory: archiveJSONDir)
-                    try converter.convert()
-
-                    // read converted playdata
-                    guard let playdataData = NSData(contentsOfFile: playdataFilePath) else { throw WorkspaceStoreError.CreateNewWorkspaceFailed("Failed to load playdata.json") }
-                    let playdata = JSON(data: playdataData)
-                    let title = playdata[ArchiveConstants.FULL_NAME].stringValue
-                    
-                    dispatch_async(dispatch_get_main_queue()) {
-                        fulfill(title)
-                    }
-                } catch let error {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        reject(error)
-                    }
+            .observeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
+            .map { [unowned self] archiveFile -> ConvertResult in
+                let id = NSUUID().UUIDString
+                guard let archiveJSONDir = self._workspaceDB.workspaceDirURL.URLByAppendingPathComponent(id).path else {
+                    throw WorkspaceStoreError.CreateNewWorkspaceFailed("Failed to get playdata directory")
                 }
+                
+                let playdataFilePath = (archiveJSONDir as NSString).stringByAppendingPathComponent(ArchiveConstants.FILE_PLAYDATA_JSON)
+                
+                // convert archive file (XML) to JSON file
+                let converter = ArchiveToJSON(fromArchive: archiveFile, toDirectory: archiveJSONDir)
+                try converter.convert()
+                
+                // read converted playdata
+                guard let playdataData = NSData(contentsOfFile: playdataFilePath) else { throw WorkspaceStoreError.CreateNewWorkspaceFailed("Failed to load playdata.json") }
+                let playdata = JSON(data: playdataData)
+                let title = playdata[ArchiveConstants.FULL_NAME].stringValue
+                
+                return ConvertResult(id: id, title: title)
             }
-        }.success { [weak self] (title) -> Task<Void, Void, ErrorType> in
-            do {
+            // then operate with realm in main thread
+            .observeOn(MainScheduler.instance)
+            .doOnNext { [unowned self] convertResult in
                 // create new Workspace object
-                if let realm = self?._workspaceDB.realm {
-                    let ws = Workspace()
-                    ws.id = id
-                    ws.title = title
-                    
-                    try realm.write {
-                        realm.add(ws)
-                    }
+                let ws = Workspace()
+                ws.id = convertResult.id
+                ws.title = convertResult.title
+                
+                try self._workspaceDB.realm.write {
+                    self._workspaceDB.realm.add(ws)
                 }
-                return Task<Void, Void, ErrorType>(value: ())
-            } catch let error {
-                return Task<Void, Void, ErrorType>(error: error)
             }
-        }.failure { [weak self] (error, _) in
-            print("error in creating a new workspace: \(error)")
-            
-            // remove failed workspace directory
-            _ = try? NSFileManager.defaultManager().removeItemAtPath(archiveJSONDir)
-            
-            let error2 = error ?? WorkspaceStoreError.CreateNewWorkspaceFailed("unknown error")
-            self?.errorOccurred.fire(error2)
-        }
+            .catchError { [unowned self] error in
+                self._error.onNext(error)
+                return Observable.empty()
+            }
+            .publish().connect().addDisposableTo(_disposeBag)
     }
     
-    public func deleteWorkspace(workspace: Workspace) {
-        do {
-            if let archiveJSONDir = _workspaceDB.workspaceDirURL.URLByAppendingPathComponent(workspace.id).path {
-                _ = try? NSFileManager.defaultManager().removeItemAtPath(archiveJSONDir)
+    private func configureDeleteWorkspaceAction() {
+        _deleteWorkspaceAction
+            .observeOn(MainScheduler.instance)
+            .doOnNext { [unowned self] workspace in
+                if let archiveJSONDir = self._workspaceDB.workspaceDirURL.URLByAppendingPathComponent(workspace.id).path {
+                    _ = try? NSFileManager.defaultManager().removeItemAtPath(archiveJSONDir)
+                }
+                
+                try self._workspaceDB.realm.write {
+                    self._workspaceDB.realm.delete(workspace)
+                }
             }
-            
-            try _workspaceDB.realm.write {
-                _workspaceDB.realm.delete(workspace)
+            .catchError { [unowned self] error in
+                self._error.onNext(error)
+                return Observable.empty()
             }
-        } catch let error {
-            errorOccurred.fire(error)
-        }
+            .publish().connect().addDisposableTo(_disposeBag)
     }
 }

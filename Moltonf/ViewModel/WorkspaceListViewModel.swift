@@ -26,7 +26,6 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import Eventitic
 
 public class WorkspaceListViewModelItem {
     public let workspace: Workspace
@@ -42,8 +41,8 @@ public class WorkspaceListViewModel: ViewModel {
     public let deleteAction: AnyObserver<NSIndexPath>
     public let selectAction: AnyObserver<NSIndexPath>
     
-    private let _listenerStore = ListenerStore()
-    private let _workspaceStore = WorkspaceStore()
+    private let _disposeBag = DisposeBag()
+    private let _workspaceStore: IWorkspaceStore = WorkspaceStore()
     private let _workspaceListSource = Variable<[WorkspaceListViewModelItem]>([])
     private let _addNewAction = ActionObserver<Void>()
     private let _deleteAction = ActionObserver<NSIndexPath>()
@@ -55,21 +54,16 @@ public class WorkspaceListViewModel: ViewModel {
         deleteAction = _deleteAction.asObserver()
         selectAction = _selectAction.asObserver()
         
+        _workspaceStore.workspaces
+            .scan([], accumulator: WorkspaceListViewModel.workspaceStoreChangeScanner)
+            .bindTo(_workspaceListSource)
+            .addDisposableTo(_disposeBag)
+        
         super.init()
         
         _addNewAction.handler = { [weak self] in self?.addNew() }
         _deleteAction.handler = { [weak self] indexPath in self?.delete(at: indexPath) }
         _selectAction.handler = { [weak self] indexPath in self?.select(indexPath) }
-
-        _workspaceListSource.value = Array(_workspaceStore.workspaces)
-            .map { workspace in
-                WorkspaceListViewModelItem(workspace: workspace)
-            }
-        _workspaceStore.workspacesChanged
-            .listen { [weak self] changes in
-                self?.workspaceChanged(changes)
-            }
-            .addToStore(_listenerStore)
     }
     
     private func addNew() {
@@ -83,7 +77,7 @@ public class WorkspaceListViewModel: ViewModel {
     private func processSelectArchiveFileResult(result: SelectArchiveFileViewModelResult) {
         switch result {
         case .Selected(let path):
-            _workspaceStore.createNewWorkspace(archiveFile: path)
+            _workspaceStore.createNewWorkspaceAction.onNext(path)
         default:
             break
         }
@@ -91,7 +85,7 @@ public class WorkspaceListViewModel: ViewModel {
     
     private func delete(at indexPath: NSIndexPath) {
         let listItem = _workspaceListSource.value[indexPath.row]
-        _workspaceStore.deleteWorkspace(listItem.workspace)
+        _workspaceStore.deleteWorkspaceAction.onNext(listItem.workspace)
     }
 
     private func select(indexPath: NSIndexPath) {
@@ -107,9 +101,9 @@ public class WorkspaceListViewModel: ViewModel {
         }
     }
     
-    private func workspaceChanged(changes: WorkspaceStoresChanges) {
-        var list = _workspaceListSource.value
-            
+    private static func workspaceStoreChangeScanner(list: [WorkspaceListViewModelItem], changes: WorkspaceStoreChanges) -> [WorkspaceListViewModelItem] {
+        var list = list
+        
         // remove deleted items
         for index in changes.deletions.reverse() {
             list.removeAtIndex(index)
@@ -126,6 +120,6 @@ public class WorkspaceListViewModel: ViewModel {
             list[index] = item
         }
 
-        _workspaceListSource.value = list
+        return list
     }
 }
