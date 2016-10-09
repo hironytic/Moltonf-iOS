@@ -231,9 +231,9 @@
 			children = (
 				501F95471CE61C5600628E29 /* Archive */,
 				509C5C4B1D306F830045B0AB /* Story */,
-				504D70431D39CBF4004DC566 /* Watching */,
 				50AF2EB61D1FC3CC00337A53 /* Workspace */,
 				5025EFF81CE1EFFB0032AD67 /* FileList.swift */,
+				504D70441D39CCCF004DC566 /* StoryWatching.swift */,
 				5025EFE91CDF689E0032AD67 /* WorkspaceStore.swift */,
 			);
 			path = Model;
@@ -298,14 +298,6 @@
 				5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		504D70431D39CBF4004DC566 /* Watching */ = {
-			isa = PBXGroup;
-			children = (
-				504D70441D39CCCF004DC566 /* StoryWatching.swift */,
-			);
-			path = Watching;
 			sourceTree = "<group>";
 		};
 		504D704A1D3A1954004DC566 /* Utility */ = {
