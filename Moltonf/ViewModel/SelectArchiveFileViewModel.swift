@@ -23,7 +23,6 @@
 // THE SOFTWARE.
 //
 
-import Eventitic
 import Foundation
 import RxCocoa
 import RxSwift
