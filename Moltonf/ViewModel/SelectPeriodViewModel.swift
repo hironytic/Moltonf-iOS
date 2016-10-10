@@ -39,7 +39,7 @@ public struct SelectPeriodViewModelItem {
 }
 
 public class SelectPeriodViewModel: ViewModel {
-    public let periods: Observable<[SelectPeriodViewModelItem]>
+    public let periodsLine: Observable<[SelectPeriodViewModelItem]>
     public let cancelAction: AnyObserver<Void>
     public let selectAction: AnyObserver<SelectPeriodViewModelItem>
     
@@ -53,8 +53,8 @@ public class SelectPeriodViewModel: ViewModel {
     public init(storyWatching: IStoryWatching) {
         _storyWatching = storyWatching
 
-        periods = Observable
-            .combineLatest(_storyWatching.availablePeriodRefs, _storyWatching.currentPeriod, resultSelector: { ($0, $1) })
+        periodsLine = Observable
+            .combineLatest(_storyWatching.availablePeriodRefsLine, _storyWatching.currentPeriodLine, resultSelector: { ($0, $1) })
             .asDriver(onErrorDriveWith: Driver.empty())
             .asObservable()
             .map { (periodList, currentPeriod) -> [SelectPeriodViewModelItem] in

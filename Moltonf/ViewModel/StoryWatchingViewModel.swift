@@ -28,8 +28,8 @@ import RxSwift
 import RxCocoa
 
 public class StoryWatchingViewModel: ViewModel {
-    public let currentPeriodText: Observable<String>
-    public let elementsList: Observable<[StoryElementViewModel]>
+    public let currentPeriodTextLine: Observable<String>
+    public let elementsListLine: Observable<[StoryElementViewModel]>
     public let selectPeriodAction: AnyObserver<Void>
     public let leaveWatchingAction: AnyObserver<Void>
 
@@ -57,8 +57,8 @@ public class StoryWatchingViewModel: ViewModel {
         _factory = factory
         _storyWatching = storyWatching
 
-        currentPeriodText = self.dynamicType.configureCurrentPeriodText(_storyWatching.currentPeriod)
-        elementsList = self.dynamicType.configureElementsList(_storyWatching.storyElements, factory: _factory)
+        currentPeriodTextLine = self.dynamicType.configureCurrentPeriodTextLine(_storyWatching.currentPeriodLine)
+        elementsListLine = self.dynamicType.configureElementsListLine(_storyWatching.storyElementsLine, factory: _factory)
         selectPeriodAction = _selectPeriodAction.asObserver()
         leaveWatchingAction = _leaveWatchingAction.asObserver()
         
@@ -68,8 +68,8 @@ public class StoryWatchingViewModel: ViewModel {
         _leaveWatchingAction.handler = { [weak self] in self?.leaveWatching() }
     }
     
-    private static func configureCurrentPeriodText(currentPeriod: Observable<Period>) -> Observable<String> {
-        return currentPeriod
+    private static func configureCurrentPeriodTextLine(currentPeriodLine: Observable<Period>) -> Observable<String> {
+        return currentPeriodLine
             .map { period in
                 return { () -> String in
                     switch period.type {
@@ -85,7 +85,7 @@ public class StoryWatchingViewModel: ViewModel {
             .asDriver(onErrorJustReturn: "").asObservable()
     }
     
-    private static func configureElementsList(storyElementsLine: Observable<[StoryElement]>, factory: Factory) -> Observable<[StoryElementViewModel]> {
+    private static func configureElementsListLine(storyElementsLine: Observable<[StoryElement]>, factory: Factory) -> Observable<[StoryElementViewModel]> {
         return storyElementsLine
             .map { storyElements in
                 return storyElements

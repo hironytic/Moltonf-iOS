@@ -61,23 +61,23 @@ public class SelectArchiveFileListViewController: UITableViewController {
                 .bindTo(viewModel.cancelAction)
                 .addDisposableTo(disposeBag)
             
-            viewModel.noItemsMessageHidden
+            viewModel.noItemsMessageHiddenLine
                 .subscribeNext { [weak self] hidden in
                     self?.tableView.separatorStyle = hidden ? .SingleLine : .None
                 }
                 .addDisposableTo(disposeBag)
             
-            viewModel.noItemsMessageHidden
+            viewModel.noItemsMessageHiddenLine
                 .bindTo(noItemsLabel.rx_hidden)
                 .addDisposableTo(disposeBag)
             
-            viewModel.archiveFiles
+            viewModel.archiveFilesLine
                 .bindTo(tableView.rx_itemsWithCellIdentifier("Cell", cellType: UITableViewCell.self)) { (row, element, cell) in
                     cell.textLabel?.text = element.title
                 }
                 .addDisposableTo(disposeBag)
             
-            viewModel.refreshing
+            viewModel.refreshingLine
                 .subscribeNext { [weak self] refreshing in
                     if (refreshing) {
                         self?.refreshControl?.beginRefreshing()
@@ -95,7 +95,7 @@ public class SelectArchiveFileListViewController: UITableViewController {
                 .bindTo(viewModel.selectAction)
                 .addDisposableTo(disposeBag)
             
-            viewModel.messenger
+            viewModel.messageLine
                 .subscribeNext { [weak self] message in
                     switch message {
                     case _ as DismissingMessage:

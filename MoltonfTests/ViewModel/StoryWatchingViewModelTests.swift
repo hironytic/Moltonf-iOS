@@ -53,10 +53,10 @@ class StoryWatchingViewModelTests: XCTestCase {
 
     func testSelectPeriod() {
         class MockStoryWatching: IStoryWatching {
-            var error = Observable<ErrorType>.never()
-            var availablePeriodRefs: Observable<[PeriodReference]>
-            var currentPeriod: Observable<Period>
-            var storyElements = Observable<[StoryElement]>.never()
+            var errorLine = Observable<ErrorType>.never()
+            var availablePeriodRefsLine: Observable<[PeriodReference]>
+            var currentPeriodLine: Observable<Period>
+            var storyElementsLine = Observable<[StoryElement]>.never()
             
             var selectPeriodAction: AnyObserver<PeriodReference>
             var switchToNextPeriodAction = ActionObserver<Void>().asObserver()
@@ -72,9 +72,9 @@ class StoryWatchingViewModelTests: XCTestCase {
                 period1 = Period(story: tests.story, type: .Progress, day: 1)
                 
                 selectPeriodAction = _selectPeriodAction.asObserver()
-                availablePeriodRefs = Observable.just(tests.availablePeriodRefs)
+                availablePeriodRefsLine = Observable.just(tests.availablePeriodRefs)
                 _currentPeriod = Variable(period0)
-                currentPeriod = _currentPeriod.asObservable()
+                currentPeriodLine = _currentPeriod.asObservable()
                 
                 _selectPeriodAction.handler = { [unowned self] periodRef in
                     switch periodRef.day {
@@ -95,7 +95,7 @@ class StoryWatchingViewModelTests: XCTestCase {
         // -- initially Prologue is selected
         
         let currentPeriodTextObserver = FulfillObserver(expectationWithDescription("initial text")) { $0 == "Prologue" }
-        storyWatchingViewModel.currentPeriodText
+        storyWatchingViewModel.currentPeriodTextLine
             .bindTo(currentPeriodTextObserver)
             .addDisposableTo(disposeBag)
         

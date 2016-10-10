@@ -28,21 +28,21 @@ import RxSwift
 import UIKit
 
 public class TalkViewModel: StoryElementViewModel {
-    public let number: Observable<Int?>
-    public let speakerName: Observable<String>
-//    public let speakerIcon: Observable<UIImage>
-    public let time: Observable<String>
-    public let message: Observable<NSAttributedString>
-    public let balloonColor: Observable<UIColor>
+    public let numberLine: Observable<Int?>
+    public let speakerNameLine: Observable<String>
+//    public let speakerIconLine: Observable<UIImage>
+    public let timeLine: Observable<String>
+    public let messageTextLine: Observable<NSAttributedString>
+    public let balloonColorLine: Observable<UIColor>
     
     public init(talk: Talk) {
-        number = Observable
+        numberLine = Observable
             .just(1) // FIXME:
-        speakerName = Observable
+        speakerNameLine = Observable
             .just(talk.speaker.fullName)
-        time = Observable
+        timeLine = Observable
             .just(String(format: "%02d:%02d", talk.time.hourPart, talk.time.minutePart))
-        message = Observable
+        messageTextLine = Observable
             .just(TalkViewModel.makeMessage(talk.messageLines))
         var color: UIColor
         switch talk.talkType {
@@ -55,7 +55,7 @@ public class TalkViewModel: StoryElementViewModel {
         case .Private:
             color = UIColor(red: 0x93 / 0xff, green: 0x93 / 0xff, blue: 0x93 / 0xff, alpha: 1)
         }
-        balloonColor = Observable
+        balloonColorLine = Observable
             .just(color)
         
         super.init(storyElement: talk)

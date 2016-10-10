@@ -36,27 +36,27 @@ public class WorkspaceListViewModelItem {
 }
 
 public class WorkspaceListViewModel: ViewModel {
-    public let workspaceList: Observable<[WorkspaceListViewModelItem]>
+    public let workspaceListLine: Observable<[WorkspaceListViewModelItem]>
     public let addNewAction: AnyObserver<Void>
     public let deleteAction: AnyObserver<NSIndexPath>
     public let selectAction: AnyObserver<NSIndexPath>
     
     private let _disposeBag = DisposeBag()
     private let _workspaceStore: IWorkspaceStore = WorkspaceStore()
-    private let _workspaceListSource = Variable<[WorkspaceListViewModelItem]>([])
+    private let _workspaceList = Variable<[WorkspaceListViewModelItem]>([])
     private let _addNewAction = ActionObserver<Void>()
     private let _deleteAction = ActionObserver<NSIndexPath>()
     private let _selectAction = ActionObserver<NSIndexPath>()
     
     public override init() {
-        workspaceList = _workspaceListSource.asDriver().asObservable()
+        workspaceListLine = _workspaceList.asDriver().asObservable()
         addNewAction = _addNewAction.asObserver()
         deleteAction = _deleteAction.asObserver()
         selectAction = _selectAction.asObserver()
         
-        _workspaceStore.workspaces
+        _workspaceStore.workspacesLine
             .scan([], accumulator: WorkspaceListViewModel.workspaceStoreChangeScanner)
-            .bindTo(_workspaceListSource)
+            .bindTo(_workspaceList)
             .addDisposableTo(_disposeBag)
         
         super.init()
@@ -84,12 +84,12 @@ public class WorkspaceListViewModel: ViewModel {
     }
     
     private func delete(at indexPath: NSIndexPath) {
-        let listItem = _workspaceListSource.value[indexPath.row]
+        let listItem = _workspaceList.value[indexPath.row]
         _workspaceStore.deleteWorkspaceAction.onNext(listItem.workspace)
     }
 
     private func select(indexPath: NSIndexPath) {
-        let listItem = _workspaceListSource.value[indexPath.row]
+        let listItem = _workspaceList.value[indexPath.row]
         let workspace = listItem.workspace
         do {
             let storyWatching = try StoryWatching(workspace: workspace)

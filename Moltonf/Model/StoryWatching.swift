@@ -31,25 +31,25 @@ public enum StoryWatchingError: ErrorType {
 }
 
 public protocol IStoryWatching {
-    var error: Observable<ErrorType> { get }
-    var availablePeriodRefs: Observable<[PeriodReference]> { get }
-    var currentPeriod: Observable<Period> { get }
-    var storyElements: Observable<[StoryElement]> { get }
+    var errorLine: Observable<ErrorType> { get }
+    var availablePeriodRefsLine: Observable<[PeriodReference]> { get }
+    var currentPeriodLine: Observable<Period> { get }
+    var storyElementsLine: Observable<[StoryElement]> { get }
     
     var selectPeriodAction: AnyObserver<PeriodReference> { get }
     var switchToNextPeriodAction: AnyObserver<Void> { get }
 }
 
 public class StoryWatching: IStoryWatching {
-    public var error: Observable<ErrorType> { get { return _error } }
-    public private(set) var availablePeriodRefs: Observable<[PeriodReference]>
-    public private(set) var currentPeriod: Observable<Period>
-    public private(set) var storyElements: Observable<[StoryElement]>
+    public var errorLine: Observable<ErrorType> { get { return _errorSubject } }
+    public private(set) var availablePeriodRefsLine: Observable<[PeriodReference]>
+    public private(set) var currentPeriodLine: Observable<Period>
+    public private(set) var storyElementsLine: Observable<[StoryElement]>
     
     public private(set) var selectPeriodAction: AnyObserver<PeriodReference>
     public private(set) var switchToNextPeriodAction: AnyObserver<Void>
     
-    private let _error = PublishSubject<ErrorType>()
+    private let _errorSubject = PublishSubject<ErrorType>()
     private let _availablePeriodRefs: Variable<[PeriodReference]>
     private let _currentPeriod: Variable<Period>
     private let _storyElements: Variable<[StoryElement]>
@@ -71,9 +71,9 @@ public class StoryWatching: IStoryWatching {
         _currentPeriod = Variable<Period>(try self.dynamicType.loadPeriod(_story.periodRefs[0], story: _story, workspace: _workspace))
         _storyElements = Variable<[StoryElement]>(_currentPeriod.value.elements)
         
-        availablePeriodRefs = _availablePeriodRefs.asObservable()
-        currentPeriod = _currentPeriod.asObservable()
-        storyElements = _storyElements.asObservable()
+        availablePeriodRefsLine = _availablePeriodRefs.asObservable()
+        currentPeriodLine = _currentPeriod.asObservable()
+        storyElementsLine = _storyElements.asObservable()
         selectPeriodAction = _selectPeriodAction.asObserver()
         switchToNextPeriodAction = _switchToNextPeriodAction.asObserver()
         
@@ -86,7 +86,7 @@ public class StoryWatching: IStoryWatching {
             do {
                 _currentPeriod.value = try loadPeriod(periodRef)
             } catch let error {
-                _error.onNext(error)
+                _errorSubject.onNext(error)
             }
         }
     }
@@ -97,11 +97,11 @@ public class StoryWatching: IStoryWatching {
                 do {
                     _currentPeriod.value = try loadPeriod(_story.periodRefs[currentIndex + 1])
                 } catch let error {
-                    _error.onNext(error)
+                    _errorSubject.onNext(error)
                 }
             }
         } else {
-            _error.onNext(StoryWatchingError.InconsistencyError("current day is not found!"))
+            _errorSubject.onNext(StoryWatchingError.InconsistencyError("current day is not found!"))
         }
     }
 

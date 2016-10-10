@@ -45,7 +45,7 @@ public class StoryWatchingViewController: UITableViewController {
         disposeBag = DisposeBag()
         
         let dataSource = StoryWatchingDataSource()
-        viewModel.elementsList
+        viewModel.elementsListLine
             .bindTo(tableView.rx_itemsWithDataSource(dataSource))
             .addDisposableTo(disposeBag)
     }

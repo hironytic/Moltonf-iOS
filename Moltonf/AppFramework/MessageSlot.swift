@@ -29,10 +29,10 @@ import RxCocoa
 
 public class MessageSlot {
     private let _subject = PublishSubject<Message>()
-    public let messenger: Observable<Message>
+    public let messageLine: Observable<Message>
 
     public init() {
-        self.messenger = _subject
+        self.messageLine = _subject
             .share()
             .observeOn(MainScheduler.instance)
     }

@@ -40,16 +40,16 @@ public struct WorkspaceStoreChanges {
 }
 
 public protocol IWorkspaceStore {
-    var error: Observable<ErrorType> { get }
-    var workspaces: Observable<WorkspaceStoreChanges> { get }
+    var errorLine: Observable<ErrorType> { get }
+    var workspacesLine: Observable<WorkspaceStoreChanges> { get }
 
     var createNewWorkspaceAction: AnyObserver</* archiveFile: */ String> { get }
     var deleteWorkspaceAction: AnyObserver<Workspace> { get }
 }
 
 public class WorkspaceStore: IWorkspaceStore {
-    public var error: Observable<ErrorType> { get { return _error } }
-    public var workspaces: Observable<WorkspaceStoreChanges> { get { return _workspaces } }
+    public var errorLine: Observable<ErrorType> { get { return _errorSubject } }
+    public var workspacesLine: Observable<WorkspaceStoreChanges> { get { return _workspacesSubject } }
     
     public private(set) var createNewWorkspaceAction: AnyObserver<String>
     public private(set) var deleteWorkspaceAction: AnyObserver<Workspace>
@@ -58,8 +58,8 @@ public class WorkspaceStore: IWorkspaceStore {
     
     private let _workspaceDB = WorkspaceDB.sharedInstance
     private var _notificationToken: NotificationToken!
-    private let _workspaces = BehaviorSubject<WorkspaceStoreChanges>(value: WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection([]), deletions: [], insertions: [], modifications: []))
-    private let _error = PublishSubject<ErrorType>()
+    private let _workspacesSubject = BehaviorSubject<WorkspaceStoreChanges>(value: WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection([]), deletions: [], insertions: [], modifications: []))
+    private let _errorSubject = PublishSubject<ErrorType>()
     
     private let _createNewWorkspaceAction = PublishSubject<String>()
     private let _deleteWorkspaceAction = PublishSubject<Workspace>()
@@ -84,11 +84,11 @@ public class WorkspaceStore: IWorkspaceStore {
                                                 deletions: [],
                                                 insertions: (0..<workspaceResults.count).map { $0 },
                                                 modifications: [])
-            self._workspaces.onNext(changes)
+            self._workspacesSubject.onNext(changes)
             self._notificationToken = workspaceResults.addNotificationBlock { [unowned self] changes in
                 switch changes {
                 case .Update(let results, let deletions, let insertions, let modifications):
-                    self._workspaces.onNext(WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection(results), deletions: deletions, insertions: insertions, modifications: modifications))
+                    self._workspacesSubject.onNext(WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection(results), deletions: deletions, insertions: insertions, modifications: modifications))
                 default:
                     break
                 }
@@ -137,7 +137,7 @@ public class WorkspaceStore: IWorkspaceStore {
                 }
             }
             .catchError { [unowned self] error in
-                self._error.onNext(error)
+                self._errorSubject.onNext(error)
                 return Observable.empty()
             }
             .publish().connect().addDisposableTo(_disposeBag)
@@ -156,7 +156,7 @@ public class WorkspaceStore: IWorkspaceStore {
                 }
             }
             .catchError { [unowned self] error in
-                self._error.onNext(error)
+                self._errorSubject.onNext(error)
                 return Observable.empty()
             }
             .publish().connect().addDisposableTo(_disposeBag)

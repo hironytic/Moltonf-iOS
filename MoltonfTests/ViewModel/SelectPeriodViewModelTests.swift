@@ -34,10 +34,10 @@ class SelectPeriodViewModelTests: XCTestCase {
     var mockStoryWatching: MockStoryWatching! = nil
     
     class MockStoryWatching: IStoryWatching {
-        var error = Observable<ErrorType>.never()
-        var availablePeriodRefs: Observable<[PeriodReference]>
-        var currentPeriod: Observable<Period>
-        var storyElements = Observable<[StoryElement]>.never()
+        var errorLine = Observable<ErrorType>.never()
+        var availablePeriodRefsLine: Observable<[PeriodReference]>
+        var currentPeriodLine: Observable<Period>
+        var storyElementsLine = Observable<[StoryElement]>.never()
         
         var selectPeriodAction: AnyObserver<PeriodReference>
         var switchToNextPeriodAction: AnyObserver<Void>
@@ -61,8 +61,8 @@ class SelectPeriodViewModelTests: XCTestCase {
             periodRef3 = PeriodReference(story: story, type: .Epilogue, day: 3, periodPath: "")
             let period = Period(story: story, type: .Prologue, day: 0)
             
-            self.availablePeriodRefs = Observable.just([periodRef0, periodRef1, periodRef2, periodRef3])
-            self.currentPeriod = Observable.just(period)
+            self.availablePeriodRefsLine = Observable.just([periodRef0, periodRef1, periodRef2, periodRef3])
+            self.currentPeriodLine = Observable.just(period)
         }
     }
     
@@ -79,7 +79,7 @@ class SelectPeriodViewModelTests: XCTestCase {
             return items.map({ $0.title }) == ["Prologue", "Day 1", "Day 2", "Epilogue"]
                 && items.map({ $0.checked }) == [true, false, false, false]
         }
-        selectPeriodViewModel.periods
+        selectPeriodViewModel.periodsLine
             .bindTo(periodsObserver)
             .addDisposableTo(disposeBag)
         
@@ -98,7 +98,7 @@ class SelectPeriodViewModelTests: XCTestCase {
             resultExpectation.fulfill()
         }
         
-        selectPeriodViewModel.periods
+        selectPeriodViewModel.periodsLine
             .subscribeNext { [unowned self] items in
                 self.selectPeriodViewModel.selectAction.onNext(items[2])
             }

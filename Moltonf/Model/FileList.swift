@@ -32,15 +32,15 @@ public struct FileItem {
 }
 
 public protocol IFileList {
-    var list: Observable<[FileItem]> { get }
-    var refreshing: Observable<Bool> { get }
+    var listLine: Observable<[FileItem]> { get }
+    var refreshingLine: Observable<Bool> { get }
     
     var reloadAction: AnyObserver<Void> { get }
 }
 
 public class FileList: IFileList {
-    public private(set) var list: Observable<[FileItem]>
-    public private(set) var refreshing: Observable<Bool>
+    public private(set) var listLine: Observable<[FileItem]>
+    public private(set) var refreshingLine: Observable<Bool>
     public private(set) var reloadAction: AnyObserver<Void>
     
     private let _reloadAction = PublishSubject<Void>()
@@ -60,11 +60,11 @@ public class FileList: IFileList {
             }
             .shareReplay(1)
         
-        list = refreshState
+        listLine = refreshState
             .filter { $0.list != nil }
             .map { $0.list! }
         
-        refreshing = refreshState
+        refreshingLine = refreshState
             .map { $0.refreshing }
     }
     

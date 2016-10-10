@@ -33,9 +33,9 @@ public enum SelectArchiveFileViewModelResult {
 }
 
 public class SelectArchiveFileViewModel: ViewModel {
-    public let archiveFiles: Observable<[FileItem]>
-    public let noItemsMessageHidden: Observable<Bool>
-    public let refreshing: Observable<Bool>
+    public let archiveFilesLine: Observable<[FileItem]>
+    public let noItemsMessageHiddenLine: Observable<Bool>
+    public let refreshingLine: Observable<Bool>
     public let cancelAction: AnyObserver<Void>
     public let refreshAction: AnyObserver<Void>
     public let selectAction: AnyObserver<FileItem>
@@ -51,9 +51,9 @@ public class SelectArchiveFileViewModel: ViewModel {
         let directory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true)[0]
         _fileList = FileList(directory: directory)
         
-        archiveFiles = _fileList.list.asDriver(onErrorJustReturn: []).asObservable()
-        noItemsMessageHidden = archiveFiles.map { !$0.isEmpty }
-        refreshing = _fileList.refreshing.asDriver(onErrorJustReturn: false).asObservable()
+        archiveFilesLine = _fileList.listLine.asDriver(onErrorJustReturn: []).asObservable()
+        noItemsMessageHiddenLine = archiveFilesLine.map { !$0.isEmpty }
+        refreshingLine = _fileList.refreshingLine.asDriver(onErrorJustReturn: false).asObservable()
         
         cancelAction = _cancelAction.asObserver()
         refreshAction = _refreshAction.asObserver()

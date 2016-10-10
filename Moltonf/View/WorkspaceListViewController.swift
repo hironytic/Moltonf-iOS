@@ -52,7 +52,7 @@ public class WorkspaceListViewController: UITableViewController {
 
         addNewButton.rx_tap.bindTo(viewModel.addNewAction).addDisposableTo(disposeBag)
 
-        viewModel.workspaceList
+        viewModel.workspaceListLine
             .bindTo(tableView.rx_itemsWithDataSource(WorkspaceListDataSource()))
             .addDisposableTo(disposeBag)
         
@@ -64,7 +64,7 @@ public class WorkspaceListViewController: UITableViewController {
             .bindTo(viewModel.selectAction)
             .addDisposableTo(disposeBag)
         
-        viewModel.messenger
+        viewModel.messageLine
             .subscribeNext { [weak self] message in
                 switch message {
                 case let transitionMessage as TransitionMessage:
