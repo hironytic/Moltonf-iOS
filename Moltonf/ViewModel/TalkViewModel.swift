@@ -27,13 +27,13 @@ import Foundation
 import RxSwift
 import UIKit
 
-public class TalkViewModel: StoryElementViewModel {
-    public let numberLine: Observable<Int?>
-    public let speakerNameLine: Observable<String>
+open class TalkViewModel: StoryElementViewModel {
+    open let numberLine: Observable<Int?>
+    open let speakerNameLine: Observable<String>
 //    public let speakerIconLine: Observable<UIImage>
-    public let timeLine: Observable<String>
-    public let messageTextLine: Observable<NSAttributedString>
-    public let balloonColorLine: Observable<UIColor>
+    open let timeLine: Observable<String>
+    open let messageTextLine: Observable<NSAttributedString>
+    open let balloonColorLine: Observable<UIColor>
     
     public init(talk: Talk) {
         numberLine = Observable
@@ -46,13 +46,13 @@ public class TalkViewModel: StoryElementViewModel {
             .just(TalkViewModel.makeMessage(talk.messageLines))
         var color: UIColor
         switch talk.talkType {
-        case .Public:
+        case .public:
             color = UIColor(red: 0xff / 0xff, green: 0xff / 0xff, blue: 0xff / 0xff, alpha: 1)
-        case .Wolf:
+        case .wolf:
             color = UIColor(red: 0xff / 0xff, green: 0x77 / 0xff, blue: 0x77 / 0xff, alpha: 1)
-        case .Grave:
+        case .grave:
             color = UIColor(red: 0x9f / 0xff, green: 0x67 / 0xff, blue: 0xcf / 0xff, alpha: 1)
-        case .Private:
+        case .private:
             color = UIColor(red: 0x93 / 0xff, green: 0x93 / 0xff, blue: 0x93 / 0xff, alpha: 1)
         }
         balloonColorLine = Observable
@@ -61,7 +61,7 @@ public class TalkViewModel: StoryElementViewModel {
         super.init(storyElement: talk)
     }
     
-    static func makeMessage(messageLines: [String]) -> NSAttributedString {
-        return NSAttributedString(string: messageLines.joinWithSeparator("\n"))
+    static func makeMessage(_ messageLines: [String]) -> NSAttributedString {
+        return NSAttributedString(string: messageLines.joined(separator: "\n"))
     }
 }

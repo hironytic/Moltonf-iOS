@@ -28,8 +28,8 @@ import RxSwift
 import RealmSwift
 import SwiftyJSON
 
-public enum WorkspaceStoreError: ErrorType {
-    case CreateNewWorkspaceFailed(String)
+public enum WorkspaceStoreError: Error {
+    case createNewWorkspaceFailed(String)
 }
 
 public struct WorkspaceStoreChanges {
@@ -40,29 +40,29 @@ public struct WorkspaceStoreChanges {
 }
 
 public protocol IWorkspaceStore {
-    var errorLine: Observable<ErrorType> { get }
+    var errorLine: Observable<ErrorProtocol> { get }
     var workspacesLine: Observable<WorkspaceStoreChanges> { get }
 
     var createNewWorkspaceAction: AnyObserver</* archiveFile: */ String> { get }
     var deleteWorkspaceAction: AnyObserver<Workspace> { get }
 }
 
-public class WorkspaceStore: IWorkspaceStore {
-    public var errorLine: Observable<ErrorType> { get { return _errorSubject } }
-    public var workspacesLine: Observable<WorkspaceStoreChanges> { get { return _workspacesSubject } }
+open class WorkspaceStore: IWorkspaceStore {
+    open var errorLine: Observable<ErrorProtocol> { get { return _errorSubject } }
+    open var workspacesLine: Observable<WorkspaceStoreChanges> { get { return _workspacesSubject } }
     
-    public private(set) var createNewWorkspaceAction: AnyObserver<String>
-    public private(set) var deleteWorkspaceAction: AnyObserver<Workspace>
+    open fileprivate(set) var createNewWorkspaceAction: AnyObserver<String>
+    open fileprivate(set) var deleteWorkspaceAction: AnyObserver<Workspace>
     
-    private let _disposeBag = DisposeBag()
+    fileprivate let _disposeBag = DisposeBag()
     
-    private let _workspaceDB = WorkspaceDB.sharedInstance
-    private var _notificationToken: NotificationToken!
-    private let _workspacesSubject = BehaviorSubject<WorkspaceStoreChanges>(value: WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection([]), deletions: [], insertions: [], modifications: []))
-    private let _errorSubject = PublishSubject<ErrorType>()
+    fileprivate let _workspaceDB = WorkspaceDB.sharedInstance
+    fileprivate var _notificationToken: NotificationToken!
+    fileprivate let _workspacesSubject = BehaviorSubject<WorkspaceStoreChanges>(value: WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection([]), deletions: [], insertions: [], modifications: []))
+    fileprivate let _errorSubject = PublishSubject<Error>()
     
-    private let _createNewWorkspaceAction = PublishSubject<String>()
-    private let _deleteWorkspaceAction = PublishSubject<Workspace>()
+    fileprivate let _createNewWorkspaceAction = PublishSubject<String>()
+    fileprivate let _deleteWorkspaceAction = PublishSubject<Workspace>()
 
     public init() {
         createNewWorkspaceAction = _createNewWorkspaceAction.asObserver()
@@ -77,8 +77,8 @@ public class WorkspaceStore: IWorkspaceStore {
         self._notificationToken.stop()
     }
 
-    private func configureWorkspaces() {
-        dispatch_async(dispatch_get_main_queue()) {
+    fileprivate func configureWorkspaces() {
+        DispatchQueue.main.async {
             let workspaceResults = self._workspaceDB.realm.objects(Workspace)
             let changes = WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection<Workspace>(workspaceResults),
                                                 deletions: [],
@@ -87,7 +87,7 @@ public class WorkspaceStore: IWorkspaceStore {
             self._workspacesSubject.onNext(changes)
             self._notificationToken = workspaceResults.addNotificationBlock { [unowned self] changes in
                 switch changes {
-                case .Update(let results, let deletions, let insertions, let modifications):
+                case .update(let results, let deletions, let insertions, let modifications):
                     self._workspacesSubject.onNext(WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection(results), deletions: deletions, insertions: insertions, modifications: modifications))
                 default:
                     break
@@ -96,29 +96,29 @@ public class WorkspaceStore: IWorkspaceStore {
         }
     }
     
-    private struct ConvertResult {
+    fileprivate struct ConvertResult {
         let id: String
         let title: String
     }
     
-    private func configureCreateNewWorkspaceAction() {
+    fileprivate func configureCreateNewWorkspaceAction() {
         _createNewWorkspaceAction
             // convert archive file (XML) to JSON file in background
-            .observeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
+            .observeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default))
             .map { [unowned self] archiveFile -> ConvertResult in
-                let id = NSUUID().UUIDString
-                guard let archiveJSONDir = self._workspaceDB.workspaceDirURL.URLByAppendingPathComponent(id).path else {
-                    throw WorkspaceStoreError.CreateNewWorkspaceFailed("Failed to get playdata directory")
+                let id = UUID().uuidString
+                guard let archiveJSONDir = self._workspaceDB.workspaceDirURL.appendingPathComponent(id).path else {
+                    throw WorkspaceStoreError.createNewWorkspaceFailed("Failed to get playdata directory")
                 }
                 
-                let playdataFilePath = (archiveJSONDir as NSString).stringByAppendingPathComponent(ArchiveConstants.FILE_PLAYDATA_JSON)
+                let playdataFilePath = (archiveJSONDir as NSString).appendingPathComponent(ArchiveConstants.FILE_PLAYDATA_JSON)
                 
                 // convert archive file (XML) to JSON file
                 let converter = ArchiveToJSON(fromArchive: archiveFile, toDirectory: archiveJSONDir)
                 try converter.convert()
                 
                 // read converted playdata
-                guard let playdataData = NSData(contentsOfFile: playdataFilePath) else { throw WorkspaceStoreError.CreateNewWorkspaceFailed("Failed to load playdata.json") }
+                guard let playdataData = try? Data(contentsOf: URL(fileURLWithPath: playdataFilePath)) else { throw WorkspaceStoreError.createNewWorkspaceFailed("Failed to load playdata.json") }
                 let playdata = JSON(data: playdataData)
                 let title = playdata[ArchiveConstants.FULL_NAME].stringValue
                 
@@ -143,12 +143,12 @@ public class WorkspaceStore: IWorkspaceStore {
             .publish().connect().addDisposableTo(_disposeBag)
     }
     
-    private func configureDeleteWorkspaceAction() {
+    fileprivate func configureDeleteWorkspaceAction() {
         _deleteWorkspaceAction
             .observeOn(MainScheduler.instance)
             .doOnNext { [unowned self] workspace in
-                if let archiveJSONDir = self._workspaceDB.workspaceDirURL.URLByAppendingPathComponent(workspace.id).path {
-                    _ = try? NSFileManager.defaultManager().removeItemAtPath(archiveJSONDir)
+                if let archiveJSONDir = self._workspaceDB.workspaceDirURL.appendingPathComponent(workspace.id).path {
+                    _ = try? FileManager.default.removeItem(atPath: archiveJSONDir)
                 }
                 
                 try self._workspaceDB.realm.write {

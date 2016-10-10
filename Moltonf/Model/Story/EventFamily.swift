@@ -30,15 +30,15 @@ public enum EventFamily {
     /// System announce
     ///
     /// ex. "次の日の朝、楽天家 ゲルト が無残な姿で発見された。"
-    case Announce
+    case announce
     
     /// Request for operation
     ///
     /// ex. "00:15 までに、誰を処刑するべきかの投票先を決定して下さい。"
-    case Order
+    case order
     
     /// About specific ability
     ///
     /// ex. "司書 クララ は、村長 ヴァルター を守っている。"
-    case Extra
+    case extra
 }

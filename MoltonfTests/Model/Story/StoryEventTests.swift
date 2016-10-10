@@ -30,7 +30,7 @@ import SwiftyJSON
 class StoryEventTests: XCTestCase {
     func testAnnounceEvent() {
         let story = Story(villageFullName: "", graveIconURI: "")
-        let period = Period(story: story, type: .Prologue, day: 0)
+        let period = Period(story: story, type: .prologue, day: 0)
         
         let element = JSON([
             "type": "startEntry",
@@ -48,7 +48,7 @@ class StoryEventTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(event.eventFamily, EventFamily.Announce)
+        XCTAssertEqual(event.eventFamily, EventFamily.announce)
         XCTAssertTrue(event.period === period)
         XCTAssertTrue(event.story === story)
         XCTAssertEqual(event.messageLines[0], "昼間は人間のふりをして、夜に正体を現すという人狼。")
@@ -56,7 +56,7 @@ class StoryEventTests: XCTestCase {
     
     func testOrderEvent() {
         let story = Story(villageFullName: "", graveIconURI: "")
-        let period = Period(story: story, type: .Prologue, day: 0)
+        let period = Period(story: story, type: .prologue, day: 0)
 
         let element = JSON([
             "type": "askCommit",
@@ -76,7 +76,7 @@ class StoryEventTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(event.eventFamily, EventFamily.Order)
+        XCTAssertEqual(event.eventFamily, EventFamily.order)
         XCTAssertTrue(event.period === period)
         XCTAssertTrue(event.story === story)
         XCTAssertEqual(event.messageLines[0], "午後 11時 0分 までに、誰を処刑するべきかの投票先を決定して下さい。")
@@ -84,7 +84,7 @@ class StoryEventTests: XCTestCase {
     
     func testExtraEvent() {
         let story = Story(villageFullName: "", graveIconURI: "")
-        let period = Period(story: story, type: .Prologue, day: 0)
+        let period = Period(story: story, type: .prologue, day: 0)
 
         let element = JSON([
             "type": "guard",
@@ -100,7 +100,7 @@ class StoryEventTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(event.eventFamily, EventFamily.Extra)
+        XCTAssertEqual(event.eventFamily, EventFamily.extra)
         XCTAssertTrue(event.period === period)
         XCTAssertTrue(event.story === story)
         XCTAssertEqual(event.messageLines[0], "農夫 ヤコブ は、少年 ペーター を守っている。")

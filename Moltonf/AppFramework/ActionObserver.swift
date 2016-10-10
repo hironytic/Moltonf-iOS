@@ -26,32 +26,32 @@
 import Foundation
 import RxSwift
 
-public class ActionObserver<Element>: ObserverType {
+open class ActionObserver<Element>: ObserverType {
     public typealias E = Element
     public typealias Handler = (Element) -> Void
     
-    public var handler: Handler
+    open var handler: Handler
 
     public convenience init() {
         self.init { _ in }
     }
     
-    public init(handler: Handler) {
+    public init(handler: @escaping Handler) {
         self.handler = handler
     }
 
-    public func on(event: Event<Element>) {
+    open func on(_ event: Event<Element>) {
         switch event {
-        case .Next(let element):
+        case .next(let element):
             handler(element)
         case .Error(_):
             break
-        case .Completed:
+        case .completed:
             break
         }
     }
     
-    public static func asObserver(handler: Handler) -> AnyObserver<Element> {
+    open static func asObserver(_ handler: Handler) -> AnyObserver<Element> {
         return ActionObserver<Element>(handler: handler).asObserver()
     }
 }

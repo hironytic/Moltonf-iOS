@@ -34,7 +34,7 @@ class SelectPeriodViewModelTests: XCTestCase {
     var mockStoryWatching: MockStoryWatching! = nil
     
     class MockStoryWatching: IStoryWatching {
-        var errorLine = Observable<ErrorType>.never()
+        var errorLine = Observable<Error>.never()
         var availablePeriodRefsLine: Observable<[PeriodReference]>
         var currentPeriodLine: Observable<Period>
         var storyElementsLine = Observable<[StoryElement]>.never()
@@ -55,11 +55,11 @@ class SelectPeriodViewModelTests: XCTestCase {
             switchToNextPeriodAction = _switchToNextPeriodAction.asObserver()
             
             let story = Story(villageFullName: "", graveIconURI: "")
-            periodRef0 = PeriodReference(story: story, type: .Prologue, day: 0, periodPath: "")
-            periodRef1 = PeriodReference(story: story, type: .Progress, day: 1, periodPath: "")
-            periodRef2 = PeriodReference(story: story, type: .Progress, day: 2, periodPath: "")
-            periodRef3 = PeriodReference(story: story, type: .Epilogue, day: 3, periodPath: "")
-            let period = Period(story: story, type: .Prologue, day: 0)
+            periodRef0 = PeriodReference(story: story, type: .prologue, day: 0, periodPath: "")
+            periodRef1 = PeriodReference(story: story, type: .progress, day: 1, periodPath: "")
+            periodRef2 = PeriodReference(story: story, type: .progress, day: 2, periodPath: "")
+            periodRef3 = PeriodReference(story: story, type: .epilogue, day: 3, periodPath: "")
+            let period = Period(story: story, type: .prologue, day: 0)
             
             self.availablePeriodRefsLine = Observable.just([periodRef0, periodRef1, periodRef2, periodRef3])
             self.currentPeriodLine = Observable.just(period)
@@ -75,7 +75,7 @@ class SelectPeriodViewModelTests: XCTestCase {
     }
     
     func testPeriods() {
-        let periodsObserver = FulfillObserver(expectationWithDescription("periods")) { (items: [SelectPeriodViewModelItem]) in
+        let periodsObserver = FulfillObserver(expectation(withDescription: "periods")) { (items: [SelectPeriodViewModelItem]) in
             return items.map({ $0.title }) == ["Prologue", "Day 1", "Day 2", "Epilogue"]
                 && items.map({ $0.checked }) == [true, false, false, false]
         }
@@ -83,14 +83,14 @@ class SelectPeriodViewModelTests: XCTestCase {
             .bindTo(periodsObserver)
             .addDisposableTo(disposeBag)
         
-        waitForExpectationsWithTimeout(3.0) { error in }
+        waitForExpectations(timeout: 3.0) { error in }
     }
     
     func testResultSelected() {
-        let resultExpectation = expectationWithDescription("result")
+        let resultExpectation = expectation(description: "result")
         selectPeriodViewModel.onResult = { result in
             switch result {
-            case .Selected(let periodRef):
+            case .selected(let periodRef):
                 XCTAssertEqual(periodRef.day, 2)
             default:
                 XCTFail("the result should be .Selected")
@@ -104,14 +104,14 @@ class SelectPeriodViewModelTests: XCTestCase {
             }
             .addDisposableTo(disposeBag)
 
-        waitForExpectationsWithTimeout(3.0) { error in }
+        waitForExpectations(timeout: 3.0) { error in }
     }
     
     func testResultCancelled() {
-        let resultExpectation = expectationWithDescription("result")
+        let resultExpectation = expectation(description: "result")
         selectPeriodViewModel.onResult = { result in
             switch result {
-            case .Cancelled:
+            case .cancelled:
                 break
             default:
                 XCTFail("the result should be .Selected")
@@ -122,6 +122,6 @@ class SelectPeriodViewModelTests: XCTestCase {
         selectPeriodViewModel.cancelAction
             .onNext(())
         
-        waitForExpectationsWithTimeout(3.0) { error in }
+        waitForExpectations(timeout: 3.0) { error in }
     }
 }

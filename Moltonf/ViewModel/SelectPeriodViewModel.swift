@@ -28,8 +28,8 @@ import RxCocoa
 import RxSwift
 
 public enum SelectPeriodViewModelResult {
-    case Selected(PeriodReference)
-    case Cancelled
+    case selected(PeriodReference)
+    case cancelled
 }
 
 public struct SelectPeriodViewModelItem {
@@ -38,17 +38,17 @@ public struct SelectPeriodViewModelItem {
     public let checked: Bool
 }
 
-public class SelectPeriodViewModel: ViewModel {
-    public let periodsLine: Observable<[SelectPeriodViewModelItem]>
-    public let cancelAction: AnyObserver<Void>
-    public let selectAction: AnyObserver<SelectPeriodViewModelItem>
+open class SelectPeriodViewModel: ViewModel {
+    open let periodsLine: Observable<[SelectPeriodViewModelItem]>
+    open let cancelAction: AnyObserver<Void>
+    open let selectAction: AnyObserver<SelectPeriodViewModelItem>
     
-    public var onResult: (SelectPeriodViewModelResult -> Void)? = nil
+    open var onResult: ((SelectPeriodViewModelResult) -> Void)? = nil
     
-    private let _disposeBag = DisposeBag()
-    private let _storyWatching: IStoryWatching
-    private let _cancelAction = ActionObserver<Void>()
-    private let _selectAction = ActionObserver<SelectPeriodViewModelItem>()
+    fileprivate let _disposeBag = DisposeBag()
+    fileprivate let _storyWatching: IStoryWatching
+    fileprivate let _cancelAction = ActionObserver<Void>()
+    fileprivate let _selectAction = ActionObserver<SelectPeriodViewModelItem>()
     
     public init(storyWatching: IStoryWatching) {
         _storyWatching = storyWatching
@@ -63,11 +63,11 @@ public class SelectPeriodViewModel: ViewModel {
                     .map { periodRef in
                         var title = ""
                         switch periodRef.type {
-                        case .Prologue:
+                        case .prologue:
                             title = "Prologue"
-                        case .Epilogue:
+                        case .epilogue:
                             title = "Epilogue"
-                        case .Progress:
+                        case .progress:
                             title = "Day \(periodRef.day)"
                         }
                         let checked = periodRef.day == currentDay
@@ -83,13 +83,13 @@ public class SelectPeriodViewModel: ViewModel {
         _selectAction.handler = { [weak self] item in self?.select(item) }
     }
     
-    private func cancel() {
+    fileprivate func cancel() {
         sendMessage(DismissingMessage())
-        onResult?(.Cancelled)
+        onResult?(.cancelled)
     }
     
-    private func select(item: SelectPeriodViewModelItem) {
+    fileprivate func select(_ item: SelectPeriodViewModelItem) {
         sendMessage(DismissingMessage())
-        onResult?(.Selected(item.periodReference))
+        onResult?(.selected(item.periodReference))
     }
 }

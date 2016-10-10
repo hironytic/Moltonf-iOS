@@ -89,7 +89,7 @@ class StoryTests: XCTestCase {
         XCTAssertEqual(story.avatarList.count, 2)
         XCTAssertEqual(story.avatarList[0].avatarId, "gerd")
         XCTAssertEqual(story.periodRefs.count, 2)
-        XCTAssertEqual(story.periodRefs[0].type, PeriodType.Prologue)
+        XCTAssertEqual(story.periodRefs[0].type, PeriodType.prologue)
         XCTAssertEqual(story.periodRefs[0].periodPath, "period0.json")
     }
 }

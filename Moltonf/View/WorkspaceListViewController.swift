@@ -27,26 +27,26 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-public class WorkspaceListViewController: UITableViewController {
+open class WorkspaceListViewController: UITableViewController {
     var disposeBag: DisposeBag!
     let viewModel = WorkspaceListViewModel()
     
     @IBOutlet weak var addNewButton: UIBarButtonItem!
     
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
 
         bindViewModel()
     }
 
-    override public func didReceiveMemoryWarning() {
+    override open func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
-    private func bindViewModel() {
+    fileprivate func bindViewModel() {
         let viewModel = self.viewModel
         disposeBag = DisposeBag()
 
@@ -76,18 +76,18 @@ public class WorkspaceListViewController: UITableViewController {
             .addDisposableTo(disposeBag)
     }
     
-    private func transition(message: TransitionMessage) {
+    fileprivate func transition(_ message: TransitionMessage) {
         switch message.viewModel {
         case let viewModel as SelectArchiveFileViewModel:
-            let storyboard: UIStoryboard = UIStoryboard(name: "SelectArchiveFile", bundle: NSBundle.mainBundle())
+            let storyboard: UIStoryboard = UIStoryboard(name: "SelectArchiveFile", bundle: Bundle.main)
             let viewController: UINavigationController = storyboard.instantiateInitialViewController() as! UINavigationController
             (viewController.topViewController as! SelectArchiveFileListViewController).viewModel = viewModel
-            presentViewController(viewController, animated: true, completion: nil)
+            present(viewController, animated: true, completion: nil)
         case let viewModel as StoryWatchingViewModel:
-            let storyboard: UIStoryboard = UIStoryboard(name: "StoryWatching", bundle: NSBundle.mainBundle())
+            let storyboard: UIStoryboard = UIStoryboard(name: "StoryWatching", bundle: Bundle.main)
             let viewController: UINavigationController = storyboard.instantiateInitialViewController() as! UINavigationController
             (viewController.topViewController as! StoryWatchingViewController).viewModel = viewModel
-            presentViewController(viewController, animated: true, completion: nil)
+            present(viewController, animated: true, completion: nil)
         default:
             break
         }
@@ -97,37 +97,37 @@ public class WorkspaceListViewController: UITableViewController {
 
 }
 
-public class WorkspaceListDataSource: NSObject, UITableViewDataSource, RxTableViewDataSourceType {
+open class WorkspaceListDataSource: NSObject, UITableViewDataSource, RxTableViewDataSourceType {
     public typealias Element = [WorkspaceListViewModelItem]
     
-    private var _itemModels: Element = []
+    fileprivate var _itemModels: Element = []
     
-    public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    open func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return _itemModels.count
     }
 
-    public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-        let element = _itemModels[indexPath.row]
+    open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let element = _itemModels[(indexPath as NSIndexPath).row]
         
         cell.textLabel?.text = element.workspace.title
         
         return cell
     }
     
-    public func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return tableView.editing
+    open func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return tableView.isEditing
     }
     
-    public func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    open func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return false
     }
     
-    public func tableView(tableView: UITableView, observedEvent: Event<Element>) {
+    open func tableView(_ tableView: UITableView, observedEvent: Event<Element>) {
         UIBindingObserver(UIElement: self) { (dataSource, element) in
             dataSource._itemModels = element
             tableView.reloadData()

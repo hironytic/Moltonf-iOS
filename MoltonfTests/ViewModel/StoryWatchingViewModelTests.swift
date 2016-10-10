@@ -40,10 +40,10 @@ class StoryWatchingViewModelTests: XCTestCase {
         disposeBag = DisposeBag()
         workspace = Workspace()
         story = Story(villageFullName: "", graveIconURI: "")
-        let periodRef0 = PeriodReference(story: story, type: .Prologue, day: 0, periodPath: "")
-        let periodRef1 = PeriodReference(story: story, type: .Progress, day: 1, periodPath: "")
-        let periodRef2 = PeriodReference(story: story, type: .Progress, day: 2, periodPath: "")
-        let periodRef3 = PeriodReference(story: story, type: .Epilogue, day: 3, periodPath: "")
+        let periodRef0 = PeriodReference(story: story, type: .prologue, day: 0, periodPath: "")
+        let periodRef1 = PeriodReference(story: story, type: .progress, day: 1, periodPath: "")
+        let periodRef2 = PeriodReference(story: story, type: .progress, day: 2, periodPath: "")
+        let periodRef3 = PeriodReference(story: story, type: .epilogue, day: 3, periodPath: "")
         availablePeriodRefs = [periodRef0, periodRef1, periodRef2, periodRef3]
     }
     
@@ -53,7 +53,7 @@ class StoryWatchingViewModelTests: XCTestCase {
 
     func testSelectPeriod() {
         class MockStoryWatching: IStoryWatching {
-            var errorLine = Observable<ErrorType>.never()
+            var errorLine = Observable<Error>.never()
             var availablePeriodRefsLine: Observable<[PeriodReference]>
             var currentPeriodLine: Observable<Period>
             var storyElementsLine = Observable<[StoryElement]>.never()
@@ -68,8 +68,8 @@ class StoryWatchingViewModelTests: XCTestCase {
             let period1: Period
             
             init(tests: StoryWatchingViewModelTests) {
-                period0 = Period(story: tests.story, type: .Prologue, day: 0)
-                period1 = Period(story: tests.story, type: .Progress, day: 1)
+                period0 = Period(story: tests.story, type: .prologue, day: 0)
+                period1 = Period(story: tests.story, type: .progress, day: 1)
                 
                 selectPeriodAction = _selectPeriodAction.asObserver()
                 availablePeriodRefsLine = Observable.just(tests.availablePeriodRefs)
@@ -94,17 +94,17 @@ class StoryWatchingViewModelTests: XCTestCase {
         
         // -- initially Prologue is selected
         
-        let currentPeriodTextObserver = FulfillObserver(expectationWithDescription("initial text")) { $0 == "Prologue" }
+        let currentPeriodTextObserver = FulfillObserver(expectation(description: "initial text")) { $0 == "Prologue" }
         storyWatchingViewModel.currentPeriodTextLine
             .bindTo(currentPeriodTextObserver)
             .addDisposableTo(disposeBag)
         
-        waitForExpectationsWithTimeout(1.0, handler: nil)
+        waitForExpectations(timeout: 1.0, handler: nil)
 
         // -- user taps "select period" button -> "Select Period" view appears
         
         var selectPeriodViewModel: SelectPeriodViewModel? = nil
-        let messageObserver = FulfillObserver(expectationWithDescription("transition message")) { (message: Message) in
+        let messageObserver = FulfillObserver(expectation(description: "transition message")) { (message: Message) in
             if let transitionMessage = message as? TransitionMessage {
                 if let viewModel = transitionMessage.viewModel as? SelectPeriodViewModel {
                     selectPeriodViewModel = viewModel
@@ -118,15 +118,15 @@ class StoryWatchingViewModelTests: XCTestCase {
             .addDisposableTo(disposeBag)
     
         storyWatchingViewModel.selectPeriodAction.onNext(())
-        waitForExpectationsWithTimeout(1.0, handler: nil)
+        waitForExpectations(timeout: 1.0, handler: nil)
 
         // -- user selects second period, Day 1
         
         XCTAssertNotNil(selectPeriodViewModel)
         XCTAssertNotNil(selectPeriodViewModel?.onResult)
 
-        currentPeriodTextObserver.reset(expectationWithDescription("day 1")) { $0 == "Day 1" }
-        selectPeriodViewModel?.onResult?(.Selected(availablePeriodRefs[1]))
-        waitForExpectationsWithTimeout(1.0, handler: nil)
+        currentPeriodTextObserver.reset(expectation(withDescription: "day 1")) { $0 == "Day 1" }
+        selectPeriodViewModel?.onResult?(.selected(availablePeriodRefs[1]))
+        waitForExpectations(timeout: 1.0, handler: nil)
     }
 }

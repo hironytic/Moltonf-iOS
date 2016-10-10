@@ -29,20 +29,20 @@ import SwiftyJSON
 private typealias K = ArchiveConstants
 
 /// This class represents a story.
-public class Story {
+open class Story {
     /// Full name of the village
-    public let villageFullName: String
+    open let villageFullName: String
     
     /// URI string which speficies a grave icon image
-    public let graveIconURI: String
+    open let graveIconURI: String
 
     /// Reference to each period in this story
-    public private(set) var periodRefs: [PeriodReference] = []
+    open fileprivate(set) var periodRefs: [PeriodReference] = []
     
     /// Avatars in this story
-    public private(set) var avatarList: [Avatar] = []
+    open fileprivate(set) var avatarList: [Avatar] = []
     
-    private var _avatarMap = [String: Avatar]()
+    fileprivate var _avatarMap = [String: Avatar]()
     
     // for testing
     init(villageFullName: String, graveIconURI: String) {
@@ -57,13 +57,13 @@ public class Story {
         if let villageFullName = playdata[K.FULL_NAME].string {
             self.villageFullName = villageFullName
         } else {
-            throw StoryError.MissingData(data: K.FULL_NAME)
+            throw StoryError.missingData(data: K.FULL_NAME)
         }
 
         if let graveIconURI = playdata[K.GRAVE_ICON_URI].string {
             self.graveIconURI = graveIconURI
         } else {
-            throw StoryError.MissingData(data: K.GRAVE_ICON_URI)
+            throw StoryError.missingData(data: K.GRAVE_ICON_URI)
         }
         
         if let avatarList = playdata[K.AVATAR_LIST].array {
@@ -72,7 +72,7 @@ public class Story {
                     try Avatar(story: self, avatarData: data)
                 }
         } else {
-            throw StoryError.MissingData(data: K.AVATAR_LIST)
+            throw StoryError.missingData(data: K.AVATAR_LIST)
         }
         for avatar in avatarList {
             _avatarMap[avatar.avatarId] = avatar
@@ -84,16 +84,16 @@ public class Story {
                     try PeriodReference(story: self, periodRefData: data)
                 }
         } else {
-            throw StoryError.MissingData(data: K.PERIODS)
+            throw StoryError.missingData(data: K.PERIODS)
         }
     }
 
     /// Creates a new instance from the file.
     /// - parameter playdataURL: file URL
     /// - throws: if it couldn't read the file or its content has errors
-    public convenience init(playdataURL: NSURL) throws {
-        guard let playdataData = NSData(contentsOfURL: playdataURL) else {
-            throw StoryError.CantLoadPlaydata
+    public convenience init(playdataURL: URL) throws {
+        guard let playdataData = try? Data(contentsOf: playdataURL) else {
+            throw StoryError.cantLoadPlaydata
         }
         let playdata = JSON(data: playdataData)
         try self.init(playdata: playdata)
@@ -102,24 +102,24 @@ public class Story {
     /// Retrieves an avatar from its ID.
     /// - parameter avatarId: ID of wanted avatar
     /// - returns: avatar, or nil if no avatar was found
-    public func avatar(havingId avatarId: String) -> Avatar? {
+    open func avatar(havingId avatarId: String) -> Avatar? {
         return _avatarMap[avatarId]
     }
 }
 
 /// This class represents a reference to a period.
-public class PeriodReference {
+open class PeriodReference {
     /// Story which contains this reference
-    public private(set) weak var story: Story?
+    open fileprivate(set) weak var story: Story?
     
     /// Type of this period
-    public let type: PeriodType
+    open let type: PeriodType
     
     /// Number of the day
-    public let day: Int
+    open let day: Int
     
     /// Path to a period file
-    public let periodPath: String
+    open let periodPath: String
 
     // for testing
     init(story: Story?, type: PeriodType, day: Int, periodPath: String) {
@@ -140,22 +140,22 @@ public class PeriodReference {
             if let type = PeriodType(archiveValue: typeValue) {
                 self.type = type
             } else {
-                throw StoryError.UnknownValue(data: typeValue)
+                throw StoryError.unknownValue(data: typeValue)
             }
         } else {
-            throw StoryError.MissingData(data: K.TYPE)
+            throw StoryError.missingData(data: K.TYPE)
         }
         
         if let day = periodRefData[K.DAY].int {
             self.day = day
         } else {
-            throw StoryError.MissingData(data: K.DAY)
+            throw StoryError.missingData(data: K.DAY)
         }
         
         if let href = periodRefData[K.HREF].string {
             self.periodPath = href
         } else {
-            throw StoryError.MissingData(data: K.HREF)
+            throw StoryError.missingData(data: K.HREF)
         }
     }
 }

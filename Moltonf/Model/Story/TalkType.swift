@@ -30,16 +30,16 @@ private typealias K = ArchiveConstants
 /// Type of talk
 public enum TalkType {
     /// Normal talk, log in white
-    case Public
+    case `public`
     
     /// Wolf's talk, log in red
-    case Wolf
+    case wolf
     
     /// Monology, log in gray
-    case Private
+    case `private`
     
     /// Talk under the grave, log in blue
-    case Grave
+    case grave
 }
 
 extension TalkType {
@@ -49,13 +49,13 @@ extension TalkType {
     public init?(archiveValue talkType: String) {
         switch talkType  {
         case K.VAL_PUBLIC:
-            self = .Public
+            self = .public
         case K.VAL_WOLF:
-            self = .Wolf
+            self = .wolf
         case K.VAL_PRIVATE:
-            self = .Private
+            self = .private
         case K.VAL_GRAVE:
-            self = .Grave
+            self = .grave
         default:
             return nil
         }

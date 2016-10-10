@@ -27,26 +27,26 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-public class WorkspaceListViewModelItem {
-    public let workspace: Workspace
+open class WorkspaceListViewModelItem {
+    open let workspace: Workspace
     
     public init(workspace: Workspace) {
         self.workspace = workspace
     }
 }
 
-public class WorkspaceListViewModel: ViewModel {
-    public let workspaceListLine: Observable<[WorkspaceListViewModelItem]>
-    public let addNewAction: AnyObserver<Void>
-    public let deleteAction: AnyObserver<NSIndexPath>
-    public let selectAction: AnyObserver<NSIndexPath>
+open class WorkspaceListViewModel: ViewModel {
+    open let workspaceListLine: Observable<[WorkspaceListViewModelItem]>
+    open let addNewAction: AnyObserver<Void>
+    open let deleteAction: AnyObserver<IndexPath>
+    open let selectAction: AnyObserver<IndexPath>
     
-    private let _disposeBag = DisposeBag()
-    private let _workspaceStore: IWorkspaceStore = WorkspaceStore()
-    private let _workspaceList = Variable<[WorkspaceListViewModelItem]>([])
-    private let _addNewAction = ActionObserver<Void>()
-    private let _deleteAction = ActionObserver<NSIndexPath>()
-    private let _selectAction = ActionObserver<NSIndexPath>()
+    fileprivate let _disposeBag = DisposeBag()
+    fileprivate let _workspaceStore: IWorkspaceStore = WorkspaceStore()
+    fileprivate let _workspaceList = Variable<[WorkspaceListViewModelItem]>([])
+    fileprivate let _addNewAction = ActionObserver<Void>()
+    fileprivate let _deleteAction = ActionObserver<IndexPath>()
+    fileprivate let _selectAction = ActionObserver<IndexPath>()
     
     public override init() {
         workspaceListLine = _workspaceList.asDriver().asObservable()
@@ -66,7 +66,7 @@ public class WorkspaceListViewModel: ViewModel {
         _selectAction.handler = { [weak self] indexPath in self?.select(indexPath) }
     }
     
-    private func addNew() {
+    fileprivate func addNew() {
         let selectArchiveFileViewModel = SelectArchiveFileViewModel()
         selectArchiveFileViewModel.onResult = { [weak self] result in
             self?.processSelectArchiveFileResult(result)
@@ -74,22 +74,22 @@ public class WorkspaceListViewModel: ViewModel {
         sendMessage(TransitionMessage(viewModel: selectArchiveFileViewModel))
     }
     
-    private func processSelectArchiveFileResult(result: SelectArchiveFileViewModelResult) {
+    fileprivate func processSelectArchiveFileResult(_ result: SelectArchiveFileViewModelResult) {
         switch result {
-        case .Selected(let path):
+        case .selected(let path):
             _workspaceStore.createNewWorkspaceAction.onNext(path)
         default:
             break
         }
     }
     
-    private func delete(at indexPath: NSIndexPath) {
-        let listItem = _workspaceList.value[indexPath.row]
+    fileprivate func delete(at indexPath: IndexPath) {
+        let listItem = _workspaceList.value[(indexPath as NSIndexPath).row]
         _workspaceStore.deleteWorkspaceAction.onNext(listItem.workspace)
     }
 
-    private func select(indexPath: NSIndexPath) {
-        let listItem = _workspaceList.value[indexPath.row]
+    fileprivate func select(_ indexPath: IndexPath) {
+        let listItem = _workspaceList.value[(indexPath as NSIndexPath).row]
         let workspace = listItem.workspace
         do {
             let storyWatching = try StoryWatching(workspace: workspace)
@@ -101,22 +101,22 @@ public class WorkspaceListViewModel: ViewModel {
         }
     }
     
-    private static func workspaceStoreChangeScanner(list: [WorkspaceListViewModelItem], changes: WorkspaceStoreChanges) -> [WorkspaceListViewModelItem] {
+    fileprivate static func workspaceStoreChangeScanner(_ list: [WorkspaceListViewModelItem], changes: WorkspaceStoreChanges) -> [WorkspaceListViewModelItem] {
         var list = list
         
         // remove deleted items
-        for index in changes.deletions.reverse() {
-            list.removeAtIndex(index)
+        for index in changes.deletions.reversed() {
+            list.remove(at: index)
         }
         
         // insert new items
         for index in changes.insertions {
-            list.insert(WorkspaceListViewModelItem(workspace: changes.workspaces[AnyRandomAccessIndex(index)]), atIndex: index)
+            list.insert(WorkspaceListViewModelItem(workspace: changes.workspaces[AnyIndex(index)]), at: index)
         }
         
         // replace modified items
         for index in changes.modifications {
-            let item = WorkspaceListViewModelItem(workspace: changes.workspaces[AnyRandomAccessIndex(index)])
+            let item = WorkspaceListViewModelItem(workspace: changes.workspaces[AnyIndex(index)])
             list[index] = item
         }
 

@@ -30,13 +30,13 @@ private typealias K = ArchiveConstants
 /// Type of period
 public enum PeriodType {
     /// Prologue
-    case Prologue
+    case prologue
     
     /// Progress
-    case Progress
+    case progress
     
     /// Epilogue
-    case Epilogue
+    case epilogue
 }
 
 extension PeriodType {
@@ -48,11 +48,11 @@ extension PeriodType {
     public init?(archiveValue type: String) {
         switch type  {
         case K.VAL_PROLOGUE:
-            self = .Prologue
+            self = .prologue
         case K.VAL_PROGRESS:
-            self = .Progress
+            self = .progress
         case K.VAL_EPILOGUE:
-            self = .Epilogue
+            self = .epilogue
         default:
             return nil
         }

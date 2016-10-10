@@ -34,8 +34,8 @@ import Foundation
 // http://jindolf.sourceforge.jp/xml/xsd/bbsArchive-110421.xsd
 
 
-public class NamespaceCandidates {
-    public let candidates: [String]
+open class NamespaceCandidates {
+    open let candidates: [String]
     public init(_ candidates: [String]) {
         self.candidates = candidates
     }
@@ -44,15 +44,15 @@ public func ~=(pattern: NamespaceCandidates, value: String) -> Bool {
     return pattern.candidates.contains(value)
 }
 
-public class ArchiveSchema {
+open class ArchiveSchema {
     // namespace URI for common archive foundation schema (401)
-    public static let NS_ARCHIVE_401 = "http://jindolf.sourceforge.jp/xml/ns/401"
+    open static let NS_ARCHIVE_401 = "http://jindolf.sourceforge.jp/xml/ns/401"
     
     // namespace URI for common archive foundation schema (501)
-    public static let NS_ARCHIVE_501 = "http://jindolf.sourceforge.jp/xml/ns/501"     // version 110420+
+    open static let NS_ARCHIVE_501 = "http://jindolf.sourceforge.jp/xml/ns/501"     // version 110420+
 
     // namespace URI candidates for common archive foundation schema
-    public static let NS_ARCHIVE = NamespaceCandidates([NS_ARCHIVE_401, NS_ARCHIVE_501])
+    open static let NS_ARCHIVE = NamespaceCandidates([NS_ARCHIVE_401, NS_ARCHIVE_501])
     
     //
     // --------------------------------------------------
@@ -61,94 +61,94 @@ public class ArchiveSchema {
     //
     
     // element "village"
-    public static let ELEM_VILLAGE = "village"
+    open static let ELEM_VILLAGE = "village"
 
     // attribute "xml:lang"
-    public static let ATTR_LANG = "xml:lang"
+    open static let ATTR_LANG = "xml:lang"
 
     // lang: "ja-JP"
-    public static let VAL_LANG_JA_JP = "ja-JP"
+    open static let VAL_LANG_JA_JP = "ja-JP"
     
     // attribute "xml:base"
-    public static let ATTR_BASE = "xml:base"
+    open static let ATTR_BASE = "xml:base"
 
     // attribute "fullName"
-    public static let ATTR_FULL_NAME = "fullName"
+    open static let ATTR_FULL_NAME = "fullName"
     
     // attribute "vid"
-    public static let ATTR_VID = "vid"
+    open static let ATTR_VID = "vid"
     
     // attribute "commitTime"
-    public static let ATTR_COMMIT_TIME = "commitTime"
+    open static let ATTR_COMMIT_TIME = "commitTime"
 
     // attribute "state"
-    public static let ATTR_STATE = "state"
+    open static let ATTR_STATE = "state"
     
     // state of village: prologue
-    public static let VAL_VILLAGE_STATE_PROLOGUE = "prologue"
+    open static let VAL_VILLAGE_STATE_PROLOGUE = "prologue"
     
     // state of village: in progress
-    public static let VAL_VILLAGE_STATE_PROGRESS = "progress"
+    open static let VAL_VILLAGE_STATE_PROGRESS = "progress"
 
     // state of village: epilogue
-    public static let VAL_VILLAGE_STATE_EPILOGUE = "epilogue"
+    open static let VAL_VILLAGE_STATE_EPILOGUE = "epilogue"
 
     // state of village: game is over
-    public static let VAL_VILLAGE_STATE_GAMEOVER = "gameover"
+    open static let VAL_VILLAGE_STATE_GAMEOVER = "gameover"
 
     // attribute "disclosure"
-    public static let ATTR_DISCLOSURE = "disclosure"
+    open static let ATTR_DISCLOSURE = "disclosure"
     
     // value of disclosure: "hot"
-    public static let VAL_DISCLOSURE_HOT = "hot"
+    open static let VAL_DISCLOSURE_HOT = "hot"
     
     // value of disclosure: "uncomplete"
-    public static let VAL_DISCLOSURE_UNCOMPLETE = "uncomplete"
+    open static let VAL_DISCLOSURE_UNCOMPLETE = "uncomplete"
     
     // value of disclosure: "complete"
-    public static let VAL_DISCLOSURE_COMPLETE = "complete"
+    open static let VAL_DISCLOSURE_COMPLETE = "complete"
     
     // attribute "isValid"
-    public static let ATTR_IS_VALID = "isValid"
+    open static let ATTR_IS_VALID = "isValid"
     
     // boolean value: "true"
-    public static let VAL_BOOLEAN_TRUE = "true"
+    open static let VAL_BOOLEAN_TRUE = "true"
 
     // boolean value: "false"
-    public static let VAL_BOOLEAN_FALSE = "false"
+    open static let VAL_BOOLEAN_FALSE = "false"
     
     // attribute "landName"
-    public static let ATTR_LAND_NAME = "landName"
+    open static let ATTR_LAND_NAME = "landName"
     
     // attribute "formalName"
-    public static let ATTR_FORMAL_NAME = "formalName"
+    open static let ATTR_FORMAL_NAME = "formalName"
     
     // attribute "landId"
-    public static let ATTR_LAND_ID = "landId"
+    open static let ATTR_LAND_ID = "landId"
     
     // attribute "landPrefix"
-    public static let ATTR_LAND_PREFIX = "landPrefix"
+    open static let ATTR_LAND_PREFIX = "landPrefix"
     
     // attribute "locale"
-    public static let ATTR_LOCALE = "locale"
+    open static let ATTR_LOCALE = "locale"
     
     // attribute "orgencoding"
-    public static let ATTR_ORGENCODING = "origencoding"
+    open static let ATTR_ORGENCODING = "origencoding"
     
     // encoding: "Shift_JIS"
-    public static let VAL_ENCODING_SHIFT_JIS = "Shift_JIS"
+    open static let VAL_ENCODING_SHIFT_JIS = "Shift_JIS"
     
     // attribute "timezone"
-    public static let ATTR_TIMEZONE = "timezone"
+    open static let ATTR_TIMEZONE = "timezone"
 
     // timezone +0900
-    public static let VAL_TIMEZONE_0900 = "GMT+09:00"
+    open static let VAL_TIMEZONE_0900 = "GMT+09:00"
     
     // attribute "graveIconURI"
-    public static let ATTR_GRAVE_ICON_URI = "graveIconURI"
+    open static let ATTR_GRAVE_ICON_URI = "graveIconURI"
     
     // attribute "generator"
-    public static let ATTR_GENERATOR = "generator"
+    open static let ATTR_GENERATOR = "generator"
 
     //
     // --------------------------------------------------
@@ -157,7 +157,7 @@ public class ArchiveSchema {
     //
     
     // element "avatarList"
-    public static let ELEM_AVATAR_LIST = "avatarList"
+    open static let ELEM_AVATAR_LIST = "avatarList"
     
     //
     // --------------------------------------------------
@@ -166,19 +166,19 @@ public class ArchiveSchema {
     //
     
     // element "avatar"
-    public static let ELEM_AVATAR = "avatar"
+    open static let ELEM_AVATAR = "avatar"
     
     // attribute "avatarId"
-    public static let ATTR_AVATAR_ID = "avatarId"
+    open static let ATTR_AVATAR_ID = "avatarId"
     
     // attribute "fullName"
     // public static let ATTR_FULL_NAME = "fullName"   // defined in other place
     
     // attribute "shortName"
-    public static let ATTR_SHORT_NAME = "shortName"
+    open static let ATTR_SHORT_NAME = "shortName"
     
     // attribute "faceIconURI"
-    public static let ATTR_FACE_ICON_URI = "faceIconURI"
+    open static let ATTR_FACE_ICON_URI = "faceIconURI"
     
     //
     // --------------------------------------------------
@@ -187,40 +187,40 @@ public class ArchiveSchema {
     //
     
     // element "period"
-    public static let ELEM_PERIOD = "period"
+    open static let ELEM_PERIOD = "period"
 
     // attribute "type"
     // public static let ATTR_TYPE = "type"  // defined in other place
 
     // type of period: prologue
-    public static let VAL_PERIOD_TYPE_PROLOGUE = "prologue"
+    open static let VAL_PERIOD_TYPE_PROLOGUE = "prologue"
 
     // type of period: in progress
-    public static let VAL_PERIOD_TYPE_PROGRESS = "progress"
+    open static let VAL_PERIOD_TYPE_PROGRESS = "progress"
     
     // type of period: epilogue
-    public static let VAL_PERIOD_TYPE_EPILOGUE = "epilogue"
+    open static let VAL_PERIOD_TYPE_EPILOGUE = "epilogue"
     
     // attribute "day"
-    public static let ATTR_DAY = "day"
+    open static let ATTR_DAY = "day"
     
     // attribute "disclosure"
     // public static let ATTR_DISCLOSURE = "disclosure"    // defined in other place
     
     // attribute "nextCommitDay"
-    public static let ATTR_NEXT_COMMIT_DAY = "nextCommitDay"
+    open static let ATTR_NEXT_COMMIT_DAY = "nextCommitDay"
     
     // attribute "commitTime"
     // public static let ATTR_COMMIT_TIME = "commitTime"   // defined in other place
     
     // attribute "sourceURI"
-    public static let ATTR_SOURCE_URI = "sourceURI"
+    open static let ATTR_SOURCE_URI = "sourceURI"
 
     // attribute "loadedTime"
-    public static let ATTR_LOADED_TIME = "loadedTime"
+    open static let ATTR_LOADED_TIME = "loadedTime"
     
     // attribute "loadedBy"
-    public static let ATTR_LOADED_BY = "loadedBy"
+    open static let ATTR_LOADED_BY = "loadedBy"
 
     //
     // --------------------------------------------------
@@ -229,46 +229,46 @@ public class ArchiveSchema {
     //
     
     // element "startEntry"
-    public static let ELEM_START_ENTRY = "startEntry"
+    open static let ELEM_START_ENTRY = "startEntry"
 
     // element "startMirror"
-    public static let ELEM_START_MIRROR = "startMirror"
+    open static let ELEM_START_MIRROR = "startMirror"
     
     // element "openRole"
-    public static let ELEM_OPEN_ROLE = "openRole"
+    open static let ELEM_OPEN_ROLE = "openRole"
     
     // element "murdered"
-    public static let ELEM_MURDERED = "murdered"
+    open static let ELEM_MURDERED = "murdered"
     
     // element "startAssault"
-    public static let ELEM_START_ASSAULT = "startAssault"
+    open static let ELEM_START_ASSAULT = "startAssault"
     
     // element "survivor"
-    public static let ELEM_SURVIVOR = "survivor"
+    open static let ELEM_SURVIVOR = "survivor"
     
     // element "suddenDeath"
-    public static let ELEM_SUDDEN_DEATH = "suddenDeath"
+    open static let ELEM_SUDDEN_DEATH = "suddenDeath"
     
     // element "noMurder"
-    public static let ELEM_NO_MURDER = "noMurder"
+    open static let ELEM_NO_MURDER = "noMurder"
     
     // element "winVillage"
-    public static let ELEM_WIN_VILLAGE = "winVillage"
+    open static let ELEM_WIN_VILLAGE = "winVillage"
     
     // element "winWolf"
-    public static let ELEM_WIN_WOLF = "winWolf"
+    open static let ELEM_WIN_WOLF = "winWolf"
     
     // element "winHamster"
-    public static let ELEM_WIN_HAMSTER = "winHamster"
+    open static let ELEM_WIN_HAMSTER = "winHamster"
     
     // element "playerList"
-    public static let ELEM_PLAYER_LIST = "playerList"
+    open static let ELEM_PLAYER_LIST = "playerList"
     
     // element "panic"
-    public static let ELEM_PANIC = "panic"
+    open static let ELEM_PANIC = "panic"
 
     // element "shortMember"
-    public static let ELEM_SHORT_MEMBER = "shortMember"
+    open static let ELEM_SHORT_MEMBER = "shortMember"
     
     //
     // --------------------------------------------------
@@ -277,10 +277,10 @@ public class ArchiveSchema {
     //
     
     // element "onStage"
-    public static let ELEM_ON_STAGE = "onStage"
+    open static let ELEM_ON_STAGE = "onStage"
     
     // attribute "entryNo"
-    public static let ATTR_ENTRY_NO = "entryNo"
+    open static let ATTR_ENTRY_NO = "entryNo"
     
     // attribute "avatarId"
     // public static let ATTR_AVATAR_ID = "avatarId" // defined in other place
@@ -292,10 +292,10 @@ public class ArchiveSchema {
     //
     
     // element "counting"
-    public static let ELEM_COUNTING = "counting"
+    open static let ELEM_COUNTING = "counting"
     
     // attribute "victim"
-    public static let ATTR_VICTIM = "victim"
+    open static let ATTR_VICTIM = "victim"
     
     //
     // --------------------------------------------------
@@ -304,13 +304,13 @@ public class ArchiveSchema {
     //
     
     // element "vote"
-    public static let ELEM_VOTE = "vote"
+    open static let ELEM_VOTE = "vote"
 
     // attribute "byWhom"
-    public static let ATTR_BY_WHOM = "byWhom"
+    open static let ATTR_BY_WHOM = "byWhom"
     
     // attribute "target"
-    public static let ATTR_TARGET = "target"
+    open static let ATTR_TARGET = "target"
     
     //
     // --------------------------------------------------
@@ -319,7 +319,7 @@ public class ArchiveSchema {
     //
     
     // element "execution"
-    public static let ELEM_EXECUTION = "execution"
+    open static let ELEM_EXECUTION = "execution"
     
     // attribute "victim"
     // public static let ATTR_VICTIM = "victim"    // defined in other place
@@ -331,13 +331,13 @@ public class ArchiveSchema {
     //
     
     // element "nominated"
-    public static let ELEM_NOMINATED = "nominated"
+    open static let ELEM_NOMINATED = "nominated"
     
     // attribute "avatarId"
     // public static let ATTR_AVATAR_ID = "avatarId" // defined in other place
     
     // attribute "count"
-    public static let ATTR_COUNT = "count"
+    open static let ATTR_COUNT = "count"
     
     //
     // --------------------------------------------------
@@ -346,7 +346,7 @@ public class ArchiveSchema {
     //
     
     // element "vanish"
-    public static let ELEM_VANISH = "vanish"
+    open static let ELEM_VANISH = "vanish"
     
     // attribute "avatarId"
     // public static let ATTR_AVATAR_ID = "avatarId" // defined in other place
@@ -358,7 +358,7 @@ public class ArchiveSchema {
     //
     
     // element "vanish"
-    public static let ELEM_CHECKOUT = "checkout"
+    open static let ELEM_CHECKOUT = "checkout"
     
     // attribute "avatarId"
     // public static let ATTR_AVATAR_ID = "avatarId" // defined in other place
@@ -370,10 +370,10 @@ public class ArchiveSchema {
     //
     
     // element "noComment"
-    public static let ELEM_NO_COMMENT = "noComment"
+    open static let ELEM_NO_COMMENT = "noComment"
     
     // element "gameOver"
-    public static let ELEM_GAME_OVER = "gameOver"
+    open static let ELEM_GAME_OVER = "gameOver"
 
     //
     // --------------------------------------------------
@@ -382,16 +382,16 @@ public class ArchiveSchema {
     //
     
     // element "askEntry"
-    public static let ELEM_ASK_ENTRY = "askEntry"
+    open static let ELEM_ASK_ENTRY = "askEntry"
     
     // attribute "commitTime"
     // public static let ATTR_COMMIT_TIME = "commitTime"   // defined in other place
     
     // attribute "minMembers"
-    public static let ATTR_MIN_MEMBERS = "minMembers"
+    open static let ATTR_MIN_MEMBERS = "minMembers"
     
     // attribute "maxMembers"
-    public static let ATTR_MAX_MEMBERS = "maxMembers"
+    open static let ATTR_MAX_MEMBERS = "maxMembers"
 
     //
     // --------------------------------------------------
@@ -400,13 +400,13 @@ public class ArchiveSchema {
     //
 
     // element "askCommit"
-    public static let ELEM_ASK_COMMIT = "askCommit"
+    open static let ELEM_ASK_COMMIT = "askCommit"
 
     // attribute "limitVote"
-    public static let ATTR_LIMIT_VOTE = "limitVote"
+    open static let ATTR_LIMIT_VOTE = "limitVote"
     
     // attribute "limitSpecial"
-    public static let ATTR_LIMIT_SPECIAL = "limitSpecial"
+    open static let ATTR_LIMIT_SPECIAL = "limitSpecial"
     
     //
     // --------------------------------------------------
@@ -415,13 +415,13 @@ public class ArchiveSchema {
     //
     
     // element "stayEpilogue"
-    public static let ELEM_STAY_EPILOGUE = "stayEpilogue"
+    open static let ELEM_STAY_EPILOGUE = "stayEpilogue"
     
     // attribute "winner"
-    public static let ATTR_WINNER = "winner"
+    open static let ATTR_WINNER = "winner"
     
     // attribute "limitTime"
-    public static let ATTR_LIMIT_TIME = "limitTime"
+    open static let ATTR_LIMIT_TIME = "limitTime"
     
     //
     // --------------------------------------------------
@@ -430,7 +430,7 @@ public class ArchiveSchema {
     //
 
     // element "judge"
-    public static let ELEM_JUDGE = "judge"
+    open static let ELEM_JUDGE = "judge"
     
     // attribute "byWhom"
     // public static let ATTR_BY_WHOM = "byWhom"   // defined in other place
@@ -445,7 +445,7 @@ public class ArchiveSchema {
     //
     
     // element "guard"
-    public static let ELEM_GUARD = "guard"
+    open static let ELEM_GUARD = "guard"
     
     // attribute "byWhom"
     // public static let ATTR_BY_WHOM = "byWhom"   // defined in other place
@@ -460,7 +460,7 @@ public class ArchiveSchema {
     //
     
     // element "counting2"
-    public static let ELEM_COUNTING2 = "counting2"
+    open static let ELEM_COUNTING2 = "counting2"
     
     //
     // --------------------------------------------------
@@ -469,7 +469,7 @@ public class ArchiveSchema {
     //
     
     // element "assault"
-    public static let ELEM_ASSAULT = "assault"
+    open static let ELEM_ASSAULT = "assault"
     
     // attribute "byWhom"
     // public static let ATTR_BY_WHOM = "byWhom"   // defined in other place
@@ -493,31 +493,31 @@ public class ArchiveSchema {
     //
     
     // element "talk"
-    public static let ELEM_TALK = "talk"
+    open static let ELEM_TALK = "talk"
     
     // attribute "type"
-    public static let ATTR_TYPE = "type"
+    open static let ATTR_TYPE = "type"
     
     // talk type: public (white balloon)
-    public static let VAL_TALK_TYPE_PUBLIC = "public"
+    open static let VAL_TALK_TYPE_PUBLIC = "public"
     
     // talk type: wolf (red balloon)
-    public static let VAL_TALK_TYPE_WOLF = "wolf"
+    open static let VAL_TALK_TYPE_WOLF = "wolf"
     
     // talk type: private (gray balloon)
-    public static let VAL_TALK_TYPE_PRIVATE = "private"
+    open static let VAL_TALK_TYPE_PRIVATE = "private"
     
     // talk type: grave (blue balloon)
-    public static let VAL_TALK_TYPE_GRAVE = "grave"
+    open static let VAL_TALK_TYPE_GRAVE = "grave"
     
     // attribute "avatarId"
     // public static let ATTR_AVATAR_ID = "avatarId" // defined in other place
 
     // attribute "xname"
-    public static let ATTR_XNAME = "xname"
+    open static let ATTR_XNAME = "xname"
     
     // attribute "time"
-    public static let ATTR_TIME = "time"
+    open static let ATTR_TIME = "time"
     
     // attribute "faceIconURI"
     // public static let ATTR_FACE_ICON_URI = "faceIconURI"    // defined in other place
@@ -529,7 +529,7 @@ public class ArchiveSchema {
     //
     
     // element "li"
-    public static let ELEM_LI = "li"
+    open static let ELEM_LI = "li"
     
     //
     // --------------------------------------------------
@@ -538,13 +538,13 @@ public class ArchiveSchema {
     //
     
     // element "rawdata"
-    public static let ELEM_RAWDATA = "rawdata"
+    open static let ELEM_RAWDATA = "rawdata"
     
     // attribute "encoding"
-    public static let ATTR_ENCODING = "encoding"
+    open static let ATTR_ENCODING = "encoding"
     
     // attribute "hexBin"
-    public static let ATTR_HEX_BIN = "hexBin"
+    open static let ATTR_HEX_BIN = "hexBin"
 
     //
     // --------------------------------------------------
@@ -553,13 +553,13 @@ public class ArchiveSchema {
     //
     
     // element "roleHeads"
-    public static let ELEM_ROLE_HEADS = "roleHeads"
+    open static let ELEM_ROLE_HEADS = "roleHeads"
     
     // attribute "role"
-    public static let ATTR_ROLE = "role"
+    open static let ATTR_ROLE = "role"
     
     // attribute "heads"
-    public static let ATTR_HEADS = "heads"
+    open static let ATTR_HEADS = "heads"
     
     //
     // --------------------------------------------------
@@ -568,7 +568,7 @@ public class ArchiveSchema {
     //
     
     // element "avatarRef"
-    public static let ELEM_AVATAR_REF = "avatarRef"
+    open static let ELEM_AVATAR_REF = "avatarRef"
     
     // attribute "avatarId"
     // public static let ATTR_AVATAR_ID = "avatarId" // defined in other place
@@ -580,44 +580,44 @@ public class ArchiveSchema {
     //
     
     // element "playerInfo"
-    public static let ELEM_PLAYER_INFO = "playerInfo"
+    open static let ELEM_PLAYER_INFO = "playerInfo"
 
     // attribute "playerId"
-    public static let ATTR_PLAYER_ID = "playerId"
+    open static let ATTR_PLAYER_ID = "playerId"
     
     // attribute "avatarId"
     // public static let ATTR_AVATAR_ID = "avatarId" // defined in other place
 
     // attribute "survive"
-    public static let ATTR_SURVIVE = "survive"
+    open static let ATTR_SURVIVE = "survive"
     
     // attribute "role"
     // public static let ATTR_ROLE = "role" // defined in other place
     
     // role: ordinary villager
-    public static let VAL_ROLE_INNOCENT = "innocent"
+    open static let VAL_ROLE_INNOCENT = "innocent"
     
     // role: werewolf
-    public static let VAL_ROLE_WOLF = "wolf"
+    open static let VAL_ROLE_WOLF = "wolf"
     
     // role: fortune teller
-    public static let VAL_ROLE_SEER = "seer"
+    open static let VAL_ROLE_SEER = "seer"
     
     // role: medium
-    public static let VAL_ROLE_SHAMAN = "shaman"
+    open static let VAL_ROLE_SHAMAN = "shaman"
     
     // role: maniac
-    public static let VAL_ROLE_MADMAN = "madman"
+    open static let VAL_ROLE_MADMAN = "madman"
     
     // role: hunter
-    public static let VAL_ROLE_HUNTER = "hunter"
+    open static let VAL_ROLE_HUNTER = "hunter"
     
     // role: mason
-    public static let VAL_ROLE_FRATER = "frater"
+    open static let VAL_ROLE_FRATER = "frater"
     
     // role: werehamster
-    public static let VAL_ROLE_HAMSTER = "hamster"
+    open static let VAL_ROLE_HAMSTER = "hamster"
     
     // attribute "uri"
-    public static let ATTR_URI = "uri"
+    open static let ATTR_URI = "uri"
 }

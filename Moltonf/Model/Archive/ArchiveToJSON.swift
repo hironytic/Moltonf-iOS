@@ -32,38 +32,38 @@ private typealias K = ArchiveConstants
 private let PERIOD_JSON_FORMAT = "period-%ld.json"
 
 protocol ArchiveJSONWriter {
-    func writeArchiveJSON(fileName fileName: String, object: [String: AnyObject]) throws
+    func writeArchiveJSON(fileName: String, object: [String: AnyObject]) throws
 }
 
-public class ArchiveToJSON: ArchiveJSONWriter {
-    public enum ConvertError: ErrorType {
-        case CantReadArchive
-        case InvalidOutputDirectory(innerError: ErrorType)
-        case ParseError(innerError: ErrorType)
-        case InvalidAttrValue(attribute: String, value: String)
-        case MissingAttr(attribute: String)
-        case FailedInWritingFile(filePath: String, innerError: ErrorType?)
+open class ArchiveToJSON: ArchiveJSONWriter {
+    public enum ConvertError: Error {
+        case cantReadArchive
+        case invalidOutputDirectory(innerError: Error)
+        case parseError(innerError: Error)
+        case invalidAttrValue(attribute: String, value: String)
+        case missingAttr(attribute: String)
+        case failedInWritingFile(filePath: String, innerError: Error?)
     }
     
-    private let _archivePath: String
-    private let _outDirPath: String
+    fileprivate let _archivePath: String
+    fileprivate let _outDirPath: String
     
     public init(fromArchive archivePath: String, toDirectory outDirPath: String) {
         _archivePath = archivePath
         _outDirPath = outDirPath
     }
 
-    public func convert() throws {
+    open func convert() throws {
         // ready parser
-        guard let parser = XMLPullParser(contentsOfURL: NSURL.fileURLWithPath(_archivePath)) else { throw ConvertError.CantReadArchive }
+        guard let parser = XMLPullParser(contentsOfURL: URL(fileURLWithPath: _archivePath)) else { throw ConvertError.cantReadArchive }
         parser.shouldProcessNamespaces = true
         
         // ready output directory
         do {
-            let fileManager = NSFileManager.defaultManager()
-            try fileManager.createDirectoryAtPath(_outDirPath, withIntermediateDirectories: true, attributes: nil)
+            let fileManager = FileManager.default
+            try fileManager.createDirectory(atPath: _outDirPath, withIntermediateDirectories: true, attributes: nil)
         } catch let error {
-            throw ConvertError.InvalidOutputDirectory(innerError: error)
+            throw ConvertError.invalidOutputDirectory(innerError: error)
         }
         
         // parse and convert
@@ -71,32 +71,32 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             parsing: while true {
                 let event = try parser.next()
                 switch event {
-                case .StartElement(name: S.ELEM_VILLAGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_VILLAGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     try VillageElementConverter(parser: parser).convert(element, writer: self)
-                case .EndDocument:
+                case .endDocument:
                     break parsing
                 default:
                     break
                 }
             }
-        } catch XMLPullParserError.ParseError(let error) {
-            throw ConvertError.ParseError(innerError: error)
+        } catch XMLPullParserError.parseError(let error) {
+            throw ConvertError.parseError(innerError: error)
         }
     }
     
-    func writeArchiveJSON(fileName fileName: String, object: [String: AnyObject]) throws {
-        let filePath = (_outDirPath as NSString).stringByAppendingPathComponent(fileName)
-        guard let outStream = NSOutputStream(toFileAtPath: filePath, append: false) else {
-            throw ConvertError.FailedInWritingFile(filePath: filePath, innerError: nil)
+    func writeArchiveJSON(fileName: String, object: [String: AnyObject]) throws {
+        let filePath = (_outDirPath as NSString).appendingPathComponent(fileName)
+        guard let outStream = OutputStream(toFileAtPath: filePath, append: false) else {
+            throw ConvertError.failedInWritingFile(filePath: filePath, innerError: nil)
         }
         do {
             outStream.open()
             defer { outStream.close() }
             
             var error: NSError?
-            let result = NSJSONSerialization.writeJSONObject(object, toStream: outStream, options: NSJSONWritingOptions(), error: &error)
+            let result = JSONSerialization.writeJSONObject(object, to: outStream, options: JSONSerialization.WritingOptions(), error: &error)
             if (result == 0) {
-                throw ConvertError.FailedInWritingFile(filePath: filePath, innerError: error)
+                throw ConvertError.failedInWritingFile(filePath: filePath, innerError: error)
             }
         }
     }
@@ -112,10 +112,10 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             parsing: while true {
                 let event = try _parser.next()
                 switch event {
-                case .StartElement:
+                case .startElement:
                     try skipElement()
                     break
-                case .EndElement:
+                case .endElement:
                     break parsing
                 default:
                     break
@@ -125,7 +125,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
 
     class VillageElementConverter: ElementConverter {
-        func convert(element: XMLElement, writer: ArchiveJSONWriter) throws {
+        func convert(_ element: XMLElement, writer: ArchiveJSONWriter) throws {
             let villageWrapper = ObjectWrapper(object: [:])
             
             // attributes
@@ -170,20 +170,20 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             parsing: while true {
                 let event = try _parser.next()
                 switch event {
-                case .StartElement(name: S.ELEM_AVATAR_LIST, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_AVATAR_LIST, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     villageWrapper.object[K.AVATAR_LIST] = try AvatarListElementConverter(parser: _parser).convert(element)
-                case .StartElement(name: S.ELEM_PERIOD, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_PERIOD, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     periods.append(try PeriodElementConverter(parser: _parser).convert(element, writer: writer))
-                case .StartElement:
+                case .startElement:
                     try skipElement()
                     break
-                case .EndElement:
+                case .endElement:
                     break parsing
                 default:
                     break
                 }
             }
-            villageWrapper.object[K.PERIODS] = periods
+            villageWrapper.object[K.PERIODS] = periods as AnyObject?
             
             // write to playdata.json
             let village = villageWrapper.object
@@ -192,18 +192,18 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class AvatarListElementConverter: ElementConverter {
-        func convert(element: XMLElement) throws -> [[String: AnyObject]] {
+        func convert(_ element: XMLElement) throws -> [[String: AnyObject]] {
             // children
             var avatars: [[String: AnyObject]] = []
             parsing: while true {
                 let event = try _parser.next()
                 switch event {
-                case .StartElement(name: S.ELEM_AVATAR, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_AVATAR, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     avatars.append(try AvatarElementConverter(parser: _parser).convert(element))
-                case .StartElement:
+                case .startElement:
                     try skipElement()
                     break
-                case .EndElement:
+                case .endElement:
                     break parsing
                 default:
                     break
@@ -215,7 +215,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class AvatarElementConverter: ElementConverter {
-        func convert(element: XMLElement) throws -> [String: AnyObject] {
+        func convert(_ element: XMLElement) throws -> [String: AnyObject] {
             let avatarWrapper = ObjectWrapper(object: [:])
             
             // attributes
@@ -241,7 +241,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class PeriodElementConverter: ElementConverter {
-        func convert(element: XMLElement, writer: ArchiveJSONWriter) throws -> [String: AnyObject] {
+        func convert(_ element: XMLElement, writer: ArchiveJSONWriter) throws -> [String: AnyObject] {
             let shallowPeriodWrapper = ObjectWrapper(object: [:])
             let deepPeriodWrapper = ObjectWrapper(object: [:])
 
@@ -272,73 +272,73 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             parsing: while true {
                 let event = try _parser.next()
                 switch event {
-                case .StartElement(name: S.ELEM_TALK, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_TALK, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try TalkElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_START_ENTRY, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_START_ENTRY, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try StartEntryElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_ON_STAGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_ON_STAGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try OnStageElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_START_MIRROR, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_START_MIRROR, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try StartMirrorElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_OPEN_ROLE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_OPEN_ROLE, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try OpenRoleElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_MURDERED, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_MURDERED, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try MurderedElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_START_ASSAULT, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_START_ASSAULT, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try StartAssaultElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_SURVIVOR, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_SURVIVOR, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try SurvivorElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_COUNTING, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_COUNTING, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try CountingElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_SUDDEN_DEATH, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_SUDDEN_DEATH, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try SuddenDeathElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_NO_MURDER, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_NO_MURDER, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try NoMurderElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_WIN_VILLAGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_WIN_VILLAGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try WinVillageElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_WIN_WOLF, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_WIN_WOLF, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try WinWolfElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_WIN_HAMSTER, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_WIN_HAMSTER, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try WinHamsterElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_PLAYER_LIST, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_PLAYER_LIST, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try PlayerListElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_PANIC, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_PANIC, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try PanicElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_EXECUTION, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_EXECUTION, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try ExecutionElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_VANISH, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_VANISH, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try VanishElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_CHECKOUT, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_CHECKOUT, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try CheckoutElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_SHORT_MEMBER, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_SHORT_MEMBER, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try ShortMemberElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_ASK_ENTRY, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_ASK_ENTRY, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try AskEntryElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_ASK_COMMIT, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_ASK_COMMIT, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try AskCommitElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_NO_COMMENT, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_NO_COMMENT, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try NoCommentElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_STAY_EPILOGUE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_STAY_EPILOGUE, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try StayEpilogueElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_GAME_OVER, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_GAME_OVER, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try GameOverElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_JUDGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_JUDGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try JudgeElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_GUARD, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_GUARD, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try GuardElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_COUNTING2, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_COUNTING2, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try Counting2ElementConverter(parser: _parser).convert(element))
-                case .StartElement(name: S.ELEM_ASSAULT, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_ASSAULT, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     elements.append(try AssaultElementConverter(parser: _parser).convert(element))
-                case .StartElement:
+                case .startElement:
                     try skipElement()
-                case .EndElement:
+                case .endElement:
                     break parsing
                 default:
                     break
                 }
             }
-            deepPeriodWrapper.object[K.ELEMENTS] = elements
+            deepPeriodWrapper.object[K.ELEMENTS] = elements as AnyObject?
 
             // write to period[n].json
             let deepPeriod = deepPeriodWrapper.object
@@ -346,7 +346,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             let periodFileName = String(format: PERIOD_JSON_FORMAT, day)
             try writer.writeArchiveJSON(fileName: periodFileName, object: deepPeriod)
 
-            shallowPeriodWrapper.object[K.HREF] = periodFileName
+            shallowPeriodWrapper.object[K.HREF] = periodFileName as AnyObject?
             return shallowPeriodWrapper.object
         }
     }
@@ -357,7 +357,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             _objectWrapper.object[K.TYPE] = K.VAL_TALK
         }
         
-        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
             // attributes
             let mapToTalk = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -389,7 +389,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_ON_STAGE)
         }
 
-        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -426,9 +426,9 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             _roleHeads = [:]
         }
         
-        override func onEvent(event: XMLEvent) throws {
+        override func onEvent(_ event: XMLEvent) throws {
             switch event {
-            case .StartElement(name: S.ELEM_ROLE_HEADS, namespaceURI: S.NS_ARCHIVE?, element: let element):
+            case .startElement(name: S.ELEM_ROLE_HEADS, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 let (role, heads) = try RoleHeadsElementConverter(parser: _parser).convert(element)
                 _roleHeads[role] = heads
             default:
@@ -437,16 +437,16 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.ROLE_HEADS] = _roleHeads
+            _objectWrapper.object[K.ROLE_HEADS] = _roleHeads as AnyObject?
             
             try super.onEnd()
         }
     }
     
     class RoleHeadsElementConverter: ElementConverter {
-        func convert(element: XMLElement) throws -> (role: String, heads: AnyObject) {
-            guard let role = element.attributes[S.ATTR_ROLE] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_ROLE) }
-            guard let headsStr = element.attributes[S.ATTR_HEADS] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_HEADS) }
+        func convert(_ element: XMLElement) throws -> (role: String, heads: AnyObject) {
+            guard let role = element.attributes[S.ATTR_ROLE] else { throw ArchiveToJSON.ConvertError.missingAttr(attribute:S.ATTR_ROLE) }
+            guard let headsStr = element.attributes[S.ATTR_HEADS] else { throw ArchiveToJSON.ConvertError.missingAttr(attribute:S.ATTR_HEADS) }
             let heads = try asInt(headsStr)
             
             try self.skipElement()
@@ -468,9 +468,9 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             _avatarId = []
         }
         
-        override func onEvent(event: XMLEvent) throws {
+        override func onEvent(_ event: XMLEvent) throws {
             switch event {
-            case .StartElement(name: S.ELEM_AVATAR_REF, namespaceURI: S.NS_ARCHIVE?, element: let element):
+            case .startElement(name: S.ELEM_AVATAR_REF, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 _avatarId.append(try AvatarRefElementConverter(parser: _parser).convert(element))
             default:
                 try super.onEvent(event)
@@ -478,7 +478,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.AVATAR_ID] = _avatarId
+            _objectWrapper.object[K.AVATAR_ID] = _avatarId as AnyObject?
             
             try super.onEnd()
         }
@@ -503,9 +503,9 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             _avatarId = []
         }
         
-        override func onEvent(event: XMLEvent) throws {
+        override func onEvent(_ event: XMLEvent) throws {
             switch event {
-            case .StartElement(name: S.ELEM_AVATAR_REF, namespaceURI: S.NS_ARCHIVE?, element: let element):
+            case .startElement(name: S.ELEM_AVATAR_REF, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 _avatarId.append(try AvatarRefElementConverter(parser: _parser).convert(element))
             default:
                 try super.onEvent(event)
@@ -513,15 +513,15 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.AVATAR_ID] = _avatarId
+            _objectWrapper.object[K.AVATAR_ID] = _avatarId as AnyObject?
             
             try super.onEnd()
         }
     }
     
     class AvatarRefElementConverter: ElementConverter {
-        func convert(element: XMLElement) throws -> String {
-            guard let avatarId = element.attributes[S.ATTR_AVATAR_ID] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_AVATAR_ID) }
+        func convert(_ element: XMLElement) throws -> String {
+            guard let avatarId = element.attributes[S.ATTR_AVATAR_ID] else { throw ArchiveToJSON.ConvertError.missingAttr(attribute:S.ATTR_AVATAR_ID) }
             try skipElement()
             return avatarId
         }
@@ -534,7 +534,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_COUNTING)
         }
         
-        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -555,9 +555,9 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             _votes = [:]
         }
 
-        override func onEvent(event: XMLEvent) throws {
+        override func onEvent(_ event: XMLEvent) throws {
             switch event {
-            case .StartElement(name: S.ELEM_VOTE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+            case .startElement(name: S.ELEM_VOTE, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 let (byWhom, target) = try VoteElementConverter(parser: _parser).convert(element)
                 _votes[byWhom] = target
             default:
@@ -566,16 +566,16 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.VOTES] = _votes
+            _objectWrapper.object[K.VOTES] = _votes as AnyObject?
             
             try super.onEnd()
         }
     }
     
     class VoteElementConverter: ElementConverter {
-        func convert(element: XMLElement) throws -> (byWhom: String, target: AnyObject) {
-            guard let byWhom = element.attributes[S.ATTR_BY_WHOM] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_BY_WHOM) }
-            guard let target = element.attributes[S.ATTR_TARGET] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_TARGET) }
+        func convert(_ element: XMLElement) throws -> (byWhom: String, target: AnyObject) {
+            guard let byWhom = element.attributes[S.ATTR_BY_WHOM] else { throw ArchiveToJSON.ConvertError.missingAttr(attribute:S.ATTR_BY_WHOM) }
+            guard let target = element.attributes[S.ATTR_TARGET] else { throw ArchiveToJSON.ConvertError.missingAttr(attribute:S.ATTR_TARGET) }
             
             try self.skipElement()
             
@@ -588,7 +588,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_SUDDEN_DEATH)
         }
         
-        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -642,9 +642,9 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             _playerInfos = []
         }
         
-        override func onEvent(event: XMLEvent) throws {
+        override func onEvent(_ event: XMLEvent) throws {
             switch event {
-            case .StartElement(name: S.ELEM_PLAYER_INFO, namespaceURI: S.NS_ARCHIVE?, element: let element):
+            case .startElement(name: S.ELEM_PLAYER_INFO, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 _playerInfos.append(try PlayerInfoElementConverter(parser: _parser).convert(element))
             default:
                 try super.onEvent(event)
@@ -652,14 +652,14 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.PLAYER_INFOS] = _playerInfos
+            _objectWrapper.object[K.PLAYER_INFOS] = _playerInfos as AnyObject?
             
             try super.onEnd()
         }
     }
 
     class PlayerInfoElementConverter: ElementConverter {
-        func convert(element: XMLElement) throws -> [String: AnyObject] {
+        func convert(_ element: XMLElement) throws -> [String: AnyObject] {
             let playerInfoWrapper = ObjectWrapper(object: [:])
             
             // attributes
@@ -698,7 +698,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_EXECUTION)
         }
         
-        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -719,9 +719,9 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             _nominateds = [:]
         }
         
-        override func onEvent(event: XMLEvent) throws {
+        override func onEvent(_ event: XMLEvent) throws {
             switch event {
-            case .StartElement(name: S.ELEM_NOMINATED, namespaceURI: S.NS_ARCHIVE?, element: let element):
+            case .startElement(name: S.ELEM_NOMINATED, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 let (avatarId, count) = try NominatedElementConverter(parser: _parser).convert(element)
                 _nominateds[avatarId] = count
             default:
@@ -730,16 +730,16 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.NOMINATEDS] = _nominateds
+            _objectWrapper.object[K.NOMINATEDS] = _nominateds as AnyObject?
             
             try super.onEnd()
         }
     }
     
     class NominatedElementConverter: ElementConverter {
-        func convert(element: XMLElement) throws -> (avatarId: String, count: AnyObject) {
-            guard let avatarId = element.attributes[S.ATTR_AVATAR_ID] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_AVATAR_ID) }
-            guard let countStr = element.attributes[S.ATTR_COUNT] else { throw ArchiveToJSON.ConvertError.MissingAttr(attribute:S.ATTR_COUNT) }
+        func convert(_ element: XMLElement) throws -> (avatarId: String, count: AnyObject) {
+            guard let avatarId = element.attributes[S.ATTR_AVATAR_ID] else { throw ArchiveToJSON.ConvertError.missingAttr(attribute:S.ATTR_AVATAR_ID) }
+            guard let countStr = element.attributes[S.ATTR_COUNT] else { throw ArchiveToJSON.ConvertError.missingAttr(attribute:S.ATTR_COUNT) }
             let count = try asInt(countStr)
             
             try self.skipElement()
@@ -753,7 +753,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_VANISH)
         }
         
-        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -775,7 +775,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_CHECKOUT)
         }
         
-        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -803,7 +803,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_ASK_ENTRY)
         }
         
-        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -829,7 +829,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_ASK_COMMIT)
         }
         
-        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -861,9 +861,9 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             _avatarId = []
         }
         
-        override func onEvent(event: XMLEvent) throws {
+        override func onEvent(_ event: XMLEvent) throws {
             switch event {
-            case .StartElement(name: S.ELEM_AVATAR_REF, namespaceURI: S.NS_ARCHIVE?, element: let element):
+            case .startElement(name: S.ELEM_AVATAR_REF, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 _avatarId.append(try AvatarRefElementConverter(parser: _parser).convert(element))
             default:
                 try super.onEvent(event)
@@ -871,7 +871,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.AVATAR_ID] = _avatarId
+            _objectWrapper.object[K.AVATAR_ID] = _avatarId as AnyObject?
             
             try super.onEnd()
         }
@@ -882,7 +882,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_STAY_EPILOGUE)
         }
         
-        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -912,7 +912,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_JUDGE)
         }
         
-        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -936,7 +936,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_GUARD)
         }
         
-        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -968,9 +968,9 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             _votes = [:]
         }
 
-        override func onEvent(event: XMLEvent) throws {
+        override func onEvent(_ event: XMLEvent) throws {
             switch event {
-            case .StartElement(name: S.ELEM_VOTE, namespaceURI: S.NS_ARCHIVE?, element: let element):
+            case .startElement(name: S.ELEM_VOTE, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 let (byWhom, target) = try VoteElementConverter(parser: _parser).convert(element)
                 _votes[byWhom] = target
             default:
@@ -979,7 +979,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.VOTES] = _votes
+            _objectWrapper.object[K.VOTES] = _votes as AnyObject?
             
             try super.onEnd()
         }
@@ -990,7 +990,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_ASSAULT)
         }
         
-        override func convert(element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -1035,7 +1035,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         var _parsing = true
         var _lines: [AnyObject] = []
         
-        func convert(element: XMLElement) throws -> [String: AnyObject] {
+        func convert(_ element: XMLElement) throws -> [String: AnyObject] {
             try onBegin()
             
             while _parsing {
@@ -1053,13 +1053,13 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             _lines = []
         }
         
-        func onEvent(event: XMLEvent) throws {
+        func onEvent(_ event: XMLEvent) throws {
             switch event {
-            case .StartElement(name: S.ELEM_LI, namespaceURI: S.NS_ARCHIVE?, element: let element):
+            case .startElement(name: S.ELEM_LI, namespaceURI: S.NS_ARCHIVE?, element: let element):
                 _lines.append(try LiElementConverter(parser: _parser).convert(element))
-            case .StartElement:
+            case .startElement:
                 try self.skipElement()
-            case .EndElement:
+            case .endElement:
                 _parsing = false
             default:
                 break
@@ -1067,24 +1067,24 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         func onEnd() throws {
-            _objectWrapper.object[K.LINES] = _lines
+            _objectWrapper.object[K.LINES] = _lines as AnyObject?
         }
     }
     
     class LiElementConverter: ElementConverter {
-        func convert(element: XMLElement) throws -> AnyObject {
+        func convert(_ element: XMLElement) throws -> AnyObject {
             var contents: [AnyObject] = []
             
             parsing: while true {
                 let event = try _parser.next()
                 switch event {
-                case .Characters(let string):
+                case .characters(let string):
                     contents.append(string)
-                case .StartElement(name: S.ELEM_RAWDATA, namespaceURI: S.NS_ARCHIVE?, element: let element):
+                case .startElement(name: S.ELEM_RAWDATA, namespaceURI: S.NS_ARCHIVE?, element: let element):
                     contents.append(try RawdataElementConverter(parser: _parser).convert(element))
-                case .StartElement:
+                case .startElement:
                     try skipElement()
-                case .EndElement:
+                case .endElement:
                     break parsing
                 default:
                     break
@@ -1103,7 +1103,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class RawdataElementConverter: ElementConverter {
-        func convert(element: XMLElement) throws -> AnyObject {
+        func convert(_ element: XMLElement) throws -> AnyObject {
             let contentWrapper = ObjectWrapper(object: [:])
 
             // attributes
@@ -1123,11 +1123,11 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             parsing: while true {
                 let event = try _parser.next()
                 switch event {
-                case .Characters(let string):
+                case .characters(let string):
                     contentWrapper.object[K.CHAR] = string
-                case .StartElement:
+                case .startElement:
                     try skipElement()
-                case .EndElement:
+                case .endElement:
                     break parsing
                 default:
                     break
@@ -1148,7 +1148,7 @@ class ObjectWrapper {
     }
 }
 
-private func convertAttribute(element: XMLElement, mapping converters: [String: String throws -> Void], required requiredAttrs: [String], defaultValues: [String: String]) throws {
+private func convertAttribute(_ element: XMLElement, mapping converters: [String: (String) throws -> Void], required requiredAttrs: [String], defaultValues: [String: String]) throws {
     var attributes = element.attributes
     for (attrName, defaultValue) in defaultValues {
         if !attributes.keys.contains(attrName) {
@@ -1161,19 +1161,19 @@ private func convertAttribute(element: XMLElement, mapping converters: [String: 
         if let converter = converters[attrName] {
             do {
                 try converter(value)
-            } catch CastError.InvalidValue {
-                throw ArchiveToJSON.ConvertError.InvalidAttrValue(attribute: attrName, value: value)
+            } catch CastError.invalidValue {
+                throw ArchiveToJSON.ConvertError.invalidAttrValue(attribute: attrName, value: value)
             }
         }
         requiredAttrSet.remove(attrName)
     }
 
     if !requiredAttrSet.isEmpty {
-        throw ArchiveToJSON.ConvertError.MissingAttr(attribute: requiredAttrSet.first!)
+        throw ArchiveToJSON.ConvertError.missingAttr(attribute: requiredAttrSet.first!)
     }
 }
 
-private func map(toObject wrapper: ObjectWrapper) -> (String, (String throws -> AnyObject)) -> String throws -> Void {
+private func map(toObject wrapper: ObjectWrapper) -> (String, ((String) throws -> AnyObject)) -> (String) throws -> Void {
     return { (key, valueConverter) in
         return { value in
             wrapper.object[key] = try valueConverter(value)
@@ -1181,7 +1181,7 @@ private func map(toObject wrapper: ObjectWrapper) -> (String, (String throws -> 
     }
 }
 
-private func map(toObjects wrappers: [ObjectWrapper]) -> (String, (String throws -> AnyObject)) -> String throws -> Void {
+private func map(toObjects wrappers: [ObjectWrapper]) -> (String, ((String) throws -> AnyObject)) -> (String) throws -> Void {
     return { (key, valueConverter) in
         return { value in
             let convertedValue = try valueConverter(value)
@@ -1192,32 +1192,32 @@ private func map(toObjects wrappers: [ObjectWrapper]) -> (String, (String throws
     }
 }
 
-private enum CastError: ErrorType {
-    case InvalidValue
+private enum CastError: Error {
+    case invalidValue
 }
 
-private func asString(value: String) -> AnyObject {
-    return value
+private func asString(_ value: String) -> AnyObject {
+    return value as AnyObject
 }
 
-private func asInt(value: String) throws -> AnyObject {
-    guard let integer = Int(value) else { throw CastError.InvalidValue }
-    return integer
+private func asInt(_ value: String) throws -> AnyObject {
+    guard let integer = Int(value) else { throw CastError.invalidValue }
+    return integer as AnyObject
 }
 
-private func asBool(value: String) throws -> AnyObject {
+private func asBool(_ value: String) throws -> AnyObject {
     switch value {
     case "0":
         fallthrough
     case "false":
-        return false
+        return false as AnyObject
     
     case "1":
         fallthrough
     case "true":
-        return true
+        return true as AnyObject
         
     default:
-        throw CastError.InvalidValue
+        throw CastError.invalidValue
     }
 }

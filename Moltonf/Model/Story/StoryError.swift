@@ -25,11 +25,11 @@
 
 import Foundation
 
-public enum StoryError: ErrorType {
-    case InvalidURL
-    case CantLoadPlaydata
-    case CantLoadPeriod
-    case MissingData(data: String)
-    case UnknownValue(data: String)
-    case UnknownAvatar(data: String)
+public enum StoryError: Error {
+    case invalidURL
+    case cantLoadPlaydata
+    case cantLoadPeriod
+    case missingData(data: String)
+    case unknownValue(data: String)
+    case unknownAvatar(data: String)
 }

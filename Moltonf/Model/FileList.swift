@@ -38,14 +38,14 @@ public protocol IFileList {
     var reloadAction: AnyObserver<Void> { get }
 }
 
-public class FileList: IFileList {
-    public private(set) var listLine: Observable<[FileItem]>
-    public private(set) var refreshingLine: Observable<Bool>
-    public private(set) var reloadAction: AnyObserver<Void>
+open class FileList: IFileList {
+    open fileprivate(set) var listLine: Observable<[FileItem]>
+    open fileprivate(set) var refreshingLine: Observable<Bool>
+    open fileprivate(set) var reloadAction: AnyObserver<Void>
     
-    private let _reloadAction = PublishSubject<Void>()
+    fileprivate let _reloadAction = PublishSubject<Void>()
     
-    private struct RefreshState {
+    fileprivate struct RefreshState {
         let list: [FileItem]?
         let refreshing: Bool
     }
@@ -68,24 +68,24 @@ public class FileList: IFileList {
             .map { $0.refreshing }
     }
     
-    private static func reloadFileList(directory: String) -> Observable<RefreshState> {
+    fileprivate static func reloadFileList(_ directory: String) -> Observable<RefreshState> {
         return Observable
             .create { observer -> Disposable in
                 observer.onNext(RefreshState(list: nil, refreshing: true))
                 
-                let fm = NSFileManager.defaultManager()
-                let contents = (try? fm.contentsOfDirectoryAtPath(directory)) ?? []
+                let fm = FileManager.default
+                let contents = (try? fm.contentsOfDirectory(atPath: directory)) ?? []
                 let list = contents
                     .filter { $0[$0.startIndex] != "." }    // exclude hidden files
-                    .map { FileItem(filePath: (directory as NSString).stringByAppendingPathComponent($0), title: $0) }
+                    .map { FileItem(filePath: (directory as NSString).appendingPathComponent($0), title: $0) }
                     .filter { item in   // exclude directories
                         var isDirectory: ObjCBool = false
-                        return fm.fileExistsAtPath(item.filePath, isDirectory: &isDirectory) && !isDirectory.boolValue
+                        return fm.fileExists(atPath: item.filePath, isDirectory: &isDirectory) && !isDirectory.boolValue
                     }
                 
                 observer.onNext(RefreshState(list: list, refreshing: false))
                 return NopDisposable.instance
             }
-            .subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default))
+            .subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default))
     }
 }

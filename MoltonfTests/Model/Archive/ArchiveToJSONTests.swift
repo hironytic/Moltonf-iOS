@@ -32,13 +32,13 @@ private typealias K = ArchiveConstants
 
 private class MockJSONWriter: ArchiveJSONWriter {
     var output: [(fileName: String, object: [String: AnyObject])] = []
-    func writeArchiveJSON(fileName fileName: String, object: [String: AnyObject]) throws {
+    func writeArchiveJSON(fileName: String, object: [String: AnyObject]) throws {
         output.append((fileName: fileName, object: object))
     }
 }
 
-private enum TestError: ErrorType {
-    case CreateParser
+private enum TestError: Error {
+    case createParser
 }
 
 class ArchiveToJSONTests: XCTestCase {
@@ -47,20 +47,20 @@ class ArchiveToJSONTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        outDir = (NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as NSString)
-            .stringByAppendingPathComponent("ArchiveTests")
-        _ = try? NSFileManager.defaultManager().removeItemAtPath(outDir)
+        outDir = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString)
+            .appendingPathComponent("ArchiveTests")
+        _ = try? FileManager.default.removeItem(atPath: outDir)
     }
     
     override func tearDown() {
-        _ = try? NSFileManager.defaultManager().removeItemAtPath(outDir)
+        _ = try? FileManager.default.removeItem(atPath: outDir)
         
         super.tearDown()
     }
 
     func testConvertToJSON() {
-        let bundle = NSBundle(forClass: self.dynamicType)
-        let archiveFilePath = bundle.pathForResource("jin_wolff_00000", ofType: "xml")!
+        let bundle = Bundle(for: type(of: self))
+        let archiveFilePath = bundle.path(forResource: "jin_wolff_00000", ofType: "xml")!
 
         let converter = ArchiveToJSON(fromArchive: archiveFilePath, toDirectory: outDir)
         do {
@@ -70,8 +70,8 @@ class ArchiveToJSONTests: XCTestCase {
             return
         }
         
-        let playdataFilePath = (outDir as NSString).stringByAppendingPathComponent("playdata.json")
-        guard let playdataData = NSData(contentsOfFile: playdataFilePath) else {
+        let playdataFilePath = (outDir as NSString).appendingPathComponent("playdata.json")
+        guard let playdataData = try? Data(contentsOf: URL(fileURLWithPath: playdataFilePath)) else {
             XCTFail("failed to load playdata.json")
             return
         }
@@ -79,8 +79,8 @@ class ArchiveToJSONTests: XCTestCase {
         let landName = playdata[K.LAND_NAME].string
         XCTAssertEqual(landName, "人狼BBS:F国")
 
-        let period0FilePath = (outDir as NSString).stringByAppendingPathComponent("period-0.json")
-        guard let period0Data = NSData(contentsOfFile: period0FilePath) else {
+        let period0FilePath = (outDir as NSString).appendingPathComponent("period-0.json")
+        guard let period0Data = try? Data(contentsOf: URL(fileURLWithPath: period0FilePath)) else {
             XCTFail("failed to load period-0.json")
             return
         }
@@ -89,15 +89,15 @@ class ArchiveToJSONTests: XCTestCase {
         XCTAssertEqual(line, "人狼なんているわけないじゃん。みんな大げさだなあ")
     }
     
-    func setupTargetElement(xml: String) throws -> (parser: XMLPullParser, element: XMLElement) {
+    func setupTargetElement(_ xml: String) throws -> (parser: XMLPullParser, element: XMLElement) {
         guard let parser = XMLPullParser(string: xml) else {
-            throw TestError.CreateParser
+            throw TestError.createParser
         }
         parser.shouldProcessNamespaces = true
 
         while true {
             switch try parser.next() {
-            case .StartElement(name: _, namespaceURI: _, element: let element):
+            case .startElement(name: _, namespaceURI: _, element: let element):
                 return (parser: parser, element: element)
             default:
                 break

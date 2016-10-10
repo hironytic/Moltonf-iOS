@@ -29,15 +29,15 @@ import SwiftyJSON
 private typealias K = ArchiveConstants
 
 /// This class represents a talk which appears in story.
-public class Talk: StoryElement {
+open class Talk: StoryElement {
     /// Type of talk
-    public let talkType: TalkType
+    open let talkType: TalkType
     
     /// Avatar which makes this talk
-    public let speaker: Avatar
+    open let speaker: Avatar
     
     /// Time on which this talk is made
-    public let time: TimePart
+    open let time: TimePart
     
     /// Creates a new instance.
     /// - parameter period: period which contains this element
@@ -48,30 +48,30 @@ public class Talk: StoryElement {
             if let talkType = TalkType(archiveValue: talkTypeValue) {
                 self.talkType = talkType
             } else {
-                throw StoryError.UnknownValue(data: talkTypeValue)
+                throw StoryError.unknownValue(data: talkTypeValue)
             }
         } else {
-            throw StoryError.MissingData(data: K.TALK_TYPE)
+            throw StoryError.missingData(data: K.TALK_TYPE)
         }
         
         if let avatarId = element[K.AVATAR_ID].string {
             if let avatar = period.story.avatar(havingId: avatarId) {
                 self.speaker = avatar
             } else {
-                throw StoryError.UnknownAvatar(data: avatarId)
+                throw StoryError.unknownAvatar(data: avatarId)
             }
         } else {
-            throw StoryError.MissingData(data: K.AVATAR_ID)
+            throw StoryError.missingData(data: K.AVATAR_ID)
         }
         
         if let timeString = element[K.TIME].string {
             if let time = TimePart(archiveValue: timeString) {
                 self.time = time
             } else {
-                throw StoryError.UnknownValue(data: timeString)
+                throw StoryError.unknownValue(data: timeString)
             }
         } else {
-            throw StoryError.MissingData(data: K.TIME)
+            throw StoryError.missingData(data: K.TIME)
         }
         
         try super.init(period: period, element: element)
@@ -79,17 +79,17 @@ public class Talk: StoryElement {
 }
 
 /// This class represents a special talk, wolf's attack.
-public class WolfAttackTalk: Talk {
+open class WolfAttackTalk: Talk {
     /// Creates a new instance.
     /// - parameter period: period which contains this element
     /// - parameter element: JSON fragment in archive
     /// - throws: if the JSON fragment has errors
     public override init(period: Period, element: JSON) throws {
         guard var talkElementDictionary = element.dictionaryObject else {
-            throw StoryError.UnknownValue(data: "")
+            throw StoryError.unknownValue(data: "")
         }
         guard let byWhom = element[K.BY_WHOM].string else {
-            throw StoryError.MissingData(data: K.BY_WHOM)
+            throw StoryError.missingData(data: K.BY_WHOM)
         }
         talkElementDictionary[K.TALK_TYPE] = K.VAL_WOLF
         talkElementDictionary[K.AVATAR_ID] = byWhom

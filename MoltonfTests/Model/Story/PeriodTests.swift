@@ -71,14 +71,14 @@ class PeriodTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(period.type, PeriodType.Progress)
+        XCTAssertEqual(period.type, PeriodType.progress)
         XCTAssertTrue(period.story === story)
         XCTAssertEqual(period.day, 1)
         guard let event = period.elements[0] as? StoryEvent else {
             XCTFail("It should be StoryEvent")
             return
         }
-        XCTAssertEqual(event.eventFamily, EventFamily.Announce)
+        XCTAssertEqual(event.eventFamily, EventFamily.announce)
     }
     
 }

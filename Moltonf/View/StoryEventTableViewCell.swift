@@ -27,24 +27,24 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-public class StoryEventTableViewCell: UITableViewCell {
+open class StoryEventTableViewCell: UITableViewCell {
     @IBOutlet weak var messageLabel: UILabel!
 
     var disposeBag: DisposeBag?
     
-    public override func awakeFromNib() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(StoryEventTableViewCell.preferredContentSizeChanged(_:)), name: UIContentSizeCategoryDidChangeNotification, object: nil)
+    open override func awakeFromNib() {
+        NotificationCenter.default.addObserver(self, selector: #selector(StoryEventTableViewCell.preferredContentSizeChanged(_:)), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIContentSizeCategoryDidChangeNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
     }
     
-    public func preferredContentSizeChanged(notification: NSNotification) {
-        messageLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+    open func preferredContentSizeChanged(_ notification: Notification) {
+        messageLabel.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
     }
     
-    public var viewModel: StoryEventViewModel! {
+    open var viewModel: StoryEventViewModel! {
         didSet {
             let disposeBag = DisposeBag()
             
@@ -56,7 +56,7 @@ public class StoryEventTableViewCell: UITableViewCell {
         }
     }
 
-    public override func prepareForReuse() {
+    open override func prepareForReuse() {
         super.prepareForReuse()
         
         self.disposeBag = nil

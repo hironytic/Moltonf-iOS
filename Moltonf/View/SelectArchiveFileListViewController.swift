@@ -27,14 +27,14 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-public class SelectArchiveFileListViewController: UITableViewController {
+open class SelectArchiveFileListViewController: UITableViewController {
     var disposeBag: DisposeBag!
     var viewModel: SelectArchiveFileViewModel!
     var noItemsLabel: UILabel!
     
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
 
         refreshControl = UIRefreshControl()
@@ -43,18 +43,18 @@ public class SelectArchiveFileListViewController: UITableViewController {
         tableView.backgroundView = noItemsLabelParent
         noItemsLabel = UILabel()
         noItemsLabel.text = "No files found"
-        noItemsLabel.textColor = UIColor.lightGrayColor()
+        noItemsLabel.textColor = UIColor.lightGray
         noItemsLabel.sizeToFit()
         noItemsLabel.translatesAutoresizingMaskIntoConstraints = false
         noItemsLabelParent.addSubview(noItemsLabel)
-        let horizontalConstraint = NSLayoutConstraint(item: noItemsLabel, attribute: .CenterX, relatedBy: .Equal, toItem: noItemsLabelParent, attribute: .CenterX, multiplier: 1.0, constant: 0.0)
-        let verticalConstraint = NSLayoutConstraint(item: noItemsLabel, attribute: .CenterY, relatedBy: .Equal, toItem: noItemsLabelParent, attribute: .CenterY, multiplier: 1.0, constant: 0.0)
+        let horizontalConstraint = NSLayoutConstraint(item: noItemsLabel, attribute: .centerX, relatedBy: .equal, toItem: noItemsLabelParent, attribute: .centerX, multiplier: 1.0, constant: 0.0)
+        let verticalConstraint = NSLayoutConstraint(item: noItemsLabel, attribute: .centerY, relatedBy: .equal, toItem: noItemsLabelParent, attribute: .centerY, multiplier: 1.0, constant: 0.0)
         noItemsLabelParent.addConstraints([horizontalConstraint, verticalConstraint])
         
         bindViewModel()
     }
 
-    private func bindViewModel() {
+    fileprivate func bindViewModel() {
         disposeBag = DisposeBag()
         if let viewModel = self.viewModel {
             cancelButton.rx_tap
@@ -63,7 +63,7 @@ public class SelectArchiveFileListViewController: UITableViewController {
             
             viewModel.noItemsMessageHiddenLine
                 .subscribeNext { [weak self] hidden in
-                    self?.tableView.separatorStyle = hidden ? .SingleLine : .None
+                    self?.tableView.separatorStyle = hidden ? .singleLine : .none
                 }
                 .addDisposableTo(disposeBag)
             
@@ -87,7 +87,7 @@ public class SelectArchiveFileListViewController: UITableViewController {
                 }
                 .addDisposableTo(disposeBag)
             
-            refreshControl?.rx_controlEvent(.ValueChanged)
+            refreshControl?.rx_controlEvent(.valueChanged)
                 .bindTo(viewModel.refreshAction)
                 .addDisposableTo(disposeBag)
             
@@ -99,7 +99,7 @@ public class SelectArchiveFileListViewController: UITableViewController {
                 .subscribeNext { [weak self] message in
                     switch message {
                     case _ as DismissingMessage:
-                        self?.dismissViewControllerAnimated(true, completion: nil)
+                        self?.dismiss(animated: true, completion: nil)
                     default:
                         break
                     }

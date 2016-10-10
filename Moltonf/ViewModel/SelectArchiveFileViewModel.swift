@@ -28,27 +28,27 @@ import RxCocoa
 import RxSwift
 
 public enum SelectArchiveFileViewModelResult {
-    case Selected(String)
-    case Cancelled
+    case selected(String)
+    case cancelled
 }
 
-public class SelectArchiveFileViewModel: ViewModel {
-    public let archiveFilesLine: Observable<[FileItem]>
-    public let noItemsMessageHiddenLine: Observable<Bool>
-    public let refreshingLine: Observable<Bool>
-    public let cancelAction: AnyObserver<Void>
-    public let refreshAction: AnyObserver<Void>
-    public let selectAction: AnyObserver<FileItem>
+open class SelectArchiveFileViewModel: ViewModel {
+    open let archiveFilesLine: Observable<[FileItem]>
+    open let noItemsMessageHiddenLine: Observable<Bool>
+    open let refreshingLine: Observable<Bool>
+    open let cancelAction: AnyObserver<Void>
+    open let refreshAction: AnyObserver<Void>
+    open let selectAction: AnyObserver<FileItem>
     
-    public var onResult: (SelectArchiveFileViewModelResult -> Void)? = nil
+    open var onResult: ((SelectArchiveFileViewModelResult) -> Void)? = nil
     
-    private let _fileList: IFileList
-    private let _cancelAction = ActionObserver<Void>()
-    private let _refreshAction = ActionObserver<Void>()
-    private let _selectAction = ActionObserver<FileItem>()
+    fileprivate let _fileList: IFileList
+    fileprivate let _cancelAction = ActionObserver<Void>()
+    fileprivate let _refreshAction = ActionObserver<Void>()
+    fileprivate let _selectAction = ActionObserver<FileItem>()
     
     public override init() {
-        let directory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .AllDomainsMask, true)[0]
+        let directory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true)[0]
         _fileList = FileList(directory: directory)
         
         archiveFilesLine = _fileList.listLine.asDriver(onErrorJustReturn: []).asObservable()
@@ -66,17 +66,17 @@ public class SelectArchiveFileViewModel: ViewModel {
         _selectAction.handler = { [weak self] item in self?.select(item) }
     }
     
-    private func cancel() {
+    fileprivate func cancel() {
         sendMessage(DismissingMessage())
-        onResult?(.Cancelled)
+        onResult?(.cancelled)
     }
     
-    private func refresh() {
+    fileprivate func refresh() {
         _fileList.reloadAction.onNext(())
     }
     
-    private func select(item: FileItem) {
+    fileprivate func select(_ item: FileItem) {
         sendMessage(DismissingMessage())
-        onResult?(.Selected(item.filePath))
+        onResult?(.selected(item.filePath))
     }
 }

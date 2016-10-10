@@ -25,7 +25,7 @@
 
 import Foundation
 
-public class StoryElementViewModel: ViewModel {
+open class StoryElementViewModel: ViewModel {
     public init(storyElement: StoryElement) {
         super.init()
     }

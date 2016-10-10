@@ -66,7 +66,7 @@ class TalkTests: XCTestCase {
     }
     
     func testPublicTalk() {
-        let period = Period(story: story, type: .Prologue, day: 0)
+        let period = Period(story: story, type: .prologue, day: 0)
         
         let element = JSON([
             "type": "talk",
@@ -85,7 +85,7 @@ class TalkTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(talk.talkType, TalkType.Public)
+        XCTAssertEqual(talk.talkType, TalkType.public)
         XCTAssertTrue(talk.speaker === story.avatarGerd)
         XCTAssertEqual(talk.time.hourPart, 13)
         XCTAssertEqual(talk.time.minutePart, 30)
@@ -97,7 +97,7 @@ class TalkTests: XCTestCase {
     }
     
     func testTalkWithRawdata() {
-        let period = Period(story: story, type: .Prologue, day: 0)
+        let period = Period(story: story, type: .prologue, day: 0)
         
         let element = JSON([
             "type": "talk",
@@ -126,13 +126,13 @@ class TalkTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(talk.talkType, TalkType.Wolf)
+        XCTAssertEqual(talk.talkType, TalkType.wolf)
         XCTAssertTrue(talk.speaker === story.avatarPeter)
         XCTAssertEqual(talk.messageLines[0], "パメおかえりー。∑閉村までって！")
     }
     
     func testTalkOfWolfsAttack() {
-        let period = Period(story: story, type: .Progress, day: 2)
+        let period = Period(story: story, type: .progress, day: 2)
 
         let element = JSON([
             "type": "assault",
@@ -150,7 +150,7 @@ class TalkTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(talk.talkType, TalkType.Wolf)
+        XCTAssertEqual(talk.talkType, TalkType.wolf)
         XCTAssertTrue(talk.speaker === story.avatarPeter)
         XCTAssertEqual(talk.time.hourPart, 1)
         XCTAssertEqual(talk.time.minutePart, 15)

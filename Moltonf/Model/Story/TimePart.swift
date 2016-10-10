@@ -27,8 +27,8 @@ import Foundation
 
 /// This class holds time components which doesn't specify a specific point of time.
 /// It is not related to any time zome, eigher.
-public class TimePart {
-    private let _milliseconds: Int
+open class TimePart {
+    fileprivate let _milliseconds: Int
     
     /// Creates a new instance from hour, minute, second and millisecond
     /// - parameter hour: hour (0-23)
@@ -51,28 +51,28 @@ public class TimePart {
     }
 
     /// Hour part value
-    public var hourPart: Int {
+    open var hourPart: Int {
         get {
             return _milliseconds / (1000 * 60 * 60)
         }
     }
     
     /// Minute part value
-    public var minutePart: Int {
+    open var minutePart: Int {
         get {
             return (_milliseconds / (1000 * 60)) % 60
         }
     }
     
     /// Second part value
-    public var secondPart: Int {
+    open var secondPart: Int {
         get {
             return (_milliseconds / 1000) % 60;
         }
     }
     
     /// Millisecond part value
-    public var millisecondPart: Int {
+    open var millisecondPart: Int {
         get {
             return _milliseconds % 1000
         }
@@ -97,26 +97,26 @@ extension TimePart {
         guard timeString.characters.count >= 8 else { return nil }
         
         let hourIndex = timeString.startIndex
-        let hourString = timeString.substringWithRange(hourIndex ..< hourIndex.advancedBy(2))
+        let hourString = timeString.substring(with: hourIndex ..< <#T##String.CharacterView corresponding to `hourIndex`##String.CharacterView#>.index(hourIndex, offsetBy: 2))
         guard let hour = Int(hourString) else { return nil }
         
-        let minuteIndex = timeString.startIndex.advancedBy(3)
-        let minuteString = timeString.substringWithRange(minuteIndex ..< minuteIndex.advancedBy(2))
+        let minuteIndex = timeString.characters.index(timeString.startIndex, offsetBy: 3)
+        let minuteString = timeString.substring(with: minuteIndex ..< <#T##String.CharacterView corresponding to `minuteIndex`##String.CharacterView#>.index(minuteIndex, offsetBy: 2))
         guard let minute = Int(minuteString) else { return nil }
         
-        let secondIndex = timeString.startIndex.advancedBy(6)
-        let secondString = timeString.substringWithRange(secondIndex ..< secondIndex.advancedBy(2))
+        let secondIndex = timeString.characters.index(timeString.startIndex, offsetBy: 6)
+        let secondString = timeString.substring(with: secondIndex ..< <#T##String.CharacterView corresponding to `secondIndex`##String.CharacterView#>.index(secondIndex, offsetBy: 2))
         guard let second = Int(secondString) else { return nil }
         
         var millisecond = 0
-        let dotIndex = timeString.startIndex.advancedBy(8)
+        let dotIndex = timeString.characters.index(timeString.startIndex, offsetBy: 8)
         if dotIndex < timeString.endIndex && timeString[dotIndex] == "." {
-            var charIndex = dotIndex.successor()
+            var charIndex = <#T##String.CharacterView corresponding to `dotIndex`##String.CharacterView#>.index(after: dotIndex)
             for factor in [100, 10, 1] {
                 if timeString.endIndex <= charIndex {
                     break
                 }
-                let ch = timeString.substringWithRange(charIndex ..< charIndex.advancedBy(1))
+                let ch = timeString.substring(with: charIndex ..< <#T##Collection corresponding to `charIndex`##Collection#>.index(charIndex, offsetBy: 1))
                 if ch < "0" || ch > "9" {
                     break
                 }
@@ -124,7 +124,7 @@ extension TimePart {
                 let value = Int(ch.utf8[ch.utf8.startIndex]) - 0x30 /* 0x30 == "0" */
                 millisecond += value * factor
                 
-                charIndex = charIndex.successor()
+                charIndex = <#T##Collection corresponding to `charIndex`##Collection#>.index(after: charIndex)
             }
         }
         

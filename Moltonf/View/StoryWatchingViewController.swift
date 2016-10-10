@@ -27,11 +27,11 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-public class StoryWatchingViewController: UITableViewController {
+open class StoryWatchingViewController: UITableViewController {
     var disposeBag: DisposeBag!
     var viewModel: StoryWatchingViewModel!
 
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.estimatedRowHeight = 132
@@ -40,7 +40,7 @@ public class StoryWatchingViewController: UITableViewController {
         bindViewModel()
     }
     
-    private func bindViewModel() {
+    fileprivate func bindViewModel() {
         let viewModel = self.viewModel
         disposeBag = DisposeBag()
         
@@ -52,28 +52,28 @@ public class StoryWatchingViewController: UITableViewController {
 
 }
 
-public class StoryWatchingDataSource: NSObject {
-    private var _itemModels: Element = []
+open class StoryWatchingDataSource: NSObject {
+    fileprivate var _itemModels: Element = []
 }
 
 extension StoryWatchingDataSource: UITableViewDataSource {
-    public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    public func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return _itemModels.count
     }
     
-    public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let elementViewModel = _itemModels[indexPath.row]
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let elementViewModel = _itemModels[(indexPath as NSIndexPath).row]
         switch elementViewModel {
         case let eventViewModel as StoryEventViewModel:
-            let cell = tableView.dequeueReusableCellWithIdentifier("Event", forIndexPath: indexPath) as! StoryEventTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Event", for: indexPath) as! StoryEventTableViewCell
             cell.viewModel = eventViewModel
             return cell
         case /* let talkViewModel as */ is TalkViewModel:
-            return tableView.dequeueReusableCellWithIdentifier("Talk", forIndexPath: indexPath)
+            return tableView.dequeueReusableCell(withIdentifier: "Talk", for: indexPath)
 //            let cell = tableView.dequeueReusableCellWithIdentifier("Talk", forIndexPath: indexPath) as! TalkTableViewCell
 //            cell.viewModel = talkViewModel
 //            return cell
@@ -88,7 +88,7 @@ extension StoryWatchingDataSource: UITableViewDataSource {
 extension StoryWatchingDataSource: RxTableViewDataSourceType {
     public typealias Element = [StoryElementViewModel]
     
-    public func tableView(tableView: UITableView, observedEvent: Event<Element>) {
+    public func tableView(_ tableView: UITableView, observedEvent: Event<Element>) {
         UIBindingObserver(UIElement: self) { (dataSource, element) in
             dataSource._itemModels = element
             tableView.reloadData()

@@ -26,51 +26,51 @@
 import XCTest
 import RxSwift
 
-public class FulfillObserver<Element>: ObserverType {
+open class FulfillObserver<Element>: ObserverType {
     public typealias E = Element
-    private var expectation: XCTestExpectation
-    private var nextChecker: Element -> Bool
-    private var errorChecker: ErrorType -> Bool
+    fileprivate var expectation: XCTestExpectation
+    fileprivate var nextChecker: (Element) -> Bool
+    fileprivate var errorChecker: (Error) -> Bool
     
-    public init(_ expectation: XCTestExpectation, nextChecker: Element -> Bool) {
+    public init(_ expectation: XCTestExpectation, nextChecker: @escaping (Element) -> Bool) {
         self.expectation = expectation
         self.nextChecker = nextChecker
         self.errorChecker = { _ in false }
     }
     
-    public init(_ expectation: XCTestExpectation, errorChecker: ErrorType -> Bool) {
+    public init(_ expectation: XCTestExpectation, errorChecker: @escaping (Error) -> Bool) {
         self.expectation = expectation
         self.nextChecker = { _ in false }
         self.errorChecker = errorChecker
     }
     
-    public init(_ expectation: XCTestExpectation, nextChecker: Element -> Bool, errorChecker: ErrorType -> Bool) {
+    public init(_ expectation: XCTestExpectation, nextChecker: @escaping (Element) -> Bool, errorChecker: @escaping (Error) -> Bool) {
         self.expectation = expectation
         self.nextChecker = nextChecker
         self.errorChecker = errorChecker
     }
     
-    public func reset(expectation: XCTestExpectation, nextChecker: Element -> Bool) {
+    open func reset(_ expectation: XCTestExpectation, nextChecker: @escaping (Element) -> Bool) {
         self.expectation = expectation
         self.nextChecker = nextChecker
         self.errorChecker = { _ in false }
     }
     
-    public func reset(expectation: XCTestExpectation, errorChecker: ErrorType -> Bool) {
+    open func reset(_ expectation: XCTestExpectation, errorChecker: @escaping (Error) -> Bool) {
         self.expectation = expectation
         self.nextChecker = { _ in false }
         self.errorChecker = errorChecker
     }
     
-    public func reset(expectation: XCTestExpectation, nextChecker: Element -> Bool, errorChecker: ErrorType -> Bool) {
+    open func reset(_ expectation: XCTestExpectation, nextChecker: @escaping (Element) -> Bool, errorChecker: @escaping (Error) -> Bool) {
         self.expectation = expectation
         self.nextChecker = nextChecker
         self.errorChecker = errorChecker
     }
     
-    public func on(event: Event<Element>) {
+    open func on(_ event: Event<Element>) {
         switch event {
-        case .Next(let element):
+        case .next(let element):
             if nextChecker(element) {
                 expectation.fulfill()
             }
@@ -78,7 +78,7 @@ public class FulfillObserver<Element>: ObserverType {
             if errorChecker(error) {
                 expectation.fulfill()
             }
-        case .Completed:
+        case .completed:
             break
         }
     }

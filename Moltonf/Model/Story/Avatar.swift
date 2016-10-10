@@ -29,27 +29,27 @@ import SwiftyJSON
 private typealias K = ArchiveConstants
 
 /// This class represents a character.
-public class Avatar {
+open class Avatar {
     /// Story which contains this element
-    public private(set) weak var story: Story?
+    open fileprivate(set) weak var story: Story?
     
     /// Avatar ID
     /// 
     /// ex. "gerd"
-    public let avatarId: String
+    open let avatarId: String
     
     /// Full name
     ///
     /// ex. "楽天家 ゲルト"
-    public let fullName: String
+    open let fullName: String
     
     /// Short name
     ///
     /// ex. "ゲルト"
-    public let shortName: String
+    open let shortName: String
     
     /// URI string of face icon
-    public let faceIconURI: String?
+    open let faceIconURI: String?
     
     // for testing
     init(story: Story, avatarId: String, fullName: String, shortName: String, faceIconURI: String?) {
@@ -69,19 +69,19 @@ public class Avatar {
         if let avatarId = avatarData[K.AVATAR_ID].string {
             self.avatarId = avatarId
         } else {
-            throw StoryError.MissingData(data: K.AVATAR_ID)
+            throw StoryError.missingData(data: K.AVATAR_ID)
         }
         
         if let fullName = avatarData[K.FULL_NAME].string {
             self.fullName = fullName
         } else {
-            throw StoryError.MissingData(data: K.FULL_NAME)
+            throw StoryError.missingData(data: K.FULL_NAME)
         }
         
         if let shortName = avatarData[K.SHORT_NAME].string {
             self.shortName = shortName
         } else {
-            throw StoryError.MissingData(data: K.SHORT_NAME)
+            throw StoryError.missingData(data: K.SHORT_NAME)
         }
         
         faceIconURI = avatarData[K.FACE_ICON_URI].string

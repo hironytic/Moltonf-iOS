@@ -29,18 +29,18 @@ import SwiftyJSON
 private typealias K = ArchiveConstants
 
 /// This class represents a day, from dawn to dawn, in a story.
-public class Period {
+open class Period {
     /// Story which contains this period
-    public let story: Story
+    open let story: Story
     
     /// Type of this period
-    public let type: PeriodType
+    open let type: PeriodType
     
     /// Number of the day
-    public let day: Int
+    open let day: Int
     
     /// Array of elements in this period
-    public private(set) var elements: [StoryElement] = []
+    open fileprivate(set) var elements: [StoryElement] = []
 
     // for testing
     init(story: Story, type: PeriodType, day: Int) {
@@ -60,16 +60,16 @@ public class Period {
             if let type = PeriodType(archiveValue: typeValue) {
                 self.type = type
             } else {
-                throw StoryError.UnknownValue(data: typeValue)
+                throw StoryError.unknownValue(data: typeValue)
             }
         } else {
-            throw StoryError.MissingData(data: K.TYPE)
+            throw StoryError.missingData(data: K.TYPE)
         }
         
         if let day = period[K.DAY].int {
             self.day = day
         } else {
-            throw StoryError.MissingData(data: K.DAY)
+            throw StoryError.missingData(data: K.DAY)
         }
         
         if let elements = period[K.ELEMENTS].array {
@@ -78,7 +78,7 @@ public class Period {
                     return try self.makeElement(element)
                 }
         } else {
-            throw StoryError.MissingData(data: K.ELEMENTS)
+            throw StoryError.missingData(data: K.ELEMENTS)
         }
     }
     
@@ -86,17 +86,17 @@ public class Period {
     /// - parameter story:     story which contains this period
     /// - parameter periodURL: file URL
     /// - throws: if it couldn't read the file or its content has errors
-    public convenience init(story: Story, periodURL: NSURL) throws {
-        guard let periodData = NSData(contentsOfURL: periodURL) else {
-            throw StoryError.CantLoadPeriod
+    public convenience init(story: Story, periodURL: URL) throws {
+        guard let periodData = try? Data(contentsOf: periodURL) else {
+            throw StoryError.cantLoadPeriod
         }
         let period = JSON(data: periodData)
         try self.init(story: story, period: period)
     }
     
-    private func makeElement(element: JSON) throws -> StoryElement {
+    fileprivate func makeElement(_ element: JSON) throws -> StoryElement {
         guard let type = element[K.TYPE].string else {
-            throw StoryError.MissingData(data: K.TYPE)
+            throw StoryError.missingData(data: K.TYPE)
         }
         switch type {
         case K.VAL_TALK:

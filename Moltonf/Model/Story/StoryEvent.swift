@@ -29,9 +29,9 @@ import SwiftyJSON
 private typealias K = ArchiveConstants
 
 /// This class represents an event which appears in story.
-public class StoryEvent: StoryElement {
+open class StoryEvent: StoryElement {
     /// Event family
-    public let eventFamily: EventFamily
+    open let eventFamily: EventFamily
     
     /// Creates a new instance
     /// - parameter period:  period which contains this element
@@ -39,7 +39,7 @@ public class StoryEvent: StoryElement {
     /// - throws: if the JSON fragment has errors
     public override init(period: Period, element: JSON) throws {
         guard let type = element[K.TYPE].string else {
-            throw StoryError.MissingData(data: K.TYPE)
+            throw StoryError.missingData(data: K.TYPE)
         }
         switch type {
         case    K.VAL_START_ENTRY, K.VAL_ON_STAGE, K.VAL_START_MIRROR,
@@ -49,17 +49,17 @@ public class StoryEvent: StoryElement {
                 K.VAL_WIN_HAMSTER, K.VAL_PLAYER_LIST, K.VAL_PANIC,
                 K.VAL_EXECUTION, K.VAL_VANISH, K.VAL_CHECKOUT,
                 K.VAL_SHORT_MEMBER:
-            eventFamily = .Announce
+            eventFamily = .announce
 
         case    K.VAL_ASK_ENTRY, K.VAL_ASK_COMMIT, K.VAL_NO_COMMENT,
                 K.VAL_STAY_EPILOGUE, K.VAL_GAME_OVER:
-            eventFamily = .Order
+            eventFamily = .order
 
         case    K.VAL_JUDGE, K.VAL_GUARD, K.VAL_COUNTING2 /* , K.VAL_ASSAULT */ :
-            eventFamily = .Extra
+            eventFamily = .extra
             
         default:
-            throw StoryError.UnknownValue(data: type)
+            throw StoryError.unknownValue(data: type)
         }
         
         try super.init(period: period, element: element)
