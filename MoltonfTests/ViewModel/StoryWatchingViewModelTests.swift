@@ -113,7 +113,7 @@ class StoryWatchingViewModelTests: XCTestCase {
             }
             return false
         }
-        storyWatchingViewModel.messenger
+        storyWatchingViewModel.messageLine
             .bindTo(messageObserver)
             .addDisposableTo(disposeBag)
     
