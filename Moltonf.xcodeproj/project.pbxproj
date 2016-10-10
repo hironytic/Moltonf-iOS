@@ -45,7 +45,6 @@
 		504D70571D3D050F004DC566 /* SelectPeriodViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70561D3D050F004DC566 /* SelectPeriodViewModelTests.swift */; };
 		504D70CF1D4057EB004DC566 /* FulfillObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70CE1D4057EB004DC566 /* FulfillObserver.swift */; };
 		5052D3401D026301002B1A17 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5052D33F1D026301002B1A17 /* SwiftyJSON.framework */; };
-		5080FAD81CE3F73300ECD5A0 /* Eventitic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5080FAD71CE3F73300ECD5A0 /* Eventitic.framework */; };
 		509C5C4D1D306FB00045B0AB /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C4C1D306FAF0045B0AB /* Story.swift */; };
 		509C5C511D30F59E0045B0AB /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C501D30F59E0045B0AB /* Avatar.swift */; };
 		509C5C531D30F99A0045B0AB /* StoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C521D30F99A0045B0AB /* StoryError.swift */; };
@@ -62,7 +61,6 @@
 		50AF2EB41D1FC20F00337A53 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50AF2EB21D1FC20F00337A53 /* Realm.framework */; };
 		50AF2EB51D1FC20F00337A53 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50AF2EB31D1FC20F00337A53 /* RealmSwift.framework */; };
 		50AF2EB81D1FC45700337A53 /* Workspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AF2EB71D1FC45700337A53 /* Workspace.swift */; };
-		50AF2EBA1D20089E00337A53 /* SwiftTask.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50AF2EB91D20089E00337A53 /* SwiftTask.framework */; };
 		50B24E1E1CF8734F0035D573 /* ArchiveToJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B24E1D1CF8734F0035D573 /* ArchiveToJSON.swift */; };
 		50B351031D35181100829BD0 /* StoryEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B351021D35181100829BD0 /* StoryEventTests.swift */; };
 		50BAC3591D448A9B008D366C /* StoryWatchingViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BAC3581D448A9B008D366C /* StoryWatchingViewModelTests.swift */; };
@@ -123,7 +121,6 @@
 		504D70561D3D050F004DC566 /* SelectPeriodViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectPeriodViewModelTests.swift; sourceTree = "<group>"; };
 		504D70CE1D4057EB004DC566 /* FulfillObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FulfillObserver.swift; sourceTree = "<group>"; };
 		5052D33F1D026301002B1A17 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
-		5080FAD71CE3F73300ECD5A0 /* Eventitic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Eventitic.framework; path = Carthage/Build/iOS/Eventitic.framework; sourceTree = "<group>"; };
 		509C5C4C1D306FAF0045B0AB /* Story.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
 		509C5C501D30F59E0045B0AB /* Avatar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		509C5C521D30F99A0045B0AB /* StoryError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryError.swift; sourceTree = "<group>"; };
@@ -140,7 +137,6 @@
 		50AF2EB21D1FC20F00337A53 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
 		50AF2EB31D1FC20F00337A53 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
 		50AF2EB71D1FC45700337A53 /* Workspace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Workspace.swift; sourceTree = "<group>"; };
-		50AF2EB91D20089E00337A53 /* SwiftTask.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftTask.framework; path = Carthage/Build/iOS/SwiftTask.framework; sourceTree = "<group>"; };
 		50B24E1D1CF8734F0035D573 /* ArchiveToJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveToJSON.swift; sourceTree = "<group>"; };
 		50B24E1F1CF95D280035D573 /* bbsArchive-110421.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "bbsArchive-110421.xsd"; sourceTree = "<group>"; };
 		50B24E201CF95D280035D573 /* coreType-090929.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "coreType-090929.xsd"; sourceTree = "<group>"; };
@@ -156,12 +152,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5080FAD81CE3F73300ECD5A0 /* Eventitic.framework in Frameworks */,
 				50AF2EB41D1FC20F00337A53 /* Realm.framework in Frameworks */,
 				50AF2EB51D1FC20F00337A53 /* RealmSwift.framework in Frameworks */,
 				5045BD331CDEDE2E00A8A0FA /* RxCocoa.framework in Frameworks */,
 				5045BD351CDEDE3200A8A0FA /* RxSwift.framework in Frameworks */,
-				50AF2EBA1D20089E00337A53 /* SwiftTask.framework in Frameworks */,
 				5052D3401D026301002B1A17 /* SwiftyJSON.framework in Frameworks */,
 				501F954F1CE9B77E00628E29 /* XMLPullitic.framework in Frameworks */,
 			);
@@ -288,12 +282,10 @@
 		5045BD381CDEDF8300A8A0FA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				50AF2EB91D20089E00337A53 /* SwiftTask.framework */,
 				50AF2EB21D1FC20F00337A53 /* Realm.framework */,
 				50AF2EB31D1FC20F00337A53 /* RealmSwift.framework */,
 				5052D33F1D026301002B1A17 /* SwiftyJSON.framework */,
 				501F954E1CE9B77E00628E29 /* XMLPullitic.framework */,
-				5080FAD71CE3F73300ECD5A0 /* Eventitic.framework */,
 				5045BD341CDEDE3200A8A0FA /* RxSwift.framework */,
 				5045BD321CDEDE2E00A8A0FA /* RxCocoa.framework */,
 			);
@@ -413,7 +405,7 @@
 				5045BD091CDED11400A8A0FA /* Sources */,
 				5045BD0A1CDED11400A8A0FA /* Frameworks */,
 				5045BD0B1CDED11400A8A0FA /* Resources */,
-				5045BD391CDEDFAD00A8A0FA /* ShellScript */,
+				5045BD391CDEDFAD00A8A0FA /* Carthage Copy Frameworks */,
 			);
 			buildRules = (
 			);
@@ -504,7 +496,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		5045BD391CDEDFAD00A8A0FA /* ShellScript */ = {
+		5045BD391CDEDFAD00A8A0FA /* Carthage Copy Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -512,13 +504,12 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Eventitic.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/XMLPullitic.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Realm.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RealmSwift.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SwiftTask.framework",
 			);
+			name = "Carthage Copy Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
