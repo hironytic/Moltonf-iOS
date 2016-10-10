@@ -75,7 +75,7 @@ class SelectPeriodViewModelTests: XCTestCase {
     }
     
     func testPeriods() {
-        let periodsObserver = FulfillObserver(expectation(withDescription: "periods")) { (items: [SelectPeriodViewModelItem]) in
+        let periodsObserver = FulfillObserver(expectation(description: "periods")) { (items: [SelectPeriodViewModelItem]) in
             return items.map({ $0.title }) == ["Prologue", "Day 1", "Day 2", "Epilogue"]
                 && items.map({ $0.checked }) == [true, false, false, false]
         }
@@ -99,9 +99,9 @@ class SelectPeriodViewModelTests: XCTestCase {
         }
         
         selectPeriodViewModel.periodsLine
-            .subscribeNext { [unowned self] items in
+            .subscribe(onNext: { [unowned self] items in
                 self.selectPeriodViewModel.selectAction.onNext(items[2])
-            }
+            })
             .addDisposableTo(disposeBag)
 
         waitForExpectations(timeout: 3.0) { error in }

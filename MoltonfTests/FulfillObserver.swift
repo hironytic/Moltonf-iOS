@@ -74,7 +74,7 @@ open class FulfillObserver<Element>: ObserverType {
             if nextChecker(element) {
                 expectation.fulfill()
             }
-        case .Error(let error):
+        case .error(let error):
             if errorChecker(error) {
                 expectation.fulfill()
             }

@@ -49,7 +49,7 @@ open class StoryEventTableViewCell: UITableViewCell {
             let disposeBag = DisposeBag()
             
             viewModel.messageTextLine
-                .bindTo(messageLabel.rx_text)
+                .bindTo(messageLabel.rx.text)
                 .addDisposableTo(disposeBag)
             
             self.disposeBag = disposeBag

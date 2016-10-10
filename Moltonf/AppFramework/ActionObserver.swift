@@ -44,14 +44,14 @@ open class ActionObserver<Element>: ObserverType {
         switch event {
         case .next(let element):
             handler(element)
-        case .Error(_):
+        case .error(_):
             break
         case .completed:
             break
         }
     }
     
-    open static func asObserver(_ handler: Handler) -> AnyObserver<Element> {
+    open static func asObserver(_ handler: @escaping Handler) -> AnyObserver<Element> {
         return ActionObserver<Element>(handler: handler).asObserver()
     }
 }

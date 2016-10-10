@@ -57,53 +57,53 @@ open class SelectArchiveFileListViewController: UITableViewController {
     fileprivate func bindViewModel() {
         disposeBag = DisposeBag()
         if let viewModel = self.viewModel {
-            cancelButton.rx_tap
+            cancelButton.rx.tap
                 .bindTo(viewModel.cancelAction)
                 .addDisposableTo(disposeBag)
             
             viewModel.noItemsMessageHiddenLine
-                .subscribeNext { [weak self] hidden in
+                .subscribe(onNext: { [weak self] hidden in
                     self?.tableView.separatorStyle = hidden ? .singleLine : .none
-                }
+                })
                 .addDisposableTo(disposeBag)
             
             viewModel.noItemsMessageHiddenLine
-                .bindTo(noItemsLabel.rx_hidden)
+                .bindTo(noItemsLabel.rx.hidden)
                 .addDisposableTo(disposeBag)
             
             viewModel.archiveFilesLine
-                .bindTo(tableView.rx_itemsWithCellIdentifier("Cell", cellType: UITableViewCell.self)) { (row, element, cell) in
+                .bindTo(tableView.rx.items(cellIdentifier:"Cell", cellType: UITableViewCell.self)) { (row, element, cell) in
                     cell.textLabel?.text = element.title
                 }
                 .addDisposableTo(disposeBag)
             
             viewModel.refreshingLine
-                .subscribeNext { [weak self] refreshing in
+                .subscribe(onNext: { [weak self] refreshing in
                     if (refreshing) {
                         self?.refreshControl?.beginRefreshing()
                     } else {
                         self?.refreshControl?.endRefreshing()
                     }
-                }
+                })
                 .addDisposableTo(disposeBag)
             
-            refreshControl?.rx_controlEvent(.valueChanged)
+            refreshControl?.rx.controlEvent(.valueChanged)
                 .bindTo(viewModel.refreshAction)
                 .addDisposableTo(disposeBag)
             
-            tableView.rx_modelSelected(FileItem.self)
+            tableView.rx.modelSelected(FileItem.self)
                 .bindTo(viewModel.selectAction)
                 .addDisposableTo(disposeBag)
             
             viewModel.messageLine
-                .subscribeNext { [weak self] message in
+                .subscribe(onNext: { [weak self] message in
                     switch message {
                     case _ as DismissingMessage:
                         self?.dismiss(animated: true, completion: nil)
                     default:
                         break
                     }
-                }
+                })
                 .addDisposableTo(disposeBag)
         }
     }

@@ -40,7 +40,7 @@ public struct WorkspaceStoreChanges {
 }
 
 public protocol IWorkspaceStore {
-    var errorLine: Observable<ErrorProtocol> { get }
+    var errorLine: Observable<Error> { get }
     var workspacesLine: Observable<WorkspaceStoreChanges> { get }
 
     var createNewWorkspaceAction: AnyObserver</* archiveFile: */ String> { get }
@@ -48,7 +48,7 @@ public protocol IWorkspaceStore {
 }
 
 open class WorkspaceStore: IWorkspaceStore {
-    open var errorLine: Observable<ErrorProtocol> { get { return _errorSubject } }
+    open var errorLine: Observable<Error> { get { return _errorSubject } }
     open var workspacesLine: Observable<WorkspaceStoreChanges> { get { return _workspacesSubject } }
     
     open fileprivate(set) var createNewWorkspaceAction: AnyObserver<String>
@@ -79,7 +79,7 @@ open class WorkspaceStore: IWorkspaceStore {
 
     fileprivate func configureWorkspaces() {
         DispatchQueue.main.async {
-            let workspaceResults = self._workspaceDB.realm.objects(Workspace)
+            let workspaceResults = self._workspaceDB.realm.objects(Workspace.self)
             let changes = WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection<Workspace>(workspaceResults),
                                                 deletions: [],
                                                 insertions: (0..<workspaceResults.count).map { $0 },
@@ -107,10 +107,7 @@ open class WorkspaceStore: IWorkspaceStore {
             .observeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default))
             .map { [unowned self] archiveFile -> ConvertResult in
                 let id = UUID().uuidString
-                guard let archiveJSONDir = self._workspaceDB.workspaceDirURL.appendingPathComponent(id).path else {
-                    throw WorkspaceStoreError.createNewWorkspaceFailed("Failed to get playdata directory")
-                }
-                
+                let archiveJSONDir = self._workspaceDB.workspaceDirURL.appendingPathComponent(id).path
                 let playdataFilePath = (archiveJSONDir as NSString).appendingPathComponent(ArchiveConstants.FILE_PLAYDATA_JSON)
                 
                 // convert archive file (XML) to JSON file
@@ -126,7 +123,7 @@ open class WorkspaceStore: IWorkspaceStore {
             }
             // then operate with realm in main thread
             .observeOn(MainScheduler.instance)
-            .doOnNext { [unowned self] convertResult in
+            .do(onNext: { [unowned self] convertResult in
                 // create new Workspace object
                 let ws = Workspace()
                 ws.id = convertResult.id
@@ -135,7 +132,7 @@ open class WorkspaceStore: IWorkspaceStore {
                 try self._workspaceDB.realm.write {
                     self._workspaceDB.realm.add(ws)
                 }
-            }
+            })
             .catchError { [unowned self] error in
                 self._errorSubject.onNext(error)
                 return Observable.empty()
@@ -146,15 +143,14 @@ open class WorkspaceStore: IWorkspaceStore {
     fileprivate func configureDeleteWorkspaceAction() {
         _deleteWorkspaceAction
             .observeOn(MainScheduler.instance)
-            .doOnNext { [unowned self] workspace in
-                if let archiveJSONDir = self._workspaceDB.workspaceDirURL.appendingPathComponent(workspace.id).path {
-                    _ = try? FileManager.default.removeItem(atPath: archiveJSONDir)
-                }
+            .do(onNext: { [unowned self] workspace in
+                let archiveJSONDir = self._workspaceDB.workspaceDirURL.appendingPathComponent(workspace.id).path
+                _ = try? FileManager.default.removeItem(atPath: archiveJSONDir)
                 
                 try self._workspaceDB.realm.write {
                     self._workspaceDB.realm.delete(workspace)
                 }
-            }
+            })
             .catchError { [unowned self] error in
                 self._errorSubject.onNext(error)
                 return Observable.empty()

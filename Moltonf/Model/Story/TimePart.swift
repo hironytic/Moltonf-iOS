@@ -96,27 +96,30 @@ extension TimePart {
         //        -- see http://www.w3.org/TR/xmlschema-2/#dateTime
         guard timeString.characters.count >= 8 else { return nil }
         
-        let hourIndex = timeString.startIndex
-        let hourString = timeString.substring(with: hourIndex ..< <#T##String.CharacterView corresponding to `hourIndex`##String.CharacterView#>.index(hourIndex, offsetBy: 2))
+        let hourFromIndex = timeString.startIndex
+        let hourToIndex = timeString.index(hourFromIndex, offsetBy: 2)
+        let hourString = timeString.substring(with: hourFromIndex ..< hourToIndex)
         guard let hour = Int(hourString) else { return nil }
         
-        let minuteIndex = timeString.characters.index(timeString.startIndex, offsetBy: 3)
-        let minuteString = timeString.substring(with: minuteIndex ..< <#T##String.CharacterView corresponding to `minuteIndex`##String.CharacterView#>.index(minuteIndex, offsetBy: 2))
+        let minuteFromIndex = timeString.index(timeString.startIndex, offsetBy: 3)
+        let minuteToIndex = timeString.index(minuteFromIndex, offsetBy: 2)
+        let minuteString = timeString.substring(with: minuteFromIndex ..< minuteToIndex)
         guard let minute = Int(minuteString) else { return nil }
         
-        let secondIndex = timeString.characters.index(timeString.startIndex, offsetBy: 6)
-        let secondString = timeString.substring(with: secondIndex ..< <#T##String.CharacterView corresponding to `secondIndex`##String.CharacterView#>.index(secondIndex, offsetBy: 2))
+        let secondFromIndex = timeString.index(timeString.startIndex, offsetBy: 6)
+        let secondToIndex = timeString.index(secondFromIndex, offsetBy: 2)
+        let secondString = timeString.substring(with: secondFromIndex ..< secondToIndex)
         guard let second = Int(secondString) else { return nil }
         
         var millisecond = 0
-        let dotIndex = timeString.characters.index(timeString.startIndex, offsetBy: 8)
+        let dotIndex = timeString.index(timeString.startIndex, offsetBy: 8)
         if dotIndex < timeString.endIndex && timeString[dotIndex] == "." {
-            var charIndex = <#T##String.CharacterView corresponding to `dotIndex`##String.CharacterView#>.index(after: dotIndex)
+            var charIndex = timeString.index(after: dotIndex)
             for factor in [100, 10, 1] {
                 if timeString.endIndex <= charIndex {
                     break
                 }
-                let ch = timeString.substring(with: charIndex ..< <#T##Collection corresponding to `charIndex`##Collection#>.index(charIndex, offsetBy: 1))
+                let ch = timeString.substring(with: charIndex ..< timeString.index(charIndex, offsetBy: 1))
                 if ch < "0" || ch > "9" {
                     break
                 }
@@ -124,7 +127,7 @@ extension TimePart {
                 let value = Int(ch.utf8[ch.utf8.startIndex]) - 0x30 /* 0x30 == "0" */
                 millisecond += value * factor
                 
-                charIndex = <#T##Collection corresponding to `charIndex`##Collection#>.index(after: charIndex)
+                charIndex = timeString.index(after: charIndex)
             }
         }
         

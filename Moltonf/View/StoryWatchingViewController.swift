@@ -41,12 +41,11 @@ open class StoryWatchingViewController: UITableViewController {
     }
     
     fileprivate func bindViewModel() {
-        let viewModel = self.viewModel
         disposeBag = DisposeBag()
         
         let dataSource = StoryWatchingDataSource()
-        viewModel.elementsListLine
-            .bindTo(tableView.rx_itemsWithDataSource(dataSource))
+        self.viewModel.elementsListLine
+            .bindTo(tableView.rx.items(dataSource: dataSource))
             .addDisposableTo(disposeBag)
     }
 

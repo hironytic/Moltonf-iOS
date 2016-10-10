@@ -28,7 +28,7 @@ import RxSwift
 import UIKit
 
 open class StoryEventViewModel: StoryElementViewModel {
-    open let messageTextLine: Observable<String>
+    open let messageTextLine: Observable<String?>
     open let messageColorLine: Observable<UIColor>
     
     public init(storyEvent: StoryEvent) {

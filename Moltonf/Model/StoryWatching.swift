@@ -31,7 +31,7 @@ public enum StoryWatchingError: Error {
 }
 
 public protocol IStoryWatching {
-    var errorLine: Observable<ErrorProtocol> { get }
+    var errorLine: Observable<Error> { get }
     var availablePeriodRefsLine: Observable<[PeriodReference]> { get }
     var currentPeriodLine: Observable<Period> { get }
     var storyElementsLine: Observable<[StoryElement]> { get }
@@ -41,7 +41,7 @@ public protocol IStoryWatching {
 }
 
 open class StoryWatching: IStoryWatching {
-    open var errorLine: Observable<ErrorProtocol> { get { return _errorSubject } }
+    open var errorLine: Observable<Error> { get { return _errorSubject } }
     open fileprivate(set) var availablePeriodRefsLine: Observable<[PeriodReference]>
     open fileprivate(set) var currentPeriodLine: Observable<Period>
     open fileprivate(set) var storyElementsLine: Observable<[StoryElement]>
@@ -64,7 +64,7 @@ open class StoryWatching: IStoryWatching {
         _workspace = workspace
         
         let workspaceURL = WorkspaceDB.sharedInstance.workspaceDirURL.appendingPathComponent(_workspace.id)
-        let playdataURL = workspaceURL?.appendingPathComponent(ArchiveConstants.FILE_PLAYDATA_JSON)
+        let playdataURL = workspaceURL.appendingPathComponent(ArchiveConstants.FILE_PLAYDATA_JSON)
         _story = try Story(playdataURL: playdataURL)
         
         _availablePeriodRefs = Variable<[PeriodReference]>(_story.periodRefs)
@@ -111,7 +111,7 @@ open class StoryWatching: IStoryWatching {
     
     fileprivate static func loadPeriod(_ periodRef: PeriodReference, story: Story, workspace: Workspace) throws -> Period {
         let workspaceURL = WorkspaceDB.sharedInstance.workspaceDirURL.appendingPathComponent(workspace.id)
-        let periodURL = workspaceURL?.appendingPathComponent(periodRef.periodPath)
+        let periodURL = workspaceURL.appendingPathComponent(periodRef.periodPath)
         return try Period(story: story, periodURL: periodURL)
     }
 }

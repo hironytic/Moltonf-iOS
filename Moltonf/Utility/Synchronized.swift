@@ -25,7 +25,7 @@
 
 import Foundation
 
-public func synchronized(object: AnyObject, closure: () throws -> Void) rethrows {
+public func synchronized(_ object: AnyObject, closure: () throws -> Void) rethrows {
     do {
         objc_sync_enter(object)
         defer { objc_sync_exit(object) }

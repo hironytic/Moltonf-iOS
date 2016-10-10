@@ -58,7 +58,7 @@ open class SelectPeriodViewModel: ViewModel {
             .asDriver(onErrorDriveWith: Driver.empty())
             .asObservable()
             .map { (periodList, currentPeriod) -> [SelectPeriodViewModelItem] in
-                let currentDay = currentPeriod.day ?? -1
+                let currentDay = currentPeriod.day
                 return periodList
                     .map { periodRef in
                         var title = ""

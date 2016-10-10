@@ -50,29 +50,29 @@ open class WorkspaceListViewController: UITableViewController {
         let viewModel = self.viewModel
         disposeBag = DisposeBag()
 
-        addNewButton.rx_tap.bindTo(viewModel.addNewAction).addDisposableTo(disposeBag)
+        addNewButton.rx.tap.bindTo(viewModel.addNewAction).addDisposableTo(disposeBag)
 
         viewModel.workspaceListLine
-            .bindTo(tableView.rx_itemsWithDataSource(WorkspaceListDataSource()))
+            .bindTo(tableView.rx.items(dataSource: WorkspaceListDataSource()))
             .addDisposableTo(disposeBag)
         
-        tableView.rx_itemDeleted
+        tableView.rx.itemDeleted
             .bindTo(viewModel.deleteAction)
             .addDisposableTo(disposeBag)
         
-        tableView.rx_itemSelected
+        tableView.rx.itemSelected
             .bindTo(viewModel.selectAction)
             .addDisposableTo(disposeBag)
         
         viewModel.messageLine
-            .subscribeNext { [weak self] message in
+            .subscribe(onNext: { [weak self] message in
                 switch message {
                 case let transitionMessage as TransitionMessage:
                     self?.transition(transitionMessage)
                 default:
                     break
                 }
-            }
+            })
             .addDisposableTo(disposeBag)
     }
     

@@ -125,7 +125,7 @@ class StoryWatchingViewModelTests: XCTestCase {
         XCTAssertNotNil(selectPeriodViewModel)
         XCTAssertNotNil(selectPeriodViewModel?.onResult)
 
-        currentPeriodTextObserver.reset(expectation(withDescription: "day 1")) { $0 == "Day 1" }
+        currentPeriodTextObserver.reset(expectation(description: "day 1")) { $0 == "Day 1" }
         selectPeriodViewModel?.onResult?(.selected(availablePeriodRefs[1]))
         waitForExpectations(timeout: 1.0, handler: nil)
     }

@@ -32,7 +32,7 @@ private typealias K = ArchiveConstants
 private let PERIOD_JSON_FORMAT = "period-%ld.json"
 
 protocol ArchiveJSONWriter {
-    func writeArchiveJSON(fileName: String, object: [String: AnyObject]) throws
+    func writeArchiveJSON(fileName: String, object: [String: Any]) throws
 }
 
 open class ArchiveToJSON: ArchiveJSONWriter {
@@ -84,7 +84,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
         }
     }
     
-    func writeArchiveJSON(fileName: String, object: [String: AnyObject]) throws {
+    func writeArchiveJSON(fileName: String, object: [String: Any]) throws {
         let filePath = (_outDirPath as NSString).appendingPathComponent(fileName)
         guard let outStream = OutputStream(toFileAtPath: filePath, append: false) else {
             throw ConvertError.failedInWritingFile(filePath: filePath, innerError: nil)
@@ -166,7 +166,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
             )
             
             // children
-            var periods: [AnyObject] = []
+            var periods: [Any] = []
             parsing: while true {
                 let event = try _parser.next()
                 switch event {
@@ -183,7 +183,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
                     break
                 }
             }
-            villageWrapper.object[K.PERIODS] = periods as AnyObject?
+            villageWrapper.object[K.PERIODS] = periods as Any?
             
             // write to playdata.json
             let village = villageWrapper.object
@@ -192,9 +192,9 @@ open class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class AvatarListElementConverter: ElementConverter {
-        func convert(_ element: XMLElement) throws -> [[String: AnyObject]] {
+        func convert(_ element: XMLElement) throws -> [[String: Any]] {
             // children
-            var avatars: [[String: AnyObject]] = []
+            var avatars: [[String: Any]] = []
             parsing: while true {
                 let event = try _parser.next()
                 switch event {
@@ -215,7 +215,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class AvatarElementConverter: ElementConverter {
-        func convert(_ element: XMLElement) throws -> [String: AnyObject] {
+        func convert(_ element: XMLElement) throws -> [String: Any] {
             let avatarWrapper = ObjectWrapper(object: [:])
             
             // attributes
@@ -241,7 +241,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class PeriodElementConverter: ElementConverter {
-        func convert(_ element: XMLElement, writer: ArchiveJSONWriter) throws -> [String: AnyObject] {
+        func convert(_ element: XMLElement, writer: ArchiveJSONWriter) throws -> [String: Any] {
             let shallowPeriodWrapper = ObjectWrapper(object: [:])
             let deepPeriodWrapper = ObjectWrapper(object: [:])
 
@@ -268,7 +268,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
             )
             
             // children
-            var elements: [[String: AnyObject]] = []
+            var elements: [[String: Any]] = []
             parsing: while true {
                 let event = try _parser.next()
                 switch event {
@@ -338,7 +338,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
                     break
                 }
             }
-            deepPeriodWrapper.object[K.ELEMENTS] = elements as AnyObject?
+            deepPeriodWrapper.object[K.ELEMENTS] = elements as Any?
 
             // write to period[n].json
             let deepPeriod = deepPeriodWrapper.object
@@ -346,7 +346,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
             let periodFileName = String(format: PERIOD_JSON_FORMAT, day)
             try writer.writeArchiveJSON(fileName: periodFileName, object: deepPeriod)
 
-            shallowPeriodWrapper.object[K.HREF] = periodFileName as AnyObject?
+            shallowPeriodWrapper.object[K.HREF] = periodFileName as Any?
             return shallowPeriodWrapper.object
         }
     }
@@ -357,7 +357,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
             _objectWrapper.object[K.TYPE] = K.VAL_TALK
         }
         
-        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : Any] {
             // attributes
             let mapToTalk = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -389,7 +389,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_ON_STAGE)
         }
 
-        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : Any] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -414,7 +414,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class OpenRoleElementConverter: EventAnnounceConverter {
-        var _roleHeads: [String: AnyObject] = [:]
+        var _roleHeads: [String: Any] = [:]
         
         init(parser: XMLPullParser) {
             super.init(parser: parser, type: K.VAL_OPEN_ROLE)
@@ -437,14 +437,14 @@ open class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.ROLE_HEADS] = _roleHeads as AnyObject?
+            _objectWrapper.object[K.ROLE_HEADS] = _roleHeads as Any?
             
             try super.onEnd()
         }
     }
     
     class RoleHeadsElementConverter: ElementConverter {
-        func convert(_ element: XMLElement) throws -> (role: String, heads: AnyObject) {
+        func convert(_ element: XMLElement) throws -> (role: String, heads: Any) {
             guard let role = element.attributes[S.ATTR_ROLE] else { throw ArchiveToJSON.ConvertError.missingAttr(attribute:S.ATTR_ROLE) }
             guard let headsStr = element.attributes[S.ATTR_HEADS] else { throw ArchiveToJSON.ConvertError.missingAttr(attribute:S.ATTR_HEADS) }
             let heads = try asInt(headsStr)
@@ -478,7 +478,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.AVATAR_ID] = _avatarId as AnyObject?
+            _objectWrapper.object[K.AVATAR_ID] = _avatarId as Any?
             
             try super.onEnd()
         }
@@ -513,7 +513,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.AVATAR_ID] = _avatarId as AnyObject?
+            _objectWrapper.object[K.AVATAR_ID] = _avatarId as Any?
             
             try super.onEnd()
         }
@@ -528,13 +528,13 @@ open class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class CountingElementConverter: EventAnnounceConverter {
-        var _votes: [String: AnyObject] = [:]
+        var _votes: [String: Any] = [:]
         
         init(parser: XMLPullParser) {
             super.init(parser: parser, type: K.VAL_COUNTING)
         }
         
-        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : Any] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -566,14 +566,14 @@ open class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.VOTES] = _votes as AnyObject?
+            _objectWrapper.object[K.VOTES] = _votes as Any?
             
             try super.onEnd()
         }
     }
     
     class VoteElementConverter: ElementConverter {
-        func convert(_ element: XMLElement) throws -> (byWhom: String, target: AnyObject) {
+        func convert(_ element: XMLElement) throws -> (byWhom: String, target: Any) {
             guard let byWhom = element.attributes[S.ATTR_BY_WHOM] else { throw ArchiveToJSON.ConvertError.missingAttr(attribute:S.ATTR_BY_WHOM) }
             guard let target = element.attributes[S.ATTR_TARGET] else { throw ArchiveToJSON.ConvertError.missingAttr(attribute:S.ATTR_TARGET) }
             
@@ -588,7 +588,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_SUDDEN_DEATH)
         }
         
-        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : Any] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -630,7 +630,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class PlayerListElementConverter: EventAnnounceConverter {
-        var _playerInfos: [[String: AnyObject]] = []
+        var _playerInfos: [[String: Any]] = []
         
         init(parser: XMLPullParser) {
             super.init(parser: parser, type: K.VAL_PLAYER_LIST)
@@ -652,14 +652,14 @@ open class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.PLAYER_INFOS] = _playerInfos as AnyObject?
+            _objectWrapper.object[K.PLAYER_INFOS] = _playerInfos as Any?
             
             try super.onEnd()
         }
     }
 
     class PlayerInfoElementConverter: ElementConverter {
-        func convert(_ element: XMLElement) throws -> [String: AnyObject] {
+        func convert(_ element: XMLElement) throws -> [String: Any] {
             let playerInfoWrapper = ObjectWrapper(object: [:])
             
             // attributes
@@ -692,13 +692,13 @@ open class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class ExecutionElementConverter: EventAnnounceConverter {
-        var _nominateds: [String: AnyObject] = [:]
+        var _nominateds: [String: Any] = [:]
         
         init(parser: XMLPullParser) {
             super.init(parser: parser, type: K.VAL_EXECUTION)
         }
         
-        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : Any] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -730,14 +730,14 @@ open class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.NOMINATEDS] = _nominateds as AnyObject?
+            _objectWrapper.object[K.NOMINATEDS] = _nominateds as Any?
             
             try super.onEnd()
         }
     }
     
     class NominatedElementConverter: ElementConverter {
-        func convert(_ element: XMLElement) throws -> (avatarId: String, count: AnyObject) {
+        func convert(_ element: XMLElement) throws -> (avatarId: String, count: Any) {
             guard let avatarId = element.attributes[S.ATTR_AVATAR_ID] else { throw ArchiveToJSON.ConvertError.missingAttr(attribute:S.ATTR_AVATAR_ID) }
             guard let countStr = element.attributes[S.ATTR_COUNT] else { throw ArchiveToJSON.ConvertError.missingAttr(attribute:S.ATTR_COUNT) }
             let count = try asInt(countStr)
@@ -753,7 +753,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_VANISH)
         }
         
-        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : Any] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -775,7 +775,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_CHECKOUT)
         }
         
-        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : Any] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -803,7 +803,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_ASK_ENTRY)
         }
         
-        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : Any] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -829,7 +829,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_ASK_COMMIT)
         }
         
-        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : Any] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -871,7 +871,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.AVATAR_ID] = _avatarId as AnyObject?
+            _objectWrapper.object[K.AVATAR_ID] = _avatarId as Any?
             
             try super.onEnd()
         }
@@ -882,7 +882,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_STAY_EPILOGUE)
         }
         
-        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : Any] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -912,7 +912,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_JUDGE)
         }
         
-        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : Any] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -936,7 +936,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_GUARD)
         }
         
-        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : Any] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -956,7 +956,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
     }
 
     class Counting2ElementConverter: EventExtraConverter {
-        var _votes: [String: AnyObject] = [:]
+        var _votes: [String: Any] = [:]
         
         init(parser: XMLPullParser) {
             super.init(parser: parser, type: K.VAL_COUNTING2)
@@ -979,7 +979,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         override func onEnd() throws {
-            _objectWrapper.object[K.VOTES] = _votes as AnyObject?
+            _objectWrapper.object[K.VOTES] = _votes as Any?
             
             try super.onEnd()
         }
@@ -990,7 +990,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
             super.init(parser: parser, type: K.VAL_ASSAULT)
         }
         
-        override func convert(_ element: XMLElement) throws -> [String : AnyObject] {
+        override func convert(_ element: XMLElement) throws -> [String : Any] {
             // attributes
             let mapToEvent = map(toObject: _objectWrapper)
             try convertAttribute(element,
@@ -1033,9 +1033,9 @@ open class ArchiveToJSON: ArchiveJSONWriter {
     class TextLinesConverter: ElementConverter {
         let _objectWrapper = ObjectWrapper(object: [:])
         var _parsing = true
-        var _lines: [AnyObject] = []
+        var _lines: [Any] = []
         
-        func convert(_ element: XMLElement) throws -> [String: AnyObject] {
+        func convert(_ element: XMLElement) throws -> [String: Any] {
             try onBegin()
             
             while _parsing {
@@ -1067,13 +1067,13 @@ open class ArchiveToJSON: ArchiveJSONWriter {
         }
         
         func onEnd() throws {
-            _objectWrapper.object[K.LINES] = _lines as AnyObject?
+            _objectWrapper.object[K.LINES] = _lines as Any?
         }
     }
     
     class LiElementConverter: ElementConverter {
-        func convert(_ element: XMLElement) throws -> AnyObject {
-            var contents: [AnyObject] = []
+        func convert(_ element: XMLElement) throws -> Any {
+            var contents: [Any] = []
             
             parsing: while true {
                 let event = try _parser.next()
@@ -1103,7 +1103,7 @@ open class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class RawdataElementConverter: ElementConverter {
-        func convert(_ element: XMLElement) throws -> AnyObject {
+        func convert(_ element: XMLElement) throws -> Any {
             let contentWrapper = ObjectWrapper(object: [:])
 
             // attributes
@@ -1142,8 +1142,8 @@ open class ArchiveToJSON: ArchiveJSONWriter {
 // MARK: - Helper Class and Functions
 
 class ObjectWrapper {
-    var object: [String: AnyObject]
-    init(object: [String: AnyObject]) {
+    var object: [String: Any]
+    init(object: [String: Any]) {
         self.object = object
     }
 }
@@ -1173,7 +1173,7 @@ private func convertAttribute(_ element: XMLElement, mapping converters: [String
     }
 }
 
-private func map(toObject wrapper: ObjectWrapper) -> (String, ((String) throws -> AnyObject)) -> (String) throws -> Void {
+private func map(toObject wrapper: ObjectWrapper) -> (String, (@escaping (String) throws -> Any)) -> (String) throws -> Void {
     return { (key, valueConverter) in
         return { value in
             wrapper.object[key] = try valueConverter(value)
@@ -1181,7 +1181,7 @@ private func map(toObject wrapper: ObjectWrapper) -> (String, ((String) throws -
     }
 }
 
-private func map(toObjects wrappers: [ObjectWrapper]) -> (String, ((String) throws -> AnyObject)) -> (String) throws -> Void {
+private func map(toObjects wrappers: [ObjectWrapper]) -> (String, (@escaping (String) throws -> Any)) -> (String) throws -> Void {
     return { (key, valueConverter) in
         return { value in
             let convertedValue = try valueConverter(value)
@@ -1196,26 +1196,26 @@ private enum CastError: Error {
     case invalidValue
 }
 
-private func asString(_ value: String) -> AnyObject {
-    return value as AnyObject
+private func asString(_ value: String) -> Any {
+    return value as Any
 }
 
-private func asInt(_ value: String) throws -> AnyObject {
+private func asInt(_ value: String) throws -> Any {
     guard let integer = Int(value) else { throw CastError.invalidValue }
-    return integer as AnyObject
+    return integer as Any
 }
 
-private func asBool(_ value: String) throws -> AnyObject {
+private func asBool(_ value: String) throws -> Any {
     switch value {
     case "0":
         fallthrough
     case "false":
-        return false as AnyObject
+        return false as Any
     
     case "1":
         fallthrough
     case "true":
-        return true as AnyObject
+        return true as Any
         
     default:
         throw CastError.invalidValue

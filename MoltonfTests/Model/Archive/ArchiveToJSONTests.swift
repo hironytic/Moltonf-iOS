@@ -31,8 +31,8 @@ import SwiftyJSON
 private typealias K = ArchiveConstants
 
 private class MockJSONWriter: ArchiveJSONWriter {
-    var output: [(fileName: String, object: [String: AnyObject])] = []
-    func writeArchiveJSON(fileName: String, object: [String: AnyObject]) throws {
+    var output: [(fileName: String, object: [String: Any])] = []
+    func writeArchiveJSON(fileName: String, object: [String: Any]) throws {
         output.append((fileName: fileName, object: object))
     }
 }
