@@ -24,7 +24,6 @@
 //
 
 import Foundation
-import Eventitic
 import RxCocoa
 import RxSwift
 
@@ -33,35 +32,33 @@ public enum SelectPeriodViewModelResult {
     case Cancelled
 }
 
-public class SelectPeriodViewModelItem {
+public struct SelectPeriodViewModelItem {
+    public let periodReference: PeriodReference
     public let title: String
     public let checked: Bool
-    
-    public init(title: String, checked: Bool) {
-        self.title = title
-        self.checked = checked
-    }
 }
 
 public class SelectPeriodViewModel: ViewModel {
     public let periods: Observable<[SelectPeriodViewModelItem]>
     public let cancelAction: AnyObserver<Void>
-    public let selectAction: AnyObserver<NSIndexPath>
+    public let selectAction: AnyObserver<SelectPeriodViewModelItem>
     
     public var onResult: (SelectPeriodViewModelResult -> Void)? = nil
     
-    private let _listenerStore = ListenerStore()
-    private let _storyWatching: StoryWatching
-    private let _periods = Variable<([PeriodReference], Period?)>([], nil)
+    private let _disposeBag = DisposeBag()
+    private let _storyWatching: IStoryWatching
     private let _cancelAction = ActionObserver<Void>()
-    private let _selectAction = ActionObserver<NSIndexPath>()
+    private let _selectAction = ActionObserver<SelectPeriodViewModelItem>()
     
-    public init(storyWatching: StoryWatching) {
+    public init(storyWatching: IStoryWatching) {
         _storyWatching = storyWatching
 
-        periods = _periods.asDriver().asObservable()
+        periods = Observable
+            .combineLatest(_storyWatching.availablePeriodRefs, _storyWatching.currentPeriod, resultSelector: { ($0, $1) })
+            .asDriver(onErrorDriveWith: Driver.empty())
+            .asObservable()
             .map { (periodList, currentPeriod) -> [SelectPeriodViewModelItem] in
-                let currentDay = currentPeriod?.day ?? -1
+                let currentDay = currentPeriod.day ?? -1
                 return periodList
                     .map { periodRef in
                         var title = ""
@@ -74,7 +71,7 @@ public class SelectPeriodViewModel: ViewModel {
                             title = "Day \(periodRef.day)"
                         }
                         let checked = periodRef.day == currentDay
-                        return SelectPeriodViewModelItem(title: title, checked: checked)
+                        return SelectPeriodViewModelItem(periodReference: periodRef, title: title, checked: checked)
                     }
             }
         cancelAction = _cancelAction.asObserver()
@@ -83,22 +80,7 @@ public class SelectPeriodViewModel: ViewModel {
         super.init()
 
         _cancelAction.handler = { [weak self] in self?.cancel() }
-        _selectAction.handler = { [weak self] indexPath in self?.select(indexPath) }
-
-        _periods.value = (_storyWatching.availablePeriodRefs, _storyWatching.currentPeriod)
-        _storyWatching.availablePeriodRefsChanged
-            .listen { [weak self] _ in
-                self?.updatePeriods()
-            }
-            .addToStore(_listenerStore)
-        _storyWatching.currentPeriodChanged
-            .listen { [weak self] _ in
-                self?.updatePeriods()
-            }
-    }
-    
-    private func updatePeriods() {
-        _periods.value = (_storyWatching.availablePeriodRefs, _storyWatching.currentPeriod)
+        _selectAction.handler = { [weak self] item in self?.select(item) }
     }
     
     private func cancel() {
@@ -106,9 +88,8 @@ public class SelectPeriodViewModel: ViewModel {
         onResult?(.Cancelled)
     }
     
-    private func select(indexPath: NSIndexPath) {
+    private func select(item: SelectPeriodViewModelItem) {
         sendMessage(DismissingMessage())
-        let periodReference = _storyWatching.availablePeriodRefs[indexPath.row]
-        onResult?(.Selected(periodReference))
+        onResult?(.Selected(item.periodReference))
     }
 }

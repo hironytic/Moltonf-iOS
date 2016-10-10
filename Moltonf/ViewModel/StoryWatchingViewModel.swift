@@ -26,7 +26,6 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import Eventitic
 
 public class StoryWatchingViewModel: ViewModel {
     public let currentPeriodText: Observable<String>
@@ -35,10 +34,7 @@ public class StoryWatchingViewModel: ViewModel {
     public let leaveWatchingAction: AnyObserver<Void>
 
     private let _factory: Factory
-    private let _listenerStore = ListenerStore()
-    private let _storyWatching: StoryWatching
-    private let _currentPeriodText = Variable<String>("")
-    private let _elementsList = Variable<[StoryElementViewModel]>([])
+    private let _storyWatching: IStoryWatching
     private let _selectPeriodAction = ActionObserver<Void>()
     private let _leaveWatchingAction = ActionObserver<Void>()
     
@@ -49,20 +45,20 @@ public class StoryWatchingViewModel: ViewModel {
         func makeTalkViewModel(talk talk: Talk) -> TalkViewModel {
             return TalkViewModel(talk: talk)
         }
-        func makeSelectPeriodViewModel(storyWatching storyWatching: StoryWatching) -> SelectPeriodViewModel {
+        func makeSelectPeriodViewModel(storyWatching storyWatching: IStoryWatching) -> SelectPeriodViewModel {
             return SelectPeriodViewModel(storyWatching: storyWatching)
         }
     }
     
-    public convenience init(storyWatching: StoryWatching) {
+    public convenience init(storyWatching: IStoryWatching) {
         self.init(storyWatching: storyWatching, factory: Factory())
     }
-    init(storyWatching: StoryWatching, factory: Factory) {
+    init(storyWatching: IStoryWatching, factory: Factory) {
         _factory = factory
         _storyWatching = storyWatching
-        
-        currentPeriodText = _currentPeriodText.asDriver().asObservable()
-        elementsList = _elementsList.asDriver().asObservable()
+
+        currentPeriodText = self.dynamicType.configureCurrentPeriodText(_storyWatching.currentPeriod)
+        elementsList = self.dynamicType.configureElementsList(_storyWatching.storyElements, factory: _factory)
         selectPeriodAction = _selectPeriodAction.asObserver()
         leaveWatchingAction = _leaveWatchingAction.asObserver()
         
@@ -70,50 +66,40 @@ public class StoryWatchingViewModel: ViewModel {
 
         _selectPeriodAction.handler = { [weak self] in self?.selectPeriod() }
         _leaveWatchingAction.handler = { [weak self] in self?.leaveWatching() }
-        
-        updateCurrentPeriodText()
-        updateElementsList()
-        
-        _storyWatching.currentPeriodChanged
-            .listen { [weak self] _ in
-                self?.updateCurrentPeriodText()
-            }
-            .addToStore(_listenerStore)
-        
-        _storyWatching.storyElementsChanged
-            .listen { [weak self] _ in
-                self?.updateElementsList()
-            }
-            .addToStore(_listenerStore)
     }
     
-    private func updateCurrentPeriodText() {
-        var text = ""
-        if let currentPeriod = _storyWatching.currentPeriod {
-            switch currentPeriod.type {
-            case .Prologue:
-                text = "Prologue"
-            case .Epilogue:
-                text = "Epilogue"
-            case .Progress:
-                text = "Day \(currentPeriod.day)"
+    private static func configureCurrentPeriodText(currentPeriod: Observable<Period>) -> Observable<String> {
+        return currentPeriod
+            .map { period in
+                return { () -> String in
+                    switch period.type {
+                    case .Prologue:
+                        return "Prologue"
+                    case .Epilogue:
+                        return "Epilogue"
+                    case .Progress:
+                        return "Day \(period.day)"
+                    }
+                }()
             }
-        }
-        _currentPeriodText.value = text
+            .asDriver(onErrorJustReturn: "").asObservable()
     }
     
-    private func updateElementsList() {
-        let viewModelList = _storyWatching.storyElements
-            .map { element -> StoryElementViewModel in
-                if let storyEvent = element as? StoryEvent {
-                    return _factory.makeStoryEventViewModel(storyEvent: storyEvent)
-                } else if let talk = element as? Talk {
-                    return _factory.makeTalkViewModel(talk: talk)
-                } else {
-                    fatalError()
-                }
+    private static func configureElementsList(storyElementsLine: Observable<[StoryElement]>, factory: Factory) -> Observable<[StoryElementViewModel]> {
+        return storyElementsLine
+            .map { storyElements in
+                return storyElements
+                    .map { element -> StoryElementViewModel in
+                        if let storyEvent = element as? StoryEvent {
+                            return factory.makeStoryEventViewModel(storyEvent: storyEvent)
+                        } else if let talk = element as? Talk {
+                            return factory.makeTalkViewModel(talk: talk)
+                        } else {
+                            fatalError()
+                        }
+                    }
             }
-        _elementsList.value = viewModelList
+            .asDriver(onErrorJustReturn: []).asObservable()
     }
     
     private func selectPeriod() {
@@ -127,7 +113,7 @@ public class StoryWatchingViewModel: ViewModel {
     private func processSelectPeriodViewModelResult(result: SelectPeriodViewModelResult) {
         switch result {
         case .Selected(let periodReference):
-            _storyWatching.selectPeriod(periodReference)
+            _storyWatching.selectPeriodAction.onNext(periodReference)
         default:
             break
         }

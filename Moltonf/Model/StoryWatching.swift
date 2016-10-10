@@ -24,85 +24,94 @@
 //
 
 import Foundation
-import Eventitic
+import RxSwift
 
 public enum StoryWatchingError: ErrorType {
     case InconsistencyError(String)
 }
 
-public class StoryWatching {
-    public let errorOccurred = EventSource<ErrorType>()
+public protocol IStoryWatching {
+    var error: Observable<ErrorType> { get }
+    var availablePeriodRefs: Observable<[PeriodReference]> { get }
+    var currentPeriod: Observable<Period> { get }
+    var storyElements: Observable<[StoryElement]> { get }
+    
+    var selectPeriodAction: AnyObserver<PeriodReference> { get }
+    var switchToNextPeriodAction: AnyObserver<Void> { get }
+}
 
-    public let availablePeriodRefsChanged = EventSource<[PeriodReference]>()
-    public private(set) var availablePeriodRefs: [PeriodReference] = [] {
-        didSet {
-            availablePeriodRefsChanged.fire(availablePeriodRefs)
-        }
-    }
+public class StoryWatching: IStoryWatching {
+    public var error: Observable<ErrorType> { get { return _error } }
+    public private(set) var availablePeriodRefs: Observable<[PeriodReference]>
+    public private(set) var currentPeriod: Observable<Period>
+    public private(set) var storyElements: Observable<[StoryElement]>
     
-    public let currentPeriodChanged = EventSource<Period?>()
-    public private(set) var currentPeriod: Period? = nil {
-        didSet {
-            currentPeriodChanged.fire(currentPeriod)
-        }
-    }
+    public private(set) var selectPeriodAction: AnyObserver<PeriodReference>
+    public private(set) var switchToNextPeriodAction: AnyObserver<Void>
     
-    public let storyElementsChanged = EventSource<[StoryElement]>()
-    public private(set) var storyElements: [StoryElement] = [] {
-        didSet {
-            storyElementsChanged.fire(storyElements)
-        }
-    }
+    private let _error = PublishSubject<ErrorType>()
+    private let _availablePeriodRefs: Variable<[PeriodReference]>
+    private let _currentPeriod: Variable<Period>
+    private let _storyElements: Variable<[StoryElement]>
+    
+    private let _selectPeriodAction = ActionObserver<PeriodReference>()
+    private let _switchToNextPeriodAction = ActionObserver<Void>()
     
     private let _workspace: Workspace
     private let _story: Story
-
-    init(workspace: Workspace, story: Story) {
-        _workspace = workspace
-        _story = story
-    }
     
     public init(workspace: Workspace) throws {
         _workspace = workspace
-
+        
         let workspaceURL = WorkspaceDB.sharedInstance.workspaceDirURL.URLByAppendingPathComponent(_workspace.id)
         let playdataURL = workspaceURL.URLByAppendingPathComponent(ArchiveConstants.FILE_PLAYDATA_JSON)
         _story = try Story(playdataURL: playdataURL)
         
-        availablePeriodRefs = _story.periodRefs
-        currentPeriod = try loadPeriod(_story.periodRefs[0])
+        _availablePeriodRefs = Variable<[PeriodReference]>(_story.periodRefs)
+        _currentPeriod = Variable<Period>(try self.dynamicType.loadPeriod(_story.periodRefs[0], story: _story, workspace: _workspace))
+        _storyElements = Variable<[StoryElement]>(_currentPeriod.value.elements)
         
-        storyElements = currentPeriod?.elements ?? []
+        availablePeriodRefs = _availablePeriodRefs.asObservable()
+        currentPeriod = _currentPeriod.asObservable()
+        storyElements = _storyElements.asObservable()
+        selectPeriodAction = _selectPeriodAction.asObserver()
+        switchToNextPeriodAction = _switchToNextPeriodAction.asObserver()
+        
+        _selectPeriodAction.handler = { [weak self] in self?.selectPeriod($0) }
+        _switchToNextPeriodAction.handler = { [weak self] in self?.switchToNextPeriod() }
     }
-    
-    public func selectPeriod(periodRef: PeriodReference) {
-        if (currentPeriod?.day ?? -1) != periodRef.day {
+
+    private func selectPeriod(periodRef: PeriodReference) {
+        if _currentPeriod.value.day != periodRef.day {
             do {
-                try loadPeriod(periodRef)
+                _currentPeriod.value = try loadPeriod(periodRef)
             } catch let error {
-                errorOccurred.fire(error)
+                _error.onNext(error)
             }
         }
     }
     
-    public func switchToNextPeriod() {
-        guard let currentPeriod = currentPeriod else { return }
-        if let currentIndex = _story.periodRefs.indexOf({ $0.day == currentPeriod.day }) {
+    private func switchToNextPeriod() {
+        if let currentIndex = _story.periodRefs.indexOf({ $0.day == _currentPeriod.value.day }) {
             if currentIndex < _story.periodRefs.count {
                 do {
-                    try loadPeriod(_story.periodRefs[currentIndex + 1])
+                    _currentPeriod.value = try loadPeriod(_story.periodRefs[currentIndex + 1])
                 } catch let error {
-                    errorOccurred.fire(error)
+                    _error.onNext(error)
                 }
             }
         } else {
-            errorOccurred.fire(StoryWatchingError.InconsistencyError("current day is not found!"))
+            _error.onNext(StoryWatchingError.InconsistencyError("current day is not found!"))
         }
     }
-    
+
     private func loadPeriod(periodRef: PeriodReference) throws -> Period {
-        let workspaceURL = WorkspaceDB.sharedInstance.workspaceDirURL.URLByAppendingPathComponent(_workspace.id)
+        return try self.dynamicType.loadPeriod(periodRef, story: _story, workspace: _workspace)
+    }
+    
+    private static func loadPeriod(periodRef: PeriodReference, story: Story, workspace: Workspace) throws -> Period {
+        let workspaceURL = WorkspaceDB.sharedInstance.workspaceDirURL.URLByAppendingPathComponent(workspace.id)
         let periodURL = workspaceURL.URLByAppendingPathComponent(periodRef.periodPath)
-        return try Period(story: _story, periodURL: periodURL)
+        return try Period(story: story, periodURL: periodURL)
     }
 }

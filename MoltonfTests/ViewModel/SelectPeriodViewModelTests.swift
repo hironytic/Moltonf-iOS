@@ -24,7 +24,6 @@
 //
 
 import XCTest
-import Eventitic
 import RxSwift
 import RxCocoa
 @testable import Moltonf
@@ -32,29 +31,38 @@ import RxCocoa
 class SelectPeriodViewModelTests: XCTestCase {
     var disposeBag = DisposeBag()
     var selectPeriodViewModel: SelectPeriodViewModel! = nil
+    var mockStoryWatching: MockStoryWatching! = nil
     
-    class MockStoryWatching: StoryWatching {
-        var _availablePeriodRefs: [PeriodReference] = []
-        override var availablePeriodRefs: [PeriodReference] {
-            get {
-                return _availablePeriodRefs
-            }
-            set {
-                _availablePeriodRefs = newValue
-                availablePeriodRefsChanged.fire(availablePeriodRefs)
-            }
-        }
-
-        var _currentPeriod: Period? = nil
-        override var currentPeriod: Period? {
-            get {
-                return _currentPeriod
-            }
-            set {
-                _currentPeriod = newValue
-                currentPeriodChanged.fire(currentPeriod)
-                
-            }
+    class MockStoryWatching: IStoryWatching {
+        var error = Observable<ErrorType>.never()
+        var availablePeriodRefs: Observable<[PeriodReference]>
+        var currentPeriod: Observable<Period>
+        var storyElements = Observable<[StoryElement]>.never()
+        
+        var selectPeriodAction: AnyObserver<PeriodReference>
+        var switchToNextPeriodAction: AnyObserver<Void>
+        
+        var _selectPeriodAction = ActionObserver<PeriodReference>()
+        var _switchToNextPeriodAction = ActionObserver<Void>()
+        
+        let periodRef0: PeriodReference
+        let periodRef1: PeriodReference
+        let periodRef2: PeriodReference
+        let periodRef3: PeriodReference
+        
+        init() {
+            selectPeriodAction = _selectPeriodAction.asObserver()
+            switchToNextPeriodAction = _switchToNextPeriodAction.asObserver()
+            
+            let story = Story(villageFullName: "", graveIconURI: "")
+            periodRef0 = PeriodReference(story: story, type: .Prologue, day: 0, periodPath: "")
+            periodRef1 = PeriodReference(story: story, type: .Progress, day: 1, periodPath: "")
+            periodRef2 = PeriodReference(story: story, type: .Progress, day: 2, periodPath: "")
+            periodRef3 = PeriodReference(story: story, type: .Epilogue, day: 3, periodPath: "")
+            let period = Period(story: story, type: .Prologue, day: 0)
+            
+            self.availablePeriodRefs = Observable.just([periodRef0, periodRef1, periodRef2, periodRef3])
+            self.currentPeriod = Observable.just(period)
         }
     }
     
@@ -62,17 +70,8 @@ class SelectPeriodViewModelTests: XCTestCase {
         super.setUp()
         disposeBag = DisposeBag()
 
-        let workspace = Workspace()
-        let story = Story(villageFullName: "", graveIconURI: "")
-        let storyWatching = MockStoryWatching(workspace: workspace, story: story)
-        let periodRef0 = PeriodReference(story: story, type: .Prologue, day: 0, periodPath: "")
-        let periodRef1 = PeriodReference(story: story, type: .Progress, day: 1, periodPath: "")
-        let periodRef2 = PeriodReference(story: story, type: .Progress, day: 2, periodPath: "")
-        let periodRef3 = PeriodReference(story: story, type: .Epilogue, day: 3, periodPath: "")
-        storyWatching.availablePeriodRefs = [periodRef0, periodRef1, periodRef2, periodRef3]
-        let period = Period(story: story, type: .Prologue, day: 0)
-        storyWatching.currentPeriod = period
-        selectPeriodViewModel = SelectPeriodViewModel(storyWatching: storyWatching)
+        mockStoryWatching = MockStoryWatching()
+        selectPeriodViewModel = SelectPeriodViewModel(storyWatching: mockStoryWatching)
     }
     
     func testPeriods() {
@@ -98,10 +97,13 @@ class SelectPeriodViewModelTests: XCTestCase {
             }
             resultExpectation.fulfill()
         }
-
-        selectPeriodViewModel.selectAction
-            .onNext(NSIndexPath(forRow: 2, inSection: 0))
         
+        selectPeriodViewModel.periods
+            .subscribeNext { [unowned self] items in
+                self.selectPeriodViewModel.selectAction.onNext(items[2])
+            }
+            .addDisposableTo(disposeBag)
+
         waitForExpectationsWithTimeout(3.0) { error in }
     }
     

@@ -52,46 +52,39 @@ class StoryWatchingViewModelTests: XCTestCase {
     }
 
     func testSelectPeriod() {
-        class MockStoryWatching: StoryWatching {
+        class MockStoryWatching: IStoryWatching {
+            var error = Observable<ErrorType>.never()
+            var availablePeriodRefs: Observable<[PeriodReference]>
+            var currentPeriod: Observable<Period>
+            var storyElements = Observable<[StoryElement]>.never()
+            
+            var selectPeriodAction: AnyObserver<PeriodReference>
+            var switchToNextPeriodAction = ActionObserver<Void>().asObserver()
+            
+            var _selectPeriodAction = ActionObserver<PeriodReference>()
+            var _currentPeriod: Variable<Period>
+            
             let period0: Period
             let period1: Period
             
-            let tests: StoryWatchingViewModelTests
             init(tests: StoryWatchingViewModelTests) {
-                self.tests = tests
                 period0 = Period(story: tests.story, type: .Prologue, day: 0)
                 period1 = Period(story: tests.story, type: .Progress, day: 1)
-
-                super.init(workspace: tests.workspace, story: tests.story)
                 
-                currentPeriod = period0
-            }
-            override var availablePeriodRefs: [PeriodReference] {
-                get {
-                    return tests.availablePeriodRefs
-                }
-            }
-            
-            var _currentPeriod: Period? = nil
-            override var currentPeriod: Period? {
-                get {
-                    return _currentPeriod
-                }
-                set {
-                    _currentPeriod = newValue
-                    currentPeriodChanged.fire(currentPeriod)
-                    
-                }
-            }
-            
-            override func selectPeriod(periodRef: PeriodReference) {
-                switch periodRef.day {
-                case 0:
-                    currentPeriod = period0
-                case 1:
-                    currentPeriod = period1
-                default:
-                    break
+                selectPeriodAction = _selectPeriodAction.asObserver()
+                availablePeriodRefs = Observable.just(tests.availablePeriodRefs)
+                _currentPeriod = Variable(period0)
+                currentPeriod = _currentPeriod.asObservable()
+                
+                _selectPeriodAction.handler = { [unowned self] periodRef in
+                    switch periodRef.day {
+                    case 0:
+                        self._currentPeriod.value = self.period0
+                    case 1:
+                        self._currentPeriod.value = self.period1
+                    default:
+                        break
+                    }
                 }
             }
         }
