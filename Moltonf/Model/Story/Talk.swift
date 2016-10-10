@@ -29,15 +29,15 @@ import SwiftyJSON
 private typealias K = ArchiveConstants
 
 /// This class represents a talk which appears in story.
-open class Talk: StoryElement {
+public class Talk: StoryElement {
     /// Type of talk
-    open let talkType: TalkType
+    public let talkType: TalkType
     
     /// Avatar which makes this talk
-    open let speaker: Avatar
+    public let speaker: Avatar
     
     /// Time on which this talk is made
-    open let time: TimePart
+    public let time: TimePart
     
     /// Creates a new instance.
     /// - parameter period: period which contains this element
@@ -79,7 +79,7 @@ open class Talk: StoryElement {
 }
 
 /// This class represents a special talk, wolf's attack.
-open class WolfAttackTalk: Talk {
+public class WolfAttackTalk: Talk {
     /// Creates a new instance.
     /// - parameter period: period which contains this element
     /// - parameter element: JSON fragment in archive

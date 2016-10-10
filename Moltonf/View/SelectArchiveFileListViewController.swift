@@ -27,14 +27,14 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-open class SelectArchiveFileListViewController: UITableViewController {
+public class SelectArchiveFileListViewController: UITableViewController {
     var disposeBag: DisposeBag!
     var viewModel: SelectArchiveFileViewModel!
     var noItemsLabel: UILabel!
     
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     
-    override open func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
 
         refreshControl = UIRefreshControl()
@@ -54,7 +54,7 @@ open class SelectArchiveFileListViewController: UITableViewController {
         bindViewModel()
     }
 
-    fileprivate func bindViewModel() {
+    private func bindViewModel() {
         disposeBag = DisposeBag()
         if let viewModel = self.viewModel {
             cancelButton.rx.tap

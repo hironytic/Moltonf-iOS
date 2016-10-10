@@ -29,14 +29,14 @@ import RealmSwift
 private let WORKSPACE_DIR = "workspace"
 private let WORKSPACE_DB = "workspace.realm"
 
-open class WorkspaceDB {
-    fileprivate static let _sharedInstanceLockObj = NSObject()
-    fileprivate static weak var _sharedInstance: WorkspaceDB? = nil
+public class WorkspaceDB {
+    private static let _sharedInstanceLockObj = NSObject()
+    private static weak var _sharedInstance: WorkspaceDB? = nil
     
-    open let workspaceDirURL: URL
-    open let realm: Realm
+    public let workspaceDirURL: URL
+    public let realm: Realm
     
-    fileprivate init() {
+    private init() {
         workspaceDirURL = URL(fileURLWithPath: AppDelegate.privateDataDirectory).appendingPathComponent(WORKSPACE_DIR)
         _ = try? FileManager.default.createDirectory(at: workspaceDirURL, withIntermediateDirectories: true, attributes: nil)
         
@@ -45,7 +45,7 @@ open class WorkspaceDB {
         realm = try! Realm(configuration: config)
     }
     
-    open static var sharedInstance: WorkspaceDB {
+    public static var sharedInstance: WorkspaceDB {
         var instance: WorkspaceDB? = nil
         synchronized(WorkspaceDB._sharedInstanceLockObj) {
             instance = WorkspaceDB._sharedInstance

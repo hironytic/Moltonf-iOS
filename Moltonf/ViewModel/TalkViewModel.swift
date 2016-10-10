@@ -27,13 +27,13 @@ import Foundation
 import RxSwift
 import UIKit
 
-open class TalkViewModel: StoryElementViewModel {
-    open let numberLine: Observable<Int?>
-    open let speakerNameLine: Observable<String>
+public class TalkViewModel: StoryElementViewModel {
+    public let numberLine: Observable<Int?>
+    public let speakerNameLine: Observable<String>
 //    public let speakerIconLine: Observable<UIImage>
-    open let timeLine: Observable<String>
-    open let messageTextLine: Observable<NSAttributedString>
-    open let balloonColorLine: Observable<UIColor>
+    public let timeLine: Observable<String>
+    public let messageTextLine: Observable<NSAttributedString>
+    public let balloonColorLine: Observable<UIColor>
     
     public init(talk: Talk) {
         numberLine = Observable

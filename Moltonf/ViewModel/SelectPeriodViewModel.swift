@@ -38,17 +38,17 @@ public struct SelectPeriodViewModelItem {
     public let checked: Bool
 }
 
-open class SelectPeriodViewModel: ViewModel {
-    open let periodsLine: Observable<[SelectPeriodViewModelItem]>
-    open let cancelAction: AnyObserver<Void>
-    open let selectAction: AnyObserver<SelectPeriodViewModelItem>
+public class SelectPeriodViewModel: ViewModel {
+    public let periodsLine: Observable<[SelectPeriodViewModelItem]>
+    public let cancelAction: AnyObserver<Void>
+    public let selectAction: AnyObserver<SelectPeriodViewModelItem>
     
-    open var onResult: ((SelectPeriodViewModelResult) -> Void)? = nil
+    public var onResult: ((SelectPeriodViewModelResult) -> Void)? = nil
     
-    fileprivate let _disposeBag = DisposeBag()
-    fileprivate let _storyWatching: IStoryWatching
-    fileprivate let _cancelAction = ActionObserver<Void>()
-    fileprivate let _selectAction = ActionObserver<SelectPeriodViewModelItem>()
+    private let _disposeBag = DisposeBag()
+    private let _storyWatching: IStoryWatching
+    private let _cancelAction = ActionObserver<Void>()
+    private let _selectAction = ActionObserver<SelectPeriodViewModelItem>()
     
     public init(storyWatching: IStoryWatching) {
         _storyWatching = storyWatching
@@ -83,12 +83,12 @@ open class SelectPeriodViewModel: ViewModel {
         _selectAction.handler = { [weak self] item in self?.select(item) }
     }
     
-    fileprivate func cancel() {
+    private func cancel() {
         sendMessage(DismissingMessage())
         onResult?(.cancelled)
     }
     
-    fileprivate func select(_ item: SelectPeriodViewModelItem) {
+    private func select(_ item: SelectPeriodViewModelItem) {
         sendMessage(DismissingMessage())
         onResult?(.selected(item.periodReference))
     }

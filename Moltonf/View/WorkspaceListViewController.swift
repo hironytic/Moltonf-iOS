@@ -27,13 +27,13 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-open class WorkspaceListViewController: UITableViewController {
+public class WorkspaceListViewController: UITableViewController {
     var disposeBag: DisposeBag!
     let viewModel = WorkspaceListViewModel()
     
     @IBOutlet weak var addNewButton: UIBarButtonItem!
     
-    override open func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.rightBarButtonItem = self.editButtonItem
@@ -41,12 +41,12 @@ open class WorkspaceListViewController: UITableViewController {
         bindViewModel()
     }
 
-    override open func didReceiveMemoryWarning() {
+    override public func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
-    fileprivate func bindViewModel() {
+    private func bindViewModel() {
         let viewModel = self.viewModel
         disposeBag = DisposeBag()
 
@@ -76,7 +76,7 @@ open class WorkspaceListViewController: UITableViewController {
             .addDisposableTo(disposeBag)
     }
     
-    fileprivate func transition(_ message: TransitionMessage) {
+    private func transition(_ message: TransitionMessage) {
         switch message.viewModel {
         case let viewModel as SelectArchiveFileViewModel:
             let storyboard: UIStoryboard = UIStoryboard(name: "SelectArchiveFile", bundle: Bundle.main)
@@ -97,20 +97,20 @@ open class WorkspaceListViewController: UITableViewController {
 
 }
 
-open class WorkspaceListDataSource: NSObject, UITableViewDataSource, RxTableViewDataSourceType {
+public class WorkspaceListDataSource: NSObject, UITableViewDataSource, RxTableViewDataSourceType {
     public typealias Element = [WorkspaceListViewModelItem]
     
-    fileprivate var _itemModels: Element = []
+    private var _itemModels: Element = []
     
-    open func numberOfSections(in tableView: UITableView) -> Int {
+    public func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return _itemModels.count
     }
 
-    open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let element = _itemModels[(indexPath as NSIndexPath).row]
         
@@ -119,15 +119,15 @@ open class WorkspaceListDataSource: NSObject, UITableViewDataSource, RxTableView
         return cell
     }
     
-    open func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return tableView.isEditing
     }
     
-    open func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+    public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return false
     }
     
-    open func tableView(_ tableView: UITableView, observedEvent: Event<Element>) {
+    public func tableView(_ tableView: UITableView, observedEvent: Event<Element>) {
         UIBindingObserver(UIElement: self) { (dataSource, element) in
             dataSource._itemModels = element
             tableView.reloadData()

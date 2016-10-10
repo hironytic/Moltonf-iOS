@@ -29,9 +29,9 @@ import SwiftyJSON
 private typealias K = ArchiveConstants
 
 /// This class represents an event which appears in story.
-open class StoryEvent: StoryElement {
+public class StoryEvent: StoryElement {
     /// Event family
-    open let eventFamily: EventFamily
+    public let eventFamily: EventFamily
     
     /// Creates a new instance
     /// - parameter period:  period which contains this element

@@ -27,11 +27,11 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-open class StoryWatchingViewController: UITableViewController {
+public class StoryWatchingViewController: UITableViewController {
     var disposeBag: DisposeBag!
     var viewModel: StoryWatchingViewModel!
 
-    open override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.estimatedRowHeight = 132
@@ -40,7 +40,7 @@ open class StoryWatchingViewController: UITableViewController {
         bindViewModel()
     }
     
-    fileprivate func bindViewModel() {
+    private func bindViewModel() {
         disposeBag = DisposeBag()
         
         let dataSource = StoryWatchingDataSource()
@@ -51,7 +51,7 @@ open class StoryWatchingViewController: UITableViewController {
 
 }
 
-open class StoryWatchingDataSource: NSObject {
+public class StoryWatchingDataSource: NSObject {
     fileprivate var _itemModels: Element = []
 }
 

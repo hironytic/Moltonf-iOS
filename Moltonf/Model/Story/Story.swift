@@ -29,20 +29,20 @@ import SwiftyJSON
 private typealias K = ArchiveConstants
 
 /// This class represents a story.
-open class Story {
+public class Story {
     /// Full name of the village
-    open let villageFullName: String
+    public let villageFullName: String
     
     /// URI string which speficies a grave icon image
-    open let graveIconURI: String
+    public let graveIconURI: String
 
     /// Reference to each period in this story
-    open fileprivate(set) var periodRefs: [PeriodReference] = []
+    public private(set) var periodRefs: [PeriodReference] = []
     
     /// Avatars in this story
-    open fileprivate(set) var avatarList: [Avatar] = []
+    public private(set) var avatarList: [Avatar] = []
     
-    fileprivate var _avatarMap = [String: Avatar]()
+    private var _avatarMap = [String: Avatar]()
     
     // for testing
     init(villageFullName: String, graveIconURI: String) {
@@ -102,24 +102,24 @@ open class Story {
     /// Retrieves an avatar from its ID.
     /// - parameter avatarId: ID of wanted avatar
     /// - returns: avatar, or nil if no avatar was found
-    open func avatar(havingId avatarId: String) -> Avatar? {
+    public func avatar(havingId avatarId: String) -> Avatar? {
         return _avatarMap[avatarId]
     }
 }
 
 /// This class represents a reference to a period.
-open class PeriodReference {
+public class PeriodReference {
     /// Story which contains this reference
-    open fileprivate(set) weak var story: Story?
+    public private(set) weak var story: Story?
     
     /// Type of this period
-    open let type: PeriodType
+    public let type: PeriodType
     
     /// Number of the day
-    open let day: Int
+    public let day: Int
     
     /// Path to a period file
-    open let periodPath: String
+    public let periodPath: String
 
     // for testing
     init(story: Story?, type: PeriodType, day: Int, periodPath: String) {

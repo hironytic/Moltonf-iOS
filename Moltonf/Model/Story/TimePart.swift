@@ -27,8 +27,8 @@ import Foundation
 
 /// This class holds time components which doesn't specify a specific point of time.
 /// It is not related to any time zome, eigher.
-open class TimePart {
-    fileprivate let _milliseconds: Int
+public class TimePart {
+    private let _milliseconds: Int
     
     /// Creates a new instance from hour, minute, second and millisecond
     /// - parameter hour: hour (0-23)
@@ -51,28 +51,28 @@ open class TimePart {
     }
 
     /// Hour part value
-    open var hourPart: Int {
+    public var hourPart: Int {
         get {
             return _milliseconds / (1000 * 60 * 60)
         }
     }
     
     /// Minute part value
-    open var minutePart: Int {
+    public var minutePart: Int {
         get {
             return (_milliseconds / (1000 * 60)) % 60
         }
     }
     
     /// Second part value
-    open var secondPart: Int {
+    public var secondPart: Int {
         get {
             return (_milliseconds / 1000) % 60;
         }
     }
     
     /// Millisecond part value
-    open var millisecondPart: Int {
+    public var millisecondPart: Int {
         get {
             return _milliseconds % 1000
         }

@@ -27,9 +27,9 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-open class MessageSlot {
-    fileprivate let _subject = PublishSubject<Message>()
-    open let messageLine: Observable<Message>
+public class MessageSlot {
+    private let _subject = PublishSubject<Message>()
+    public let messageLine: Observable<Message>
 
     public init() {
         self.messageLine = _subject
@@ -37,7 +37,7 @@ open class MessageSlot {
             .observeOn(MainScheduler.instance)
     }
     
-    open func send(_ message: Message) {
+    public func send(_ message: Message) {
         _subject.onNext(message)
     }
 }

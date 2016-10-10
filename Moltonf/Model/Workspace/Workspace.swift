@@ -26,11 +26,11 @@
 import Foundation
 import RealmSwift
 
-open class Workspace: Object {
+public class Workspace: Object {
     dynamic var id = ""
     dynamic var title = ""
     
-    override open static func primaryKey() -> String? {
+    override public static func primaryKey() -> String? {
         return "id"
     }
 }

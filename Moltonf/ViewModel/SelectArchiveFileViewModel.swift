@@ -32,20 +32,20 @@ public enum SelectArchiveFileViewModelResult {
     case cancelled
 }
 
-open class SelectArchiveFileViewModel: ViewModel {
-    open let archiveFilesLine: Observable<[FileItem]>
-    open let noItemsMessageHiddenLine: Observable<Bool>
-    open let refreshingLine: Observable<Bool>
-    open let cancelAction: AnyObserver<Void>
-    open let refreshAction: AnyObserver<Void>
-    open let selectAction: AnyObserver<FileItem>
+public class SelectArchiveFileViewModel: ViewModel {
+    public let archiveFilesLine: Observable<[FileItem]>
+    public let noItemsMessageHiddenLine: Observable<Bool>
+    public let refreshingLine: Observable<Bool>
+    public let cancelAction: AnyObserver<Void>
+    public let refreshAction: AnyObserver<Void>
+    public let selectAction: AnyObserver<FileItem>
     
-    open var onResult: ((SelectArchiveFileViewModelResult) -> Void)? = nil
+    public var onResult: ((SelectArchiveFileViewModelResult) -> Void)? = nil
     
-    fileprivate let _fileList: IFileList
-    fileprivate let _cancelAction = ActionObserver<Void>()
-    fileprivate let _refreshAction = ActionObserver<Void>()
-    fileprivate let _selectAction = ActionObserver<FileItem>()
+    private let _fileList: IFileList
+    private let _cancelAction = ActionObserver<Void>()
+    private let _refreshAction = ActionObserver<Void>()
+    private let _selectAction = ActionObserver<FileItem>()
     
     public override init() {
         let directory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true)[0]
@@ -66,16 +66,16 @@ open class SelectArchiveFileViewModel: ViewModel {
         _selectAction.handler = { [weak self] item in self?.select(item) }
     }
     
-    fileprivate func cancel() {
+    private func cancel() {
         sendMessage(DismissingMessage())
         onResult?(.cancelled)
     }
     
-    fileprivate func refresh() {
+    private func refresh() {
         _fileList.reloadAction.onNext(())
     }
     
-    fileprivate func select(_ item: FileItem) {
+    private func select(_ item: FileItem) {
         sendMessage(DismissingMessage())
         onResult?(.selected(item.filePath))
     }

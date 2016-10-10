@@ -35,7 +35,7 @@ protocol ArchiveJSONWriter {
     func writeArchiveJSON(fileName: String, object: [String: Any]) throws
 }
 
-open class ArchiveToJSON: ArchiveJSONWriter {
+public class ArchiveToJSON: ArchiveJSONWriter {
     public enum ConvertError: Error {
         case cantReadArchive
         case invalidOutputDirectory(innerError: Error)
@@ -45,15 +45,15 @@ open class ArchiveToJSON: ArchiveJSONWriter {
         case failedInWritingFile(filePath: String, innerError: Error?)
     }
     
-    fileprivate let _archivePath: String
-    fileprivate let _outDirPath: String
+    private let _archivePath: String
+    private let _outDirPath: String
     
     public init(fromArchive archivePath: String, toDirectory outDirPath: String) {
         _archivePath = archivePath
         _outDirPath = outDirPath
     }
 
-    open func convert() throws {
+    public func convert() throws {
         // ready parser
         guard let parser = XMLPullParser(contentsOfURL: URL(fileURLWithPath: _archivePath)) else { throw ConvertError.cantReadArchive }
         parser.shouldProcessNamespaces = true

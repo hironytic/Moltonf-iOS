@@ -25,6 +25,6 @@
 
 import Foundation
 
-open class Message {
+public class Message {
     
 }

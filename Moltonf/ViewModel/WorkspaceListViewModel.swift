@@ -27,26 +27,26 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-open class WorkspaceListViewModelItem {
-    open let workspace: Workspace
+public class WorkspaceListViewModelItem {
+    public let workspace: Workspace
     
     public init(workspace: Workspace) {
         self.workspace = workspace
     }
 }
 
-open class WorkspaceListViewModel: ViewModel {
-    open let workspaceListLine: Observable<[WorkspaceListViewModelItem]>
-    open let addNewAction: AnyObserver<Void>
-    open let deleteAction: AnyObserver<IndexPath>
-    open let selectAction: AnyObserver<IndexPath>
+public class WorkspaceListViewModel: ViewModel {
+    public let workspaceListLine: Observable<[WorkspaceListViewModelItem]>
+    public let addNewAction: AnyObserver<Void>
+    public let deleteAction: AnyObserver<IndexPath>
+    public let selectAction: AnyObserver<IndexPath>
     
-    fileprivate let _disposeBag = DisposeBag()
-    fileprivate let _workspaceStore: IWorkspaceStore = WorkspaceStore()
-    fileprivate let _workspaceList = Variable<[WorkspaceListViewModelItem]>([])
-    fileprivate let _addNewAction = ActionObserver<Void>()
-    fileprivate let _deleteAction = ActionObserver<IndexPath>()
-    fileprivate let _selectAction = ActionObserver<IndexPath>()
+    private let _disposeBag = DisposeBag()
+    private let _workspaceStore: IWorkspaceStore = WorkspaceStore()
+    private let _workspaceList = Variable<[WorkspaceListViewModelItem]>([])
+    private let _addNewAction = ActionObserver<Void>()
+    private let _deleteAction = ActionObserver<IndexPath>()
+    private let _selectAction = ActionObserver<IndexPath>()
     
     public override init() {
         workspaceListLine = _workspaceList.asDriver().asObservable()
@@ -66,7 +66,7 @@ open class WorkspaceListViewModel: ViewModel {
         _selectAction.handler = { [weak self] indexPath in self?.select(indexPath) }
     }
     
-    fileprivate func addNew() {
+    private func addNew() {
         let selectArchiveFileViewModel = SelectArchiveFileViewModel()
         selectArchiveFileViewModel.onResult = { [weak self] result in
             self?.processSelectArchiveFileResult(result)
@@ -74,7 +74,7 @@ open class WorkspaceListViewModel: ViewModel {
         sendMessage(TransitionMessage(viewModel: selectArchiveFileViewModel))
     }
     
-    fileprivate func processSelectArchiveFileResult(_ result: SelectArchiveFileViewModelResult) {
+    private func processSelectArchiveFileResult(_ result: SelectArchiveFileViewModelResult) {
         switch result {
         case .selected(let path):
             _workspaceStore.createNewWorkspaceAction.onNext(path)
@@ -83,12 +83,12 @@ open class WorkspaceListViewModel: ViewModel {
         }
     }
     
-    fileprivate func delete(at indexPath: IndexPath) {
+    private func delete(at indexPath: IndexPath) {
         let listItem = _workspaceList.value[(indexPath as NSIndexPath).row]
         _workspaceStore.deleteWorkspaceAction.onNext(listItem.workspace)
     }
 
-    fileprivate func select(_ indexPath: IndexPath) {
+    private func select(_ indexPath: IndexPath) {
         let listItem = _workspaceList.value[(indexPath as NSIndexPath).row]
         let workspace = listItem.workspace
         do {
@@ -101,7 +101,7 @@ open class WorkspaceListViewModel: ViewModel {
         }
     }
     
-    fileprivate static func workspaceStoreChangeScanner(_ list: [WorkspaceListViewModelItem], changes: WorkspaceStoreChanges) -> [WorkspaceListViewModelItem] {
+    private static func workspaceStoreChangeScanner(_ list: [WorkspaceListViewModelItem], changes: WorkspaceStoreChanges) -> [WorkspaceListViewModelItem] {
         var list = list
         
         // remove deleted items

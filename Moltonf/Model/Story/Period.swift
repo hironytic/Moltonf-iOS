@@ -29,18 +29,18 @@ import SwiftyJSON
 private typealias K = ArchiveConstants
 
 /// This class represents a day, from dawn to dawn, in a story.
-open class Period {
+public class Period {
     /// Story which contains this period
-    open let story: Story
+    public let story: Story
     
     /// Type of this period
-    open let type: PeriodType
+    public let type: PeriodType
     
     /// Number of the day
-    open let day: Int
+    public let day: Int
     
     /// Array of elements in this period
-    open fileprivate(set) var elements: [StoryElement] = []
+    public private(set) var elements: [StoryElement] = []
 
     // for testing
     init(story: Story, type: PeriodType, day: Int) {
@@ -94,7 +94,7 @@ open class Period {
         try self.init(story: story, period: period)
     }
     
-    fileprivate func makeElement(_ element: JSON) throws -> StoryElement {
+    private func makeElement(_ element: JSON) throws -> StoryElement {
         guard let type = element[K.TYPE].string else {
             throw StoryError.missingData(data: K.TYPE)
         }

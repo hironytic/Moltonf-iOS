@@ -27,12 +27,12 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-open class StoryEventTableViewCell: UITableViewCell {
+public class StoryEventTableViewCell: UITableViewCell {
     @IBOutlet weak var messageLabel: UILabel!
 
     var disposeBag: DisposeBag?
     
-    open override func awakeFromNib() {
+    public override func awakeFromNib() {
         NotificationCenter.default.addObserver(self, selector: #selector(StoryEventTableViewCell.preferredContentSizeChanged(_:)), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
     }
     
@@ -40,11 +40,11 @@ open class StoryEventTableViewCell: UITableViewCell {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
     }
     
-    open func preferredContentSizeChanged(_ notification: Notification) {
+    public func preferredContentSizeChanged(_ notification: Notification) {
         messageLabel.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
     }
     
-    open var viewModel: StoryEventViewModel! {
+    public var viewModel: StoryEventViewModel! {
         didSet {
             let disposeBag = DisposeBag()
             
@@ -56,7 +56,7 @@ open class StoryEventTableViewCell: UITableViewCell {
         }
     }
 
-    open override func prepareForReuse() {
+    public override func prepareForReuse() {
         super.prepareForReuse()
         
         self.disposeBag = nil

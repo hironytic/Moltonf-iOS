@@ -27,16 +27,16 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-open class StoryWatchingViewModel: ViewModel {
-    open let currentPeriodTextLine: Observable<String>
-    open let elementsListLine: Observable<[StoryElementViewModel]>
-    open let selectPeriodAction: AnyObserver<Void>
-    open let leaveWatchingAction: AnyObserver<Void>
+public class StoryWatchingViewModel: ViewModel {
+    public let currentPeriodTextLine: Observable<String>
+    public let elementsListLine: Observable<[StoryElementViewModel]>
+    public let selectPeriodAction: AnyObserver<Void>
+    public let leaveWatchingAction: AnyObserver<Void>
 
-    fileprivate let _factory: Factory
-    fileprivate let _storyWatching: IStoryWatching
-    fileprivate let _selectPeriodAction = ActionObserver<Void>()
-    fileprivate let _leaveWatchingAction = ActionObserver<Void>()
+    private let _factory: Factory
+    private let _storyWatching: IStoryWatching
+    private let _selectPeriodAction = ActionObserver<Void>()
+    private let _leaveWatchingAction = ActionObserver<Void>()
     
     class Factory {
         func makeStoryEventViewModel(storyEvent: StoryEvent) -> StoryEventViewModel {
@@ -68,7 +68,7 @@ open class StoryWatchingViewModel: ViewModel {
         _leaveWatchingAction.handler = { [weak self] in self?.leaveWatching() }
     }
     
-    fileprivate static func configureCurrentPeriodTextLine(_ currentPeriodLine: Observable<Period>) -> Observable<String> {
+    private static func configureCurrentPeriodTextLine(_ currentPeriodLine: Observable<Period>) -> Observable<String> {
         return currentPeriodLine
             .map { period in
                 return { () -> String in
@@ -85,7 +85,7 @@ open class StoryWatchingViewModel: ViewModel {
             .asDriver(onErrorJustReturn: "").asObservable()
     }
     
-    fileprivate static func configureElementsListLine(_ storyElementsLine: Observable<[StoryElement]>, factory: Factory) -> Observable<[StoryElementViewModel]> {
+    private static func configureElementsListLine(_ storyElementsLine: Observable<[StoryElement]>, factory: Factory) -> Observable<[StoryElementViewModel]> {
         return storyElementsLine
             .map { storyElements in
                 return storyElements
@@ -102,7 +102,7 @@ open class StoryWatchingViewModel: ViewModel {
             .asDriver(onErrorJustReturn: []).asObservable()
     }
     
-    fileprivate func selectPeriod() {
+    private func selectPeriod() {
         let selectPeriodViewModel = _factory.makeSelectPeriodViewModel(storyWatching: _storyWatching)
         selectPeriodViewModel.onResult = { [weak self] result in
             self?.processSelectPeriodViewModelResult(result)
@@ -110,7 +110,7 @@ open class StoryWatchingViewModel: ViewModel {
         sendMessage(TransitionMessage(viewModel: selectPeriodViewModel))
     }
     
-    fileprivate func processSelectPeriodViewModelResult(_ result: SelectPeriodViewModelResult) {
+    private func processSelectPeriodViewModelResult(_ result: SelectPeriodViewModelResult) {
         switch result {
         case .selected(let periodReference):
             _storyWatching.selectPeriodAction.onNext(periodReference)
@@ -119,7 +119,7 @@ open class StoryWatchingViewModel: ViewModel {
         }
     }
     
-    fileprivate func leaveWatching() {
+    private func leaveWatching() {
         
     }
 }

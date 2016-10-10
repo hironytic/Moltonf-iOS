@@ -38,14 +38,14 @@ public protocol IFileList {
     var reloadAction: AnyObserver<Void> { get }
 }
 
-open class FileList: IFileList {
-    open fileprivate(set) var listLine: Observable<[FileItem]>
-    open fileprivate(set) var refreshingLine: Observable<Bool>
-    open fileprivate(set) var reloadAction: AnyObserver<Void>
+public class FileList: IFileList {
+    public private(set) var listLine: Observable<[FileItem]>
+    public private(set) var refreshingLine: Observable<Bool>
+    public private(set) var reloadAction: AnyObserver<Void>
     
-    fileprivate let _reloadAction = PublishSubject<Void>()
+    private let _reloadAction = PublishSubject<Void>()
     
-    fileprivate struct RefreshState {
+    private struct RefreshState {
         let list: [FileItem]?
         let refreshing: Bool
     }
@@ -68,7 +68,7 @@ open class FileList: IFileList {
             .map { $0.refreshing }
     }
     
-    fileprivate static func reloadFileList(_ directory: String) -> Observable<RefreshState> {
+    private static func reloadFileList(_ directory: String) -> Observable<RefreshState> {
         return Observable
             .create { observer -> Disposable in
                 observer.onNext(RefreshState(list: nil, refreshing: true))

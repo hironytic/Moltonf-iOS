@@ -47,22 +47,22 @@ public protocol IWorkspaceStore {
     var deleteWorkspaceAction: AnyObserver<Workspace> { get }
 }
 
-open class WorkspaceStore: IWorkspaceStore {
-    open var errorLine: Observable<Error> { get { return _errorSubject } }
-    open var workspacesLine: Observable<WorkspaceStoreChanges> { get { return _workspacesSubject } }
+public class WorkspaceStore: IWorkspaceStore {
+    public var errorLine: Observable<Error> { get { return _errorSubject } }
+    public var workspacesLine: Observable<WorkspaceStoreChanges> { get { return _workspacesSubject } }
     
-    open fileprivate(set) var createNewWorkspaceAction: AnyObserver<String>
-    open fileprivate(set) var deleteWorkspaceAction: AnyObserver<Workspace>
+    public private(set) var createNewWorkspaceAction: AnyObserver<String>
+    public private(set) var deleteWorkspaceAction: AnyObserver<Workspace>
     
-    fileprivate let _disposeBag = DisposeBag()
+    private let _disposeBag = DisposeBag()
     
-    fileprivate let _workspaceDB = WorkspaceDB.sharedInstance
-    fileprivate var _notificationToken: NotificationToken!
-    fileprivate let _workspacesSubject = BehaviorSubject<WorkspaceStoreChanges>(value: WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection([]), deletions: [], insertions: [], modifications: []))
-    fileprivate let _errorSubject = PublishSubject<Error>()
+    private let _workspaceDB = WorkspaceDB.sharedInstance
+    private var _notificationToken: NotificationToken!
+    private let _workspacesSubject = BehaviorSubject<WorkspaceStoreChanges>(value: WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection([]), deletions: [], insertions: [], modifications: []))
+    private let _errorSubject = PublishSubject<Error>()
     
-    fileprivate let _createNewWorkspaceAction = PublishSubject<String>()
-    fileprivate let _deleteWorkspaceAction = PublishSubject<Workspace>()
+    private let _createNewWorkspaceAction = PublishSubject<String>()
+    private let _deleteWorkspaceAction = PublishSubject<Workspace>()
 
     public init() {
         createNewWorkspaceAction = _createNewWorkspaceAction.asObserver()
@@ -77,7 +77,7 @@ open class WorkspaceStore: IWorkspaceStore {
         self._notificationToken.stop()
     }
 
-    fileprivate func configureWorkspaces() {
+    private func configureWorkspaces() {
         DispatchQueue.main.async {
             let workspaceResults = self._workspaceDB.realm.objects(Workspace.self)
             let changes = WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection<Workspace>(workspaceResults),
@@ -96,12 +96,12 @@ open class WorkspaceStore: IWorkspaceStore {
         }
     }
     
-    fileprivate struct ConvertResult {
+    private struct ConvertResult {
         let id: String
         let title: String
     }
     
-    fileprivate func configureCreateNewWorkspaceAction() {
+    private func configureCreateNewWorkspaceAction() {
         _createNewWorkspaceAction
             // convert archive file (XML) to JSON file in background
             .observeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default))
@@ -140,7 +140,7 @@ open class WorkspaceStore: IWorkspaceStore {
             .publish().connect().addDisposableTo(_disposeBag)
     }
     
-    fileprivate func configureDeleteWorkspaceAction() {
+    private func configureDeleteWorkspaceAction() {
         _deleteWorkspaceAction
             .observeOn(MainScheduler.instance)
             .do(onNext: { [unowned self] workspace in

@@ -30,12 +30,12 @@ private typealias K = ArchiveConstants
 
 /// This class reporesents an element of a story.
 /// This is a base class of `StoryEvent` and `Talk`.
-open class StoryElement {
+public class StoryElement {
     /// Period which contains this element
-    open fileprivate(set) weak var period: Period?
+    public private(set) weak var period: Period?
     
     /// Lines of messages
-    open let messageLines: [String]
+    public let messageLines: [String]
 
     /// Creates a new instance
     /// - parameter period:  period which contains this element
@@ -69,7 +69,7 @@ open class StoryElement {
     }
     
     /// Story which contains this element
-    open var story: Story? {
+    public var story: Story? {
         get {
             return period?.story
         }

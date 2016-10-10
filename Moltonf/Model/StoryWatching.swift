@@ -40,25 +40,25 @@ public protocol IStoryWatching {
     var switchToNextPeriodAction: AnyObserver<Void> { get }
 }
 
-open class StoryWatching: IStoryWatching {
-    open var errorLine: Observable<Error> { get { return _errorSubject } }
-    open fileprivate(set) var availablePeriodRefsLine: Observable<[PeriodReference]>
-    open fileprivate(set) var currentPeriodLine: Observable<Period>
-    open fileprivate(set) var storyElementsLine: Observable<[StoryElement]>
+public class StoryWatching: IStoryWatching {
+    public var errorLine: Observable<Error> { get { return _errorSubject } }
+    public private(set) var availablePeriodRefsLine: Observable<[PeriodReference]>
+    public private(set) var currentPeriodLine: Observable<Period>
+    public private(set) var storyElementsLine: Observable<[StoryElement]>
     
-    open fileprivate(set) var selectPeriodAction: AnyObserver<PeriodReference>
-    open fileprivate(set) var switchToNextPeriodAction: AnyObserver<Void>
+    public private(set) var selectPeriodAction: AnyObserver<PeriodReference>
+    public private(set) var switchToNextPeriodAction: AnyObserver<Void>
     
-    fileprivate let _errorSubject = PublishSubject<Error>()
-    fileprivate let _availablePeriodRefs: Variable<[PeriodReference]>
-    fileprivate let _currentPeriod: Variable<Period>
-    fileprivate let _storyElements: Variable<[StoryElement]>
+    private let _errorSubject = PublishSubject<Error>()
+    private let _availablePeriodRefs: Variable<[PeriodReference]>
+    private let _currentPeriod: Variable<Period>
+    private let _storyElements: Variable<[StoryElement]>
     
-    fileprivate let _selectPeriodAction = ActionObserver<PeriodReference>()
-    fileprivate let _switchToNextPeriodAction = ActionObserver<Void>()
+    private let _selectPeriodAction = ActionObserver<PeriodReference>()
+    private let _switchToNextPeriodAction = ActionObserver<Void>()
     
-    fileprivate let _workspace: Workspace
-    fileprivate let _story: Story
+    private let _workspace: Workspace
+    private let _story: Story
     
     public init(workspace: Workspace) throws {
         _workspace = workspace
@@ -81,7 +81,7 @@ open class StoryWatching: IStoryWatching {
         _switchToNextPeriodAction.handler = { [weak self] in self?.switchToNextPeriod() }
     }
 
-    fileprivate func selectPeriod(_ periodRef: PeriodReference) {
+    private func selectPeriod(_ periodRef: PeriodReference) {
         if _currentPeriod.value.day != periodRef.day {
             do {
                 _currentPeriod.value = try loadPeriod(periodRef)
@@ -91,7 +91,7 @@ open class StoryWatching: IStoryWatching {
         }
     }
     
-    fileprivate func switchToNextPeriod() {
+    private func switchToNextPeriod() {
         if let currentIndex = _story.periodRefs.index(where: { $0.day == _currentPeriod.value.day }) {
             if currentIndex < _story.periodRefs.count {
                 do {
@@ -105,11 +105,11 @@ open class StoryWatching: IStoryWatching {
         }
     }
 
-    fileprivate func loadPeriod(_ periodRef: PeriodReference) throws -> Period {
+    private func loadPeriod(_ periodRef: PeriodReference) throws -> Period {
         return try type(of: self).loadPeriod(periodRef, story: _story, workspace: _workspace)
     }
     
-    fileprivate static func loadPeriod(_ periodRef: PeriodReference, story: Story, workspace: Workspace) throws -> Period {
+    private static func loadPeriod(_ periodRef: PeriodReference, story: Story, workspace: Workspace) throws -> Period {
         let workspaceURL = WorkspaceDB.sharedInstance.workspaceDirURL.appendingPathComponent(workspace.id)
         let periodURL = workspaceURL.appendingPathComponent(periodRef.periodPath)
         return try Period(story: story, periodURL: periodURL)

@@ -25,5 +25,5 @@
 
 import Foundation
 
-open class DismissingMessage: Message {
+public class DismissingMessage: Message {
 }
