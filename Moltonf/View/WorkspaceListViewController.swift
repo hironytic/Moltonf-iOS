@@ -56,11 +56,11 @@ public class WorkspaceListViewController: UITableViewController {
             .bindTo(tableView.rx.items(dataSource: WorkspaceListDataSource()))
             .addDisposableTo(disposeBag)
         
-        tableView.rx.itemDeleted
+        tableView.rx.modelDeleted(WorkspaceListViewModelItem.self)
             .bindTo(viewModel.deleteAction)
             .addDisposableTo(disposeBag)
         
-        tableView.rx.itemSelected
+        tableView.rx.modelSelected(WorkspaceListViewModelItem.self)
             .bindTo(viewModel.selectAction)
             .addDisposableTo(disposeBag)
         
@@ -97,11 +97,12 @@ public class WorkspaceListViewController: UITableViewController {
 
 }
 
-public class WorkspaceListDataSource: NSObject, UITableViewDataSource, RxTableViewDataSourceType {
+public class WorkspaceListDataSource: NSObject {
     public typealias Element = [WorkspaceListViewModelItem]
-    
-    private var _itemModels: Element = []
-    
+    fileprivate var _itemModels: Element = []
+}
+
+extension WorkspaceListDataSource: UITableViewDataSource {
     public func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -126,12 +127,21 @@ public class WorkspaceListDataSource: NSObject, UITableViewDataSource, RxTableVi
     public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return false
     }
-    
+}
+
+extension WorkspaceListDataSource: RxTableViewDataSourceType {
     public func tableView(_ tableView: UITableView, observedEvent: Event<Element>) {
         UIBindingObserver(UIElement: self) { (dataSource, element) in
             dataSource._itemModels = element
             tableView.reloadData()
         }
         .on(observedEvent)
+    }
+}
+
+extension WorkspaceListDataSource: SectionedViewDataSourceType {
+    public func model(_ indexPath: IndexPath) throws -> Any {
+        precondition(indexPath.section == 0)
+        return _itemModels[indexPath.row]
     }
 }

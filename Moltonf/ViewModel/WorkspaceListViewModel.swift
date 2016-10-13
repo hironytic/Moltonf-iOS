@@ -35,23 +35,23 @@ public protocol IWorkspaceListViewModel: IViewModel {
     var workspaceListLine: Observable<[WorkspaceListViewModelItem]> { get }
     
     var addNewAction: AnyObserver<Void> { get }
-    var deleteAction: AnyObserver<IndexPath> { get }
-    var selectAction: AnyObserver<IndexPath> { get }
+    var deleteAction: AnyObserver<WorkspaceListViewModelItem> { get }
+    var selectAction: AnyObserver<WorkspaceListViewModelItem> { get }
 }
 
 public class WorkspaceListViewModel: ViewModel, IWorkspaceListViewModel {
     public private(set) var workspaceListLine: Observable<[WorkspaceListViewModelItem]>
     public private(set) var addNewAction: AnyObserver<Void>
-    public private(set) var deleteAction: AnyObserver<IndexPath>
-    public private(set) var selectAction: AnyObserver<IndexPath>
+    public private(set) var deleteAction: AnyObserver<WorkspaceListViewModelItem>
+    public private(set) var selectAction: AnyObserver<WorkspaceListViewModelItem>
     
     private let _factory: Factory
     private let _disposeBag = DisposeBag()
     private let _workspaceStore: IWorkspaceStore = WorkspaceStore()
     private let _workspaceList = Variable<[WorkspaceListViewModelItem]>([])
     private let _addNewAction = ActionObserver<Void>()
-    private let _deleteAction = ActionObserver<IndexPath>()
-    private let _selectAction = ActionObserver<IndexPath>()
+    private let _deleteAction = ActionObserver<WorkspaceListViewModelItem>()
+    private let _selectAction = ActionObserver<WorkspaceListViewModelItem>()
     
     class Factory {
         func selectArchiveFileViewModel() -> ISelectArchiveFileViewModel {
@@ -77,8 +77,8 @@ public class WorkspaceListViewModel: ViewModel, IWorkspaceListViewModel {
         super.init()
         
         _addNewAction.handler = { [weak self] in self?.addNew() }
-        _deleteAction.handler = { [weak self] indexPath in self?.delete(at: indexPath) }
-        _selectAction.handler = { [weak self] indexPath in self?.select(indexPath) }
+        _deleteAction.handler = { [weak self] listItem in self?.delete(listItem) }
+        _selectAction.handler = { [weak self] listItem in self?.select(listItem) }
     }
     
     private func addNew() {
@@ -98,13 +98,11 @@ public class WorkspaceListViewModel: ViewModel, IWorkspaceListViewModel {
         }
     }
     
-    private func delete(at indexPath: IndexPath) {
-        let listItem = _workspaceList.value[(indexPath as NSIndexPath).row]
+    private func delete(_ listItem: WorkspaceListViewModelItem) {
         _workspaceStore.deleteWorkspaceAction.onNext(listItem.workspace)
     }
 
-    private func select(_ indexPath: IndexPath) {
-        let listItem = _workspaceList.value[(indexPath as NSIndexPath).row]
+    private func select(_ listItem: WorkspaceListViewModelItem) {
         let workspace = listItem.workspace
         do {
             let storyWatching = try StoryWatching(workspace: workspace)

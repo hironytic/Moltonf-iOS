@@ -45,6 +45,7 @@
 		504D70571D3D050F004DC566 /* SelectPeriodViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70561D3D050F004DC566 /* SelectPeriodViewModelTests.swift */; };
 		504D70CF1D4057EB004DC566 /* FulfillObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70CE1D4057EB004DC566 /* FulfillObserver.swift */; };
 		5052D3401D026301002B1A17 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5052D33F1D026301002B1A17 /* SwiftyJSON.framework */; };
+		508D1E021DAFCEE300196208 /* UITableView+rxEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508D1E011DAFCEE300196208 /* UITableView+rxEx.swift */; };
 		509C5C4D1D306FB00045B0AB /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C4C1D306FAF0045B0AB /* Story.swift */; };
 		509C5C511D30F59E0045B0AB /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C501D30F59E0045B0AB /* Avatar.swift */; };
 		509C5C531D30F99A0045B0AB /* StoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C521D30F99A0045B0AB /* StoryError.swift */; };
@@ -121,6 +122,7 @@
 		504D70561D3D050F004DC566 /* SelectPeriodViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectPeriodViewModelTests.swift; sourceTree = "<group>"; };
 		504D70CE1D4057EB004DC566 /* FulfillObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FulfillObserver.swift; sourceTree = "<group>"; };
 		5052D33F1D026301002B1A17 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
+		508D1E011DAFCEE300196208 /* UITableView+rxEx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+rxEx.swift"; sourceTree = "<group>"; };
 		509C5C4C1D306FAF0045B0AB /* Story.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
 		509C5C501D30F59E0045B0AB /* Avatar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		509C5C521D30F99A0045B0AB /* StoryError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryError.swift; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 			isa = PBXGroup;
 			children = (
 				504D70481D3A0C79004DC566 /* Synchronized.swift */,
+				508D1E011DAFCEE300196208 /* UITableView+rxEx.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -539,6 +542,7 @@
 				509C5C5B1D31F7A10045B0AB /* StoryElement.swift in Sources */,
 				509C5C531D30F99A0045B0AB /* StoryError.swift in Sources */,
 				504D70471D3A0953004DC566 /* WorkspaceDB.swift in Sources */,
+				508D1E021DAFCEE300196208 /* UITableView+rxEx.swift in Sources */,
 				5025EFE31CDF16530032AD67 /* WorkspaceListViewController.swift in Sources */,
 				504D70501D3B362E004DC566 /* StoryEventViewModel.swift in Sources */,
 				50F9F2401D77172300278F48 /* StoryEventTableViewCell.swift in Sources */,
