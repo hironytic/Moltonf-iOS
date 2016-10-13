@@ -29,7 +29,7 @@ import RxCocoa
 
 public class WorkspaceListViewController: UITableViewController {
     var disposeBag: DisposeBag!
-    let viewModel = WorkspaceListViewModel()
+    let viewModel: IWorkspaceListViewModel = WorkspaceListViewModel()
     
     @IBOutlet weak var addNewButton: UIBarButtonItem!
     
@@ -78,7 +78,7 @@ public class WorkspaceListViewController: UITableViewController {
     
     private func transition(_ message: TransitionMessage) {
         switch message.viewModel {
-        case let viewModel as SelectArchiveFileViewModel:
+        case let viewModel as ISelectArchiveFileViewModel:
             let storyboard: UIStoryboard = UIStoryboard(name: "SelectArchiveFile", bundle: Bundle.main)
             let viewController: UINavigationController = storyboard.instantiateInitialViewController() as! UINavigationController
             (viewController.topViewController as! SelectArchiveFileListViewController).viewModel = viewModel

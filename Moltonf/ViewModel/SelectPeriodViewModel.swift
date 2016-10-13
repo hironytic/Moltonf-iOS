@@ -38,10 +38,18 @@ public struct SelectPeriodViewModelItem {
     public let checked: Bool
 }
 
-public class SelectPeriodViewModel: ViewModel {
-    public let periodsLine: Observable<[SelectPeriodViewModelItem]>
-    public let cancelAction: AnyObserver<Void>
-    public let selectAction: AnyObserver<SelectPeriodViewModelItem>
+public protocol ISelectPeriodViewModel: IViewModel {
+    var periodsLine: Observable<[SelectPeriodViewModelItem]> { get }
+    var cancelAction: AnyObserver<Void> { get }
+    var selectAction: AnyObserver<SelectPeriodViewModelItem> { get }
+    
+    var onResult: ((SelectPeriodViewModelResult) -> Void)? { get set }
+}
+
+public class SelectPeriodViewModel: ViewModel, ISelectPeriodViewModel {
+    public private(set) var periodsLine: Observable<[SelectPeriodViewModelItem]>
+    public private(set) var cancelAction: AnyObserver<Void>
+    public private(set) var selectAction: AnyObserver<SelectPeriodViewModelItem>
     
     public var onResult: ((SelectPeriodViewModelResult) -> Void)? = nil
     

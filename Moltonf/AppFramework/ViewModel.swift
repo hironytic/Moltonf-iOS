@@ -26,12 +26,19 @@
 import Foundation
 import RxSwift
 
-public class ViewModel {
-    public let messageLine: Observable<Message>
+public protocol IViewModel: class {
+    var messageLine: Observable<Message> { get }
+}
+
+public class ViewModel: IViewModel {
+    public var messageLine: Observable<Message> {
+        get {
+            return _messageSlot.messageLine
+        }
+    }
     private let _messageSlot = MessageSlot()
     
     public init() {
-        messageLine = _messageSlot.messageLine
     }
     
     public func sendMessage(_ message: Message) {

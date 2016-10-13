@@ -103,10 +103,10 @@ class StoryWatchingViewModelTests: XCTestCase {
 
         // -- user taps "select period" button -> "Select Period" view appears
         
-        var selectPeriodViewModel: SelectPeriodViewModel? = nil
+        var selectPeriodViewModel: ISelectPeriodViewModel? = nil
         let messageObserver = FulfillObserver(expectation(description: "transition message")) { (message: Message) in
             if let transitionMessage = message as? TransitionMessage {
-                if let viewModel = transitionMessage.viewModel as? SelectPeriodViewModel {
+                if let viewModel = transitionMessage.viewModel as? ISelectPeriodViewModel {
                     selectPeriodViewModel = viewModel
                     return true
                 }

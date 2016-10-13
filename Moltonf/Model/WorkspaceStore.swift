@@ -39,7 +39,7 @@ public struct WorkspaceStoreChanges {
     let modifications: [Int]
 }
 
-public protocol IWorkspaceStore {
+public protocol IWorkspaceStore: class {
     var errorLine: Observable<Error> { get }
     var workspacesLine: Observable<WorkspaceStoreChanges> { get }
 

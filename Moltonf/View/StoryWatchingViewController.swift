@@ -67,11 +67,11 @@ extension StoryWatchingDataSource: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let elementViewModel = _itemModels[(indexPath as NSIndexPath).row]
         switch elementViewModel {
-        case let eventViewModel as StoryEventViewModel:
+        case let eventViewModel as IStoryEventViewModel:
             let cell = tableView.dequeueReusableCell(withIdentifier: "Event", for: indexPath) as! StoryEventTableViewCell
             cell.viewModel = eventViewModel
             return cell
-        case /* let talkViewModel as */ is TalkViewModel:
+        case /* let talkViewModel as */ is ITalkViewModel:
             return tableView.dequeueReusableCell(withIdentifier: "Talk", for: indexPath)
 //            let cell = tableView.dequeueReusableCellWithIdentifier("Talk", forIndexPath: indexPath) as! TalkTableViewCell
 //            cell.viewModel = talkViewModel
@@ -85,7 +85,7 @@ extension StoryWatchingDataSource: UITableViewDataSource {
 }
 
 extension StoryWatchingDataSource: RxTableViewDataSourceType {
-    public typealias Element = [StoryElementViewModel]
+    public typealias Element = [IStoryElementViewModel]
     
     public func tableView(_ tableView: UITableView, observedEvent: Event<Element>) {
         UIBindingObserver(UIElement: self) { (dataSource, element) in

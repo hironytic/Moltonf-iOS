@@ -27,9 +27,14 @@ import Foundation
 import RxSwift
 import UIKit
 
-public class StoryEventViewModel: StoryElementViewModel {
-    public let messageTextLine: Observable<String?>
-    public let messageColorLine: Observable<UIColor>
+public protocol IStoryEventViewModel: IStoryElementViewModel {
+    var messageTextLine: Observable<String?> { get }
+    var messageColorLine: Observable<UIColor> { get }
+}
+
+public class StoryEventViewModel: ViewModel, IStoryEventViewModel {
+    public private(set) var messageTextLine: Observable<String?>
+    public private(set) var messageColorLine: Observable<UIColor>
     
     public init(storyEvent: StoryEvent) {
         messageTextLine = Observable
@@ -47,6 +52,6 @@ public class StoryEventViewModel: StoryElementViewModel {
         messageColorLine = Observable
             .just(color)
         
-        super.init(storyElement: storyEvent)
+        super.init()
     }
 }

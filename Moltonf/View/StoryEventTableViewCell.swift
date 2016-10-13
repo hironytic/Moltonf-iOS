@@ -44,7 +44,7 @@ public class StoryEventTableViewCell: UITableViewCell {
         messageLabel.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
     }
     
-    public var viewModel: StoryEventViewModel! {
+    public var viewModel: IStoryEventViewModel! {
         didSet {
             let disposeBag = DisposeBag()
             

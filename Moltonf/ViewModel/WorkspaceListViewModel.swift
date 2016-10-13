@@ -27,20 +27,25 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-public class WorkspaceListViewModelItem {
+public struct WorkspaceListViewModelItem {
     public let workspace: Workspace
-    
-    public init(workspace: Workspace) {
-        self.workspace = workspace
-    }
 }
 
-public class WorkspaceListViewModel: ViewModel {
-    public let workspaceListLine: Observable<[WorkspaceListViewModelItem]>
-    public let addNewAction: AnyObserver<Void>
-    public let deleteAction: AnyObserver<IndexPath>
-    public let selectAction: AnyObserver<IndexPath>
+public protocol IWorkspaceListViewModel: IViewModel {
+    var workspaceListLine: Observable<[WorkspaceListViewModelItem]> { get }
     
+    var addNewAction: AnyObserver<Void> { get }
+    var deleteAction: AnyObserver<IndexPath> { get }
+    var selectAction: AnyObserver<IndexPath> { get }
+}
+
+public class WorkspaceListViewModel: ViewModel, IWorkspaceListViewModel {
+    public private(set) var workspaceListLine: Observable<[WorkspaceListViewModelItem]>
+    public private(set) var addNewAction: AnyObserver<Void>
+    public private(set) var deleteAction: AnyObserver<IndexPath>
+    public private(set) var selectAction: AnyObserver<IndexPath>
+    
+    private let _factory: Factory
     private let _disposeBag = DisposeBag()
     private let _workspaceStore: IWorkspaceStore = WorkspaceStore()
     private let _workspaceList = Variable<[WorkspaceListViewModelItem]>([])
@@ -48,7 +53,17 @@ public class WorkspaceListViewModel: ViewModel {
     private let _deleteAction = ActionObserver<IndexPath>()
     private let _selectAction = ActionObserver<IndexPath>()
     
-    public override init() {
+    class Factory {
+        func selectArchiveFileViewModel() -> ISelectArchiveFileViewModel {
+            return SelectArchiveFileViewModel()
+        }
+    }
+    
+    public convenience override init() {
+        self.init(factory: Factory())
+    }
+    init(factory: Factory) {
+        _factory = factory
         workspaceListLine = _workspaceList.asDriver().asObservable()
         addNewAction = _addNewAction.asObserver()
         deleteAction = _deleteAction.asObserver()
@@ -67,7 +82,7 @@ public class WorkspaceListViewModel: ViewModel {
     }
     
     private func addNew() {
-        let selectArchiveFileViewModel = SelectArchiveFileViewModel()
+        let selectArchiveFileViewModel: ISelectArchiveFileViewModel = _factory.selectArchiveFileViewModel()
         selectArchiveFileViewModel.onResult = { [weak self] result in
             self?.processSelectArchiveFileResult(result)
         }

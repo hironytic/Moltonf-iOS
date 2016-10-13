@@ -32,13 +32,25 @@ public enum SelectArchiveFileViewModelResult {
     case cancelled
 }
 
-public class SelectArchiveFileViewModel: ViewModel {
-    public let archiveFilesLine: Observable<[FileItem]>
-    public let noItemsMessageHiddenLine: Observable<Bool>
-    public let refreshingLine: Observable<Bool>
-    public let cancelAction: AnyObserver<Void>
-    public let refreshAction: AnyObserver<Void>
-    public let selectAction: AnyObserver<FileItem>
+public protocol ISelectArchiveFileViewModel: IViewModel {
+    var archiveFilesLine: Observable<[FileItem]> { get }
+    var noItemsMessageHiddenLine: Observable<Bool> { get }
+    var refreshingLine: Observable<Bool> { get }
+    
+    var cancelAction: AnyObserver<Void> { get }
+    var refreshAction: AnyObserver<Void> { get }
+    var selectAction: AnyObserver<FileItem> { get }
+    
+    var onResult: ((SelectArchiveFileViewModelResult) -> Void)? { get set }
+}
+
+public class SelectArchiveFileViewModel: ViewModel, ISelectArchiveFileViewModel {
+    public private(set) var archiveFilesLine: Observable<[FileItem]>
+    public private(set) var noItemsMessageHiddenLine: Observable<Bool>
+    public private(set) var refreshingLine: Observable<Bool>
+    public private(set) var cancelAction: AnyObserver<Void>
+    public private(set) var refreshAction: AnyObserver<Void>
+    public private(set) var selectAction: AnyObserver<FileItem>
     
     public var onResult: ((SelectArchiveFileViewModelResult) -> Void)? = nil
     

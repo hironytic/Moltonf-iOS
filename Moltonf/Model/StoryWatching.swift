@@ -30,7 +30,7 @@ public enum StoryWatchingError: Error {
     case inconsistencyError(String)
 }
 
-public protocol IStoryWatching {
+public protocol IStoryWatching: class {
     var errorLine: Observable<Error> { get }
     var availablePeriodRefsLine: Observable<[PeriodReference]> { get }
     var currentPeriodLine: Observable<Period> { get }

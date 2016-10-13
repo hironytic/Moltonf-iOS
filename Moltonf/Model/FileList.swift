@@ -31,7 +31,7 @@ public struct FileItem {
     let title: String
 }
 
-public protocol IFileList {
+public protocol IFileList: class {
     var listLine: Observable<[FileItem]> { get }
     var refreshingLine: Observable<Bool> { get }
     

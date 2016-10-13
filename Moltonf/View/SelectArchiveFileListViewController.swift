@@ -29,7 +29,7 @@ import RxCocoa
 
 public class SelectArchiveFileListViewController: UITableViewController {
     var disposeBag: DisposeBag!
-    var viewModel: SelectArchiveFileViewModel!
+    var viewModel: ISelectArchiveFileViewModel!
     var noItemsLabel: UILabel!
     
     @IBOutlet weak var cancelButton: UIBarButtonItem!

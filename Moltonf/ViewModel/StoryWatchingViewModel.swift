@@ -29,7 +29,7 @@ import RxCocoa
 
 public class StoryWatchingViewModel: ViewModel {
     public let currentPeriodTextLine: Observable<String>
-    public let elementsListLine: Observable<[StoryElementViewModel]>
+    public let elementsListLine: Observable<[IStoryElementViewModel]>
     public let selectPeriodAction: AnyObserver<Void>
     public let leaveWatchingAction: AnyObserver<Void>
 
@@ -39,13 +39,13 @@ public class StoryWatchingViewModel: ViewModel {
     private let _leaveWatchingAction = ActionObserver<Void>()
     
     class Factory {
-        func makeStoryEventViewModel(storyEvent: StoryEvent) -> StoryEventViewModel {
+        func storyEventViewModel(storyEvent: StoryEvent) -> IStoryEventViewModel {
             return StoryEventViewModel(storyEvent: storyEvent)
         }
-        func makeTalkViewModel(talk: Talk) -> TalkViewModel {
+        func talkViewModel(talk: Talk) -> ITalkViewModel {
             return TalkViewModel(talk: talk)
         }
-        func makeSelectPeriodViewModel(storyWatching: IStoryWatching) -> SelectPeriodViewModel {
+        func selectPeriodViewModel(storyWatching: IStoryWatching) -> ISelectPeriodViewModel {
             return SelectPeriodViewModel(storyWatching: storyWatching)
         }
     }
@@ -85,15 +85,15 @@ public class StoryWatchingViewModel: ViewModel {
             .asDriver(onErrorJustReturn: "").asObservable()
     }
     
-    private static func configureElementsListLine(_ storyElementsLine: Observable<[StoryElement]>, factory: Factory) -> Observable<[StoryElementViewModel]> {
+    private static func configureElementsListLine(_ storyElementsLine: Observable<[StoryElement]>, factory: Factory) -> Observable<[IStoryElementViewModel]> {
         return storyElementsLine
             .map { storyElements in
                 return storyElements
-                    .map { element -> StoryElementViewModel in
+                    .map { element -> IStoryElementViewModel in
                         if let storyEvent = element as? StoryEvent {
-                            return factory.makeStoryEventViewModel(storyEvent: storyEvent)
+                            return factory.storyEventViewModel(storyEvent: storyEvent)
                         } else if let talk = element as? Talk {
-                            return factory.makeTalkViewModel(talk: talk)
+                            return factory.talkViewModel(talk: talk)
                         } else {
                             fatalError()
                         }
@@ -103,7 +103,7 @@ public class StoryWatchingViewModel: ViewModel {
     }
     
     private func selectPeriod() {
-        let selectPeriodViewModel = _factory.makeSelectPeriodViewModel(storyWatching: _storyWatching)
+        let selectPeriodViewModel = _factory.selectPeriodViewModel(storyWatching: _storyWatching)
         selectPeriodViewModel.onResult = { [weak self] result in
             self?.processSelectPeriodViewModelResult(result)
         }

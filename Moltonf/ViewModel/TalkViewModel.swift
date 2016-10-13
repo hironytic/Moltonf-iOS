@@ -27,13 +27,22 @@ import Foundation
 import RxSwift
 import UIKit
 
-public class TalkViewModel: StoryElementViewModel {
-    public let numberLine: Observable<Int?>
-    public let speakerNameLine: Observable<String>
-//    public let speakerIconLine: Observable<UIImage>
-    public let timeLine: Observable<String>
-    public let messageTextLine: Observable<NSAttributedString>
-    public let balloonColorLine: Observable<UIColor>
+public protocol ITalkViewModel: IStoryElementViewModel {
+    var numberLine: Observable<Int?> { get }
+    var speakerNameLine: Observable<String> { get }
+//    var speakerIconLine: Observable<UIImage> { get }
+    var timeLine: Observable<String> { get }
+    var messageTextLine: Observable<NSAttributedString> { get }
+    var balloonColorLine: Observable<UIColor> { get }
+}
+
+public class TalkViewModel: ViewModel, ITalkViewModel {
+    public private(set) var numberLine: Observable<Int?>
+    public private(set) var speakerNameLine: Observable<String>
+//    public private(set) var speakerIconLine: Observable<UIImage>
+    public private(set) var timeLine: Observable<String>
+    public private(set) var messageTextLine: Observable<NSAttributedString>
+    public private(set) var balloonColorLine: Observable<UIColor>
     
     public init(talk: Talk) {
         numberLine = Observable
@@ -43,7 +52,7 @@ public class TalkViewModel: StoryElementViewModel {
         timeLine = Observable
             .just(String(format: "%02d:%02d", talk.time.hourPart, talk.time.minutePart))
         messageTextLine = Observable
-            .just(TalkViewModel.makeMessage(talk.messageLines))
+            .just(TalkViewModel.makeMessageText(talk.messageLines))
         var color: UIColor
         switch talk.talkType {
         case .public:
@@ -58,10 +67,10 @@ public class TalkViewModel: StoryElementViewModel {
         balloonColorLine = Observable
             .just(color)
         
-        super.init(storyElement: talk)
+        super.init()
     }
     
-    static func makeMessage(_ messageLines: [String]) -> NSAttributedString {
+    static func makeMessageText(_ messageLines: [String]) -> NSAttributedString {
         return NSAttributedString(string: messageLines.joined(separator: "\n"))
     }
 }
