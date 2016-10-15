@@ -91,7 +91,6 @@ public class WorkspaceListViewController: UITableViewController {
         default:
             break
         }
-        print("presentViewController \(message.viewModel)")
     }
     
 
