@@ -73,6 +73,13 @@ public class WorkspaceListViewModel: ViewModel, IWorkspaceListViewModel {
             .scan([], accumulator: WorkspaceListViewModel.workspaceStoreChangeScanner)
             .bindTo(_workspaceList)
             .addDisposableTo(_disposeBag)
+
+        // TODO:
+        _workspaceStore.errorLine
+            .subscribe(onNext: { error in
+                dump(error)
+            })
+            .addDisposableTo(_disposeBag)
         
         super.init()
         
@@ -109,7 +116,7 @@ public class WorkspaceListViewModel: ViewModel, IWorkspaceListViewModel {
             let storyWatchingViewModel = StoryWatchingViewModel(storyWatching: storyWatching)
             sendMessage(TransitionMessage(viewModel: storyWatchingViewModel))
         } catch let error {
-            print(error)
+            dump(error)
             // TODO:
         }
     }
