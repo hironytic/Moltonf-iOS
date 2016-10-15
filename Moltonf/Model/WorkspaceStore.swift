@@ -133,10 +133,10 @@ public class WorkspaceStore: IWorkspaceStore {
                     self._workspaceDB.realm.add(ws)
                 }
             })
-            .catchError { [unowned self] error in
+            .do(onError: { [unowned self] error in
                 self._errorSubject.onNext(error)
-                return Observable.empty()
-            }
+            })
+            .retry()
             .publish().connect().addDisposableTo(_disposeBag)
     }
     
@@ -151,10 +151,10 @@ public class WorkspaceStore: IWorkspaceStore {
                     self._workspaceDB.realm.delete(workspace)
                 }
             })
-            .catchError { [unowned self] error in
+            .do(onError: { [unowned self] error in
                 self._errorSubject.onNext(error)
-                return Observable.empty()
-            }
+                })
+            .retry()
             .publish().connect().addDisposableTo(_disposeBag)
     }
 }
