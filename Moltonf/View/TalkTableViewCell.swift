@@ -1,5 +1,5 @@
 //
-// StoryEventTableViewCell.swift
+// TalkTableViewCell.swift
 // Moltonf
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -25,41 +25,56 @@
 
 import UIKit
 import RxSwift
-import RxCocoa
 
-public class StoryEventTableViewCell: UITableViewCell {
+class TalkTableViewCell: UITableViewCell {
+    @IBOutlet weak var talkNumberLabel: UILabel!
+    @IBOutlet weak var speakerNameLabel: UILabel!
+    @IBOutlet weak var talkTimeLabel: UILabel!
+    @IBOutlet weak var speakerIconImageView: UIImageView!
     @IBOutlet weak var messageLabel: UILabel!
-
-    var disposeBag: DisposeBag?
     
+    var disposeBag: DisposeBag?
+
     public override func awakeFromNib() {
         super.awakeFromNib()
-        NotificationCenter.default.addObserver(self, selector: #selector(StoryEventTableViewCell.preferredContentSizeChanged(_:)), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(TalkTableViewCell.preferredContentSizeChanged(_:)), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
     }
-    
+
     public func preferredContentSizeChanged(_ notification: Notification) {
         messageLabel.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
     }
     
-    public var viewModel: IStoryEventViewModel! {
+    public var viewModel: ITalkViewModel! {
         didSet {
             let disposeBag = DisposeBag()
             
+            viewModel.numberLine
+                .bindTo(talkNumberLabel.rx.text)
+                .addDisposableTo(disposeBag)
+            
+            viewModel.speakerNameLine
+                .bindTo(speakerNameLabel.rx.text)
+                .addDisposableTo(disposeBag)
+            
+            viewModel.timeLine
+                .bindTo(talkTimeLabel.rx.text)
+                .addDisposableTo(disposeBag)
+            
             viewModel.messageTextLine
-                .bindTo(messageLabel.rx.text)
+                .bindTo(messageLabel.rx.attributedText)
                 .addDisposableTo(disposeBag)
             
             self.disposeBag = disposeBag
         }
     }
-
+    
     public override func prepareForReuse() {
         super.prepareForReuse()
         
         self.disposeBag = nil
-    }    
+    }
 }

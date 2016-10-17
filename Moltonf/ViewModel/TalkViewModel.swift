@@ -28,25 +28,26 @@ import RxSwift
 import UIKit
 
 public protocol ITalkViewModel: IStoryElementViewModel {
-    var numberLine: Observable<Int?> { get }
-    var speakerNameLine: Observable<String> { get }
+    var numberLine: Observable<String?> { get }
+    var speakerNameLine: Observable<String?> { get }
 //    var speakerIconLine: Observable<UIImage> { get }
-    var timeLine: Observable<String> { get }
-    var messageTextLine: Observable<NSAttributedString> { get }
+    var timeLine: Observable<String?> { get }
+    var messageTextLine: Observable<NSAttributedString?> { get }
     var balloonColorLine: Observable<UIColor> { get }
 }
 
 public class TalkViewModel: ViewModel, ITalkViewModel {
-    public private(set) var numberLine: Observable<Int?>
-    public private(set) var speakerNameLine: Observable<String>
+    public private(set) var numberLine: Observable<String?>
+    public private(set) var speakerNameLine: Observable<String?>
 //    public private(set) var speakerIconLine: Observable<UIImage>
-    public private(set) var timeLine: Observable<String>
-    public private(set) var messageTextLine: Observable<NSAttributedString>
+    public private(set) var timeLine: Observable<String?>
+    public private(set) var messageTextLine: Observable<NSAttributedString?>
     public private(set) var balloonColorLine: Observable<UIColor>
     
     public init(talk: Talk) {
         numberLine = Observable
             .just(1) // FIXME:
+            .map { "\($0)" }
         speakerNameLine = Observable
             .just(talk.speaker.fullName)
         timeLine = Observable

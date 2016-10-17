@@ -64,6 +64,7 @@
 		50AF2EB81D1FC45700337A53 /* Workspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AF2EB71D1FC45700337A53 /* Workspace.swift */; };
 		50B24E1E1CF8734F0035D573 /* ArchiveToJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B24E1D1CF8734F0035D573 /* ArchiveToJSON.swift */; };
 		50B351031D35181100829BD0 /* StoryEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B351021D35181100829BD0 /* StoryEventTests.swift */; };
+		50B69C861DB5179100C1B3F0 /* TalkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B69C851DB5179100C1B3F0 /* TalkTableViewCell.swift */; };
 		50BAC3591D448A9B008D366C /* StoryWatchingViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BAC3581D448A9B008D366C /* StoryWatchingViewModelTests.swift */; };
 		50F9F2391D74787100278F48 /* StoryWatching.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50F9F2381D74787100278F48 /* StoryWatching.storyboard */; };
 		50F9F2401D77172300278F48 /* StoryEventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F9F23F1D77172300278F48 /* StoryEventTableViewCell.swift */; };
@@ -144,6 +145,7 @@
 		50B24E201CF95D280035D573 /* coreType-090929.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "coreType-090929.xsd"; sourceTree = "<group>"; };
 		50B24E211CF95D280035D573 /* coreXML-090929.xsd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "coreXML-090929.xsd"; sourceTree = "<group>"; };
 		50B351021D35181100829BD0 /* StoryEventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryEventTests.swift; sourceTree = "<group>"; };
+		50B69C851DB5179100C1B3F0 /* TalkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TalkTableViewCell.swift; sourceTree = "<group>"; };
 		50BAC3581D448A9B008D366C /* StoryWatchingViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryWatchingViewModelTests.swift; sourceTree = "<group>"; };
 		50F9F2381D74787100278F48 /* StoryWatching.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StoryWatching.storyboard; sourceTree = "<group>"; };
 		50F9F23F1D77172300278F48 /* StoryEventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryEventTableViewCell.swift; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 				5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift */,
 				50F9F23F1D77172300278F48 /* StoryEventTableViewCell.swift */,
 				50AC417F1D7851190093C02D /* StoryWatchingViewController.swift */,
+				50B69C851DB5179100C1B3F0 /* TalkTableViewCell.swift */,
 				5025EFE21CDF16530032AD67 /* WorkspaceListViewController.swift */,
 			);
 			path = View;
@@ -553,6 +556,7 @@
 				501F95511CEB440400628E29 /* ArchiveConstants.swift in Sources */,
 				5025EFEC1CDF6F900032AD67 /* Message.swift in Sources */,
 				504D70521D3B3651004DC566 /* TalkViewModel.swift in Sources */,
+				50B69C861DB5179100C1B3F0 /* TalkTableViewCell.swift in Sources */,
 				5025EFF11CE0D50C0032AD67 /* ActionObserver.swift in Sources */,
 				509C5C5F1D3204650045B0AB /* Talk.swift in Sources */,
 				5025EFEA1CDF689E0032AD67 /* WorkspaceStore.swift in Sources */,

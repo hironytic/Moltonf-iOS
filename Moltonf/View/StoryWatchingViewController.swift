@@ -71,11 +71,10 @@ extension StoryWatchingDataSource: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Event", for: indexPath) as! StoryEventTableViewCell
             cell.viewModel = eventViewModel
             return cell
-        case /* let talkViewModel as */ is ITalkViewModel:
-            return tableView.dequeueReusableCell(withIdentifier: "Talk", for: indexPath)
-//            let cell = tableView.dequeueReusableCellWithIdentifier("Talk", forIndexPath: indexPath) as! TalkTableViewCell
-//            cell.viewModel = talkViewModel
-//            return cell
+        case let talkViewModel as ITalkViewModel:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Talk", for: indexPath) as! TalkTableViewCell
+            cell.viewModel = talkViewModel
+            return cell
         default:
             break
         }
