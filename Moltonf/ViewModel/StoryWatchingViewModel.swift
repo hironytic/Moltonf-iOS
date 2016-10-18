@@ -120,6 +120,6 @@ public class StoryWatchingViewModel: ViewModel {
     }
     
     private func leaveWatching() {
-        
+        sendMessage(DismissingMessage())
     }
 }

@@ -28,6 +28,8 @@ import RxSwift
 import RxCocoa
 
 public class StoryWatchingViewController: UITableViewController {
+    var backButtonItem: UIBarButtonItem!
+    
     var disposeBag: DisposeBag!
     var viewModel: StoryWatchingViewModel!
 
@@ -37,6 +39,9 @@ public class StoryWatchingViewController: UITableViewController {
         tableView.estimatedRowHeight = 132
         tableView.rowHeight = UITableViewAutomaticDimension
         
+        backButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: nil, action: nil)
+        navigationItem.leftBarButtonItem = backButtonItem
+        
         bindViewModel()
     }
     
@@ -44,8 +49,23 @@ public class StoryWatchingViewController: UITableViewController {
         disposeBag = DisposeBag()
         
         let dataSource = StoryWatchingDataSource()
-        self.viewModel.elementsListLine
+        viewModel.elementsListLine
             .bindTo(tableView.rx.items(dataSource: dataSource))
+            .addDisposableTo(disposeBag)
+
+        backButtonItem.rx.tap
+            .bindTo(viewModel.leaveWatchingAction)
+            .addDisposableTo(disposeBag)
+        
+        viewModel.messageLine
+            .subscribe(onNext: { [weak self] message in
+                switch message {
+                case _ as DismissingMessage:
+                    self?.dismiss(animated: true, completion: nil)
+                default:
+                    break
+                }
+                })
             .addDisposableTo(disposeBag)
     }
 
