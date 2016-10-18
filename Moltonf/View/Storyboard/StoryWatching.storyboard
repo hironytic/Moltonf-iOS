@@ -20,7 +20,7 @@
                                 <rect key="frame" x="0.0" y="92" width="375" height="91"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VfQ-E2-qqm" id="rWL-gp-2QC">
-                                    <frame key="frameInset" width="375" height="91"/>
+                                    <frame key="frameInset" width="375" height="90"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cz1-jq-9YS">
@@ -104,12 +104,12 @@
                                         <constraint firstAttribute="trailingMargin" secondItem="TmT-uf-H7L" secondAttribute="trailing" constant="8" id="G0G-Pb-HtB"/>
                                         <constraint firstItem="6T5-Ps-jkI" firstAttribute="leading" secondItem="btZ-uL-gGy" secondAttribute="trailing" constant="8" id="JrP-V9-NRL"/>
                                         <constraint firstItem="btZ-uL-gGy" firstAttribute="baseline" secondItem="rsH-Z1-1SR" secondAttribute="baseline" id="PRR-X6-lfd"/>
-                                        <constraint firstItem="rsH-Z1-1SR" firstAttribute="top" secondItem="18l-q4-5eN" secondAttribute="topMargin" id="Pse-8v-iaY"/>
                                         <constraint firstItem="btZ-uL-gGy" firstAttribute="leading" secondItem="rsH-Z1-1SR" secondAttribute="trailing" constant="8" id="RrH-a7-jdR"/>
                                         <constraint firstItem="AQa-N9-7T1" firstAttribute="leading" secondItem="18l-q4-5eN" secondAttribute="leading" constant="8" id="USg-ia-DbL"/>
                                         <constraint firstItem="rsH-Z1-1SR" firstAttribute="leading" secondItem="18l-q4-5eN" secondAttribute="leadingMargin" id="ZTX-vT-7TC"/>
                                         <constraint firstItem="AQa-N9-7T1" firstAttribute="top" secondItem="6T5-Ps-jkI" secondAttribute="bottom" constant="8" id="bnH-W7-ubh"/>
                                         <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="AQa-N9-7T1" secondAttribute="bottom" constant="8" id="lrY-vv-t5l"/>
+                                        <constraint firstItem="btZ-uL-gGy" firstAttribute="top" secondItem="18l-q4-5eN" secondAttribute="topMargin" id="uTY-Tk-Gj4"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>

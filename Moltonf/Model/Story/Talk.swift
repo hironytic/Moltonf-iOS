@@ -39,6 +39,9 @@ public class Talk: StoryElement {
     /// Time on which this talk is made
     public let time: TimePart
     
+    /// Sequence number of public talk
+    public let publicTalkNo: Int?
+    
     /// Creates a new instance.
     /// - parameter period: period which contains this element
     /// - parameter element: JSON fragment in archive
@@ -73,6 +76,8 @@ public class Talk: StoryElement {
         } else {
             throw StoryError.missingData(data: K.TIME)
         }
+        
+        self.publicTalkNo = element[K.PUBLIC_TALK_NO].int
         
         try super.init(period: period, element: element)
     }

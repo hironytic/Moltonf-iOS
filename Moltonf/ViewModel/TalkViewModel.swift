@@ -46,8 +46,7 @@ public class TalkViewModel: ViewModel, ITalkViewModel {
     
     public init(talk: Talk) {
         numberLine = Observable
-            .just(1) // FIXME:
-            .map { "\($0)" }
+            .just(talk.publicTalkNo.flatMap({ "\($0)." }))
         speakerNameLine = Observable
             .just(talk.speaker.fullName)
         timeLine = Observable

@@ -114,6 +114,7 @@ public class ArchiveConstants {
     public static let XNAME = "xname"
     public static let TIME = "time"
     // public static let FACE_ICON_URI = "faceIconURI" // defined in another place
+    public static let PUBLIC_TALK_NO = "publicTalkNo"
     
     // MARK: value of period["elements"][n] (talk) ["talkType"]
     public static let VAL_PUBLIC = "public"

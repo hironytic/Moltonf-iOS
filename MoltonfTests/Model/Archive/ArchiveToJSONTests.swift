@@ -89,16 +89,17 @@ class ArchiveToJSONTests: XCTestCase {
         XCTAssertEqual(line, "人狼なんているわけないじゃん。みんな大げさだなあ")
     }
     
-    func setupTargetElement(_ xml: String) throws -> (parser: XMLPullParser, element: XMLElement) {
+    func setupTargetElement(_ xml: String) throws -> (parseContext: ArchiveToJSON.ParseContext, element: XMLElement) {
         guard let parser = XMLPullParser(string: xml) else {
             throw TestError.createParser
         }
         parser.shouldProcessNamespaces = true
+        let parseContext = ArchiveToJSON.ParseContext(parser: parser)
 
         while true {
             switch try parser.next() {
             case .startElement(name: _, namespaceURI: _, element: let element):
-                return (parser: parser, element: element)
+                return (parseContext: parseContext, element: element)
             default:
                 break
             }
@@ -107,7 +108,7 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertVillage() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<village\n" +
                 "  xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\"\n" +
                 "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
@@ -135,7 +136,7 @@ class ArchiveToJSONTests: XCTestCase {
             )
             
             let writer = MockJSONWriter()
-            try ArchiveToJSON.VillageElementConverter(parser: parser).convert(element, writer: writer)
+            try ArchiveToJSON.VillageElementConverter(parseContext: parseContext).convert(element, writer: writer)
             
             let output = writer.output[0]
             let playdata = JSON(output.object)
@@ -160,7 +161,7 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertAvaterList() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<avatarList xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "  <avatar\n" +
                 "    avatarId=\"gerd\"\n" +
@@ -179,7 +180,7 @@ class ArchiveToJSONTests: XCTestCase {
                 "  />\n" +
                 "</avatarList>\n"
             )
-            let avatarList = JSON(try ArchiveToJSON.AvatarListElementConverter(parser: parser).convert(element))
+            let avatarList = JSON(try ArchiveToJSON.AvatarListElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(avatarList.count, 3)
         } catch let error {
             XCTFail("error: \(error)")
@@ -188,14 +189,14 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertAvatar() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<avatar xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\"\n" +
                 "  avatarId=\"gerd\"\n" +
                 "  fullName=\"楽天家 ゲルト\" shortName=\"ゲルト\"\n" +
                 "  faceIconURI=\"plugin_wolf/img/face01.jpg\"\n" +
                 "/>\n"
             )
-            let avatar = JSON(try ArchiveToJSON.AvatarElementConverter(parser: parser).convert(element))
+            let avatar = JSON(try ArchiveToJSON.AvatarElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(avatar[K.AVATAR_ID].string, "gerd")
             XCTAssertEqual(avatar[K.FULL_NAME].string, "楽天家 ゲルト")
             XCTAssertEqual(avatar[K.SHORT_NAME].string, "ゲルト")
@@ -207,7 +208,7 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertTalk() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<talk xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\"\n" +
                 "  type=\"public\" avatarId=\"gerd\"\n" +
                 "  xname=\"mes1246576501\" time=\"08:15:00+09:00\"\n" +
@@ -216,14 +217,40 @@ class ArchiveToJSONTests: XCTestCase {
                 "<li/>\n" +
                 "</talk>\n"
             )
-            let talk = JSON(try ArchiveToJSON.TalkElementConverter(parser: parser).convert(element))
+            let prevPublicTalkNo = parseContext.nextPublicTalkNo()
+            let talk = JSON(try ArchiveToJSON.TalkElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(talk[K.TYPE].string, K.VAL_TALK)
             XCTAssertEqual(talk[K.TALK_TYPE].string, "public")
             XCTAssertEqual(talk[K.AVATAR_ID].string, "gerd")
             XCTAssertEqual(talk[K.XNAME].string, "mes1246576501")
             XCTAssertEqual(talk[K.TIME].string, "08:15:00+09:00")
+            XCTAssertEqual(talk[K.PUBLIC_TALK_NO].int, prevPublicTalkNo + 1)
             let line = talk[K.LINES][0].string
             XCTAssertEqual(line, "ふぁーあ……ねむいな……寝てていい？")
+        } catch let error {
+            XCTFail("error: \(error)")
+        }
+    }
+
+    func testConvertWolfTalk() {
+        do {
+            let (parseContext, element) = try setupTargetElement(
+                "<talk xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\"\n" +
+                "  type=\"wolf\" avatarId=\"otto\"\n" +
+                "  xname=\"mes1180334569\" time=\"15:42:00+09:00\"\n" +
+                ">\n" +
+                "<li>わおーん。</li>\n" +
+                "</talk>\n"
+            )
+            let talk = JSON(try ArchiveToJSON.TalkElementConverter(parseContext: parseContext).convert(element))
+            XCTAssertEqual(talk[K.TYPE].string, K.VAL_TALK)
+            XCTAssertEqual(talk[K.TALK_TYPE].string, "wolf")
+            XCTAssertEqual(talk[K.AVATAR_ID].string, "otto")
+            XCTAssertEqual(talk[K.XNAME].string, "mes1180334569")
+            XCTAssertEqual(talk[K.TIME].string, "15:42:00+09:00")
+            XCTAssertNil(talk[K.PUBLIC_TALK_NO].int)
+            let line = talk[K.LINES][0].string
+            XCTAssertEqual(line, "わおーん。")
         } catch let error {
             XCTFail("error: \(error)")
         }
@@ -231,7 +258,7 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertStartEntry() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<startEntry xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>昼間は人間のふりをして、夜に正体を現すという人狼。</li>\n" +
                 "<li>その人狼が、この村に紛れ込んでいるという噂が広がった。</li>\n" +
@@ -240,7 +267,7 @@ class ArchiveToJSONTests: XCTestCase {
                 "<li/>\n" +
                 "</startEntry>\n"
             )
-            let startEntry = JSON(try ArchiveToJSON.StartEntryElementConverter(parser: parser).convert(element))
+            let startEntry = JSON(try ArchiveToJSON.StartEntryElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(startEntry[K.TYPE].string, K.VAL_START_ENTRY)
             let line = startEntry[K.LINES][0].string
             XCTAssertEqual(line, "昼間は人間のふりをして、夜に正体を現すという人狼。")
@@ -251,12 +278,12 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertOnStage() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<onStage xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\" entryNo=\"1\" avatarId=\"gerd\" >\n" +
                 "<li>1人目、楽天家 ゲルト。</li>\n" +
                 "</onStage>\n"
             )
-            let onStage = JSON(try ArchiveToJSON.OnStageElementConverter(parser: parser).convert(element))
+            let onStage = JSON(try ArchiveToJSON.OnStageElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(onStage[K.TYPE].string, K.VAL_ON_STAGE)
             XCTAssertEqual(onStage[K.ENTRY_NO].int, 1)
             XCTAssertEqual(onStage[K.AVATAR_ID].string, "gerd")
@@ -269,7 +296,7 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertStartMirror() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<startMirror xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>さあ、自らの姿を鏡に映してみよう。</li>\n" +
                 "<li>そこに映るのはただの村人か、それとも血に飢えた人狼か。</li>\n" +
@@ -280,7 +307,7 @@ class ArchiveToJSONTests: XCTestCase {
                 "<li/>\n" +
                 "</startMirror>\n"
             )
-            let startMirror = JSON(try ArchiveToJSON.StartMirrorElementConverter(parser: parser).convert(element))
+            let startMirror = JSON(try ArchiveToJSON.StartMirrorElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(startMirror[K.TYPE].string, K.VAL_START_MIRROR)
             let line = startMirror[K.LINES][0].string
             XCTAssertEqual(line, "さあ、自らの姿を鏡に映してみよう。")
@@ -291,7 +318,7 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertOpenRole() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<openRole xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>どうやらこの中には、村人が7名、人狼が3名、占い師が1名、霊能者が1名、狂人が1名、狩人が1名、共有者が2名いるようだ。</li>\n" +
                 "<roleHeads role=\"innocent\" heads=\"7\" />\n" +
@@ -303,7 +330,7 @@ class ArchiveToJSONTests: XCTestCase {
                 "<roleHeads role=\"frater\" heads=\"2\" />\n" +
                 "</openRole>\n"
             )
-            let openRole = JSON(try ArchiveToJSON.OpenRoleElementConverter(parser: parser).convert(element))
+            let openRole = JSON(try ArchiveToJSON.OpenRoleElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(openRole[K.TYPE].string, K.VAL_OPEN_ROLE)
             XCTAssertEqual(openRole[K.ROLE_HEADS]["innocent"].int, 7)
             let line = openRole[K.LINES][0].string
@@ -315,14 +342,14 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertMurdered() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<murdered xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>次の日の朝、楽天家 ゲルト が無残な姿で発見された。</li>\n" +
                 "<li/>\n" +
                 "<avatarRef avatarId=\"gerd\" />\n" +
                 "</murdered>\n"
             )
-            let murdered = JSON(try ArchiveToJSON.MurderedElementConverter(parser: parser).convert(element))
+            let murdered = JSON(try ArchiveToJSON.MurderedElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(murdered[K.TYPE].string, K.VAL_MURDERED)
             XCTAssertEqual(murdered[K.AVATAR_ID][0].string, "gerd")
             let line = murdered[K.LINES][0].string
@@ -334,7 +361,7 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertStartAssault() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<startAssault xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>ついに犠牲者が出た。人狼はこの村人達のなかにいる。</li>\n" +
                 "<li>しかし、それを見分ける手段はない。</li>\n" +
@@ -346,7 +373,7 @@ class ArchiveToJSONTests: XCTestCase {
                 "<li/>\n" +
                 "</startAssault>\n"
             )
-            let startAssault = JSON(try ArchiveToJSON.StartAssaultElementConverter(parser: parser).convert(element))
+            let startAssault = JSON(try ArchiveToJSON.StartAssaultElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(startAssault[K.TYPE].string, K.VAL_START_ASSAULT)
             let line = startAssault[K.LINES][0].string
             XCTAssertEqual(line, "ついに犠牲者が出た。人狼はこの村人達のなかにいる。")
@@ -357,7 +384,7 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertSurvivor() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<survivor xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>現在の生存者は、司書 クララ、シスター フリーデル、少女 リーザ、宿屋の女主人 レジーナ、ならず者 ディーター、神父 ジムゾン、少年 ペーター、青年 ヨアヒム、旅人 ニコラス、農夫 ヤコブ、負傷兵 シモン、仕立て屋 エルナ、パン屋 オットー、老人 モーリッツ、羊飼い カタリナ の 15 名。</li>\n" +
                 "<avatarRef avatarId=\"clara\" />\n" +
@@ -377,7 +404,7 @@ class ArchiveToJSONTests: XCTestCase {
                 "<avatarRef avatarId=\"katharina\" />\n" +
                 "</survivor>\n"
             )
-            let survivor = JSON(try ArchiveToJSON.SurvivorElementConverter(parser: parser).convert(element))
+            let survivor = JSON(try ArchiveToJSON.SurvivorElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(survivor[K.TYPE].string, K.VAL_SURVIVOR)
             XCTAssert(survivor[K.AVATAR_ID].arrayValue.contains("liesa"))
             let line = survivor[K.LINES][0].string
@@ -389,7 +416,7 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertCounting() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<counting victim=\"moritz\" xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>司書 クララ は 老人 モーリッツ に投票した。</li>\n" +
                 "<li>シスター フリーデル は 少年 ペーター に投票した。</li>\n" +
@@ -425,7 +452,7 @@ class ArchiveToJSONTests: XCTestCase {
                 "<vote byWhom=\"katharina\" target=\"peter\" />\n" +
                 "</counting>\n"
             )
-            let counting = JSON(try ArchiveToJSON.CountingElementConverter(parser: parser).convert(element))
+            let counting = JSON(try ArchiveToJSON.CountingElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(counting[K.TYPE].string, K.VAL_COUNTING)
             XCTAssertEqual(counting[K.VICTIM].string, "moritz")
             XCTAssertEqual(counting[K.VOTES]["liesa"].string, "peter")
@@ -438,12 +465,12 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertSuddenDeath() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<suddenDeath avatarId=\"otto\" xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>パン屋 オットー は、突然死した。</li>\n" +
                 "</suddenDeath>\n"
             )
-            let suddenDeath = JSON(try ArchiveToJSON.SuddenDeathElementConverter(parser: parser).convert(element))
+            let suddenDeath = JSON(try ArchiveToJSON.SuddenDeathElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(suddenDeath[K.TYPE].string, K.VAL_SUDDEN_DEATH)
             XCTAssertEqual(suddenDeath[K.AVATAR_ID].string, "otto")
             let line = suddenDeath[K.LINES][0].string
@@ -455,13 +482,13 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertNoMurder() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<noMurder xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>今日は犠牲者がいないようだ。人狼は襲撃に失敗したのだろうか。</li>\n" +
                 "<li/>\n" +
                 "</noMurder>\n"
             )
-            let noMurder = JSON(try ArchiveToJSON.NoMurderElementConverter(parser: parser).convert(element))
+            let noMurder = JSON(try ArchiveToJSON.NoMurderElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(noMurder[K.TYPE].string, K.VAL_NO_MURDER)
             let line = noMurder[K.LINES][0].string
             XCTAssertEqual(line, "今日は犠牲者がいないようだ。人狼は襲撃に失敗したのだろうか。")            
@@ -472,13 +499,13 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertWinVillage() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<winVillage xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>全ての人狼を退治した……。人狼に怯える日々は去ったのだ！</li>\n" +
                 "<li/>\n" +
                 "</winVillage>\n"
             )
-            let winVillage = JSON(try ArchiveToJSON.WinVillageElementConverter(parser: parser).convert(element))
+            let winVillage = JSON(try ArchiveToJSON.WinVillageElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(winVillage[K.TYPE].string, K.VAL_WIN_VILLAGE)
             let line = winVillage[K.LINES][0].string
             XCTAssertEqual(line, "全ての人狼を退治した……。人狼に怯える日々は去ったのだ！")
@@ -489,14 +516,14 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertWinWolf() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<winWolf xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>もう人狼に抵抗できるほど村人は残っていない……。</li>\n" +
                 "<li>人狼は残った村人を全て食らい、別の獲物を求めてこの村を去っていった。</li>\n" +
                 "<li/>\n" +
                 "</winWolf>\n"
             )
-            let winWolf = JSON(try ArchiveToJSON.WinWolfElementConverter(parser: parser).convert(element))
+            let winWolf = JSON(try ArchiveToJSON.WinWolfElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(winWolf[K.TYPE].string, K.VAL_WIN_WOLF)
             let line = winWolf[K.LINES][0].string
             XCTAssertEqual(line, "もう人狼に抵抗できるほど村人は残っていない……。")
@@ -507,14 +534,14 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertWinHamster() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<winHamster xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>全ては終わったかのように見えた。</li>\n" +
                 "<li>だが、奴が生き残っていた……。</li>\n" +
                 "<li/>\n" +
                 "</winHamster>\n"
             )
-            let winHamster = JSON(try ArchiveToJSON.WinHamsterElementConverter(parser: parser).convert(element))
+            let winHamster = JSON(try ArchiveToJSON.WinHamsterElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(winHamster[K.TYPE].string, K.VAL_WIN_HAMSTER)
             let line = winHamster[K.LINES][0].string
             XCTAssertEqual(line, "全ては終わったかのように見えた。")
@@ -525,7 +552,7 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertPlayerList() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<playerList xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>楽天家 ゲルト （master）、死亡。村人だった。</li>\n" +
                 "<li>司書 クララ （player1）、生存。霊能者だった。</li>\n" +
@@ -547,7 +574,7 @@ class ArchiveToJSONTests: XCTestCase {
                 "<playerInfo playerId=\"player15\" avatarId=\"katharina\" survive=\"false\" role=\"madman\" uri=\"http://192.168.150.129/wolfbbs/player15.html\" />\n" +
                 "</playerList>\n"
             )
-            let playerList = JSON(try ArchiveToJSON.PlayerListElementConverter(parser: parser).convert(element))
+            let playerList = JSON(try ArchiveToJSON.PlayerListElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(playerList[K.TYPE].string, K.VAL_PLAYER_LIST)
             XCTAssertEqual(playerList[K.PLAYER_INFOS].array?.count, 9)
             XCTAssertEqual(playerList[K.PLAYER_INFOS][0][K.PLAYER_ID].string, "master")
@@ -565,12 +592,12 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertPanic() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<panic xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>……。</li>\n" +
                 "</panic>\n"
             )
-            let panic = JSON(try ArchiveToJSON.PanicElementConverter(parser: parser).convert(element))
+            let panic = JSON(try ArchiveToJSON.PanicElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(panic[K.TYPE].string, K.VAL_PANIC)
             let line = panic[K.LINES][0].string
             XCTAssertEqual(line, "……。")
@@ -581,7 +608,7 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertExecution() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<execution xmlns=\"http://jindolf.sourceforge.jp/xml/ns/501\" victim=\"dieter\" >\n" +
                 "<li>負傷兵 シモン、1票。</li>\n" +
                 "<li>青年 ヨアヒム、1票。</li>\n" +
@@ -593,7 +620,7 @@ class ArchiveToJSONTests: XCTestCase {
                 "<nominated avatarId=\"dieter\" count=\"8\" />\n" +
                 "</execution>\n"
             )
-            let execution = JSON(try ArchiveToJSON.ExecutionElementConverter(parser: parser).convert(element))
+            let execution = JSON(try ArchiveToJSON.ExecutionElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(execution[K.TYPE].string, K.VAL_EXECUTION)
             XCTAssertEqual(execution[K.VICTIM].string, "dieter")
             XCTAssertEqual(execution[K.NOMINATEDS]["simon"].int, 1)
@@ -606,12 +633,12 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertVanish() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<vanish xmlns=\"http://jindolf.sourceforge.jp/xml/ns/501\" avatarId=\"erna\" >\n" +
                 "<li>仕立て屋 エルナ は、失踪した。</li>\n" +
                 "</vanish>\n"
             )
-            let vanish = JSON(try ArchiveToJSON.VanishElementConverter(parser: parser).convert(element))
+            let vanish = JSON(try ArchiveToJSON.VanishElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(vanish[K.TYPE].string, K.VAL_VANISH)
             XCTAssertEqual(vanish[K.AVATAR_ID].string, "erna")
             let line = vanish[K.LINES][0].string
@@ -623,12 +650,12 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertCheckout() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<checkout xmlns=\"http://jindolf.sourceforge.jp/xml/ns/501\" avatarId=\"joachim\" >\n" +
                 "<li>青年 ヨアヒム は、宿を去った。</li>\n" +
                 "</checkout>\n"
             )
-            let checkout = JSON(try ArchiveToJSON.CheckoutElementConverter(parser: parser).convert(element))
+            let checkout = JSON(try ArchiveToJSON.CheckoutElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(checkout[K.TYPE].string, K.VAL_CHECKOUT)
             XCTAssertEqual(checkout[K.AVATAR_ID].string, "joachim")
             let line = checkout[K.LINES][0].string
@@ -640,13 +667,13 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertShortMember() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<shortMember xmlns=\"http://jindolf.sourceforge.jp/xml/ns/501\">\n" +
                 "<li>まだ村人達は揃っていないようだ。</li>\n" +
                 "<li/>\n" +
                 "</shortMember>\n"
             )
-            let shortMember = JSON(try ArchiveToJSON.ShortMemberElementConverter(parser: parser).convert(element))
+            let shortMember = JSON(try ArchiveToJSON.ShortMemberElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(shortMember[K.TYPE].string, K.VAL_SHORT_MEMBER)
             let line = shortMember[K.LINES][0].string
             XCTAssertEqual(line, "まだ村人達は揃っていないようだ。")
@@ -657,7 +684,7 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertAskEntry() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<askEntry xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\" commitTime=\"10:00:00+09:00\" minMembers=\"11\" maxMembers=\"16\">\n" +
                 "<li>演じたいキャラクターを選び、発言してください。</li>\n" +
                 "<li>午前 10時 0分 に11名以上がエントリーしていれば進行します。</li>\n" +
@@ -669,7 +696,7 @@ class ArchiveToJSONTests: XCTestCase {
                 "<li/>\n" +
                 "</askEntry>\n"
             )
-            let askEntry = JSON(try ArchiveToJSON.AskEntryElementConverter(parser: parser).convert(element))
+            let askEntry = JSON(try ArchiveToJSON.AskEntryElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(askEntry[K.TYPE].string, K.VAL_ASK_ENTRY)
             XCTAssertEqual(askEntry[K.COMMIT_TIME].string, "10:00:00+09:00")
             XCTAssertEqual(askEntry[K.MIN_MEMBERS].int, 11)
@@ -683,7 +710,7 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertAskCommit() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<askCommit xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\" limitVote=\"23:00:00+09:00\" limitSpecial=\"23:00:00+09:00\">\n" +
                 "<li>午後 11時 0分 までに、誰を処刑するべきかの投票先を決定して下さい。</li>\n" +
                 "<li>一番票を集めた人物が処刑されます。同数だった場合はランダムで決定されます。</li>\n" +
@@ -692,7 +719,7 @@ class ArchiveToJSONTests: XCTestCase {
                 "<li/>\n" +
                 "</askCommit>\n"
             )
-            let askCommit = JSON(try ArchiveToJSON.AskCommitElementConverter(parser: parser).convert(element))
+            let askCommit = JSON(try ArchiveToJSON.AskCommitElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(askCommit[K.TYPE].string, K.VAL_ASK_COMMIT)
             XCTAssertEqual(askCommit[K.LIMIT_VOTE].string, "23:00:00+09:00")
             XCTAssertEqual(askCommit[K.LIMIT_SPECIAL].string, "23:00:00+09:00")
@@ -705,13 +732,13 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertNoComment() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<noComment xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>本日まだ発言していない者は、羊飼い カタリナ、以上 1 名。</li>\n" +
                 "<avatarRef avatarId=\"katharina\" />\n" +
                 "</noComment>\n"
             )
-            let noComment = JSON(try ArchiveToJSON.NoCommentElementConverter(parser: parser).convert(element))
+            let noComment = JSON(try ArchiveToJSON.NoCommentElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(noComment[K.TYPE].string, K.VAL_NO_COMMENT)
             XCTAssertEqual(noComment[K.AVATAR_ID][0].string, "katharina")
             let line = noComment[K.LINES][0].string
@@ -723,14 +750,14 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertStayEpilogue() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<stayEpilogue xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\" winner=\"village\" limitTime=\"02:00:00+09:00\">\n" +
                 "<li>村人側の勝利です！</li>\n" +
                 "<li>全てのログとユーザー名を公開します。午前 2時 0分 まで自由に書き込めますので、今回の感想などをどうぞ。</li>\n" +
                 "<li/>\n" +
                 "</stayEpilogue>\n"
             )
-            let stayEpilogue = JSON(try ArchiveToJSON.StayEpilogueElementConverter(parser: parser).convert(element))
+            let stayEpilogue = JSON(try ArchiveToJSON.StayEpilogueElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(stayEpilogue[K.TYPE].string, K.VAL_STAY_EPILOGUE)
             XCTAssertEqual(stayEpilogue[K.WINNER].string, "village")
             XCTAssertEqual(stayEpilogue[K.LIMIT_TIME].string, "02:00:00+09:00")
@@ -743,13 +770,13 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertGameOver() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<gameOver xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">\n" +
                 "<li>終了しました</li>\n" +
                 "<li/>\n" +
                 "</gameOver>\n"
             )
-            let gameOver = JSON(try ArchiveToJSON.GameOverElementConverter(parser: parser).convert(element))
+            let gameOver = JSON(try ArchiveToJSON.GameOverElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(gameOver[K.TYPE].string, K.VAL_GAME_OVER)
             let line = gameOver[K.LINES][0].string
             XCTAssertEqual(line, "終了しました")
@@ -760,12 +787,12 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertJudge() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<judge xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\" byWhom=\"albin\" target=\"liesa\" >\n" +
                 "<li>行商人 アルビン は、少女 リーザ を占った。</li>\n" +
                 "</judge>\n"
             )
-            let judge = JSON(try ArchiveToJSON.JudgeElementConverter(parser: parser).convert(element))
+            let judge = JSON(try ArchiveToJSON.JudgeElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(judge[K.TYPE].string, K.VAL_JUDGE)
             XCTAssertEqual(judge[K.BY_WHOM].string, "albin")
             XCTAssertEqual(judge[K.TARGET].string, "liesa")
@@ -778,12 +805,12 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertGuard() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<guard xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\" byWhom=\"jacob\" target=\"peter\" >\n" +
                 "<li>農夫 ヤコブ は、少年 ペーター を守っている。</li>\n" +
                 "</guard>\n"
             )
-            let guardObject = JSON(try ArchiveToJSON.GuardElementConverter(parser: parser).convert(element))
+            let guardObject = JSON(try ArchiveToJSON.GuardElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(guardObject[K.TYPE].string, K.VAL_GUARD)
             XCTAssertEqual(guardObject[K.BY_WHOM].string, "jacob")
             XCTAssertEqual(guardObject[K.TARGET].string, "peter")
@@ -796,7 +823,7 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertCounting2() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<counting2 xmlns=\"http://jindolf.sourceforge.jp/xml/ns/501\">\n" +
                 "<li>負傷兵 シモン は 青年 ヨアヒム に投票した。</li>\n" +
                 "<li>村娘 パメラ は 青年 ヨアヒム に投票した。</li>\n" +
@@ -824,7 +851,7 @@ class ArchiveToJSONTests: XCTestCase {
                 "<vote byWhom=\"jacob\" target=\"joachim\" />\n" +
                 "</counting2>\n"
             )
-            let counting2 = JSON(try ArchiveToJSON.Counting2ElementConverter(parser: parser).convert(element))
+            let counting2 = JSON(try ArchiveToJSON.Counting2ElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(counting2[K.TYPE].string, K.VAL_COUNTING2)
             XCTAssertEqual(counting2[K.VOTES]["simon"].string, "joachim")
             let line = counting2[K.LINES][0].string
@@ -836,7 +863,7 @@ class ArchiveToJSONTests: XCTestCase {
 
     func testConvertAssault() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<assault xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\"\n" +
                 "  byWhom=\"walter\" target=\"simon\"\n" +
                 "  xname=\"mes1268151301\" time=\"01:15:00+09:00\"\n" +
@@ -844,7 +871,7 @@ class ArchiveToJSONTests: XCTestCase {
                 "<li>負傷兵 シモン ！ 今日がお前の命日だ！</li>\n" +
                 "</assault>\n"
             )
-            let assault = JSON(try ArchiveToJSON.AssaultElementConverter(parser: parser).convert(element))
+            let assault = JSON(try ArchiveToJSON.AssaultElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(assault[K.TYPE].string, K.VAL_ASSAULT)
             XCTAssertEqual(assault[K.BY_WHOM].string, "walter")
             XCTAssertEqual(assault[K.TARGET].string, "simon")
@@ -859,10 +886,10 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertNormalLi() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<li xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">人狼なんているわけないじゃん。みんな大げさだなあ</li>\n"
             )
-            let li = JSON(try ArchiveToJSON.LiElementConverter(parser: parser).convert(element))
+            let li = JSON(try ArchiveToJSON.LiElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(li.string, "人狼なんているわけないじゃん。みんな大げさだなあ")
         } catch let error {
             XCTFail("error: \(error)")
@@ -871,10 +898,10 @@ class ArchiveToJSONTests: XCTestCase {
     
     func testConvertLiWithRawdata() {
         do {
-            let (parser, element) = try setupTargetElement(
+            let (parseContext, element) = try setupTargetElement(
                 "<li xmlns=\"http://jindolf.sourceforge.jp/xml/ns/401\">パメおかえりー。<rawdata encoding=\"Shift_JIS\" hexBin=\"8794\" >∑</rawdata>閉村までって！</li>\n"
             )
-            let li = JSON(try ArchiveToJSON.LiElementConverter(parser: parser).convert(element))
+            let li = JSON(try ArchiveToJSON.LiElementConverter(parseContext: parseContext).convert(element))
             XCTAssertEqual(li[0].string, "パメおかえりー。")
             XCTAssertEqual(li[1][K.ENCODING].string, "Shift_JIS")
             XCTAssertEqual(li[1][K.HEX_BIN].string, "8794")

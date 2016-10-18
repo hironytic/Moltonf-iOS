@@ -57,6 +57,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         // ready parser
         guard let parser = XMLPullParser(contentsOfURL: URL(fileURLWithPath: _archivePath)) else { throw ConvertError.cantReadArchive }
         parser.shouldProcessNamespaces = true
+        let parseContext = ParseContext(parser: parser)
         
         // ready output directory
         do {
@@ -72,7 +73,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
                 let event = try parser.next()
                 switch event {
                 case .startElement(name: S.ELEM_VILLAGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    try VillageElementConverter(parser: parser).convert(element, writer: self)
+                    try VillageElementConverter(parseContext: parseContext).convert(element, writer: self)
                 case .endDocument:
                     break parsing
                 default:
@@ -101,16 +102,30 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         }
     }
     
-    class ElementConverter {
-        let _parser: XMLPullParser
+    class ParseContext {
+        let parser: XMLPullParser
+        private var _lastPublicTalkNo: Int = 0
         
         init(parser: XMLPullParser) {
-            _parser = parser
+            self.parser = parser
+        }
+        
+        func nextPublicTalkNo() -> Int {
+            _lastPublicTalkNo += 1
+            return _lastPublicTalkNo
+        }
+    }
+    
+    class ElementConverter {
+        let _parseContext: ParseContext
+
+        init(parseContext: ParseContext) {
+            _parseContext = parseContext
         }
         
         func skipElement() throws {
             parsing: while true {
-                let event = try _parser.next()
+                let event = try _parseContext.parser.next()
                 switch event {
                 case .startElement:
                     try skipElement()
@@ -168,12 +183,12 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             // children
             var periods: [Any] = []
             parsing: while true {
-                let event = try _parser.next()
+                let event = try _parseContext.parser.next()
                 switch event {
                 case .startElement(name: S.ELEM_AVATAR_LIST, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    villageWrapper.object[K.AVATAR_LIST] = try AvatarListElementConverter(parser: _parser).convert(element)
+                    villageWrapper.object[K.AVATAR_LIST] = try AvatarListElementConverter(parseContext: _parseContext).convert(element)
                 case .startElement(name: S.ELEM_PERIOD, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    periods.append(try PeriodElementConverter(parser: _parser).convert(element, writer: writer))
+                    periods.append(try PeriodElementConverter(parseContext: _parseContext).convert(element, writer: writer))
                 case .startElement:
                     try skipElement()
                     break
@@ -196,10 +211,10 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             // children
             var avatars: [[String: Any]] = []
             parsing: while true {
-                let event = try _parser.next()
+                let event = try _parseContext.parser.next()
                 switch event {
                 case .startElement(name: S.ELEM_AVATAR, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    avatars.append(try AvatarElementConverter(parser: _parser).convert(element))
+                    avatars.append(try AvatarElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement:
                     try skipElement()
                     break
@@ -270,66 +285,66 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             // children
             var elements: [[String: Any]] = []
             parsing: while true {
-                let event = try _parser.next()
+                let event = try _parseContext.parser.next()
                 switch event {
                 case .startElement(name: S.ELEM_TALK, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try TalkElementConverter(parser: _parser).convert(element))
+                    elements.append(try TalkElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_START_ENTRY, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try StartEntryElementConverter(parser: _parser).convert(element))
+                    elements.append(try StartEntryElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_ON_STAGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try OnStageElementConverter(parser: _parser).convert(element))
+                    elements.append(try OnStageElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_START_MIRROR, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try StartMirrorElementConverter(parser: _parser).convert(element))
+                    elements.append(try StartMirrorElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_OPEN_ROLE, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try OpenRoleElementConverter(parser: _parser).convert(element))
+                    elements.append(try OpenRoleElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_MURDERED, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try MurderedElementConverter(parser: _parser).convert(element))
+                    elements.append(try MurderedElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_START_ASSAULT, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try StartAssaultElementConverter(parser: _parser).convert(element))
+                    elements.append(try StartAssaultElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_SURVIVOR, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try SurvivorElementConverter(parser: _parser).convert(element))
+                    elements.append(try SurvivorElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_COUNTING, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try CountingElementConverter(parser: _parser).convert(element))
+                    elements.append(try CountingElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_SUDDEN_DEATH, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try SuddenDeathElementConverter(parser: _parser).convert(element))
+                    elements.append(try SuddenDeathElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_NO_MURDER, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try NoMurderElementConverter(parser: _parser).convert(element))
+                    elements.append(try NoMurderElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_WIN_VILLAGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try WinVillageElementConverter(parser: _parser).convert(element))
+                    elements.append(try WinVillageElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_WIN_WOLF, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try WinWolfElementConverter(parser: _parser).convert(element))
+                    elements.append(try WinWolfElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_WIN_HAMSTER, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try WinHamsterElementConverter(parser: _parser).convert(element))
+                    elements.append(try WinHamsterElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_PLAYER_LIST, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try PlayerListElementConverter(parser: _parser).convert(element))
+                    elements.append(try PlayerListElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_PANIC, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try PanicElementConverter(parser: _parser).convert(element))
+                    elements.append(try PanicElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_EXECUTION, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try ExecutionElementConverter(parser: _parser).convert(element))
+                    elements.append(try ExecutionElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_VANISH, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try VanishElementConverter(parser: _parser).convert(element))
+                    elements.append(try VanishElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_CHECKOUT, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try CheckoutElementConverter(parser: _parser).convert(element))
+                    elements.append(try CheckoutElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_SHORT_MEMBER, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try ShortMemberElementConverter(parser: _parser).convert(element))
+                    elements.append(try ShortMemberElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_ASK_ENTRY, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try AskEntryElementConverter(parser: _parser).convert(element))
+                    elements.append(try AskEntryElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_ASK_COMMIT, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try AskCommitElementConverter(parser: _parser).convert(element))
+                    elements.append(try AskCommitElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_NO_COMMENT, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try NoCommentElementConverter(parser: _parser).convert(element))
+                    elements.append(try NoCommentElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_STAY_EPILOGUE, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try StayEpilogueElementConverter(parser: _parser).convert(element))
+                    elements.append(try StayEpilogueElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_GAME_OVER, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try GameOverElementConverter(parser: _parser).convert(element))
+                    elements.append(try GameOverElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_JUDGE, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try JudgeElementConverter(parser: _parser).convert(element))
+                    elements.append(try JudgeElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_GUARD, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try GuardElementConverter(parser: _parser).convert(element))
+                    elements.append(try GuardElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_COUNTING2, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try Counting2ElementConverter(parser: _parser).convert(element))
+                    elements.append(try Counting2ElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement(name: S.ELEM_ASSAULT, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    elements.append(try AssaultElementConverter(parser: _parser).convert(element))
+                    elements.append(try AssaultElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement:
                     try skipElement()
                 case .endElement:
@@ -352,8 +367,8 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class TalkElementConverter: TextLinesConverter {
-        override init(parser: XMLPullParser) {
-            super.init(parser: parser)
+        override init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext)
             _objectWrapper.object[K.TYPE] = K.VAL_TALK
         }
         
@@ -374,19 +389,25 @@ public class ArchiveToJSON: ArchiveJSONWriter {
                 defaultValues: [:]
             )
             
+            if let talkType = _objectWrapper.object[K.TALK_TYPE] as? String {
+                if talkType == K.VAL_PUBLIC {
+                    _objectWrapper.object[K.PUBLIC_TALK_NO] = _parseContext.nextPublicTalkNo()
+                }
+            }
+            
             return try super.convert(element)
         }
     }
     
     class StartEntryElementConverter: EventAnnounceConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_START_ENTRY)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_START_ENTRY)
         }
     }
 
     class OnStageElementConverter: EventAnnounceConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_ON_STAGE)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_ON_STAGE)
         }
 
         override func convert(_ element: XMLElement) throws -> [String : Any] {
@@ -408,16 +429,16 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class StartMirrorElementConverter: EventAnnounceConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_START_MIRROR)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_START_MIRROR)
         }
     }
     
     class OpenRoleElementConverter: EventAnnounceConverter {
         var _roleHeads: [String: Any] = [:]
         
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_OPEN_ROLE)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_OPEN_ROLE)
         }
 
         override func onBegin() throws {
@@ -429,7 +450,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         override func onEvent(_ event: XMLEvent) throws {
             switch event {
             case .startElement(name: S.ELEM_ROLE_HEADS, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                let (role, heads) = try RoleHeadsElementConverter(parser: _parser).convert(element)
+                let (role, heads) = try RoleHeadsElementConverter(parseContext: _parseContext).convert(element)
                 _roleHeads[role] = heads
             default:
                 try super.onEvent(event)
@@ -458,8 +479,8 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     class MurderedElementConverter: EventAnnounceConverter {
         var _avatarId: [String] = []
         
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_MURDERED)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_MURDERED)
         }
 
         override func onBegin() throws {
@@ -471,7 +492,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         override func onEvent(_ event: XMLEvent) throws {
             switch event {
             case .startElement(name: S.ELEM_AVATAR_REF, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                _avatarId.append(try AvatarRefElementConverter(parser: _parser).convert(element))
+                _avatarId.append(try AvatarRefElementConverter(parseContext: _parseContext).convert(element))
             default:
                 try super.onEvent(event)
             }
@@ -485,16 +506,16 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class StartAssaultElementConverter: EventAnnounceConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_START_ASSAULT)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_START_ASSAULT)
         }
     }
     
     class SurvivorElementConverter: EventAnnounceConverter {
         var _avatarId: [String] = []
         
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_SURVIVOR)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_SURVIVOR)
         }
         
         override func onBegin() throws {
@@ -506,7 +527,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         override func onEvent(_ event: XMLEvent) throws {
             switch event {
             case .startElement(name: S.ELEM_AVATAR_REF, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                _avatarId.append(try AvatarRefElementConverter(parser: _parser).convert(element))
+                _avatarId.append(try AvatarRefElementConverter(parseContext: _parseContext).convert(element))
             default:
                 try super.onEvent(event)
             }
@@ -530,8 +551,8 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     class CountingElementConverter: EventAnnounceConverter {
         var _votes: [String: Any] = [:]
         
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_COUNTING)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_COUNTING)
         }
         
         override func convert(_ element: XMLElement) throws -> [String : Any] {
@@ -558,7 +579,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         override func onEvent(_ event: XMLEvent) throws {
             switch event {
             case .startElement(name: S.ELEM_VOTE, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                let (byWhom, target) = try VoteElementConverter(parser: _parser).convert(element)
+                let (byWhom, target) = try VoteElementConverter(parseContext: _parseContext).convert(element)
                 _votes[byWhom] = target
             default:
                 try super.onEvent(event)
@@ -584,8 +605,8 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class SuddenDeathElementConverter: EventAnnounceConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_SUDDEN_DEATH)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_SUDDEN_DEATH)
         }
         
         override func convert(_ element: XMLElement) throws -> [String : Any] {
@@ -606,34 +627,34 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
 
     class NoMurderElementConverter: EventAnnounceConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_NO_MURDER)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_NO_MURDER)
         }
     }
 
     class WinVillageElementConverter: EventAnnounceConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_WIN_VILLAGE)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_WIN_VILLAGE)
         }
     }
     
     class WinWolfElementConverter: EventAnnounceConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_WIN_WOLF)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_WIN_WOLF)
         }
     }
     
     class WinHamsterElementConverter: EventAnnounceConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_WIN_HAMSTER)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_WIN_HAMSTER)
         }
     }
     
     class PlayerListElementConverter: EventAnnounceConverter {
         var _playerInfos: [[String: Any]] = []
         
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_PLAYER_LIST)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_PLAYER_LIST)
         }
         
         override func onBegin() throws {
@@ -645,7 +666,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         override func onEvent(_ event: XMLEvent) throws {
             switch event {
             case .startElement(name: S.ELEM_PLAYER_INFO, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                _playerInfos.append(try PlayerInfoElementConverter(parser: _parser).convert(element))
+                _playerInfos.append(try PlayerInfoElementConverter(parseContext: _parseContext).convert(element))
             default:
                 try super.onEvent(event)
             }
@@ -686,16 +707,16 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class PanicElementConverter: EventAnnounceConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_PANIC)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_PANIC)
         }
     }
     
     class ExecutionElementConverter: EventAnnounceConverter {
         var _nominateds: [String: Any] = [:]
         
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_EXECUTION)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_EXECUTION)
         }
         
         override func convert(_ element: XMLElement) throws -> [String : Any] {
@@ -722,7 +743,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         override func onEvent(_ event: XMLEvent) throws {
             switch event {
             case .startElement(name: S.ELEM_NOMINATED, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                let (avatarId, count) = try NominatedElementConverter(parser: _parser).convert(element)
+                let (avatarId, count) = try NominatedElementConverter(parseContext: _parseContext).convert(element)
                 _nominateds[avatarId] = count
             default:
                 try super.onEvent(event)
@@ -749,8 +770,8 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
 
     class VanishElementConverter: EventAnnounceConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_VANISH)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_VANISH)
         }
         
         override func convert(_ element: XMLElement) throws -> [String : Any] {
@@ -771,8 +792,8 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
 
     class CheckoutElementConverter: EventAnnounceConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_CHECKOUT)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_CHECKOUT)
         }
         
         override func convert(_ element: XMLElement) throws -> [String : Any] {
@@ -793,14 +814,14 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
 
     class ShortMemberElementConverter: EventAnnounceConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_SHORT_MEMBER)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_SHORT_MEMBER)
         }
     }
 
     class AskEntryElementConverter: EventOrderConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_ASK_ENTRY)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_ASK_ENTRY)
         }
         
         override func convert(_ element: XMLElement) throws -> [String : Any] {
@@ -825,8 +846,8 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
 
     class AskCommitElementConverter: EventOrderConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_ASK_COMMIT)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_ASK_COMMIT)
         }
         
         override func convert(_ element: XMLElement) throws -> [String : Any] {
@@ -851,8 +872,8 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     class NoCommentElementConverter: EventOrderConverter {
         var _avatarId: [String] = []
         
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_NO_COMMENT)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_NO_COMMENT)
         }
 
         override func onBegin() throws {
@@ -864,7 +885,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         override func onEvent(_ event: XMLEvent) throws {
             switch event {
             case .startElement(name: S.ELEM_AVATAR_REF, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                _avatarId.append(try AvatarRefElementConverter(parser: _parser).convert(element))
+                _avatarId.append(try AvatarRefElementConverter(parseContext: _parseContext).convert(element))
             default:
                 try super.onEvent(event)
             }
@@ -878,8 +899,8 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class StayEpilogueElementConverter: EventOrderConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_STAY_EPILOGUE)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_STAY_EPILOGUE)
         }
         
         override func convert(_ element: XMLElement) throws -> [String : Any] {
@@ -902,14 +923,14 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class GameOverElementConverter: EventOrderConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_GAME_OVER)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_GAME_OVER)
         }
     }
     
     class JudgeElementConverter: EventExtraConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_JUDGE)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_JUDGE)
         }
         
         override func convert(_ element: XMLElement) throws -> [String : Any] {
@@ -932,8 +953,8 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
 
     class GuardElementConverter: EventExtraConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_GUARD)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_GUARD)
         }
         
         override func convert(_ element: XMLElement) throws -> [String : Any] {
@@ -958,8 +979,8 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     class Counting2ElementConverter: EventExtraConverter {
         var _votes: [String: Any] = [:]
         
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_COUNTING2)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_COUNTING2)
         }
         
         override func onBegin() throws {
@@ -971,7 +992,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         override func onEvent(_ event: XMLEvent) throws {
             switch event {
             case .startElement(name: S.ELEM_VOTE, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                let (byWhom, target) = try VoteElementConverter(parser: _parser).convert(element)
+                let (byWhom, target) = try VoteElementConverter(parseContext: _parseContext).convert(element)
                 _votes[byWhom] = target
             default:
                 try super.onEvent(event)
@@ -986,8 +1007,8 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
 
     class AssaultElementConverter: EventExtraConverter {
-        init(parser: XMLPullParser) {
-            super.init(parser: parser, type: K.VAL_ASSAULT)
+        init(parseContext: ParseContext) {
+            super.init(parseContext: parseContext, type: K.VAL_ASSAULT)
         }
         
         override func convert(_ element: XMLElement) throws -> [String : Any] {
@@ -1024,8 +1045,8 @@ public class ArchiveToJSON: ArchiveJSONWriter {
     }
     
     class EventConverter: TextLinesConverter {
-        init(parser: XMLPullParser, type: String) {
-            super.init(parser: parser)
+        init(parseContext: ParseContext, type: String) {
+            super.init(parseContext: parseContext)
             _objectWrapper.object[K.TYPE] = type
         }
     }
@@ -1039,7 +1060,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             try onBegin()
             
             while _parsing {
-                let event = try _parser.next()
+                let event = try _parseContext.parser.next()
                 try onEvent(event)
             }
             
@@ -1056,7 +1077,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
         func onEvent(_ event: XMLEvent) throws {
             switch event {
             case .startElement(name: S.ELEM_LI, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                _lines.append(try LiElementConverter(parser: _parser).convert(element))
+                _lines.append(try LiElementConverter(parseContext: _parseContext).convert(element))
             case .startElement:
                 try self.skipElement()
             case .endElement:
@@ -1076,12 +1097,12 @@ public class ArchiveToJSON: ArchiveJSONWriter {
             var contents: [Any] = []
             
             parsing: while true {
-                let event = try _parser.next()
+                let event = try _parseContext.parser.next()
                 switch event {
                 case .characters(let string):
                     contents.append(string)
                 case .startElement(name: S.ELEM_RAWDATA, namespaceURI: S.NS_ARCHIVE?, element: let element):
-                    contents.append(try RawdataElementConverter(parser: _parser).convert(element))
+                    contents.append(try RawdataElementConverter(parseContext: _parseContext).convert(element))
                 case .startElement:
                     try skipElement()
                 case .endElement:
@@ -1121,7 +1142,7 @@ public class ArchiveToJSON: ArchiveJSONWriter {
 
             // children
             parsing: while true {
-                let event = try _parser.next()
+                let event = try _parseContext.parser.next()
                 switch event {
                 case .characters(let string):
                     contentWrapper.object[K.CHAR] = string
