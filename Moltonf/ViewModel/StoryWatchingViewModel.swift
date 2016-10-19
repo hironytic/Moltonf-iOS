@@ -28,6 +28,7 @@ import RxSwift
 import RxCocoa
 
 public protocol IStoryWatchingViewModel: IViewModel {
+    var titleLine: Observable<String> { get }
     var currentPeriodTextLine: Observable<String> { get }
     var elementsListLine: Observable<[IStoryElementViewModel]> { get }
     var selectPeriodAction: AnyObserver<Void> { get }
@@ -35,6 +36,7 @@ public protocol IStoryWatchingViewModel: IViewModel {
 }
 
 public class StoryWatchingViewModel: ViewModel, IStoryWatchingViewModel {
+    public var titleLine: Observable<String> { get { return _storyWatching.titleLine } }
     public private(set) var currentPeriodTextLine: Observable<String>
     public private(set) var elementsListLine: Observable<[IStoryElementViewModel]>
     public private(set) var selectPeriodAction: AnyObserver<Void>

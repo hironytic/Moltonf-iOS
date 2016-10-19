@@ -53,6 +53,10 @@ public class StoryWatchingViewController: UITableViewController {
             .bindTo(tableView.rx.items(dataSource: dataSource))
             .addDisposableTo(disposeBag)
 
+        viewModel.titleLine
+            .bindTo(rx.title)
+            .addDisposableTo(disposeBag)
+        
         backButtonItem.rx.tap
             .bindTo(viewModel.leaveWatchingAction)
             .addDisposableTo(disposeBag)

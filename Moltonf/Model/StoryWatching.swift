@@ -32,6 +32,7 @@ public enum StoryWatchingError: Error {
 
 public protocol IStoryWatching: class {
     var errorLine: Observable<Error> { get }
+    var titleLine: Observable<String> { get }
     var availablePeriodRefsLine: Observable<[PeriodReference]> { get }
     var currentPeriodLine: Observable<Period> { get }
     var storyElementsLine: Observable<[StoryElement]> { get }
@@ -42,6 +43,7 @@ public protocol IStoryWatching: class {
 
 public class StoryWatching: IStoryWatching {
     public var errorLine: Observable<Error> { get { return _errorSubject } }
+    public private(set) var titleLine: Observable<String>
     public private(set) var availablePeriodRefsLine: Observable<[PeriodReference]>
     public private(set) var currentPeriodLine: Observable<Period>
     public private(set) var storyElementsLine: Observable<[StoryElement]>
@@ -71,6 +73,7 @@ public class StoryWatching: IStoryWatching {
         _currentPeriod = Variable<Period>(try type(of: self).loadPeriod(_story.periodRefs[0], story: _story, workspace: _workspace))
         _storyElements = Variable<[StoryElement]>(_currentPeriod.value.elements)
         
+        titleLine = Observable.just(_story.villageFullName)
         availablePeriodRefsLine = _availablePeriodRefs.asObservable()
         currentPeriodLine = _currentPeriod.asObservable()
         storyElementsLine = _storyElements.asObservable()
