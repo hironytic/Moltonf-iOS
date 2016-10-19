@@ -28,6 +28,7 @@ import RxSwift
 import RxCocoa
 
 public class StoryWatchingViewController: UITableViewController {
+    @IBOutlet weak var selectPeriodButtonItem: UIBarButtonItem!
     var backButtonItem: UIBarButtonItem!
     
     var disposeBag: DisposeBag!
@@ -55,6 +56,10 @@ public class StoryWatchingViewController: UITableViewController {
 
         viewModel.titleLine
             .bindTo(rx.title)
+            .addDisposableTo(disposeBag)
+        
+        viewModel.currentPeriodTextLine
+            .bindTo(selectPeriodButtonItem.rx.title)
             .addDisposableTo(disposeBag)
         
         backButtonItem.rx.tap

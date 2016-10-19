@@ -126,7 +126,15 @@
                             <outlet property="delegate" destination="zu8-an-dOQ" id="pJ9-uJ-eWO"/>
                         </connections>
                     </tableView>
+                    <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="siR-3E-iW9"/>
+                        <barButtonItem title="Day X" id="48I-fx-BCb"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="0bf-TB-bz1"/>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="Story Watching" id="N4Z-nw-lDH"/>
+                    <connections>
+                        <outlet property="selectPeriodButtonItem" destination="48I-fx-BCb" id="uVt-lg-FAE"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HZ7-L1-zgK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -135,11 +143,15 @@
         <!--Navigation Controller-->
         <scene sceneID="Kfc-Gn-YeK">
             <objects>
-                <navigationController id="gwk-Q9-q4W" sceneMemberID="viewController">
+                <navigationController toolbarHidden="NO" id="gwk-Q9-q4W" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="suS-fb-LIz">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="SfL-VF-fog">
+                        <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="zu8-an-dOQ" kind="relationship" relationship="rootViewController" id="ZgJ-KQ-0eR"/>
                     </connections>

@@ -1,5 +1,5 @@
 //
-// UITableView+rxEx.swift
+// RxCocoaComplement.swift
 // Moltonf
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -38,5 +38,16 @@ extension Reactive where Base: UITableView {
         }
         
         return ControlEvent(events: source)
+    }
+}
+
+extension Reactive where Base: UIBarButtonItem {
+    /**
+     Bindable sink for `title` property.
+     */
+    public var title: AnyObserver<String?> {
+        return UIBindingObserver(UIElement: self.base) { UIElement, title in
+            UIElement.title = title
+            }.asObserver()
     }
 }
