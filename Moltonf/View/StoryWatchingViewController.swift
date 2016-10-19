@@ -31,7 +31,7 @@ public class StoryWatchingViewController: UITableViewController {
     var backButtonItem: UIBarButtonItem!
     
     var disposeBag: DisposeBag!
-    var viewModel: StoryWatchingViewModel!
+    var viewModel: IStoryWatchingViewModel!
 
     public override func viewDidLoad() {
         super.viewDidLoad()

@@ -83,7 +83,7 @@ public class WorkspaceListViewController: UITableViewController {
             let viewController: UINavigationController = storyboard.instantiateInitialViewController() as! UINavigationController
             (viewController.topViewController as! SelectArchiveFileListViewController).viewModel = viewModel
             present(viewController, animated: true, completion: nil)
-        case let viewModel as StoryWatchingViewModel:
+        case let viewModel as IStoryWatchingViewModel:
             let storyboard: UIStoryboard = UIStoryboard(name: "StoryWatching", bundle: Bundle.main)
             let viewController: UINavigationController = storyboard.instantiateInitialViewController() as! UINavigationController
             (viewController.topViewController as! StoryWatchingViewController).viewModel = viewModel

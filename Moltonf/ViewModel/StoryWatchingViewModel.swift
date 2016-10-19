@@ -27,11 +27,18 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-public class StoryWatchingViewModel: ViewModel {
-    public let currentPeriodTextLine: Observable<String>
-    public let elementsListLine: Observable<[IStoryElementViewModel]>
-    public let selectPeriodAction: AnyObserver<Void>
-    public let leaveWatchingAction: AnyObserver<Void>
+public protocol IStoryWatchingViewModel: IViewModel {
+    var currentPeriodTextLine: Observable<String> { get }
+    var elementsListLine: Observable<[IStoryElementViewModel]> { get }
+    var selectPeriodAction: AnyObserver<Void> { get }
+    var leaveWatchingAction: AnyObserver<Void> { get }
+}
+
+public class StoryWatchingViewModel: ViewModel, IStoryWatchingViewModel {
+    public private(set) var currentPeriodTextLine: Observable<String>
+    public private(set) var elementsListLine: Observable<[IStoryElementViewModel]>
+    public private(set) var selectPeriodAction: AnyObserver<Void>
+    public private(set) var leaveWatchingAction: AnyObserver<Void>
 
     private let _factory: Factory
     private let _storyWatching: IStoryWatching

@@ -57,6 +57,14 @@ public class WorkspaceListViewModel: ViewModel, IWorkspaceListViewModel {
         func selectArchiveFileViewModel() -> ISelectArchiveFileViewModel {
             return SelectArchiveFileViewModel()
         }
+        
+        func storyWatching(workspace: Workspace) throws -> IStoryWatching {
+            return try StoryWatching(workspace: workspace)
+        }
+        
+        func storyWatchingViewModel(storyWatching: IStoryWatching) -> IStoryWatchingViewModel {
+            return StoryWatchingViewModel(storyWatching: storyWatching)
+        }
     }
     
     public convenience override init() {
@@ -112,8 +120,8 @@ public class WorkspaceListViewModel: ViewModel, IWorkspaceListViewModel {
     private func select(_ listItem: WorkspaceListViewModelItem) {
         let workspace = listItem.workspace
         do {
-            let storyWatching = try StoryWatching(workspace: workspace)
-            let storyWatchingViewModel = StoryWatchingViewModel(storyWatching: storyWatching)
+            let storyWatching = try _factory.storyWatching(workspace: workspace)
+            let storyWatchingViewModel = _factory.storyWatchingViewModel(storyWatching: storyWatching)
             sendMessage(TransitionMessage(viewModel: storyWatchingViewModel))
         } catch let error {
             dump(error)
