@@ -27,11 +27,11 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class SelectPeriodViewController: UITableViewController {
+public class SelectPeriodViewController: UITableViewController {
     private var disposeBag: DisposeBag!
     public var viewModel: ISelectPeriodViewModel!
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         bindViewModel()
@@ -61,5 +61,75 @@ class SelectPeriodViewController: UITableViewController {
                 }
             })
             .addDisposableTo(disposeBag)
+    }
+}
+
+public class SelectPeriodPresentationController: UIPresentationController {
+    private var overlay: UIView!
+    
+    private func heightOfChildController(withParentContainerSize parentSize: CGSize) -> CGFloat {
+        return min(parentSize.height, min(parentSize.height / 2, 242))
+    }
+    
+    public override func size(forChildContentContainer container: UIContentContainer, withParentContainerSize parentSize: CGSize) -> CGSize {
+        return CGSize(width: parentSize.width, height: heightOfChildController(withParentContainerSize: parentSize))
+    }
+    
+    public override var frameOfPresentedViewInContainerView: CGRect {
+        let bounds = self.containerView?.bounds ?? CGRect.zero
+        let height = heightOfChildController(withParentContainerSize: bounds.size)
+        return CGRect(x: bounds.minX,
+                      y: bounds.maxY - height,
+                      width: bounds.width,
+                      height: height)
+    }
+    
+    public override func presentationTransitionWillBegin() {
+        super.presentationTransitionWillBegin()
+        
+        if let containerView = self.containerView {
+            // install overlay
+            let overlay = UIView(frame: containerView.bounds)
+            self.overlay = overlay
+            overlay.backgroundColor = UIColor.black
+            overlay.alpha = 0.0
+            overlay.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            containerView.addSubview(overlay)
+            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SelectPeriodPresentationController.processOverlayTapped(_:)))
+            overlay.addGestureRecognizer(tapGestureRecognizer)
+            
+            presentedViewController.transitionCoordinator?.animate(alongsideTransition: { context in
+                overlay.alpha = 0.5
+                }, completion: nil)
+        }
+    }
+    
+    public override func dismissalTransitionWillBegin() {
+        presentedViewController.transitionCoordinator?.animate(alongsideTransition: { [weak self] context in
+            if let strongSelf = self {
+                strongSelf.overlay.alpha = 0.0
+            }
+            }, completion: nil)
+        
+        super.dismissalTransitionWillBegin()
+    }
+    
+    public override func dismissalTransitionDidEnd(_ completed: Bool) {
+        if completed {
+            self.overlay.removeFromSuperview()
+        }
+        
+        super.dismissalTransitionDidEnd(completed)
+    }
+    
+    public override func containerViewWillLayoutSubviews() {
+        super.containerViewWillLayoutSubviews()
+        presentedView?.frame = frameOfPresentedViewInContainerView
+    }
+    
+    @objc private func processOverlayTapped(_ sender: Any) {
+        if let presentedViewController = presentedViewController as? SelectPeriodViewController {
+            presentedViewController.viewModel.cancelAction.onNext(())
+        }
     }
 }

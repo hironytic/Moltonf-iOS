@@ -89,10 +89,23 @@ public class StoryWatchingViewController: UITableViewController {
         case let viewModel as ISelectPeriodViewModel:
             let storyboard: UIStoryboard = UIStoryboard(name: "SelectPeriod", bundle: Bundle.main)
             let viewController = storyboard.instantiateInitialViewController() as! SelectPeriodViewController
+            viewController.modalPresentationStyle = .custom
+            viewController.transitioningDelegate = self
             viewController.viewModel = viewModel
             present(viewController, animated: true, completion: nil)
         default:
             break
+        }
+    }
+}
+
+extension StoryWatchingViewController: UIViewControllerTransitioningDelegate {
+    public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        switch presented {
+        case _ as SelectPeriodViewController:
+            return SelectPeriodPresentationController(presentedViewController: presented, presenting: presenting)
+        default:
+            fatalError("Don't know custom presentation controller about this view controller.")
         }
     }
 }
