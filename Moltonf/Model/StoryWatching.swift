@@ -87,7 +87,9 @@ public class StoryWatching: IStoryWatching {
     private func selectPeriod(_ periodRef: PeriodReference) {
         if _currentPeriod.value.day != periodRef.day {
             do {
-                _currentPeriod.value = try loadPeriod(periodRef)
+                let nextPeriod = try loadPeriod(periodRef)
+                _currentPeriod.value = nextPeriod
+                _storyElements.value = nextPeriod.elements
             } catch let error {
                 _errorSubject.onNext(error)
             }
@@ -98,7 +100,9 @@ public class StoryWatching: IStoryWatching {
         if let currentIndex = _story.periodRefs.index(where: { $0.day == _currentPeriod.value.day }) {
             if currentIndex < _story.periodRefs.count {
                 do {
-                    _currentPeriod.value = try loadPeriod(_story.periodRefs[currentIndex + 1])
+                    let nextPeriod = try loadPeriod(_story.periodRefs[currentIndex + 1])
+                    _currentPeriod.value = nextPeriod
+                    _storyElements.value = nextPeriod.elements
                 } catch let error {
                     _errorSubject.onNext(error)
                 }

@@ -66,11 +66,17 @@ public class StoryWatchingViewController: UITableViewController {
             .bindTo(viewModel.leaveWatchingAction)
             .addDisposableTo(disposeBag)
         
+        selectPeriodButtonItem.rx.tap
+            .bindTo(viewModel.selectPeriodAction)
+            .addDisposableTo(disposeBag)
+        
         viewModel.messageLine
             .subscribe(onNext: { [weak self] message in
                 switch message {
                 case _ as DismissingMessage:
                     self?.dismiss(animated: true, completion: nil)
+                case let transitionMessage as TransitionMessage:
+                    self?.transition(transitionMessage)
                 default:
                     break
                 }
@@ -78,6 +84,17 @@ public class StoryWatchingViewController: UITableViewController {
             .addDisposableTo(disposeBag)
     }
 
+    private func transition(_ message: TransitionMessage) {
+        switch message.viewModel {
+        case let viewModel as ISelectPeriodViewModel:
+            let storyboard: UIStoryboard = UIStoryboard(name: "SelectPeriod", bundle: Bundle.main)
+            let viewController = storyboard.instantiateInitialViewController() as! SelectPeriodViewController
+            viewController.viewModel = viewModel
+            present(viewController, animated: true, completion: nil)
+        default:
+            break
+        }
+    }
 }
 
 public class StoryWatchingDataSource: NSObject {

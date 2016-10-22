@@ -35,6 +35,7 @@ class SelectPeriodViewModelTests: XCTestCase {
     
     class MockStoryWatching: IStoryWatching {
         var errorLine = Observable<Error>.never()
+        var titleLine = Observable<String>.never()
         var availablePeriodRefsLine: Observable<[PeriodReference]>
         var currentPeriodLine: Observable<Period>
         var storyElementsLine = Observable<[StoryElement]>.never()
