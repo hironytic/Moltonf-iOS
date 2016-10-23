@@ -22,7 +22,7 @@
 		5025EFF71CE161470032AD67 /* SelectArchiveFileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFF61CE161470032AD67 /* SelectArchiveFileViewModel.swift */; };
 		5025EFF91CE1EFFB0032AD67 /* FileList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFF81CE1EFFB0032AD67 /* FileList.swift */; };
 		5025EFFB1CE1FEF70032AD67 /* SelectArchiveFile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5025EFFA1CE1FEF70032AD67 /* SelectArchiveFile.storyboard */; };
-		5025EFFD1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift */; };
+		5025EFFD1CE1FFD90032AD67 /* SelectArchiveFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileViewController.swift */; };
 		5025EFFF1CE2139B0032AD67 /* DismissingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5025EFFE1CE2139B0032AD67 /* DismissingMessage.swift */; };
 		503AC72A1CEDD8A500A379AB /* ArchiveToJSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503AC7291CEDD8A500A379AB /* ArchiveToJSONTests.swift */; };
 		503AC72C1CEDDCA700A379AB /* jin_wolff_00000.xml in Resources */ = {isa = PBXBuildFile; fileRef = 503AC72B1CEDDCA700A379AB /* jin_wolff_00000.xml */; };
@@ -99,7 +99,7 @@
 		5025EFF61CE161470032AD67 /* SelectArchiveFileViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectArchiveFileViewModel.swift; sourceTree = "<group>"; };
 		5025EFF81CE1EFFB0032AD67 /* FileList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileList.swift; sourceTree = "<group>"; };
 		5025EFFA1CE1FEF70032AD67 /* SelectArchiveFile.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SelectArchiveFile.storyboard; sourceTree = "<group>"; };
-		5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectArchiveFileListViewController.swift; sourceTree = "<group>"; };
+		5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectArchiveFileViewController.swift; sourceTree = "<group>"; };
 		5025EFFE1CE2139B0032AD67 /* DismissingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DismissingMessage.swift; sourceTree = "<group>"; };
 		503AC7291CEDD8A500A379AB /* ArchiveToJSONTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveToJSONTests.swift; sourceTree = "<group>"; };
 		503AC72B1CEDDCA700A379AB /* jin_wolff_00000.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = jin_wolff_00000.xml; sourceTree = "<group>"; };
@@ -196,7 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				5067A9D41CE49F670079E3DA /* Storyboard */,
-				5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift */,
+				5025EFFC1CE1FFD90032AD67 /* SelectArchiveFileViewController.swift */,
 				50B69C8C1DBA4F9C00C1B3F0 /* SelectPeriodViewController.swift */,
 				50F9F23F1D77172300278F48 /* StoryEventTableViewCell.swift */,
 				50AC417F1D7851190093C02D /* StoryWatchingViewController.swift */,
@@ -545,7 +545,7 @@
 				5025EFF71CE161470032AD67 /* SelectArchiveFileViewModel.swift in Sources */,
 				50AC41801D7851190093C02D /* StoryWatchingViewController.swift in Sources */,
 				509C5C611D3220C30045B0AB /* TalkType.swift in Sources */,
-				5025EFFD1CE1FFD90032AD67 /* SelectArchiveFileListViewController.swift in Sources */,
+				5025EFFD1CE1FFD90032AD67 /* SelectArchiveFileViewController.swift in Sources */,
 				501F954B1CE61CA700628E29 /* ArchiveSchema.swift in Sources */,
 				5045BD111CDED11500A8A0FA /* AppDelegate.swift in Sources */,
 				504D70541D3B36D5004DC566 /* StoryElementViewModel.swift in Sources */,

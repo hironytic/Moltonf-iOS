@@ -1,5 +1,5 @@
 //
-// SelectArchiveFileListViewController.swift
+// SelectArchiveFileViewController.swift
 // Moltonf
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -27,7 +27,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-public class SelectArchiveFileListViewController: UITableViewController {
+public class SelectArchiveFileViewController: UITableViewController {
     var disposeBag: DisposeBag!
     var viewModel: ISelectArchiveFileViewModel!
     var noItemsLabel: UILabel!
@@ -37,6 +37,8 @@ public class SelectArchiveFileListViewController: UITableViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
 
+        self.view.backgroundColor = UIColor.Moltonf.background
+        
         refreshControl = UIRefreshControl()
         
         let noItemsLabelParent = UIView()
@@ -105,6 +107,18 @@ public class SelectArchiveFileListViewController: UITableViewController {
                     }
                 })
                 .addDisposableTo(disposeBag)
+        }
+    }
+}
+
+public class SelectArchiveFileTableViewCell: UITableViewCell {
+    public override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        
+        if highlighted {
+            self.backgroundColor = UIColor.Moltonf.backgroundHighlighted
+        } else {
+            self.backgroundColor = UIColor.Moltonf.background
         }
     }
 }

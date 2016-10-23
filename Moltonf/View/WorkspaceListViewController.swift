@@ -36,6 +36,7 @@ public class WorkspaceListViewController: UITableViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = UIColor.Moltonf.background
         self.navigationItem.rightBarButtonItem = self.editButtonItem
 
         bindViewModel()
@@ -81,7 +82,7 @@ public class WorkspaceListViewController: UITableViewController {
         case let viewModel as ISelectArchiveFileViewModel:
             let storyboard: UIStoryboard = UIStoryboard(name: "SelectArchiveFile", bundle: Bundle.main)
             let viewController: UINavigationController = storyboard.instantiateInitialViewController() as! UINavigationController
-            (viewController.topViewController as! SelectArchiveFileListViewController).viewModel = viewModel
+            (viewController.topViewController as! SelectArchiveFileViewController).viewModel = viewModel
             present(viewController, animated: true, completion: nil)
         case let viewModel as IStoryWatchingViewModel:
             let storyboard: UIStoryboard = UIStoryboard(name: "StoryWatching", bundle: Bundle.main)
@@ -94,6 +95,18 @@ public class WorkspaceListViewController: UITableViewController {
     }
     
 
+}
+
+public class WorkspaceListTableViewCell: UITableViewCell {
+    public override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        
+        if highlighted {
+            self.backgroundColor = UIColor.Moltonf.backgroundHighlighted
+        } else {
+            self.backgroundColor = UIColor.Moltonf.background
+        }
+    }    
 }
 
 public class WorkspaceListDataSource: NSObject {
