@@ -30,12 +30,17 @@ public enum StoryWatchingError: Error {
     case inconsistencyError(String)
 }
 
+public struct StoryWatchingElementList {
+    let elements: [StoryElement]
+    let shouldScrollToTop: Bool
+}
+
 public protocol IStoryWatching: class {
     var errorLine: Observable<Error> { get }
     var titleLine: Observable<String> { get }
     var availablePeriodRefsLine: Observable<[PeriodReference]> { get }
     var currentPeriodLine: Observable<Period> { get }
-    var storyElementsLine: Observable<[StoryElement]> { get }
+    var storyElementListLine: Observable<StoryWatchingElementList> { get }
     
     var selectPeriodAction: AnyObserver<PeriodReference> { get }
     var switchToNextPeriodAction: AnyObserver<Void> { get }
@@ -46,7 +51,7 @@ public class StoryWatching: IStoryWatching {
     public private(set) var titleLine: Observable<String>
     public private(set) var availablePeriodRefsLine: Observable<[PeriodReference]>
     public private(set) var currentPeriodLine: Observable<Period>
-    public private(set) var storyElementsLine: Observable<[StoryElement]>
+    public private(set) var storyElementListLine: Observable<StoryWatchingElementList>
     
     public private(set) var selectPeriodAction: AnyObserver<PeriodReference>
     public private(set) var switchToNextPeriodAction: AnyObserver<Void>
@@ -54,7 +59,7 @@ public class StoryWatching: IStoryWatching {
     private let _errorSubject = PublishSubject<Error>()
     private let _availablePeriodRefs: Variable<[PeriodReference]>
     private let _currentPeriod: Variable<Period>
-    private let _storyElements: Variable<[StoryElement]>
+    private let _storyElementList: Variable<StoryWatchingElementList>
     
     private let _selectPeriodAction = ActionObserver<PeriodReference>()
     private let _switchToNextPeriodAction = ActionObserver<Void>()
@@ -71,12 +76,12 @@ public class StoryWatching: IStoryWatching {
         
         _availablePeriodRefs = Variable<[PeriodReference]>(_story.periodRefs)
         _currentPeriod = Variable<Period>(try type(of: self).loadPeriod(_story.periodRefs[0], story: _story, workspace: _workspace))
-        _storyElements = Variable<[StoryElement]>(_currentPeriod.value.elements)
+        _storyElementList = Variable<StoryWatchingElementList>(StoryWatchingElementList(elements: _currentPeriod.value.elements, shouldScrollToTop: true))
         
         titleLine = Observable.just(_story.villageFullName)
         availablePeriodRefsLine = _availablePeriodRefs.asObservable()
         currentPeriodLine = _currentPeriod.asObservable()
-        storyElementsLine = _storyElements.asObservable()
+        storyElementListLine = _storyElementList.asObservable()
         selectPeriodAction = _selectPeriodAction.asObserver()
         switchToNextPeriodAction = _switchToNextPeriodAction.asObserver()
         
@@ -89,7 +94,7 @@ public class StoryWatching: IStoryWatching {
             do {
                 let nextPeriod = try loadPeriod(periodRef)
                 _currentPeriod.value = nextPeriod
-                _storyElements.value = nextPeriod.elements
+                _storyElementList.value = StoryWatchingElementList(elements: nextPeriod.elements, shouldScrollToTop: true)
             } catch let error {
                 _errorSubject.onNext(error)
             }
@@ -102,7 +107,7 @@ public class StoryWatching: IStoryWatching {
                 do {
                     let nextPeriod = try loadPeriod(_story.periodRefs[currentIndex + 1])
                     _currentPeriod.value = nextPeriod
-                    _storyElements.value = nextPeriod.elements
+                    _storyElementList.value = StoryWatchingElementList(elements: nextPeriod.elements, shouldScrollToTop: true)
                 } catch let error {
                     _errorSubject.onNext(error)
                 }

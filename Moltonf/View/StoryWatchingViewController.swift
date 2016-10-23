@@ -50,7 +50,7 @@ public class StoryWatchingViewController: UITableViewController {
         disposeBag = DisposeBag()
         
         let dataSource = StoryWatchingDataSource()
-        viewModel.elementsListLine
+        viewModel.elementListLine
             .bindTo(tableView.rx.items(dataSource: dataSource))
             .addDisposableTo(disposeBag)
 
@@ -111,7 +111,7 @@ extension StoryWatchingViewController: UIViewControllerTransitioningDelegate {
 }
 
 public class StoryWatchingDataSource: NSObject {
-    fileprivate var _itemModels: Element = []
+    fileprivate var _itemModels: [IStoryElementViewModel] = []
 }
 
 extension StoryWatchingDataSource: UITableViewDataSource {
@@ -143,12 +143,15 @@ extension StoryWatchingDataSource: UITableViewDataSource {
 }
 
 extension StoryWatchingDataSource: RxTableViewDataSourceType {
-    public typealias Element = [IStoryElementViewModel]
+    public typealias Element = StoryWatchingViewModelElementList
     
     public func tableView(_ tableView: UITableView, observedEvent: Event<Element>) {
-        UIBindingObserver(UIElement: self) { (dataSource, element) in
-            dataSource._itemModels = element
+        UIBindingObserver(UIElement: self) { (dataSource, elementList) in
+            dataSource._itemModels = elementList.items
             tableView.reloadData()
+            if elementList.shouldScrollToTop {
+                tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+            }
         }
         .on(observedEvent)
     }

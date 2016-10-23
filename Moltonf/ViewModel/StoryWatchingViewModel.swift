@@ -27,10 +27,16 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+public struct StoryWatchingViewModelElementList {
+    let items: [IStoryElementViewModel]
+    let shouldScrollToTop: Bool
+}
+
 public protocol IStoryWatchingViewModel: IViewModel {
     var titleLine: Observable<String> { get }
     var currentPeriodTextLine: Observable<String?> { get }
-    var elementsListLine: Observable<[IStoryElementViewModel]> { get }
+    var elementListLine: Observable<StoryWatchingViewModelElementList> { get }
+    
     var selectPeriodAction: AnyObserver<Void> { get }
     var leaveWatchingAction: AnyObserver<Void> { get }
 }
@@ -38,7 +44,8 @@ public protocol IStoryWatchingViewModel: IViewModel {
 public class StoryWatchingViewModel: ViewModel, IStoryWatchingViewModel {
     public var titleLine: Observable<String> { get { return _storyWatching.titleLine } }
     public private(set) var currentPeriodTextLine: Observable<String?>
-    public private(set) var elementsListLine: Observable<[IStoryElementViewModel]>
+    public private(set) var elementListLine: Observable<StoryWatchingViewModelElementList>
+    
     public private(set) var selectPeriodAction: AnyObserver<Void>
     public private(set) var leaveWatchingAction: AnyObserver<Void>
 
@@ -67,7 +74,8 @@ public class StoryWatchingViewModel: ViewModel, IStoryWatchingViewModel {
         _storyWatching = storyWatching
 
         currentPeriodTextLine = type(of: self).configureCurrentPeriodTextLine(_storyWatching.currentPeriodLine)
-        elementsListLine = type(of: self).configureElementsListLine(_storyWatching.storyElementsLine, factory: _factory)
+        elementListLine = type(of: self).configureElementListLine(storyElementListLine: _storyWatching.storyElementListLine, factory: _factory)
+        
         selectPeriodAction = _selectPeriodAction.asObserver()
         leaveWatchingAction = _leaveWatchingAction.asObserver()
         
@@ -94,10 +102,12 @@ public class StoryWatchingViewModel: ViewModel, IStoryWatchingViewModel {
             .asDriver(onErrorJustReturn: nil).asObservable()
     }
     
-    private static func configureElementsListLine(_ storyElementsLine: Observable<[StoryElement]>, factory: Factory) -> Observable<[IStoryElementViewModel]> {
-        return storyElementsLine
-            .map { storyElements in
-                return storyElements
+    private static func configureElementListLine(storyElementListLine: Observable<StoryWatchingElementList>, factory: Factory)
+            -> Observable<StoryWatchingViewModelElementList>
+    {
+        return storyElementListLine
+            .map { elementList in
+                let items = elementList.elements
                     .map { element -> IStoryElementViewModel in
                         if let storyEvent = element as? StoryEvent {
                             return factory.storyEventViewModel(storyEvent: storyEvent)
@@ -107,8 +117,9 @@ public class StoryWatchingViewModel: ViewModel, IStoryWatchingViewModel {
                             fatalError()
                         }
                     }
+                return StoryWatchingViewModelElementList(items: items, shouldScrollToTop: elementList.shouldScrollToTop)
             }
-            .asDriver(onErrorJustReturn: []).asObservable()
+            .asDriver(onErrorJustReturn: StoryWatchingViewModelElementList(items: [], shouldScrollToTop: false)).asObservable()
     }
     
     private func selectPeriod() {
