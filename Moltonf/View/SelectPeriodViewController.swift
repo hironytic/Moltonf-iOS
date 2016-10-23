@@ -34,6 +34,8 @@ public class SelectPeriodViewController: UITableViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.view.backgroundColor = UIColor.Moltonf.overlappedViewBackground
+        
         bindViewModel()
     }
 
@@ -61,6 +63,18 @@ public class SelectPeriodViewController: UITableViewController {
                 }
             })
             .addDisposableTo(disposeBag)
+    }
+}
+
+public class SelectPeriodTableViewCell: UITableViewCell {
+    public override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        
+        if highlighted {
+            self.backgroundColor = UIColor.Moltonf.overlappedViewBackgroundHighlighted
+        } else {
+            self.backgroundColor = UIColor.Moltonf.overlappedViewBackground
+        }
     }
 }
 

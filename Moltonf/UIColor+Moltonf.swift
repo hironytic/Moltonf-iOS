@@ -29,7 +29,19 @@ extension UIColor {
     struct Moltonf {
         private init() { }
         
-        /// Tint color (#f80)
+        /// Tint color (#ff8800)
         static let tint = #colorLiteral(red: 1, green: 0.5333333333, blue: 0, alpha: 1)
+        
+        /// Generic background color (#000000)
+        static let background = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        
+        /// Generic text color (#ffffff)
+        static let text = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        
+        /// Background color of overlapped view (#333333)
+        static let overlappedViewBackground = #colorLiteral(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
+        
+        /// Highlighted background color of overlapped view (#555555)
+        static let overlappedViewBackgroundHighlighted = #colorLiteral(red: 0.3333333333, green: 0.3333333333, blue: 0.3333333333, alpha: 1)
     }
 }
