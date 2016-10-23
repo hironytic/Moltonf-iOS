@@ -93,20 +93,6 @@ public class WorkspaceListViewController: UITableViewController {
             break
         }
     }
-    
-
-}
-
-public class WorkspaceListTableViewCell: UITableViewCell {
-    public override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated: animated)
-        
-        if highlighted {
-            self.backgroundColor = UIColor.Moltonf.backgroundHighlighted
-        } else {
-            self.backgroundColor = UIColor.Moltonf.background
-        }
-    }    
 }
 
 public class WorkspaceListDataSource: NSObject {
@@ -129,6 +115,9 @@ extension WorkspaceListDataSource: UITableViewDataSource {
         
         cell.textLabel?.text = element.workspace.title
         
+        cell.backgroundColor = UIColor.Moltonf.background
+        cell.selectedBackgroundView = UIView()
+        cell.selectedBackgroundView?.backgroundColor = UIColor.Moltonf.backgroundSelected
         return cell
     }
     

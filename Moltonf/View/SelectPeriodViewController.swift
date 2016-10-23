@@ -46,6 +46,9 @@ public class SelectPeriodViewController: UITableViewController {
             .bindTo(tableView.rx.items(cellIdentifier:"Cell", cellType: UITableViewCell.self)) { (row, element, cell) in
                 cell.textLabel?.text = element.title
                 cell.accessoryType = element.checked ? .checkmark : .none
+                cell.backgroundColor = UIColor.Moltonf.overlappedViewBackground
+                cell.selectedBackgroundView = UIView()
+                cell.selectedBackgroundView?.backgroundColor = UIColor.Moltonf.overlappedViewBackgroundSelected
             }
             .addDisposableTo(disposeBag)
         
@@ -63,18 +66,6 @@ public class SelectPeriodViewController: UITableViewController {
                 }
             })
             .addDisposableTo(disposeBag)
-    }
-}
-
-public class SelectPeriodTableViewCell: UITableViewCell {
-    public override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated: animated)
-        
-        if highlighted {
-            self.backgroundColor = UIColor.Moltonf.overlappedViewBackgroundHighlighted
-        } else {
-            self.backgroundColor = UIColor.Moltonf.overlappedViewBackground
-        }
     }
 }
 

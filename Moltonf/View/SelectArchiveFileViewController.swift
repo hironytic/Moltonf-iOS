@@ -76,6 +76,10 @@ public class SelectArchiveFileViewController: UITableViewController {
             viewModel.archiveFilesLine
                 .bindTo(tableView.rx.items(cellIdentifier:"Cell", cellType: UITableViewCell.self)) { (row, element, cell) in
                     cell.textLabel?.text = element.title
+                    
+                    cell.backgroundColor = UIColor.Moltonf.background
+                    cell.selectedBackgroundView = UIView()
+                    cell.selectedBackgroundView?.backgroundColor = UIColor.Moltonf.backgroundSelected
                 }
                 .addDisposableTo(disposeBag)
             
@@ -107,18 +111,6 @@ public class SelectArchiveFileViewController: UITableViewController {
                     }
                 })
                 .addDisposableTo(disposeBag)
-        }
-    }
-}
-
-public class SelectArchiveFileTableViewCell: UITableViewCell {
-    public override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated: animated)
-        
-        if highlighted {
-            self.backgroundColor = UIColor.Moltonf.backgroundHighlighted
-        } else {
-            self.backgroundColor = UIColor.Moltonf.background
         }
     }
 }

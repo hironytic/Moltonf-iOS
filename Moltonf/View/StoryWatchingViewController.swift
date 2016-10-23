@@ -37,6 +37,8 @@ public class StoryWatchingViewController: UITableViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.backgroundColor = UIColor.Moltonf.background
+        
         tableView.estimatedRowHeight = 132
         tableView.rowHeight = UITableViewAutomaticDimension
         
@@ -125,20 +127,25 @@ extension StoryWatchingDataSource: UITableViewDataSource {
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let elementViewModel = _itemModels[(indexPath as NSIndexPath).row]
-        switch elementViewModel {
-        case let eventViewModel as IStoryEventViewModel:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Event", for: indexPath) as! StoryEventTableViewCell
-            cell.viewModel = eventViewModel
-            return cell
-        case let talkViewModel as ITalkViewModel:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Talk", for: indexPath) as! TalkTableViewCell
-            cell.viewModel = talkViewModel
-            return cell
-        default:
-            break
-        }
-
-        fatalError()
+        let cell = { () -> UITableViewCell in
+            switch elementViewModel {
+            case let eventViewModel as IStoryEventViewModel:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "Event", for: indexPath) as! StoryEventTableViewCell
+                cell.viewModel = eventViewModel
+                return cell
+            case let talkViewModel as ITalkViewModel:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "Talk", for: indexPath) as! TalkTableViewCell
+                cell.viewModel = talkViewModel
+                return cell
+            default:
+                fatalError()
+            }
+        }()
+        
+        cell.backgroundColor = UIColor.Moltonf.background
+        cell.selectedBackgroundView = UIView()
+        cell.selectedBackgroundView?.backgroundColor = UIColor.Moltonf.backgroundSelected
+        return cell
     }
 }
 

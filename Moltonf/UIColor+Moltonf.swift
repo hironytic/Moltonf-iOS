@@ -35,8 +35,8 @@ extension UIColor {
         /// Generic background color (#000000)
         static let background = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         
-        /// Generic highlighted background color (#333333)
-        static let backgroundHighlighted = #colorLiteral(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
+        /// Generic selected background color (#333333)
+        static let backgroundSelected = #colorLiteral(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
         
         /// Generic text color (#ffffff)
         static let text = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
@@ -44,7 +44,7 @@ extension UIColor {
         /// Background color of overlapped view (#333333)
         static let overlappedViewBackground = #colorLiteral(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
         
-        /// Highlighted background color of overlapped view (#555555)
-        static let overlappedViewBackgroundHighlighted = #colorLiteral(red: 0.3333333333, green: 0.3333333333, blue: 0.3333333333, alpha: 1)
+        /// Selected background color of overlapped view (#555555)
+        static let overlappedViewBackgroundSelected = #colorLiteral(red: 0.3333333333, green: 0.3333333333, blue: 0.3333333333, alpha: 1)
     }
 }
