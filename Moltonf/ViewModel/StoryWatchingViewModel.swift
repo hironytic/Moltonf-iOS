@@ -99,6 +99,7 @@ public class StoryWatchingViewModel: ViewModel, IStoryWatchingViewModel {
                     }
                 }()
             }
+            .map { $0 + " ▴" }
             .asDriver(onErrorJustReturn: nil).asObservable()
     }
     
