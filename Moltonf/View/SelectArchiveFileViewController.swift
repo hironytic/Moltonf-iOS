@@ -70,7 +70,7 @@ public class SelectArchiveFileViewController: UITableViewController {
                 .addDisposableTo(disposeBag)
             
             viewModel.noItemsMessageHiddenLine
-                .bindTo(noItemsLabel.rx.hidden)
+                .bindTo(noItemsLabel.rx.isHidden)
                 .addDisposableTo(disposeBag)
             
             viewModel.archiveFilesLine

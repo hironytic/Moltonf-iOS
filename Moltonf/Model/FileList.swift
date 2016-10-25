@@ -86,6 +86,6 @@ public class FileList: IFileList {
                 observer.onNext(RefreshState(list: list, refreshing: false))
                 return Disposables.create()
             }
-            .subscribeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default))
+            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .default))
     }
 }

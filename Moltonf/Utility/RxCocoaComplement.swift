@@ -34,7 +34,7 @@ extension Reactive where Base: UITableView {
                 return Observable.empty()
             }
             
-            return Observable.just(try view.rx.model(indexPath))
+            return Observable.just(try view.rx.model(at: indexPath))
         }
         
         return ControlEvent(events: source)

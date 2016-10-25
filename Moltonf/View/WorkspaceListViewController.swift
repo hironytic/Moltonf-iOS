@@ -141,7 +141,7 @@ extension WorkspaceListDataSource: RxTableViewDataSourceType {
 }
 
 extension WorkspaceListDataSource: SectionedViewDataSourceType {
-    public func model(_ indexPath: IndexPath) throws -> Any {
+    public func model(at indexPath: IndexPath) throws -> Any {
         precondition(indexPath.section == 0)
         return _itemModels[indexPath.row]
     }

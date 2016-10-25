@@ -1,4 +1,4 @@
-github "ReactiveX/RxSwift" "3.0.0-beta.2"
+github "ReactiveX/RxSwift" ~> 3.0
 github "hironytic/XMLPullitic"
 github "SwiftyJSON/SwiftyJSON" ~> 3.0
 github "realm/realm-cocoa" ~> 2.0

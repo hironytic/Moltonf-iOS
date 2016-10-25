@@ -104,7 +104,7 @@ public class WorkspaceStore: IWorkspaceStore {
     private func configureCreateNewWorkspaceAction() {
         _createNewWorkspaceAction
             // convert archive file (XML) to JSON file in background
-            .observeOn(ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default))
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .default))
             .map { [unowned self] archiveFile -> ConvertResult in
                 let id = UUID().uuidString
                 let archiveJSONDir = self._workspaceDB.workspaceDirURL.appendingPathComponent(id).path
