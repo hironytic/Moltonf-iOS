@@ -48,6 +48,17 @@ extension Reactive where Base: UIBarButtonItem {
     public var title: AnyObserver<String?> {
         return UIBindingObserver(UIElement: self.base) { UIElement, title in
             UIElement.title = title
-            }.asObserver()
+        }.asObserver()
+    }
+}
+
+extension Reactive where Base: UILabel {
+    /**
+     Bindable sink for `title` property.
+     */
+    public var textColor: AnyObserver<UIColor> {
+        return UIBindingObserver(UIElement: self.base) { UIElement, textColor in
+            UIElement.textColor = textColor
+        }.asObserver()
     }
 }

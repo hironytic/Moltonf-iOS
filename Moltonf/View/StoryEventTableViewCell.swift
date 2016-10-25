@@ -58,6 +58,10 @@ public class StoryEventTableViewCell: UITableViewCell {
                 .bindTo(borderedView.rx.borderColor)
                 .addDisposableTo(disposeBag)
             
+            viewModel.messageColorLine
+                .bindTo(messageLabel.rx.textColor)
+                .addDisposableTo(disposeBag)
+            
             self.disposeBag = disposeBag
         }
     }
