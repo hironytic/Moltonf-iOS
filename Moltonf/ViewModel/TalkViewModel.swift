@@ -71,6 +71,7 @@ public class TalkViewModel: ViewModel, ITalkViewModel {
     }
     
     static func makeMessageText(_ messageLines: [String]) -> NSAttributedString {
-        return NSAttributedString(string: messageLines.joined(separator: "\n"))
+        let lines = (messageLines.isEmpty || messageLines.last != "") ? messageLines : Array(messageLines.dropLast())
+        return NSAttributedString(string: lines.joined(separator: "\n"))
     }
 }

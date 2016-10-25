@@ -38,7 +38,7 @@ public class StoryEventViewModel: ViewModel, IStoryEventViewModel {
     
     public init(storyEvent: StoryEvent) {
         messageTextLine = Observable
-            .just(storyEvent.messageLines.joined(separator: "\n"))
+            .just(type(of: self).removeLastEmptyLine(storyEvent.messageLines).joined(separator: "\n"))
         
         let color = { () -> UIColor in
             switch storyEvent.eventFamily {
@@ -54,5 +54,13 @@ public class StoryEventViewModel: ViewModel, IStoryEventViewModel {
             .just(color)
         
         super.init()
+    }
+    
+    static private func removeLastEmptyLine(_ messageLines: [String]) -> [String] {
+        if !messageLines.isEmpty && messageLines.last == "" {
+            return Array(messageLines.dropLast())
+        } else {
+            return messageLines
+        }
     }
 }
