@@ -46,5 +46,14 @@ extension UIColor {
         
         /// Selected background color of overlapped view (#555555)
         static let overlappedViewBackgroundSelected = #colorLiteral(red: 0.3333333333, green: 0.3333333333, blue: 0.3333333333, alpha: 1)
+        
+        /// announce event color (#dddddd)
+        static let eventAnnounce = #colorLiteral(red: 0.8666666667, green: 0.8666666667, blue: 0.8666666667, alpha: 1)
+        
+        /// order event color (#ff4444)
+        static let eventOrder = #colorLiteral(red: 1, green: 0.2666666667, blue: 0.2666666667, alpha: 1)
+        
+        /// extra event color (#888888)
+        static let eventExtra = #colorLiteral(red: 0.5333333333, green: 0.5333333333, blue: 0.5333333333, alpha: 1)
     }
 }

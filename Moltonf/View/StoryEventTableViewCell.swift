@@ -29,6 +29,7 @@ import RxCocoa
 
 public class StoryEventTableViewCell: UITableViewCell {
     @IBOutlet weak var messageLabel: UILabel!
+    @IBOutlet weak var borderedView: StoryEventBorderedView!
 
     var disposeBag: DisposeBag?
     
@@ -53,6 +54,10 @@ public class StoryEventTableViewCell: UITableViewCell {
                 .bindTo(messageLabel.rx.text)
                 .addDisposableTo(disposeBag)
             
+            viewModel.messageColorLine
+                .bindTo(borderedView.rx.borderColor)
+                .addDisposableTo(disposeBag)
+            
             self.disposeBag = disposeBag
         }
     }
@@ -62,4 +67,28 @@ public class StoryEventTableViewCell: UITableViewCell {
         
         self.disposeBag = nil
     }    
+}
+
+public class StoryEventBorderedView: UIView {
+    public required override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    private func setup() {
+        self.layer.borderWidth = 1
+    }
+}
+
+extension Reactive where Base: StoryEventBorderedView {
+    public var borderColor: AnyObserver<UIColor> {
+        return UIBindingObserver(UIElement: self.base) { view, color in
+            view.layer.borderColor = color.cgColor
+        }.asObserver()
+    }
 }

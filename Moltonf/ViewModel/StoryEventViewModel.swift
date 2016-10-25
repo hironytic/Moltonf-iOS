@@ -23,9 +23,9 @@
 // THE SOFTWARE.
 //
 
-import Foundation
-import RxSwift
 import UIKit
+import RxSwift
+import RxCocoa
 
 public protocol IStoryEventViewModel: IStoryElementViewModel {
     var messageTextLine: Observable<String?> { get }
@@ -40,15 +40,16 @@ public class StoryEventViewModel: ViewModel, IStoryEventViewModel {
         messageTextLine = Observable
             .just(storyEvent.messageLines.joined(separator: "\n"))
         
-        var color: UIColor
-        switch storyEvent.eventFamily {
-        case .announce:
-            color = UIColor(red: 0xdd / 0xff, green: 0xdd / 0xff, blue: 0xdd / 0xff, alpha: 1)
-        case .order:
-            color = UIColor(red: 0xff / 0xff, green: 0x44 / 0xff, blue: 0x44 / 0xff, alpha: 1)
-        case .extra:
-            color = UIColor(red: 0x88 / 0xff, green: 0x88 / 0xff, blue: 0x88 / 0xff, alpha: 1)
-        }
+        let color = { () -> UIColor in
+            switch storyEvent.eventFamily {
+            case .announce:
+                return UIColor.Moltonf.eventAnnounce
+            case .order:
+                return UIColor.Moltonf.eventOrder
+            case .extra:
+                return UIColor.Moltonf.eventExtra
+            }
+        }()
         messageColorLine = Observable
             .just(color)
         
