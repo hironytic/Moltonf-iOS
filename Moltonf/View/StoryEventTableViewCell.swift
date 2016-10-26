@@ -46,10 +46,13 @@ public class StoryEventTableViewCell: UITableViewCell {
         messageLabel.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
     }
     
-    public var viewModel: IStoryEventViewModel! {
+    public var viewModel: IStoryEventViewModel? {
         didSet {
-            let disposeBag = DisposeBag()
+            self.disposeBag = nil
+            guard let viewModel = viewModel else { return }
             
+            let disposeBag = DisposeBag()
+
             viewModel.messageTextLine
                 .bindTo(messageLabel.rx.text)
                 .addDisposableTo(disposeBag)
@@ -69,7 +72,7 @@ public class StoryEventTableViewCell: UITableViewCell {
     public override func prepareForReuse() {
         super.prepareForReuse()
         
-        self.disposeBag = nil
+        self.viewModel = nil
     }    
 }
 

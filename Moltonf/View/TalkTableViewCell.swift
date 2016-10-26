@@ -48,8 +48,11 @@ class TalkTableViewCell: UITableViewCell {
         messageLabel.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
     }
     
-    public var viewModel: ITalkViewModel! {
+    public var viewModel: ITalkViewModel? {
         didSet {
+            self.disposeBag = nil
+            guard let viewModel = viewModel else { return }
+            
             let disposeBag = DisposeBag()
             
             viewModel.numberLine
@@ -75,6 +78,6 @@ class TalkTableViewCell: UITableViewCell {
     public override func prepareForReuse() {
         super.prepareForReuse()
         
-        self.disposeBag = nil
+        self.viewModel = nil
     }
 }
