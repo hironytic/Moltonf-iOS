@@ -55,5 +55,17 @@ extension UIColor {
         
         /// extra event color (#888888)
         static let eventExtra = #colorLiteral(red: 0.5333333333, green: 0.5333333333, blue: 0.5333333333, alpha: 1)
+        
+        /// public balloon color (#ffffff)
+        static let balloonPublic = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        
+        /// wolf balloon color (#ff7777)
+        static let balloonWolf = #colorLiteral(red: 1, green: 0.4666666667, blue: 0.4666666667, alpha: 1)
+        
+        /// grave balloon color (#9fb7cf)
+        static let balloonGrave = #colorLiteral(red: 0.6235294118, green: 0.7176470588, blue: 0.8117647059, alpha: 1)
+        
+        /// private balloon color (#9393a3)
+        static let balloonPrivate = #colorLiteral(red: 0.5764705882, green: 0.5764705882, blue: 0.6392156863, alpha: 1)
     }
 }

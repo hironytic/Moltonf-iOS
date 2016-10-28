@@ -86,16 +86,15 @@
                                                 <constraint firstAttribute="height" constant="75" id="ieL-go-P0Y"/>
                                             </constraints>
                                         </imageView>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TmT-uf-H7L">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TmT-uf-H7L" customClass="TalkBalloonView" customModule="Moltonf" customModuleProvider="target">
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Message" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c3V-Kt-KQN">
-                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="c3V-Kt-KQN" secondAttribute="bottom" constant="8" id="7uE-PB-khx"/>
                                                 <constraint firstItem="c3V-Kt-KQN" firstAttribute="top" secondItem="TmT-uf-H7L" secondAttribute="top" constant="8" id="8Zb-3b-vOb"/>
@@ -105,19 +104,20 @@
                                         </view>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="bottomMargin" secondItem="TmT-uf-H7L" secondAttribute="bottom" constant="8" id="8ZM-Oe-Jg7"/>
+                                        <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="TmT-uf-H7L" secondAttribute="bottom" id="8ZM-Oe-Jg7"/>
                                         <constraint firstItem="TmT-uf-H7L" firstAttribute="leading" secondItem="AQa-N9-7T1" secondAttribute="trailing" constant="8" id="BzI-fl-XOW"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="TmT-uf-H7L" secondAttribute="trailing" constant="8" id="G0G-Pb-HtB"/>
-                                        <constraint firstItem="Vts-Je-Jef" firstAttribute="leading" secondItem="18l-q4-5eN" secondAttribute="leadingMargin" constant="8" id="JOn-s3-scN"/>
+                                        <constraint firstItem="Vts-Je-Jef" firstAttribute="leading" secondItem="18l-q4-5eN" secondAttribute="leadingMargin" id="JOn-s3-scN"/>
                                         <constraint firstItem="TmT-uf-H7L" firstAttribute="top" secondItem="Vts-Je-Jef" secondAttribute="bottom" constant="8" id="Lv1-VG-uu5"/>
                                         <constraint firstItem="AQa-N9-7T1" firstAttribute="top" secondItem="Vts-Je-Jef" secondAttribute="bottom" constant="8" id="SxA-Mg-Fuw"/>
                                         <constraint firstItem="AQa-N9-7T1" firstAttribute="leading" secondItem="18l-q4-5eN" secondAttribute="leading" constant="8" id="USg-ia-DbL"/>
-                                        <constraint firstItem="Vts-Je-Jef" firstAttribute="top" secondItem="18l-q4-5eN" secondAttribute="topMargin" constant="8" id="ZLe-S9-ybn"/>
-                                        <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="AQa-N9-7T1" secondAttribute="bottom" constant="8" id="lrY-vv-t5l"/>
+                                        <constraint firstItem="Vts-Je-Jef" firstAttribute="top" secondItem="18l-q4-5eN" secondAttribute="topMargin" id="ZLe-S9-ybn"/>
+                                        <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="AQa-N9-7T1" secondAttribute="bottom" id="lrY-vv-t5l"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
+                                    <outlet property="balloonView" destination="TmT-uf-H7L" id="aXm-Nw-hkX"/>
                                     <outlet property="messageLabel" destination="c3V-Kt-KQN" id="Flc-1U-5qf"/>
                                     <outlet property="speakerIconImageView" destination="AQa-N9-7T1" id="Otp-Vo-SaW"/>
                                     <outlet property="speakerNameLabel" destination="btZ-uL-gGy" id="ETh-yd-OKK"/>

@@ -25,6 +25,7 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 
 class TalkTableViewCell: UITableViewCell {
     @IBOutlet weak var talkNumberLabel: UILabel!
@@ -32,6 +33,7 @@ class TalkTableViewCell: UITableViewCell {
     @IBOutlet weak var talkTimeLabel: UILabel!
     @IBOutlet weak var speakerIconImageView: UIImageView!
     @IBOutlet weak var messageLabel: UILabel!
+    @IBOutlet weak var balloonView: TalkBalloonView!
     
     var disposeBag: DisposeBag?
 
@@ -75,6 +77,10 @@ class TalkTableViewCell: UITableViewCell {
                 .bindTo(messageLabel.rx.attributedText)
                 .addDisposableTo(disposeBag)
             
+            viewModel.balloonColorLine
+                .bindTo(balloonView.rx.backgroundColor)
+                .addDisposableTo(disposeBag)
+            
             self.disposeBag = disposeBag
         }
     }
@@ -83,5 +89,29 @@ class TalkTableViewCell: UITableViewCell {
         super.prepareForReuse()
         
         self.viewModel = nil
+    }
+}
+
+public class TalkBalloonView: UIView {
+    public required override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    private func setup() {
+        self.layer.cornerRadius = 5
+    }
+}
+
+extension Reactive where Base: TalkBalloonView {
+    public var backgroundColor: AnyObserver<UIColor> {
+        return UIBindingObserver(UIElement: self.base) { view, color in
+            view.backgroundColor = color
+        }.asObserver()
     }
 }

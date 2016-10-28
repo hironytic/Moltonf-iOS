@@ -57,17 +57,18 @@ public class TalkViewModel: ViewModel, ITalkViewModel {
             .just(String(format: "%02d:%02d", talk.time.hourPart, talk.time.minutePart))
         messageTextLine = Observable
             .just(TalkViewModel.makeMessageText(talk.messageLines))
-        var color: UIColor
-        switch talk.talkType {
-        case .public:
-            color = UIColor(red: 0xff / 0xff, green: 0xff / 0xff, blue: 0xff / 0xff, alpha: 1)
-        case .wolf:
-            color = UIColor(red: 0xff / 0xff, green: 0x77 / 0xff, blue: 0x77 / 0xff, alpha: 1)
-        case .grave:
-            color = UIColor(red: 0x9f / 0xff, green: 0x67 / 0xff, blue: 0xcf / 0xff, alpha: 1)
-        case .private:
-            color = UIColor(red: 0x93 / 0xff, green: 0x93 / 0xff, blue: 0x93 / 0xff, alpha: 1)
-        }
+        let color: UIColor = { () in
+            switch talk.talkType {
+            case .public:
+                return UIColor.Moltonf.balloonPublic
+            case .wolf:
+                return UIColor.Moltonf.balloonWolf
+            case .grave:
+                return UIColor.Moltonf.balloonGrave
+            case .private:
+                return UIColor.Moltonf.balloonPrivate
+            }
+        }()
         balloonColorLine = Observable
             .just(color)
         
