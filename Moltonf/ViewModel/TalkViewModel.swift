@@ -29,6 +29,7 @@ import UIKit
 
 public protocol ITalkViewModel: IStoryElementViewModel {
     var numberLine: Observable<String?> { get }
+    var numberHiddenLine: Observable<Bool> { get }
     var speakerNameLine: Observable<String?> { get }
 //    var speakerIconLine: Observable<UIImage> { get }
     var timeLine: Observable<String?> { get }
@@ -38,6 +39,7 @@ public protocol ITalkViewModel: IStoryElementViewModel {
 
 public class TalkViewModel: ViewModel, ITalkViewModel {
     public private(set) var numberLine: Observable<String?>
+    public private(set) var numberHiddenLine: Observable<Bool>
     public private(set) var speakerNameLine: Observable<String?>
 //    public private(set) var speakerIconLine: Observable<UIImage>
     public private(set) var timeLine: Observable<String?>
@@ -47,6 +49,8 @@ public class TalkViewModel: ViewModel, ITalkViewModel {
     public init(talk: Talk) {
         numberLine = Observable
             .just(talk.publicTalkNo.flatMap({ "\($0)." }))
+        numberHiddenLine = Observable
+            .just(talk.publicTalkNo == nil)
         speakerNameLine = Observable
             .just(talk.speaker.fullName)
         timeLine = Observable

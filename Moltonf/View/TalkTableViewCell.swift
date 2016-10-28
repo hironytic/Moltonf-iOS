@@ -59,6 +59,10 @@ class TalkTableViewCell: UITableViewCell {
                 .bindTo(talkNumberLabel.rx.text)
                 .addDisposableTo(disposeBag)
             
+            viewModel.numberHiddenLine
+                .bindTo(talkNumberLabel.rx.isHidden)
+                .addDisposableTo(disposeBag)
+            
             viewModel.speakerNameLine
                 .bindTo(speakerNameLabel.rx.text)
                 .addDisposableTo(disposeBag)
