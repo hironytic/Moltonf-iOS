@@ -78,8 +78,8 @@ public class WorkspaceStore: IWorkspaceStore {
     }
 
     private func configureWorkspaces() {
-        DispatchQueue.main.async {
-            let workspaceResults = self._workspaceDB.realm.objects(Workspace.self)
+        self._workspaceDB.withRealm { realm in
+            let workspaceResults = realm.objects(Workspace.self)
             let changes = WorkspaceStoreChanges(workspaces: AnyRandomAccessCollection<Workspace>(workspaceResults),
                                                 deletions: [],
                                                 insertions: (0..<workspaceResults.count).map { $0 },
@@ -96,16 +96,11 @@ public class WorkspaceStore: IWorkspaceStore {
         }
     }
     
-    private struct ConvertResult {
-        let id: String
-        let title: String
-    }
-    
     private func configureCreateNewWorkspaceAction() {
         _createNewWorkspaceAction
             // convert archive file (XML) to JSON file in background
             .observeOn(ConcurrentDispatchQueueScheduler(qos: .default))
-            .map { [unowned self] archiveFile -> ConvertResult in
+            .map { [unowned self] archiveFile in
                 let id = UUID().uuidString
                 let archiveJSONDir = self._workspaceDB.workspaceDirURL.appendingPathComponent(id).path
                 let playdataFilePath = (archiveJSONDir as NSString).appendingPathComponent(ArchiveConstants.FILE_PLAYDATA_JSON)
@@ -119,20 +114,17 @@ public class WorkspaceStore: IWorkspaceStore {
                 let playdata = JSON(data: playdataData)
                 let title = playdata[ArchiveConstants.FULL_NAME].stringValue
                 
-                return ConvertResult(id: id, title: title)
-            }
-            // then operate with realm in main thread
-            .observeOn(MainScheduler.instance)
-            .do(onNext: { [unowned self] convertResult in
                 // create new Workspace object
                 let ws = Workspace()
-                ws.id = convertResult.id
-                ws.title = convertResult.title
+                ws.id = id
+                ws.title = title
                 
-                try self._workspaceDB.realm.write {
-                    self._workspaceDB.realm.add(ws)
+                try self._workspaceDB.withRealm { realm in
+                    try realm.write {
+                        realm.add(ws)
+                    }
                 }
-            })
+            }
             .do(onError: { [unowned self] error in
                 self._errorSubject.onNext(error)
             })
@@ -142,13 +134,14 @@ public class WorkspaceStore: IWorkspaceStore {
     
     private func configureDeleteWorkspaceAction() {
         _deleteWorkspaceAction
-            .observeOn(MainScheduler.instance)
             .do(onNext: { [unowned self] workspace in
                 let archiveJSONDir = self._workspaceDB.workspaceDirURL.appendingPathComponent(workspace.id).path
                 _ = try? FileManager.default.removeItem(atPath: archiveJSONDir)
-                
-                try self._workspaceDB.realm.write {
-                    self._workspaceDB.realm.delete(workspace)
+
+                try self._workspaceDB.withRealm { realm in
+                    try realm.write {
+                        realm.delete(workspace)
+                    }
                 }
             })
             .do(onError: { [unowned self] error in

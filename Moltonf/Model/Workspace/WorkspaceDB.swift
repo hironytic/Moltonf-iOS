@@ -30,30 +30,22 @@ private let WORKSPACE_DIR = "workspace"
 private let WORKSPACE_DB = "workspace.realm"
 
 public class WorkspaceDB {
-    private static let _sharedInstanceLockObj = NSObject()
-    private static weak var _sharedInstance: WorkspaceDB? = nil
+    public static let sharedInstance = WorkspaceDB()
     
     public let workspaceDirURL: URL
-    public let realm: Realm
     
     private init() {
         workspaceDirURL = URL(fileURLWithPath: AppDelegate.privateDataDirectory).appendingPathComponent(WORKSPACE_DIR)
         _ = try? FileManager.default.createDirectory(at: workspaceDirURL, withIntermediateDirectories: true, attributes: nil)
-        
-        let workspaceDBURL = workspaceDirURL.appendingPathComponent(WORKSPACE_DB)
-        let config = Realm.Configuration(fileURL: workspaceDBURL)
-        realm = try! Realm(configuration: config)
     }
     
-    public static var sharedInstance: WorkspaceDB {
-        var instance: WorkspaceDB? = nil
-        synchronized(WorkspaceDB._sharedInstanceLockObj) {
-            instance = WorkspaceDB._sharedInstance
-            if (instance == nil) {
-                instance = WorkspaceDB()
-                WorkspaceDB._sharedInstance = instance
-            }
-        }
-        return instance!
+    private func createRealm() -> Realm {
+        let workspaceDBURL = workspaceDirURL.appendingPathComponent(WORKSPACE_DB)
+        let config = Realm.Configuration(fileURL: workspaceDBURL)
+        return try! Realm(configuration: config)
+    }
+    
+    public func withRealm<Result>(_ proc: (Realm) throws -> Result) rethrows -> Result {
+        return try proc(createRealm())
     }
 }
