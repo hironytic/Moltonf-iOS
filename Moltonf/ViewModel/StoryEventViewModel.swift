@@ -27,7 +27,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-fileprivate typealias R = ResourceConstants
+fileprivate typealias R = Resource
 
 public protocol IStoryEventViewModel: IStoryElementViewModel {
     var messageTextLine: Observable<String?> { get }

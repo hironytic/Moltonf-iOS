@@ -25,7 +25,7 @@
 
 import UIKit
 
-fileprivate typealias R = ResourceConstants
+fileprivate typealias R = Resource
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

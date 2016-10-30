@@ -45,8 +45,11 @@
 		504D70571D3D050F004DC566 /* SelectPeriodViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70561D3D050F004DC566 /* SelectPeriodViewModelTests.swift */; };
 		504D70CF1D4057EB004DC566 /* FulfillObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D70CE1D4057EB004DC566 /* FulfillObserver.swift */; };
 		5052D3401D026301002B1A17 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5052D33F1D026301002B1A17 /* SwiftyJSON.framework */; };
-		507E4A281DC6296500B95FD1 /* ResourceConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507E4A271DC6296500B95FD1 /* ResourceConstants.swift */; };
-		507E4A2A1DC62C0D00B95FD1 /* ResourceConstants+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507E4A291DC62C0D00B95FD1 /* ResourceConstants+Color.swift */; };
+		507E4A281DC6296500B95FD1 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507E4A271DC6296500B95FD1 /* Resource.swift */; };
+		507E4A2A1DC62C0D00B95FD1 /* Resource+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507E4A291DC62C0D00B95FD1 /* Resource+Color.swift */; };
+		507E4A2C1DC6357600B95FD1 /* Resource+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507E4A2B1DC6357600B95FD1 /* Resource+String.swift */; };
+		507E4A2E1DC63A7100B95FD1 /* Resource+Id.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507E4A2D1DC63A7100B95FD1 /* Resource+Id.swift */; };
+		507E4A301DC6480300B95FD1 /* ResourceUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507E4A2F1DC6480300B95FD1 /* ResourceUtils.swift */; };
 		508D1E021DAFCEE300196208 /* RxCocoaComplement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508D1E011DAFCEE300196208 /* RxCocoaComplement.swift */; };
 		509C5C4D1D306FB00045B0AB /* Story.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C4C1D306FAF0045B0AB /* Story.swift */; };
 		509C5C511D30F59E0045B0AB /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509C5C501D30F59E0045B0AB /* Avatar.swift */; };
@@ -130,8 +133,11 @@
 		504D70561D3D050F004DC566 /* SelectPeriodViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectPeriodViewModelTests.swift; sourceTree = "<group>"; };
 		504D70CE1D4057EB004DC566 /* FulfillObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FulfillObserver.swift; sourceTree = "<group>"; };
 		5052D33F1D026301002B1A17 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
-		507E4A271DC6296500B95FD1 /* ResourceConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceConstants.swift; sourceTree = "<group>"; };
-		507E4A291DC62C0D00B95FD1 /* ResourceConstants+Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ResourceConstants+Color.swift"; sourceTree = "<group>"; };
+		507E4A271DC6296500B95FD1 /* Resource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resource.swift; sourceTree = "<group>"; };
+		507E4A291DC62C0D00B95FD1 /* Resource+Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Resource+Color.swift"; sourceTree = "<group>"; };
+		507E4A2B1DC6357600B95FD1 /* Resource+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Resource+String.swift"; sourceTree = "<group>"; };
+		507E4A2D1DC63A7100B95FD1 /* Resource+Id.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Resource+Id.swift"; sourceTree = "<group>"; };
+		507E4A2F1DC6480300B95FD1 /* ResourceUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResourceUtils.swift; sourceTree = "<group>"; };
 		508D1E011DAFCEE300196208 /* RxCocoaComplement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxCocoaComplement.swift; sourceTree = "<group>"; };
 		509C5C4C1D306FAF0045B0AB /* Story.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Story.swift; sourceTree = "<group>"; };
 		509C5C501D30F59E0045B0AB /* Avatar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
@@ -355,8 +361,11 @@
 		507E4A261DC6295C00B95FD1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				507E4A271DC6296500B95FD1 /* ResourceConstants.swift */,
-				507E4A291DC62C0D00B95FD1 /* ResourceConstants+Color.swift */,
+				507E4A271DC6296500B95FD1 /* Resource.swift */,
+				507E4A291DC62C0D00B95FD1 /* Resource+Color.swift */,
+				507E4A2D1DC63A7100B95FD1 /* Resource+Id.swift */,
+				507E4A2B1DC6357600B95FD1 /* Resource+String.swift */,
+				507E4A2F1DC6480300B95FD1 /* ResourceUtils.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -576,6 +585,7 @@
 				509C5C611D3220C30045B0AB /* TalkType.swift in Sources */,
 				5025EFFD1CE1FFD90032AD67 /* SelectArchiveFileViewController.swift in Sources */,
 				501F954B1CE61CA700628E29 /* ArchiveSchema.swift in Sources */,
+				507E4A301DC6480300B95FD1 /* ResourceUtils.swift in Sources */,
 				5045BD111CDED11500A8A0FA /* AppDelegate.swift in Sources */,
 				504D70541D3B36D5004DC566 /* StoryElementViewModel.swift in Sources */,
 				509C5C591D31F61B0045B0AB /* Period.swift in Sources */,
@@ -587,7 +597,8 @@
 				504D70471D3A0953004DC566 /* WorkspaceDB.swift in Sources */,
 				508D1E021DAFCEE300196208 /* RxCocoaComplement.swift in Sources */,
 				5025EFE31CDF16530032AD67 /* WorkspaceListViewController.swift in Sources */,
-				507E4A2A1DC62C0D00B95FD1 /* ResourceConstants+Color.swift in Sources */,
+				507E4A2A1DC62C0D00B95FD1 /* Resource+Color.swift in Sources */,
+				507E4A2C1DC6357600B95FD1 /* Resource+String.swift in Sources */,
 				504D70501D3B362E004DC566 /* StoryEventViewModel.swift in Sources */,
 				50F9F2401D77172300278F48 /* StoryEventTableViewCell.swift in Sources */,
 				504D704E1D3B3608004DC566 /* SelectPeriodViewModel.swift in Sources */,
@@ -601,7 +612,8 @@
 				5025EFF11CE0D50C0032AD67 /* ActionObserver.swift in Sources */,
 				50C3A2511DC4E4C200265D0F /* ImageLoader.swift in Sources */,
 				509C5C5F1D3204650045B0AB /* Talk.swift in Sources */,
-				507E4A281DC6296500B95FD1 /* ResourceConstants.swift in Sources */,
+				507E4A2E1DC63A7100B95FD1 /* Resource+Id.swift in Sources */,
+				507E4A281DC6296500B95FD1 /* Resource.swift in Sources */,
 				50B69C8D1DBA4F9C00C1B3F0 /* SelectPeriodViewController.swift in Sources */,
 				50C3A2541DC4E59900265D0F /* CachedImage.swift in Sources */,
 				5025EFEA1CDF689E0032AD67 /* WorkspaceStore.swift in Sources */,

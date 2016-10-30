@@ -27,7 +27,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-fileprivate typealias R = ResourceConstants
+fileprivate typealias R = Resource
 
 public class StoryWatchingViewController: UITableViewController {
     @IBOutlet weak var selectPeriodButtonItem: UIBarButtonItem!
@@ -91,7 +91,7 @@ public class StoryWatchingViewController: UITableViewController {
     private func transition(_ message: TransitionMessage) {
         switch message.viewModel {
         case let viewModel as ISelectPeriodViewModel:
-            let storyboard: UIStoryboard = UIStoryboard(name: "SelectPeriod", bundle: Bundle.main)
+            let storyboard: UIStoryboard = UIStoryboard(name: R.Id.selectPeriod, bundle: Bundle.main)
             let viewController = storyboard.instantiateInitialViewController() as! SelectPeriodViewController
             viewController.modalPresentationStyle = .custom
             viewController.transitioningDelegate = self
@@ -132,11 +132,11 @@ extension StoryWatchingDataSource: UITableViewDataSource {
         let cell = { () -> UITableViewCell in
             switch elementViewModel {
             case let eventViewModel as IStoryEventViewModel:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "Event", for: indexPath) as! StoryEventTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: R.Id.event, for: indexPath) as! StoryEventTableViewCell
                 cell.viewModel = eventViewModel
                 return cell
             case let talkViewModel as ITalkViewModel:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "Talk", for: indexPath) as! TalkTableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: R.Id.talk, for: indexPath) as! TalkTableViewCell
                 cell.viewModel = talkViewModel
                 return cell
             default:

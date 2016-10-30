@@ -27,6 +27,8 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+fileprivate typealias R = Resource
+
 public struct StoryWatchingViewModelElementList {
     let items: [IStoryElementViewModel]
     let shouldScrollToTop: Bool
@@ -91,15 +93,15 @@ public class StoryWatchingViewModel: ViewModel, IStoryWatchingViewModel {
                 return { () -> String in
                     switch period.type {
                     case .prologue:
-                        return "Prologue"
+                        return ResourceUtils.getString(R.String.periodPrologue)
                     case .epilogue:
-                        return "Epilogue"
+                        return ResourceUtils.getString(R.String.periodEpilogue)
                     case .progress:
-                        return "Day \(period.day)"
+                        return ResourceUtils.getString(format: R.String.periodDayFormat, period.day)
                     }
                 }()
             }
-            .map { $0 + " ▴" }
+            .map { ResourceUtils.getString(format: R.String.periodSelectFormat, $0) }
             .asDriver(onErrorJustReturn: nil).asObservable()
     }
     

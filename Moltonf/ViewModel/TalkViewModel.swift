@@ -27,7 +27,7 @@ import Foundation
 import RxSwift
 import UIKit
 
-fileprivate typealias R = ResourceConstants
+fileprivate typealias R = Resource
 
 public protocol ITalkViewModel: IStoryElementViewModel {
     var numberLine: Observable<String?> { get }
@@ -66,7 +66,7 @@ public class TalkViewModel: ViewModel, ITalkViewModel {
             .map { image -> UIImage? in return image }
             .asDriver(onErrorJustReturn: nil).asObservable()
         timeLine = Observable
-            .just(String(format: "%02d:%02d", talk.time.hourPart, talk.time.minutePart))
+            .just(ResourceUtils.getString(format: R.String.timeFormat, talk.time.hourPart, talk.time.minutePart))
         messageTextLine = Observable
             .just(TalkViewModel.makeMessageText(talk.messageLines))
         let color: UIColor = { () in

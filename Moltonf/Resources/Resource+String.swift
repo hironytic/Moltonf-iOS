@@ -1,5 +1,5 @@
 //
-// ResourceConstants.swift
+// Resource+String.swift
 // Moltonf
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -25,6 +25,18 @@
 
 import Foundation
 
-public struct ResourceConstants {
-    private init() { }
+public extension Resource {
+    public struct String {
+        private init() { }
+        
+        public static let noItemsFound = "No files found"
+        
+        public static let periodPrologue = "Prologue"
+        public static let periodEpilogue = "Epilogue"
+        public static let periodDayFormat = "Day %d"
+        
+        public static let periodSelectFormat = "%@ ▴"
+        
+        public static let timeFormat = "%02d:%02d"
+    }
 }

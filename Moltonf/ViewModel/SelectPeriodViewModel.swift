@@ -27,6 +27,8 @@ import Foundation
 import RxCocoa
 import RxSwift
 
+fileprivate typealias R = Resource
+
 public enum SelectPeriodViewModelResult {
     case selected(PeriodReference)
     case cancelled
@@ -72,11 +74,11 @@ public class SelectPeriodViewModel: ViewModel, ISelectPeriodViewModel {
                         var title = ""
                         switch periodRef.type {
                         case .prologue:
-                            title = "Prologue"
+                            title = ResourceUtils.getString(R.String.periodPrologue)
                         case .epilogue:
-                            title = "Epilogue"
+                            title = ResourceUtils.getString(R.String.periodEpilogue)
                         case .progress:
-                            title = "Day \(periodRef.day)"
+                            title = ResourceUtils.getString(format: R.String.periodDayFormat, periodRef.day)
                         }
                         let checked = periodRef.day == currentDay
                         return SelectPeriodViewModelItem(periodReference: periodRef, title: title, checked: checked)

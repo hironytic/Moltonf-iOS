@@ -27,7 +27,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-fileprivate typealias R = ResourceConstants
+fileprivate typealias R = Resource
 
 public class SelectArchiveFileViewController: UITableViewController {
     var disposeBag: DisposeBag!
@@ -46,7 +46,7 @@ public class SelectArchiveFileViewController: UITableViewController {
         let noItemsLabelParent = UIView()
         tableView.backgroundView = noItemsLabelParent
         noItemsLabel = UILabel()
-        noItemsLabel.text = "No files found"
+        noItemsLabel.text = ResourceUtils.getString(R.String.noItemsFound)
         noItemsLabel.textColor = UIColor.lightGray
         noItemsLabel.sizeToFit()
         noItemsLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -76,7 +76,7 @@ public class SelectArchiveFileViewController: UITableViewController {
                 .addDisposableTo(disposeBag)
             
             viewModel.archiveFilesLine
-                .bindTo(tableView.rx.items(cellIdentifier:"Cell", cellType: UITableViewCell.self)) { (row, element, cell) in
+                .bindTo(tableView.rx.items(cellIdentifier:R.Id.cell, cellType: UITableViewCell.self)) { (row, element, cell) in
                     cell.textLabel?.text = element.title
                     
                     cell.backgroundColor = R.Color.background

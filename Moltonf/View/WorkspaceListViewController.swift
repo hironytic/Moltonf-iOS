@@ -27,7 +27,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-fileprivate typealias R = ResourceConstants
+fileprivate typealias R = Resource
 
 public class WorkspaceListViewController: UITableViewController {
     var disposeBag: DisposeBag!
@@ -82,12 +82,12 @@ public class WorkspaceListViewController: UITableViewController {
     private func transition(_ message: TransitionMessage) {
         switch message.viewModel {
         case let viewModel as ISelectArchiveFileViewModel:
-            let storyboard: UIStoryboard = UIStoryboard(name: "SelectArchiveFile", bundle: Bundle.main)
+            let storyboard: UIStoryboard = UIStoryboard(name: R.Id.selectArchiveFile, bundle: Bundle.main)
             let viewController: UINavigationController = storyboard.instantiateInitialViewController() as! UINavigationController
             (viewController.topViewController as! SelectArchiveFileViewController).viewModel = viewModel
             present(viewController, animated: true, completion: nil)
         case let viewModel as IStoryWatchingViewModel:
-            let storyboard: UIStoryboard = UIStoryboard(name: "StoryWatching", bundle: Bundle.main)
+            let storyboard: UIStoryboard = UIStoryboard(name: R.Id.storyWatching, bundle: Bundle.main)
             let viewController: UINavigationController = storyboard.instantiateInitialViewController() as! UINavigationController
             (viewController.topViewController as! StoryWatchingViewController).viewModel = viewModel
             present(viewController, animated: true, completion: nil)
@@ -112,7 +112,7 @@ extension WorkspaceListDataSource: UITableViewDataSource {
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: R.Id.cell, for: indexPath)
         let element = _itemModels[(indexPath as NSIndexPath).row]
         
         cell.textLabel?.text = element.workspace.title

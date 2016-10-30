@@ -1,5 +1,5 @@
 //
-// ResourceConstants+Color.swift
+// Resource+Color.swift
 // Moltonf
 //
 // Copyright (c) 2016 Hironori Ichimiya <hiron@hironytic.com>
@@ -25,7 +25,7 @@
 
 import UIKit
 
-public extension ResourceConstants {
+public extension Resource {
     public struct Color {
         private init() { }
         
