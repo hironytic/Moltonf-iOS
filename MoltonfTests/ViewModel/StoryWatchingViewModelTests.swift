@@ -54,9 +54,10 @@ class StoryWatchingViewModelTests: XCTestCase {
     func testSelectPeriod() {
         class MockStoryWatching: IStoryWatching {
             var errorLine = Observable<Error>.never()
+            var titleLine = Observable<String>.never()
             var availablePeriodRefsLine: Observable<[PeriodReference]>
             var currentPeriodLine: Observable<Period>
-            var storyElementsLine = Observable<[StoryElement]>.never()
+            var storyElementListLine = Observable<StoryWatchingElementList>.never()
             
             var selectPeriodAction: AnyObserver<PeriodReference>
             var switchToNextPeriodAction = ActionObserver<Void>().asObserver()
@@ -94,7 +95,7 @@ class StoryWatchingViewModelTests: XCTestCase {
         
         // -- initially Prologue is selected
         
-        let currentPeriodTextObserver = FulfillObserver(expectation(description: "initial text")) { $0 == "Prologue" }
+        let currentPeriodTextObserver = FulfillObserver<String?>(expectation(description: "initial text")) { $0 == "Prologue ▴" }
         storyWatchingViewModel.currentPeriodTextLine
             .bindTo(currentPeriodTextObserver)
             .addDisposableTo(disposeBag)
@@ -125,7 +126,7 @@ class StoryWatchingViewModelTests: XCTestCase {
         XCTAssertNotNil(selectPeriodViewModel)
         XCTAssertNotNil(selectPeriodViewModel?.onResult)
 
-        currentPeriodTextObserver.reset(expectation(description: "day 1")) { $0 == "Day 1" }
+        currentPeriodTextObserver.reset(expectation(description: "day 1")) { $0 == "Day 1 ▴" }
         selectPeriodViewModel?.onResult?(.selected(availablePeriodRefs[1]))
         waitForExpectations(timeout: 1.0, handler: nil)
     }
