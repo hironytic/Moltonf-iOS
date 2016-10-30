@@ -55,7 +55,7 @@ class SelectPeriodViewModelTests: XCTestCase {
             selectPeriodAction = _selectPeriodAction.asObserver()
             switchToNextPeriodAction = _switchToNextPeriodAction.asObserver()
             
-            let story = Story(villageFullName: "", graveIconURI: "")
+            let story = Story(villageFullName: "", baseURI: "", graveIconURI: "")
             periodRef0 = PeriodReference(story: story, type: .prologue, day: 0, periodPath: "")
             periodRef1 = PeriodReference(story: story, type: .progress, day: 1, periodPath: "")
             periodRef2 = PeriodReference(story: story, type: .progress, day: 2, periodPath: "")

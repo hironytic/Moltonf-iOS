@@ -39,7 +39,7 @@ class StoryWatchingViewModelTests: XCTestCase {
         
         disposeBag = DisposeBag()
         workspace = Workspace()
-        story = Story(villageFullName: "", graveIconURI: "")
+        story = Story(villageFullName: "", baseURI: "", graveIconURI: "")
         let periodRef0 = PeriodReference(story: story, type: .prologue, day: 0, periodPath: "")
         let periodRef1 = PeriodReference(story: story, type: .progress, day: 1, periodPath: "")
         let periodRef2 = PeriodReference(story: story, type: .progress, day: 2, periodPath: "")

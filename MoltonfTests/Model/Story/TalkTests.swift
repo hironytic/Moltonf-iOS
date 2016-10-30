@@ -52,7 +52,7 @@ class TalkTests: XCTestCase {
         }
         
         init() {
-            super.init(villageFullName: "", graveIconURI: "")
+            super.init(villageFullName: "", baseURI: "", graveIconURI: "")
             avatarGerd = Avatar(story: self, avatarId: "gerd", fullName: "楽天家 ゲルト", shortName: "ゲルト", faceIconURI: "plugin_wolf/img/face01.jpg")
             avatarPeter = Avatar(story: self, avatarId: "peter", fullName: "少年 ペーター", shortName: "ペーター", faceIconURI: "plugin_wolf/img/face08.jpg")
         }

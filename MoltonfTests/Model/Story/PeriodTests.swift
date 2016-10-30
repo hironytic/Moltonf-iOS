@@ -29,7 +29,7 @@ import SwiftyJSON
 
 class PeriodTests: XCTestCase {
     func testProgress() {
-        let story = Story(villageFullName: "", graveIconURI: "")
+        let story = Story(villageFullName: "", baseURI: "", graveIconURI: "")
         let periodJSON = JSON([
             "type": "progress",
             "day": 1,

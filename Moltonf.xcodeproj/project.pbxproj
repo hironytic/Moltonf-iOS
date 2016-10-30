@@ -69,6 +69,9 @@
 		50B69C8B1DBA4EBF00C1B3F0 /* SelectPeriod.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50B69C8A1DBA4EBF00C1B3F0 /* SelectPeriod.storyboard */; };
 		50B69C8D1DBA4F9C00C1B3F0 /* SelectPeriodViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B69C8C1DBA4F9C00C1B3F0 /* SelectPeriodViewController.swift */; };
 		50BAC3591D448A9B008D366C /* StoryWatchingViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BAC3581D448A9B008D366C /* StoryWatchingViewModelTests.swift */; };
+		50C3A2511DC4E4C200265D0F /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C3A2501DC4E4C200265D0F /* ImageLoader.swift */; };
+		50C3A2541DC4E59900265D0F /* CachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C3A2531DC4E59900265D0F /* CachedImage.swift */; };
+		50C3A2561DC4E60C00265D0F /* ImageCacheDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C3A2551DC4E60C00265D0F /* ImageCacheDB.swift */; };
 		50F9F2391D74787100278F48 /* StoryWatching.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50F9F2381D74787100278F48 /* StoryWatching.storyboard */; };
 		50F9F2401D77172300278F48 /* StoryEventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F9F23F1D77172300278F48 /* StoryEventTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -153,6 +156,9 @@
 		50B69C8A1DBA4EBF00C1B3F0 /* SelectPeriod.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SelectPeriod.storyboard; sourceTree = "<group>"; };
 		50B69C8C1DBA4F9C00C1B3F0 /* SelectPeriodViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectPeriodViewController.swift; sourceTree = "<group>"; };
 		50BAC3581D448A9B008D366C /* StoryWatchingViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryWatchingViewModelTests.swift; sourceTree = "<group>"; };
+		50C3A2501DC4E4C200265D0F /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		50C3A2531DC4E59900265D0F /* CachedImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedImage.swift; sourceTree = "<group>"; };
+		50C3A2551DC4E60C00265D0F /* ImageCacheDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCacheDB.swift; sourceTree = "<group>"; };
 		50F9F2381D74787100278F48 /* StoryWatching.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = StoryWatching.storyboard; sourceTree = "<group>"; };
 		50F9F23F1D77172300278F48 /* StoryEventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryEventTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -236,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				501F95471CE61C5600628E29 /* Archive */,
+				50C3A2521DC4E55400265D0F /* ImageCache */,
 				509C5C4B1D306F830045B0AB /* Story */,
 				50AF2EB61D1FC3CC00337A53 /* Workspace */,
 				5025EFF81CE1EFFB0032AD67 /* FileList.swift */,
@@ -410,6 +417,16 @@
 			path = Schema;
 			sourceTree = "<group>";
 		};
+		50C3A2521DC4E55400265D0F /* ImageCache */ = {
+			isa = PBXGroup;
+			children = (
+				50C3A2531DC4E59900265D0F /* CachedImage.swift */,
+				50C3A2551DC4E60C00265D0F /* ImageCacheDB.swift */,
+				50C3A2501DC4E4C200265D0F /* ImageLoader.swift */,
+			);
+			path = ImageCache;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -542,6 +559,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50C3A2561DC4E60C00265D0F /* ImageCacheDB.swift in Sources */,
 				5025EFF71CE161470032AD67 /* SelectArchiveFileViewModel.swift in Sources */,
 				50AC41801D7851190093C02D /* StoryWatchingViewController.swift in Sources */,
 				509C5C611D3220C30045B0AB /* TalkType.swift in Sources */,
@@ -570,8 +588,10 @@
 				504D70521D3B3651004DC566 /* TalkViewModel.swift in Sources */,
 				50B69C861DB5179100C1B3F0 /* TalkTableViewCell.swift in Sources */,
 				5025EFF11CE0D50C0032AD67 /* ActionObserver.swift in Sources */,
+				50C3A2511DC4E4C200265D0F /* ImageLoader.swift in Sources */,
 				509C5C5F1D3204650045B0AB /* Talk.swift in Sources */,
 				50B69C8D1DBA4F9C00C1B3F0 /* SelectPeriodViewController.swift in Sources */,
+				50C3A2541DC4E59900265D0F /* CachedImage.swift in Sources */,
 				5025EFEA1CDF689E0032AD67 /* WorkspaceStore.swift in Sources */,
 				509C5C5D1D31FBB10045B0AB /* StoryEvent.swift in Sources */,
 				5025EFEE1CDF7EFD0032AD67 /* MessageSlot.swift in Sources */,

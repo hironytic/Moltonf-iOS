@@ -73,6 +73,10 @@ class TalkTableViewCell: UITableViewCell {
                 .bindTo(talkTimeLabel.rx.text)
                 .addDisposableTo(disposeBag)
             
+            viewModel.speakerIconLine
+                .bindTo(speakerIconImageView.rx.image)
+                .addDisposableTo(disposeBag)
+            
             viewModel.messageTextLine
                 .bindTo(messageLabel.rx.attributedText)
                 .addDisposableTo(disposeBag)

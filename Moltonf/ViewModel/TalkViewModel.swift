@@ -31,7 +31,7 @@ public protocol ITalkViewModel: IStoryElementViewModel {
     var numberLine: Observable<String?> { get }
     var numberHiddenLine: Observable<Bool> { get }
     var speakerNameLine: Observable<String?> { get }
-//    var speakerIconLine: Observable<UIImage> { get }
+    var speakerIconLine: Observable<UIImage?> { get }
     var timeLine: Observable<String?> { get }
     var messageTextLine: Observable<NSAttributedString?> { get }
     var balloonColorLine: Observable<UIColor> { get }
@@ -41,7 +41,7 @@ public class TalkViewModel: ViewModel, ITalkViewModel {
     public private(set) var numberLine: Observable<String?>
     public private(set) var numberHiddenLine: Observable<Bool>
     public private(set) var speakerNameLine: Observable<String?>
-//    public private(set) var speakerIconLine: Observable<UIImage>
+    public private(set) var speakerIconLine: Observable<UIImage?>
     public private(set) var timeLine: Observable<String?>
     public private(set) var messageTextLine: Observable<NSAttributedString?>
     public private(set) var balloonColorLine: Observable<UIColor>
@@ -53,6 +53,9 @@ public class TalkViewModel: ViewModel, ITalkViewModel {
             .just(talk.publicTalkNo == nil)
         speakerNameLine = Observable
             .just(talk.speaker.fullName)
+        speakerIconLine = talk.speaker.faceIconImageLine
+            .map { image -> UIImage? in return image }
+            .asDriver(onErrorJustReturn: nil).asObservable()
         timeLine = Observable
             .just(String(format: "%02d:%02d", talk.time.hourPart, talk.time.minutePart))
         messageTextLine = Observable

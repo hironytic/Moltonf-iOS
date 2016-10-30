@@ -33,6 +33,9 @@ public class Story {
     /// Full name of the village
     public let villageFullName: String
     
+    /// Base URI of this story
+    public let baseURI: String
+    
     /// URI string which speficies a grave icon image
     public let graveIconURI: String
 
@@ -45,8 +48,9 @@ public class Story {
     private var _avatarMap = [String: Avatar]()
     
     // for testing
-    init(villageFullName: String, graveIconURI: String) {
+    init(villageFullName: String, baseURI: String, graveIconURI: String) {
         self.villageFullName = villageFullName
+        self.baseURI = baseURI
         self.graveIconURI = graveIconURI
     }
 
@@ -60,6 +64,12 @@ public class Story {
             throw StoryError.missingData(data: K.FULL_NAME)
         }
 
+        if let baseURI = playdata[K.BASE].string {
+            self.baseURI = baseURI
+        } else {
+            throw StoryError.missingData(data: K.BASE)
+        }
+        
         if let graveIconURI = playdata[K.GRAVE_ICON_URI].string {
             self.graveIconURI = graveIconURI
         } else {

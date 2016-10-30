@@ -29,7 +29,7 @@ import SwiftyJSON
 
 class StoryEventTests: XCTestCase {
     func testAnnounceEvent() {
-        let story = Story(villageFullName: "", graveIconURI: "")
+        let story = Story(villageFullName: "", baseURI: "", graveIconURI: "")
         let period = Period(story: story, type: .prologue, day: 0)
         
         let element = JSON([
@@ -55,7 +55,7 @@ class StoryEventTests: XCTestCase {
     }
     
     func testOrderEvent() {
-        let story = Story(villageFullName: "", graveIconURI: "")
+        let story = Story(villageFullName: "", baseURI: "", graveIconURI: "")
         let period = Period(story: story, type: .prologue, day: 0)
 
         let element = JSON([
@@ -83,7 +83,7 @@ class StoryEventTests: XCTestCase {
     }
     
     func testExtraEvent() {
-        let story = Story(villageFullName: "", graveIconURI: "")
+        let story = Story(villageFullName: "", baseURI: "", graveIconURI: "")
         let period = Period(story: story, type: .prologue, day: 0)
 
         let element = JSON([
