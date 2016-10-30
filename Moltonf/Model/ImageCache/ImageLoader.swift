@@ -91,10 +91,21 @@ public class ImageLoader {
 public extension Avatar {
     public var faceIconImageLine: Observable<UIImage> {
         get {
-            guard let story = self.story else { return Observable.error(ImageLoaderError.invalidURL) }
-            guard let faceIconURI = self.faceIconURI else { return Observable.error(ImageLoaderError.invalidURL) }
+            guard let story = story else { return Observable.error(ImageLoaderError.invalidURL) }
+            guard let faceIconURI = faceIconURI else { return Observable.error(ImageLoaderError.invalidURL) }
             guard let baseURL = URL(string: story.baseURI) else { return Observable.error(ImageLoaderError.invalidURL) }
             guard let fullURL = URL(string: faceIconURI, relativeTo: baseURL) else { return Observable.error(ImageLoaderError.invalidURL) }
+            
+            return Observable.deferred { ImageLoader.shared.load(fromURL: fullURL) }
+        }
+    }
+}
+
+public extension Story {
+    public var graveIconImageLine: Observable<UIImage> {
+        get {
+            guard let baseURL = URL(string: baseURI) else { return Observable.error(ImageLoaderError.invalidURL) }
+            guard let fullURL = URL(string: graveIconURI, relativeTo: baseURL) else { return Observable.error(ImageLoaderError.invalidURL) }
             
             return Observable.deferred { ImageLoader.shared.load(fromURL: fullURL) }
         }

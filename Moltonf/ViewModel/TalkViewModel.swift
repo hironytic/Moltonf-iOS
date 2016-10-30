@@ -53,7 +53,14 @@ public class TalkViewModel: ViewModel, ITalkViewModel {
             .just(talk.publicTalkNo == nil)
         speakerNameLine = Observable
             .just(talk.speaker.fullName)
-        speakerIconLine = talk.speaker.faceIconImageLine
+        speakerIconLine = { () -> Observable<UIImage> in
+                switch talk.talkType {
+                case .grave:
+                    return talk.story?.graveIconImageLine ?? Observable.never()
+                default:
+                    return talk.speaker.faceIconImageLine
+                }
+            }()
             .map { image -> UIImage? in return image }
             .asDriver(onErrorJustReturn: nil).asObservable()
         timeLine = Observable
