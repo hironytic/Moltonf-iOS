@@ -42,7 +42,7 @@ public class ImageCacheDB {
     
     private func createRealm() -> Realm {
         let imageCacheDBURL = imageCacheDirURL.appendingPathComponent(IMAGE_CACHE_DB)
-        let config = Realm.Configuration(fileURL: imageCacheDBURL)
+        let config = Realm.Configuration(fileURL: imageCacheDBURL, objectTypes: [CachedImage.self])
         return try! Realm(configuration: config)
     }
     

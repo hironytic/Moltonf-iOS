@@ -41,7 +41,7 @@ public class WorkspaceDB {
     
     private func createRealm() -> Realm {
         let workspaceDBURL = workspaceDirURL.appendingPathComponent(WORKSPACE_DB)
-        let config = Realm.Configuration(fileURL: workspaceDBURL)
+        let config = Realm.Configuration(fileURL: workspaceDBURL, objectTypes: [Workspace.self])
         return try! Realm(configuration: config)
     }
     
