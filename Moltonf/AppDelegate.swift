@@ -25,6 +25,8 @@
 
 import UIKit
 
+fileprivate typealias R = ResourceConstants
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -46,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        self.window?.tintColor = UIColor.Moltonf.tint
+        self.window?.tintColor = R.Color.tint
         
         return true
     }

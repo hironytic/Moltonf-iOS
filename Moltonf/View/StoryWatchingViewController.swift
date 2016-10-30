@@ -27,6 +27,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+fileprivate typealias R = ResourceConstants
+
 public class StoryWatchingViewController: UITableViewController {
     @IBOutlet weak var selectPeriodButtonItem: UIBarButtonItem!
     var backButtonItem: UIBarButtonItem!
@@ -37,7 +39,7 @@ public class StoryWatchingViewController: UITableViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.backgroundColor = UIColor.Moltonf.background
+        tableView.backgroundColor = R.Color.background
         
         tableView.estimatedRowHeight = 132
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -142,9 +144,9 @@ extension StoryWatchingDataSource: UITableViewDataSource {
             }
         }()
         
-        cell.backgroundColor = UIColor.Moltonf.background
+        cell.backgroundColor = R.Color.background
         cell.selectedBackgroundView = UIView()
-        cell.selectedBackgroundView?.backgroundColor = UIColor.Moltonf.backgroundSelected
+        cell.selectedBackgroundView?.backgroundColor = R.Color.backgroundSelected
         return cell
     }
 }

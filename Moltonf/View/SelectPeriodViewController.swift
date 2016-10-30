@@ -27,6 +27,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+fileprivate typealias R = ResourceConstants
+
 public class SelectPeriodViewController: UITableViewController {
     private var disposeBag: DisposeBag!
     public var viewModel: ISelectPeriodViewModel!
@@ -34,7 +36,7 @@ public class SelectPeriodViewController: UITableViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.backgroundColor = UIColor.Moltonf.overlappedViewBackground
+        self.view.backgroundColor = R.Color.overlappedViewBackground
         
         bindViewModel()
     }
@@ -46,9 +48,9 @@ public class SelectPeriodViewController: UITableViewController {
             .bindTo(tableView.rx.items(cellIdentifier:"Cell", cellType: UITableViewCell.self)) { (row, element, cell) in
                 cell.textLabel?.text = element.title
                 cell.accessoryType = element.checked ? .checkmark : .none
-                cell.backgroundColor = UIColor.Moltonf.overlappedViewBackground
+                cell.backgroundColor = R.Color.overlappedViewBackground
                 cell.selectedBackgroundView = UIView()
-                cell.selectedBackgroundView?.backgroundColor = UIColor.Moltonf.overlappedViewBackgroundSelected
+                cell.selectedBackgroundView?.backgroundColor = R.Color.overlappedViewBackgroundSelected
             }
             .addDisposableTo(disposeBag)
         

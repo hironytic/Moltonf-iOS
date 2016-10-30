@@ -27,6 +27,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+fileprivate typealias R = ResourceConstants
+
 public protocol IStoryEventViewModel: IStoryElementViewModel {
     var messageTextLine: Observable<String?> { get }
     var messageColorLine: Observable<UIColor> { get }
@@ -43,11 +45,11 @@ public class StoryEventViewModel: ViewModel, IStoryEventViewModel {
         let color = { () -> UIColor in
             switch storyEvent.eventFamily {
             case .announce:
-                return UIColor.Moltonf.eventAnnounce
+                return R.Color.eventAnnounce
             case .order:
-                return UIColor.Moltonf.eventOrder
+                return R.Color.eventOrder
             case .extra:
-                return UIColor.Moltonf.eventExtra
+                return R.Color.eventExtra
             }
         }()
         messageColorLine = Observable

@@ -27,6 +27,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+fileprivate typealias R = ResourceConstants
+
 public class WorkspaceListViewController: UITableViewController {
     var disposeBag: DisposeBag!
     let viewModel: IWorkspaceListViewModel = WorkspaceListViewModel()
@@ -36,7 +38,7 @@ public class WorkspaceListViewController: UITableViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = UIColor.Moltonf.background
+        self.view.backgroundColor = R.Color.background
         self.navigationItem.rightBarButtonItem = self.editButtonItem
 
         bindViewModel()
@@ -115,9 +117,9 @@ extension WorkspaceListDataSource: UITableViewDataSource {
         
         cell.textLabel?.text = element.workspace.title
         
-        cell.backgroundColor = UIColor.Moltonf.background
+        cell.backgroundColor = R.Color.background
         cell.selectedBackgroundView = UIView()
-        cell.selectedBackgroundView?.backgroundColor = UIColor.Moltonf.backgroundSelected
+        cell.selectedBackgroundView?.backgroundColor = R.Color.backgroundSelected
         return cell
     }
     

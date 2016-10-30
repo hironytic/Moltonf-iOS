@@ -27,6 +27,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+fileprivate typealias R = ResourceConstants
+
 public class SelectArchiveFileViewController: UITableViewController {
     var disposeBag: DisposeBag!
     var viewModel: ISelectArchiveFileViewModel!
@@ -37,7 +39,7 @@ public class SelectArchiveFileViewController: UITableViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.backgroundColor = UIColor.Moltonf.background
+        self.view.backgroundColor = R.Color.background
         
         refreshControl = UIRefreshControl()
         
@@ -77,9 +79,9 @@ public class SelectArchiveFileViewController: UITableViewController {
                 .bindTo(tableView.rx.items(cellIdentifier:"Cell", cellType: UITableViewCell.self)) { (row, element, cell) in
                     cell.textLabel?.text = element.title
                     
-                    cell.backgroundColor = UIColor.Moltonf.background
+                    cell.backgroundColor = R.Color.background
                     cell.selectedBackgroundView = UIView()
-                    cell.selectedBackgroundView?.backgroundColor = UIColor.Moltonf.backgroundSelected
+                    cell.selectedBackgroundView?.backgroundColor = R.Color.backgroundSelected
                 }
                 .addDisposableTo(disposeBag)
             

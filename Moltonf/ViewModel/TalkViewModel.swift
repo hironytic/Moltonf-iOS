@@ -27,6 +27,8 @@ import Foundation
 import RxSwift
 import UIKit
 
+fileprivate typealias R = ResourceConstants
+
 public protocol ITalkViewModel: IStoryElementViewModel {
     var numberLine: Observable<String?> { get }
     var numberHiddenLine: Observable<Bool> { get }
@@ -70,13 +72,13 @@ public class TalkViewModel: ViewModel, ITalkViewModel {
         let color: UIColor = { () in
             switch talk.talkType {
             case .public:
-                return UIColor.Moltonf.balloonPublic
+                return R.Color.balloonPublic
             case .wolf:
-                return UIColor.Moltonf.balloonWolf
+                return R.Color.balloonWolf
             case .grave:
-                return UIColor.Moltonf.balloonGrave
+                return R.Color.balloonGrave
             case .private:
-                return UIColor.Moltonf.balloonPrivate
+                return R.Color.balloonPrivate
             }
         }()
         balloonColorLine = Observable
