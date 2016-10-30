@@ -38,7 +38,7 @@ class SelectPeriodViewModelTests: XCTestCase {
         var titleLine = Observable<String>.never()
         var availablePeriodRefsLine: Observable<[PeriodReference]>
         var currentPeriodLine: Observable<Period>
-        var storyElementsLine = Observable<[StoryElement]>.never()
+        var storyElementListLine = Observable<StoryWatchingElementList>.never()
         
         var selectPeriodAction: AnyObserver<PeriodReference>
         var switchToNextPeriodAction: AnyObserver<Void>
