@@ -31,30 +31,69 @@ public enum ImageLoaderError: Error {
     case invalidData
 }
 
-public struct ImageLoader {
+public class ImageLoader {
+    public static let shared = ImageLoader()
     private init() { }
     
-    public static func load(fromURL url: URL) -> Observable<UIImage> {
-        return Observable.create { observer in
-            // search from cache first
-            if let data = ImageCacheDB.shared.imageData(forURL: url) {
-                if let image = UIImage(data: data) {
-                    observer.onNext(image)
+    private let _syncQueue = DispatchQueue(label: "ImageLoader.sync")
+    private var _observables: [URL: Observable<UIImage>] = [:]
+    
+    public func load(fromURL url: URL) -> Observable<UIImage> {
+//        return Observable<UIImage>
+//            .create { observer in
+//                // search from cache first
+//                if let data = ImageCacheDB.shared.imageData(forURL: url) {
+//                    if let image = UIImage(data: data) {
+//                        observer.onNext(image)
+//                    } else {
+//                        observer.onError(ImageLoaderError.invalidData)
+//                    }
+//                    return Disposables.create()
+//                }
+//                
+//                // load from network
+//                return ImageLoader.loadNetworkImageData(fromURL: url)
+//                    .subscribe(observer)
+//        }
+        
+        return Observable.deferred { [unowned self] in
+            var observable: Observable<UIImage>? = nil
+            self._syncQueue.sync {
+                if let existing = self._observables[url] {
+                    observable = existing
                 } else {
-                    observer.onError(ImageLoaderError.invalidData)
+                    print("not existing: \(url.absoluteString)")
+                    let obs = Observable<UIImage>
+                        .create { observer in
+                            // search from cache first
+                            if let data = ImageCacheDB.shared.imageData(forURL: url) {
+                                if let image = UIImage(data: data) {
+                                    observer.onNext(image)
+                                } else {
+                                    observer.onError(ImageLoaderError.invalidData)
+                                }
+                                return Disposables.create()
+                            }
+                            
+                            // load from network
+                            return ImageLoader.loadNetworkImageData(fromURL: url)
+                                .subscribe(observer)
+                        }
+                        .replay(1)
+                    _ = obs.connect()
+                    self._observables[url] = obs
+                    observable = obs
                 }
-                return Disposables.create()
             }
-            
-            // load from network
-            return loadNetworkImageData(fromURL: url)
-                .subscribe(observer)
+            return observable!
         }
     }
     
     private static func loadNetworkImageData(fromURL url: URL) -> Observable<UIImage> {
         return URLSession.shared
             .rx.data(request: URLRequest(url: url))
+            .do(onNext: { _ in print("loaded: \(url.absoluteString)") })
+//            .delay(5, scheduler: MainScheduler.instance)
             .map { data in
                 try ImageCacheDB.shared.putImageData(forURL: url, data: data)
                 if let image = UIImage(data: data) {
@@ -74,7 +113,7 @@ public extension Avatar {
             guard let baseURL = URL(string: story.baseURI) else { return Observable.error(ImageLoaderError.invalidURL) }
             guard let fullURL = URL(string: faceIconURI, relativeTo: baseURL) else { return Observable.error(ImageLoaderError.invalidURL) }
             
-            return ImageLoader.load(fromURL: fullURL)
+            return ImageLoader.shared.load(fromURL: fullURL)
         }
     }
 }
