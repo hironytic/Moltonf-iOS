@@ -1,0 +1,6 @@
+
+/* Class = "UILabel"; text = "#Title#"; ObjectID = "6xp-Cn-n6W"; */
+"6xp-Cn-n6W.text" = "#Title#";
+
+/* Class = "UINavigationItem"; title = "Load from iTunes"; ObjectID = "XRc-H9-TxC"; */
+"XRc-H9-TxC.title" = "iTunes共有からロード";

@@ -1,0 +1,21 @@
+
+/* Class = "UILabel"; text = "#Message#"; ObjectID = "2Qo-8E-wuG"; */
+"2Qo-8E-wuG.text" = "#Message#";
+
+/* Class = "UIBarButtonItem"; title = "#Day X#"; ObjectID = "48I-fx-BCb"; */
+"48I-fx-BCb.title" = "#Day X#";
+
+/* Class = "UILabel"; text = "#00:00#"; ObjectID = "6T5-Ps-jkI"; */
+"6T5-Ps-jkI.text" = "#00:00#";
+
+/* Class = "UINavigationItem"; title = "#Village Name#"; ObjectID = "N4Z-nw-lDH"; */
+"N4Z-nw-lDH.title" = "#Village Name#";
+
+/* Class = "UILabel"; text = "#Name#"; ObjectID = "btZ-uL-gGy"; */
+"btZ-uL-gGy.text" = "#Name#";
+
+/* Class = "UILabel"; text = "#Message#"; ObjectID = "c3V-Kt-KQN"; */
+"c3V-Kt-KQN.text" = "#Message#";
+
+/* Class = "UILabel"; text = "#No.#"; ObjectID = "rsH-Z1-1SR"; */
+"rsH-Z1-1SR.text" = "#No.#";

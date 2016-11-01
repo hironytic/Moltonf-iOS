@@ -29,14 +29,14 @@ public extension Resource {
     public struct String {
         private init() { }
         
-        public static let noItemsFound = "No files found"
+        public static let noItemsFound = "Moltonf.noItemsFound"
         
-        public static let periodPrologue = "Prologue"
-        public static let periodEpilogue = "Epilogue"
-        public static let periodDayFormat = "Day %d"
+        public static let periodPrologue = "Moltonf.periodPrologue"
+        public static let periodEpilogue = "Moltonf.periodEpilogue"
+        public static let periodDayFormat = "Moltonf.periodDayFormat"
         
-        public static let periodSelectFormat = "%@ ▴"
+        public static let periodSelectFormat = "Moltonf.periodSelectFormat"
         
-        public static let timeFormat = "%02d:%02d"
+        public static let timeFormat = "Moltonf.timeFormat"
     }
 }
