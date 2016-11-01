@@ -90,17 +90,17 @@
                                             </subviews>
                                         </stackView>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AQa-N9-7T1">
-                                            <rect key="frame" x="8" y="37" width="75" height="75"/>
+                                            <rect key="frame" x="8" y="37" width="40" height="40"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="75" id="AU7-Om-6ML"/>
-                                                <constraint firstAttribute="height" constant="75" id="ieL-go-P0Y"/>
+                                                <constraint firstAttribute="width" constant="40" id="AU7-Om-6ML"/>
+                                                <constraint firstAttribute="height" constant="40" id="ieL-go-P0Y"/>
                                             </constraints>
                                         </imageView>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TmT-uf-H7L" customClass="TalkBalloonView" customModule="Moltonf" customModuleProvider="target">
-                                            <rect key="frame" x="91" y="37" width="268" height="36.5"/>
+                                            <rect key="frame" x="56" y="37" width="303" height="36.5"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#Message#" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c3V-Kt-KQN">
-                                                    <rect key="frame" x="8" y="8" width="252" height="20.5"/>
+                                                    <rect key="frame" x="8" y="8" width="287" height="20.5"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <nil key="highlightedColor"/>
