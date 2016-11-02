@@ -26,6 +26,8 @@
 import UIKit
 import RxSwift
 
+fileprivate typealias R = Resource
+
 public enum ImageLoaderError: Error {
     case invalidURL
     case invalidData
@@ -39,7 +41,7 @@ public class ImageLoader {
     private let _syncQueue = DispatchQueue(label: "ImageLoader.sync")
     private var _observables: [URL: Observable<UIImage>] = [:]
     
-    public func load(fromURL url: URL) -> Observable<UIImage> {
+    public func load(fromURL url: URL, altImage: UIImage? = nil) -> Observable<UIImage> {
 //        print("request for url: \(url)")
         var observable: Observable<UIImage>!
         _syncQueue.sync {
@@ -60,7 +62,7 @@ public class ImageLoader {
                         }
                         
                         // load from network
-                        return ImageLoader.loadNetworkImageData(fromURL: url)
+                        return ImageLoader.loadNetworkImageData(fromURL: url, altImage: altImage)
                             .subscribe(observer)
                     }
                     .replay(1)
@@ -72,8 +74,8 @@ public class ImageLoader {
         return observable
     }
     
-    private static func loadNetworkImageData(fromURL url: URL) -> Observable<UIImage> {
-        return URLSession.shared
+    private static func loadNetworkImageData(fromURL url: URL, altImage: UIImage?) -> Observable<UIImage> {
+        var result: Observable<UIImage> = URLSession.shared
             .rx.data(request: URLRequest(url: url))
 //            .do(onNext: { _ in print("loaded: \(url.absoluteString)") })
 //            .delay(5, scheduler: MainScheduler.instance)
@@ -85,6 +87,13 @@ public class ImageLoader {
                     throw ImageLoaderError.invalidData
                 }
             }
+        
+        if let altImage = altImage {
+            result = result
+                .startWith(altImage)
+                .catchErrorJustReturn(altImage)
+        }
+        return result
     }
 }
 
@@ -96,7 +105,7 @@ public extension Avatar {
             guard let baseURL = URL(string: story.baseURI) else { return Observable.error(ImageLoaderError.invalidURL) }
             guard let fullURL = URL(string: faceIconURI, relativeTo: baseURL) else { return Observable.error(ImageLoaderError.invalidURL) }
             
-            return Observable.deferred { ImageLoader.shared.load(fromURL: fullURL) }
+            return Observable.deferred { ImageLoader.shared.load(fromURL: fullURL, altImage: R.Image.face_unknown) }
         }
     }
 }
@@ -107,7 +116,7 @@ public extension Story {
             guard let baseURL = URL(string: baseURI) else { return Observable.error(ImageLoaderError.invalidURL) }
             guard let fullURL = URL(string: graveIconURI, relativeTo: baseURL) else { return Observable.error(ImageLoaderError.invalidURL) }
             
-            return Observable.deferred { ImageLoader.shared.load(fromURL: fullURL) }
+            return Observable.deferred { ImageLoader.shared.load(fromURL: fullURL, altImage: R.Image.face_unknown) }
         }
     }
 }
